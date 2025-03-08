@@ -5,8 +5,40 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TourPlanner"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="MainWindow" Height="450" Width="800"
+        Background="Transparent"
+        AllowsTransparency="True">
+    
+    <Border Background="#272537"
+            CornerRadius="20">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="TourPlanner"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Left"
+                       Margin="20,0,0,0"
+                       Foreground="White"
+                       FontSize="16"/>
+
+            <StackPanel Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Center">
+                <RadioButton Content="File"
+                             Foreground="White"
+                             FontSize="16"/>
+                <RadioButton/>
+                <RadioButton/>
+            </StackPanel>
+
+        </Grid>
+    </Border>
 </Window>

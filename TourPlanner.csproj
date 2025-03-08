@@ -94,5 +94,13 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BusinessLayer\Models\" />
+    <Folder Include="BusinessLayer\Services\" />
+    <Folder Include="DataLayer\Database\" />
+    <Folder Include="UILayer\Resources\" />
+    <Folder Include="UILayer\ViewModels\" />
+    <Folder Include="UILayer\Views\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
