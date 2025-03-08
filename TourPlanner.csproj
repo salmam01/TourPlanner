@@ -64,7 +64,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BusinessLayer\Models\Tour.cs" />
+    <Compile Include="BusinessLayer\Models\TourAttributes.cs" />
     <Compile Include="BusinessLayer\Models\TourLogs.cs" />
+    <Compile Include="UILayer\ViewModels\TourViewModel.cs" />
     <Compile Include="UILayer\Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -100,7 +102,6 @@
     <Folder Include="BusinessLayer\Services\" />
     <Folder Include="DataLayer\Database\" />
     <Folder Include="UILayer\Resources\" />
-    <Folder Include="UILayer\ViewModels\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
