@@ -60,7 +60,7 @@
 
             <Label Grid.Row="2" 
                    Grid.Column="0"
-                   Content="Tour Logs"
+                   Content="Tours"
                    Margin="10,0,0,0"
                    Foreground="White"
                    FontSize="16"
