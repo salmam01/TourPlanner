@@ -73,9 +73,12 @@
     </Compile>
     <Compile Include="BusinessLayer\Models\Tour.cs" />
     <Compile Include="BusinessLayer\Models\TourAttributes.cs" />
-    <Compile Include="BusinessLayer\Models\TourLogs.cs" />
+    <Compile Include="BusinessLayer\Models\TourLog.cs" />
+    <Compile Include="BusinessLayer\Services\TourLogService.cs" />
+    <Compile Include="BusinessLayer\Services\TourService.cs" />
+    <Compile Include="UILayer\Commands\RelayCommand.cs" />
     <Compile Include="UILayer\ViewModels\MainWindowViewModel.cs" />
-    <Compile Include="UILayer\ViewModels\TourLogsViewModel.cs" />
+    <Compile Include="UILayer\ViewModels\TourLogViewModel.cs" />
     <Compile Include="UILayer\ViewModels\TourViewModel.cs" />
     <Compile Include="UILayer\Views\CreateTour.xaml.cs">
       <DependentUpon>CreateTour.xaml</DependentUpon>
@@ -115,7 +118,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="BusinessLayer\Services\" />
     <Folder Include="DataLayer\Database\" />
     <Folder Include="UILayer\Resources\" />
   </ItemGroup>

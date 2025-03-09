@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TourPlanner.BusinessLayer.Models
 {
-    public class TourLogs
+    public class TourLog
     {
         public Guid Id { get; set; }
         public DateTime Date { get; set; }

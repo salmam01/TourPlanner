@@ -14,6 +14,6 @@ namespace TourPlanner.UILayer.ViewModels
 
         }
 
-        
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

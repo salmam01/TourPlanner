@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TourPlanner.UILayer.ViewModels
+namespace TourPlanner.BusinessLayer.Services
 {
-    class TourLogsViewModel
+    class TourService
     {
     }
 }

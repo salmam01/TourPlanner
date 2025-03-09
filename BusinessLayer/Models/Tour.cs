@@ -18,6 +18,6 @@ namespace TourPlanner.BusinessLayer.Models
         public string RouteInformation { get; set; }
         public double Distance { get; set; }
         public TimeSpan EstimatedTime { get; set; }
-        public List<TourLogs> TourLogs { get; set; }
+        public List<TourLog> TourLogs { get; set; }
     }
 }
