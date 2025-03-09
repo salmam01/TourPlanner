@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -15,8 +16,13 @@ namespace TourPlanner.UILayer.ViewModels
 
         }
 
-        public Tour Tour;
+        public ObservableCollection<Tour> Tours { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public void AddTour (Tour tour)
+        {
+
+        }
     }
 }

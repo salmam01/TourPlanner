@@ -119,7 +119,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DataLayer\Database\" />
-    <Folder Include="UILayer\Resources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UILayer\Resources\Images\Background.jpeg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

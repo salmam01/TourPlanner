@@ -6,11 +6,16 @@
         xmlns:vm="TourPlanner.UILayer.ViewModels"
         xmlns:local="clr-namespace:TourPlanner"
         mc:Ignorable="d"
-        Title="TourPlanner" Height="450" Width="800"
-        Background="Transparent">
+        Title="TourPlanner" Height="550" Width="800"
+        Background="Transparent"
+        WindowStyle="None"
+        WindowStartupLocation="CenterScreen"
+        MouseDown="Window_MouseDown">
 
     <Border Background="#272537"
-            CornerRadius="20">
+            CornerRadius="20"
+            BorderBrush="MediumSlateBlue"
+            BorderThickness="5">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200"/>
@@ -107,6 +112,13 @@
                  FontSize="16"/>
             </StackPanel>
 
+            <ListView Grid.Row="3" Grid.RowSpan="3"
+                      Grid.Column="0"
+                      VerticalAlignment="Stretch"
+                      HorizontalAlignment="Stretch">
+                
+            </ListView>
+            
             <Label Grid.Column="1"
                    Grid.Row="4" 
                    Content="Tour Logs"
