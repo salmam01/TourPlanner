@@ -55,6 +55,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="UILayer\Views\CreateTour.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UILayer\Views\CreateTourLog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UILayer\Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -66,7 +74,15 @@
     <Compile Include="BusinessLayer\Models\Tour.cs" />
     <Compile Include="BusinessLayer\Models\TourAttributes.cs" />
     <Compile Include="BusinessLayer\Models\TourLogs.cs" />
+    <Compile Include="UILayer\ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="UILayer\ViewModels\TourLogsViewModel.cs" />
     <Compile Include="UILayer\ViewModels\TourViewModel.cs" />
+    <Compile Include="UILayer\Views\CreateTour.xaml.cs">
+      <DependentUpon>CreateTour.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UILayer\Views\CreateTourLog.xaml.cs">
+      <DependentUpon>CreateTourLog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UILayer\Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
