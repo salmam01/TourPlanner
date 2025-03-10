@@ -10,6 +10,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace TourPlanner.UILayer.Views
@@ -17,7 +18,7 @@ namespace TourPlanner.UILayer.Views
     /// <summary>
     /// Interaction logic for CreateTour.xaml
     /// </summary>
-    public partial class CreateTour : Window
+    public partial class CreateTour : Page
     {
         public CreateTour()
         {

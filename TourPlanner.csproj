@@ -55,6 +55,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="UILayer\ViewModels\TourListViewModel.cs" />
+    <Compile Include="UILayer\Views\CreateTour.xaml.cs">
+      <DependentUpon>CreateTour.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UILayer\Views\TourListSubView.xaml.cs">
+      <DependentUpon>TourListSubView.xaml</DependentUpon>
+    </Compile>
     <Page Include="UILayer\Views\CreateTour.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -80,9 +87,6 @@
     <Compile Include="UILayer\ViewModels\MainWindowViewModel.cs" />
     <Compile Include="UILayer\ViewModels\TourLogViewModel.cs" />
     <Compile Include="UILayer\ViewModels\TourViewModel.cs" />
-    <Compile Include="UILayer\Views\CreateTour.xaml.cs">
-      <DependentUpon>CreateTour.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UILayer\Views\CreateTourLog.xaml.cs">
       <DependentUpon>CreateTourLog.xaml</DependentUpon>
     </Compile>
@@ -90,6 +94,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UILayer\Views\TourListSubView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

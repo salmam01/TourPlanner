@@ -5,145 +5,163 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="TourPlanner.UILayer.ViewModels"
         xmlns:local="clr-namespace:TourPlanner"
+        xmlns:views="clr-namespace:TourPlanner.UILayer.Views"
         mc:Ignorable="d"
         Title="TourPlanner" Height="550" Width="800"
         Background="Transparent"
         WindowStyle="None"
         WindowStartupLocation="CenterScreen"
         MouseDown="Window_MouseDown">
+    
+    <Border CornerRadius="40">
+        <Border.Background>
+            <ImageBrush ImageSource="/UILayer/Resources/Images/Background.jpeg"/>
+        </Border.Background>
+        <Border CornerRadius="30"
+                BorderThickness="3"
+                Opacity="0.92">
 
-    <Border Background="#272537"
-            CornerRadius="20"
-            BorderBrush="MediumSlateBlue"
-            BorderThickness="5">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,1" EndPoint="1,0">
+                    <GradientStop Color="#150C25" Offset="0"/>
+                    <GradientStop Color="#341D5C" Offset="0.75"/>
+                </LinearGradientBrush>
+            </Border.Background>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="130"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+            <Border.BorderBrush>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#462AD8" Offset="0"/>
+                    <GradientStop Color="#DA34AE" Offset="0.75"/>
+                    <GradientStop Color="#8A16C1" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.BorderBrush>
 
-            <Label Content="TourPlanner"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Left"
-                   Margin="10,0,0,0"
-                   Foreground="White"
-                   FontSize="16"/>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="130"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-            <DockPanel Grid.Row="0" Grid.Column="2" 
-                       VerticalAlignment="Center" 
-                       HorizontalAlignment="Stretch">
-                <RadioButton Content="File"
-                             Foreground="White"
-                             FontSize="16"
-                             Width="100"
-                             HorizontalAlignment="Stretch"/>
-                <RadioButton Content="Edit"
-                             Foreground="White"
-                             FontSize="16"
-                             Width="100"
-                             HorizontalAlignment="Stretch"/>
-                <RadioButton Content="Options"
-                             Foreground="White"
-                             FontSize="16"
-                             Width="120"
-                             HorizontalAlignment="Stretch"/>
-                <RadioButton Content="Help"
-                             Foreground="White"
-                             FontSize="16"
-                             HorizontalAlignment="Stretch"/>
-            </DockPanel>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-            <TextBox Grid.Row="1"
-                     Grid.ColumnSpan="2"
-                     Text="Search" 
-                     TextChanged="TextBox_TextChanged"
-                     FontSize="16"
-                     Padding="12,0,10,0"
-                     Background="AliceBlue"/>
 
-            <Label Grid.Row="2" 
-                   Grid.Column="0"
-                   Content="Tours"
-                   Margin="10,0,0,0"
-                   Foreground="White"
-                   FontSize="16"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Left"/>
 
-            <StackPanel Grid.Row="2"
-                        Grid.Column="0"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        Orientation="Horizontal">
-                <Button Content="+"
-                        Foreground="Black"
-                        FontSize="16"
-                        Command="{Binding AddTourCommand}"/>
-                <Button Content="-"
-                        Foreground="Black"
-                        FontSize="16"
-                        Command="{Binding DeleteTourCommand}"/>
-                <Button Content="..."
-                        Foreground="Black"
-                        FontSize="16"/>
-            </StackPanel>
+                <Label Content="TourPlanner"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Left"
+                       Margin="10,0,0,0"
+                       Foreground="White"
+                       FontSize="16"/>
 
-            <StackPanel Grid.Row="2"
-                        Grid.Column="1" 
-                        Orientation="Horizontal"
-                        VerticalAlignment="Center">
-                <RadioButton Content="General"
-                 Foreground="White"
-                 FontSize="16"/>
-                <RadioButton Content="Route"
-                 Foreground="White"
-                 FontSize="16"/>
-                <RadioButton Content="Misc"
-                 Foreground="White"
-                 FontSize="16"/>
-            </StackPanel>
+                <DockPanel Grid.Row="0" Grid.Column="2" 
+                           VerticalAlignment="Center" 
+                           HorizontalAlignment="Stretch">
+                    <RadioButton Content="File"
+                                 Foreground="White"
+                                 FontSize="16"
+                                 Width="100"
+                                 HorizontalAlignment="Stretch"/>
+                    <RadioButton Content="Edit"
+                                 Foreground="White"
+                                 FontSize="16"
+                                 Width="100"
+                                 HorizontalAlignment="Stretch"/>
+                    <RadioButton Content="Options"
+                                 Foreground="White"
+                                 FontSize="16"
+                                 Width="120"
+                                 HorizontalAlignment="Stretch"/>
+                    <RadioButton Content="Help"
+                                 Foreground="White"
+                                 FontSize="16"
+                                 HorizontalAlignment="Stretch"/>
+                </DockPanel>
 
-            <ListView Grid.Row="3" Grid.RowSpan="3"
-                      Grid.Column="0"
-                      VerticalAlignment="Stretch"
-                      HorizontalAlignment="Stretch">
-                
-            </ListView>
-            
-            <Label Grid.Column="1"
-                   Grid.Row="4" 
-                   Content="Tour Logs"
-                   Foreground="White"
-                   FontSize="16"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Left"/>
+                <TextBox Grid.Row="1"
+                         Grid.ColumnSpan="2"
+                         Text="Search" 
+                         TextChanged="TextBox_TextChanged"
+                         FontSize="16"
+                         Padding="12,0,10,0"
+                         Background="AliceBlue"/>
 
-            <StackPanel Grid.Row="4"
-                        Grid.Column="1"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        Orientation="Horizontal"
-                        Margin="0,0,20,0">
-                <Button Content="+"
-                        Foreground="Black"
-                        FontSize="16"/>
-                <Button Content="-"
-                        Foreground="Black"
-                        FontSize="16"/>
-                <Button Content="..."
-                        Foreground="Black"
-                        FontSize="16"/>
-            </StackPanel>
+                <Label Grid.Row="2" 
+                       Grid.Column="0"
+                       Content="Tours"
+                       Margin="10,0,0,0"
+                       Foreground="White"
+                       FontSize="16"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Left"/>
 
-        </Grid>
+                <StackPanel Grid.Row="2"
+                            Grid.Column="0"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal">
+                    <Button Content="+"
+                            Foreground="Black"
+                            FontSize="16"
+                            Command="{Binding AddTourCommand}"/>
+                    <Button Content="-"
+                            Foreground="Black"
+                            FontSize="16"
+                            Command="{Binding DeleteTourCommand}"/>
+                    <Button Content="..."
+                            Foreground="Black"
+                            FontSize="16"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="2"
+                            Grid.Column="1" 
+                            Orientation="Horizontal"
+                            VerticalAlignment="Center">
+                    <RadioButton Content="General"
+                     Foreground="White"
+                     FontSize="16"/>
+                    <RadioButton Content="Route"
+                     Foreground="White"
+                     FontSize="16"/>
+                    <RadioButton Content="Misc"
+                     Foreground="White"
+                     FontSize="16"/>
+                </StackPanel>
+
+
+
+                <Label Grid.Column="1"
+                       Grid.Row="4" 
+                       Content="Tour Logs"
+                       Foreground="White"
+                       FontSize="16"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Left"/>
+
+                <StackPanel Grid.Row="4"
+                            Grid.Column="1"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal"
+                            Margin="0,0,20,0">
+                    <Button Content="+"
+                            Foreground="Black"
+                            FontSize="16"/>
+                    <Button Content="-"
+                            Foreground="Black"
+                            FontSize="16"/>
+                    <Button Content="..."
+                            Foreground="Black"
+                            FontSize="16"/>
+                </StackPanel>
+
+            </Grid>
+        </Border>
     </Border>
 </Window>

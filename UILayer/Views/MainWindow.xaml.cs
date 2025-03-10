@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TourPlanner.UILayer.ViewModels;
 
 namespace TourPlanner
 {
@@ -23,6 +24,7 @@ namespace TourPlanner
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new MainWindowViewModel();
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)

@@ -12,17 +12,19 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TourPlanner.UILayer.ViewModels;
 
 namespace TourPlanner.UILayer.Views
 {
     /// <summary>
-    /// Interaction logic for CreateTourLog.xaml
+    /// Interaction logic for TourListSubView.xaml
     /// </summary>
-    public partial class CreateTourLog : Page
+    public partial class TourListSubView : UserControl
     {
-        public CreateTourLog()
+        public TourListSubView()
         {
             InitializeComponent();
+            DataContext = new TourListViewModel();
         }
     }
 }
