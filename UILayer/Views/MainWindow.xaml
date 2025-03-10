@@ -11,14 +11,15 @@
         Background="Transparent"
         WindowStyle="None"
         WindowStartupLocation="CenterScreen"
-        MouseDown="Window_MouseDown">
+        MouseDown="Window_MouseDown"
+        ResizeMode="NoResize">
     
-    <Border CornerRadius="40">
+    <Border CornerRadius="12">
         <Border.Background>
             <ImageBrush ImageSource="/UILayer/Resources/Images/Background.jpeg"/>
         </Border.Background>
-        <Border CornerRadius="30"
-                BorderThickness="3"
+        <Border CornerRadius="10"
+                BorderThickness="2"
                 Opacity="0.92">
 
             <Border.Background>
@@ -39,9 +40,9 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"/>
-                    <RowDefinition Height="30"/>
                     <RowDefinition Height="40"/>
-                    <RowDefinition Height="130"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="170"/>
                     <RowDefinition Height="40"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
@@ -51,14 +52,13 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-
-
-                <Label Content="TourPlanner"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Left"
-                       Margin="10,0,0,0"
-                       Foreground="White"
-                       FontSize="16"/>
+                <TextBlock Grid.Column="0" 
+                               Text="TourPlanner"
+                               Foreground="LightCyan"
+                               FontSize="16"
+                               FontFamily="Dubai"
+                               VerticalAlignment="Center"
+                               Margin="10,0,0,0"/>
 
                 <DockPanel Grid.Row="0" Grid.Column="2" 
                            VerticalAlignment="Center" 
@@ -84,15 +84,7 @@
                                  HorizontalAlignment="Stretch"/>
                 </DockPanel>
 
-                <TextBox Grid.Row="1"
-                         Grid.ColumnSpan="2"
-                         Text="Search" 
-                         TextChanged="TextBox_TextChanged"
-                         FontSize="16"
-                         Padding="12,0,10,0"
-                         Background="AliceBlue"/>
-
-                <Label Grid.Row="2" 
+                <Label Grid.Row="1" 
                        Grid.Column="0"
                        Content="Tours"
                        Margin="10,0,0,0"
@@ -101,7 +93,7 @@
                        VerticalAlignment="Center"
                        HorizontalAlignment="Left"/>
 
-                <StackPanel Grid.Row="2"
+                <StackPanel Grid.Row="1"
                             Grid.Column="0"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Center"
@@ -119,7 +111,7 @@
                             FontSize="16"/>
                 </StackPanel>
 
-                <StackPanel Grid.Row="2"
+                <StackPanel Grid.Row="1"
                             Grid.Column="1" 
                             Orientation="Horizontal"
                             VerticalAlignment="Center">
@@ -134,7 +126,13 @@
                      FontSize="16"/>
                 </StackPanel>
 
-
+                <TextBox Grid.Row="2"
+                         Grid.Column="0"
+                         Text="Search" 
+                         TextChanged="TextBox_TextChanged"
+                         FontSize="16"
+                         Padding="12,0,10,0"
+                         Background="AliceBlue"/>
 
                 <Label Grid.Column="1"
                        Grid.Row="4" 
