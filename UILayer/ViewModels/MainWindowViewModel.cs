@@ -5,31 +5,36 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Input;
 using TourPlanner.BusinessLayer.Models;
 using TourPlanner.UILayer.Commands;
+using TourPlanner.UILayer.Views;
 
 namespace TourPlanner.UILayer.ViewModels
 {
     public class MainWindowViewModel : BaseViewModel
     {
-        public ObservableCollection<Tour> Tours { get; set; }
-        public RelayCommand AddTourCommand => new RelayCommand(execute => AddTour());
-        public RelayCommand RemoveTourCommand => new RelayCommand(execute => RemoveTour());
+        private UserControl _currentView;
+        public RelayCommand ShowCreateTourCommand => new RelayCommand(execute => ShowCreateTour());
+        public UserControl CurrentView
+        {
+            get => _currentView;
+            set
+            {
+                _currentView = value;
+                OnPropertyChanged(nameof(CurrentView));
+            }
+        }
 
         public MainWindowViewModel()
         {
-            Tours = new ObservableCollection<Tour>();
+            CurrentView = new Home();
         }
-
-        public void AddTour()
+        
+        private void ShowCreateTour()
         {
-            
-        }
-
-        public void RemoveTour()
-        {
-
+            CurrentView = new CreateTour();
         }
 
         private bool CanButtonClick()

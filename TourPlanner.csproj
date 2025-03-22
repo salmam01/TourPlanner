@@ -58,6 +58,7 @@
     <Compile Include="UILayer\ViewModels\BaseViewModel.cs" />
     <Compile Include="UILayer\ViewModels\CreateTourLogViewModel.cs" />
     <Compile Include="UILayer\ViewModels\CreateTourViewModel.cs" />
+    <Compile Include="UILayer\ViewModels\HomeViewModel.cs" />
     <Compile Include="UILayer\ViewModels\SearchBarViewModel.cs" />
     <Compile Include="UILayer\ViewModels\TourListViewModel.cs" />
     <Compile Include="UILayer\ViewModels\TourLogsManagementViewModel.cs" />
@@ -65,6 +66,9 @@
     <Compile Include="UILayer\ViewModels\TourNavbarViewModel.cs" />
     <Compile Include="UILayer\Views\CreateTour.xaml.cs">
       <DependentUpon>CreateTour.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UILayer\Views\Home.xaml.cs">
+      <DependentUpon>Home.xaml</DependentUpon>
     </Compile>
     <Compile Include="UILayer\Views\SearchBar.xaml.cs">
       <DependentUpon>SearchBar.xaml</DependentUpon>
@@ -86,6 +90,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UILayer\Views\CreateTourLog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UILayer\Views\Home.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -18,8 +18,6 @@ namespace TourPlanner.UILayer.ViewModels
         private string _from;
         private string _to;
 
-        public RelayCommand CreateTourCommand => new RelayCommand(execute => CreateTour());
-
         public string Name
         {
             get
