@@ -175,6 +175,7 @@
 
                         <views:TourManagement Grid.Row="0"/>
                         <views:SearchBar Grid.Row="1"/>
+                        <views:TourList Grid.Row="2"/>
 
                     </Grid>
 

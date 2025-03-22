@@ -16,11 +16,14 @@
                     VerticalAlignment="Center"
                     HorizontalAlignment="Stretch">
             <Button Content="General"
-                    FontSize="18"/>
+                    FontSize="18"
+                    VerticalContentAlignment="Center"/>
             <Button Content="Route"
-                    FontSize="18"/>
+                    FontSize="18"
+                    VerticalContentAlignment="Center"/>
             <Button Content="Misc"
-                    FontSize="18"/>
+                    FontSize="18"
+                    VerticalContentAlignment="Center"/>
         </StackPanel>
     </Grid>
 </UserControl>
