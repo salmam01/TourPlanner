@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace TourPlanner.UILayer.Views
 {
     /// <summary>
-    /// Interaction logic for CreateTour.xaml
+    /// Interaction logic for SearchBar.xaml
     /// </summary>
-    public partial class CreateTour : UserControl
+    public partial class SearchBar : UserControl
     {
-        public CreateTour()
+        public SearchBar()
         {
             InitializeComponent();
         }

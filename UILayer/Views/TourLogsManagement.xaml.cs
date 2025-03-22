@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace TourPlanner.UILayer.Views
 {
     /// <summary>
-    /// Interaction logic for CreateTour.xaml
+    /// Interaction logic for TourLogsManagement.xaml
     /// </summary>
-    public partial class CreateTour : UserControl
+    public partial class TourLogsManagement : UserControl
     {
-        public CreateTour()
+        public TourLogsManagement()
         {
             InitializeComponent();
         }

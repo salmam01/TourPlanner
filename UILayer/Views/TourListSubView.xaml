@@ -7,9 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <ListView Grid.Row="3" Grid.RowSpan="3"
-                  Grid.Column="0"
-                  VerticalAlignment="Stretch"
+        <ListView VerticalAlignment="Stretch"
                   HorizontalAlignment="Stretch">
         </ListView>
     </Grid>
