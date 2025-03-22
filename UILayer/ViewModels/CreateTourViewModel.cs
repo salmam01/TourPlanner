@@ -9,7 +9,7 @@ using TourPlanner.UILayer.Commands;
 
 namespace TourPlanner.UILayer.ViewModels
 {
-    public class CreateTourViewModel : INotifyPropertyChanged
+    public class CreateTourViewModel : BaseViewModel
     {
         private string _name;
         private string _date;
@@ -102,13 +102,6 @@ namespace TourPlanner.UILayer.ViewModels
         {
             Tour tour = new Tour(_name, _date, _description, _from, _to);
 
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

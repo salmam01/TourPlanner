@@ -11,7 +11,7 @@ using TourPlanner.UILayer.Commands;
 
 namespace TourPlanner.UILayer.ViewModels
 {
-    public class MainWindowViewModel : INotifyPropertyChanged
+    public class MainWindowViewModel : BaseViewModel
     {
         public ObservableCollection<Tour> Tours { get; set; }
         public RelayCommand AddTourCommand => new RelayCommand(execute => AddTour());
@@ -35,12 +35,6 @@ namespace TourPlanner.UILayer.ViewModels
         private bool CanButtonClick()
         {
             return true;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

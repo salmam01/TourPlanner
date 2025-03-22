@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace TourPlanner.UILayer.ViewModels
 {
-    class TourManagementViewModel
+    public class TourManagementViewModel : BaseViewModel
     {
+
     }
 }

@@ -25,16 +25,19 @@
                     Foreground="Black"
                     FontSize="18"
                     MinWidth="30"
+                    VerticalContentAlignment="Center"
                     Command="{Binding CreateTourCommand}"/>
             <Button Content="-"
                     Foreground="Black"
                     MinWidth="30"
                     FontSize="18"
+                    VerticalContentAlignment="Center"
                     Command="{Binding DeleteTourCommand}"/>
             <Button Content="..."
                     Foreground="Black"
                     MinWidth="30"
-                    FontSize="18"/>
+                    FontSize="18"
+                    VerticalContentAlignment="Center"/>
         </StackPanel>
     </Grid>
 </UserControl>

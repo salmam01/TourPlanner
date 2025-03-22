@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace TourPlanner.UILayer.ViewModels
 {
-    public class TourListViewModel : INotifyPropertyChanged
+    public class TourListViewModel : BaseViewModel
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        
     }
 }
