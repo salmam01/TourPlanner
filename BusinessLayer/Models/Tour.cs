@@ -11,7 +11,7 @@ namespace TourPlanner.BusinessLayer.Models
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        //public DateTime Date { get; set; }
+        //public DateTime Date { get; set; } will fix later, string for now
         public string Date { get; set; }
         public string Description { get; set; }
         public string From { get; set; }

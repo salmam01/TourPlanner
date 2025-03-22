@@ -8,7 +8,13 @@
              d:DesignHeight="400" d:DesignWidth="200">
     <Grid>
         <ListView VerticalAlignment="Stretch"
-                  HorizontalAlignment="Stretch">
+                  HorizontalAlignment="Stretch"
+                  ItemsSource="{Binding Tours}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn DisplayMemberBinding="{Binding Name}"/>
+                </GridView>
+            </ListView.View>
         </ListView>
     </Grid>
 </UserControl>

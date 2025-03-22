@@ -16,7 +16,11 @@ namespace TourPlanner.UILayer.ViewModels
     public class MainWindowViewModel : BaseViewModel
     {
         private UserControl _currentView;
-        public RelayCommand ShowCreateTourCommand => new RelayCommand(execute => ShowCreateTour());
+        private UserControl _homeView;
+        public ICommand ShowCreateTourCommand { get; }
+        public ICommand ShowHomeViewCommand { get; }
+        public ObservableCollection<Tour> Tours { get; set; } = new ObservableCollection<Tour>();
+
         public UserControl CurrentView
         {
             get => _currentView;
@@ -27,14 +31,33 @@ namespace TourPlanner.UILayer.ViewModels
             }
         }
 
+        public UserControl HomeView
+        {
+            get => _homeView;
+            set
+            {
+                _homeView = value;
+                OnPropertyChanged(nameof(HomeView));
+            }
+        }
+
         public MainWindowViewModel()
         {
-            CurrentView = new Home();
+            ShowCreateTourCommand = new RelayCommand(execute => ShowCreateTour());
+            ShowHomeViewCommand = new RelayCommand(execute => ShowHomeView());
+
+            _homeView = new Home();
+            CurrentView = _homeView;
         }
         
         private void ShowCreateTour()
         {
             CurrentView = new CreateTour();
+        }
+
+        private void ShowHomeView()
+        {
+            CurrentView = _homeView;
         }
 
         private bool CanButtonClick()

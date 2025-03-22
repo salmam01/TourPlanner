@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using TourPlanner.BusinessLayer.Models;
 using TourPlanner.UILayer.Commands;
 
@@ -99,7 +100,7 @@ namespace TourPlanner.UILayer.ViewModels
         public void CreateTour()
         {
             Tour tour = new Tour(_name, _date, _description, _from, _to);
-
+            MessageBox.Show(tour.Name + "has been created");
         }
     }
 }

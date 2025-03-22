@@ -3,13 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:TourPlanner.UILayer.Views"
+             xmlns:views="clr-namespace:TourPlanner.UILayer.Views"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="800">
     <Grid>
-        <StackPanel Width="250"
+        <views:ReturnButton Grid.Column="0"/>
+
+        <StackPanel Grid.Column="1"
+                    Width="250"
                     Orientation="Vertical"
-                    Margin="0,20,0,0">
+                    Margin="0,20,0,0"
+                    HorizontalAlignment="Center">
 
             <TextBlock Text="Create a new Tour"
                        Foreground="White"
@@ -51,7 +55,6 @@
                         FontSize="13"
                         FontFamily="Dubai"
                         FontWeight="Medium"
-                        Foreground="White"
                         BorderBrush="DarkGray"
                         BorderThickness="0,0,0,1"
                         Height="28"
@@ -91,7 +94,6 @@
                       FontFamily="Dubai"
                       FontSize="13"
                       FontWeight="Medium"
-                      Foreground="White"
                       BorderBrush="DarkGray"
                       BorderThickness="0,0,0,1"
                       Height="28"
@@ -151,7 +153,7 @@
                     Content="Create Tour"
                     Foreground="White"
                     FontFamily="Dubai"
-                    FontSize="16"
+                    FontSize="18"
                     Cursor="Hand"
                     VerticalAlignment="Bottom"
                     Margin="0,30,0,0"
