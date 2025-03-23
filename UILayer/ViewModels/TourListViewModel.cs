@@ -18,7 +18,7 @@ namespace TourPlanner.UILayer.ViewModels
             set
             {
                 _tours = value;
-                OnPropertyChanged(nameof(Tours)); // Fixed incorrect property name
+                OnPropertyChanged(nameof(Tours));
             }
         }
 
@@ -33,7 +33,7 @@ namespace TourPlanner.UILayer.ViewModels
             }
         }
 
-        public TourListViewModel(CreateTourViewModel createTourViewModel)
+        public TourListViewModel()
         {
             _tours = new ObservableCollection<Tour>
             {
@@ -43,8 +43,6 @@ namespace TourPlanner.UILayer.ViewModels
                     TourLogs = new List<TourLog>()
                 }
             };
-
-            createTourViewModel.TourCreated += OnTourCreated;
         }
 
         private void OnTourCreated(Tour tour)

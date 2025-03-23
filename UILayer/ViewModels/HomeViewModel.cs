@@ -34,7 +34,7 @@ namespace TourPlanner.UILayer.ViewModels
         public HomeViewModel(CreateTourViewModel createTourViewModel)
         {
             _tourManagementVm = new TourManagementViewModel();
-            _tourListVm = new TourListViewModel(createTourViewModel);
+            _tourListVm = new TourListViewModel();
 
             ModifyTourCommand = new RelayCommand(execute => ModifyTour());
             DeleteTourCommand = new RelayCommand(execute => DeleteTour());

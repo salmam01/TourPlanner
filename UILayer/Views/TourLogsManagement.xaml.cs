@@ -12,7 +12,6 @@ namespace TourPlanner.UILayer.Views
         public TourLogsManagement()
         {
             InitializeComponent();
-            DataContext = new TourLogsManagementViewModel();
         }
     }
 }
