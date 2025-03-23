@@ -24,10 +24,7 @@ namespace TourPlanner.UILayer.ViewModels
 
         public string Name
         {
-            get
-            {
-                return _name;
-            }
+            get => _name;
             set
             {
                 _name = value;
@@ -37,10 +34,7 @@ namespace TourPlanner.UILayer.ViewModels
 
         public string Date
         {
-            get
-            {
-                return _date;
-            }
+            get => _date;
             set
             {
                 _date = value;
@@ -50,10 +44,7 @@ namespace TourPlanner.UILayer.ViewModels
 
         public string Description
         {
-            get
-            {
-                return _description;
-            }
+            get => _description;
             set
             {
                 _description = value;
@@ -63,10 +54,7 @@ namespace TourPlanner.UILayer.ViewModels
 
         public string TransportType
         {
-            get
-            {
-                return _transportType;
-            }
+            get => _transportType;
             set
             {
                 _transportType = value;
@@ -76,10 +64,7 @@ namespace TourPlanner.UILayer.ViewModels
 
         public string From
         {
-            get
-            {
-                return _from;
-            }
+            get => _from;
             set
             {
                 _from = value;
@@ -89,10 +74,7 @@ namespace TourPlanner.UILayer.ViewModels
 
         public string To
         {
-            get
-            {
-                return _to;
-            }
+            get => _to;
             set
             {
                 _to = value;

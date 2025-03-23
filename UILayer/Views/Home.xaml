@@ -12,7 +12,8 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Grid>
+        <!-- Left side: Tour List -->
+        <Grid Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -21,22 +22,26 @@
 
             <views:TourManagement Grid.Row="0"/>
             <views:SearchBar Grid.Row="1"/>
-            <views:TourList Grid.Row="2"/>
-
+            <views:TourList x:Name="TourListView" Grid.Row="2"/>
         </Grid>
 
+        <!-- Right side: Tour Details and Logs -->
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="230"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="30"/>  <!-- Navbar height -->
+                <RowDefinition Height="230"/> <!-- Map/Image area -->
+                <RowDefinition Height="Auto"/> <!-- Tour Logs header -->
+                <RowDefinition Height="*"/>   <!-- Tour Logs list -->
             </Grid.RowDefinitions>
 
             <views:TourNavbar Grid.Row="0"/>
-
-            <views:TourLogsManagement Grid.Row="2"/>
-
+            
+            <!-- Placeholder for Map/Image -->
+            <Border Grid.Row="1" Background="#1E4620"/>
+            
+            <views:TourLogsManagement x:Name="TourLogsView" 
+                                     Grid.Row="2" 
+                                     Grid.RowSpan="2"/>
         </Grid>
     </Grid>
 </UserControl>

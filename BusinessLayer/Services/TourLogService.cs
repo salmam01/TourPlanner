@@ -13,7 +13,7 @@ namespace TourPlanner.BusinessLayer.Services
         {
             ValidateTourLogData(date, comment, difficulty, rating, totalDistance, totalTime);
 
-            var tourLog = new TourLog
+            TourLog tourLog = new TourLog
             {
                 Id = Guid.NewGuid(),
                 Date = date,
@@ -45,12 +45,8 @@ namespace TourPlanner.BusinessLayer.Services
             tourLog.TotalTime = totalTime;
         }
 
-        public void DeleteTourLog(TourLog tourLog, Tour tour)
-        {
-            if (tour.TourLogs != null)
-            {
-                tour.TourLogs.Remove(tourLog);
-            }
+        public void DeleteTourLog(TourLog tourLog, Tour tour) {
+            tour.TourLogs?.Remove(tourLog);
         }
 
         public List<TourLog> GetTourLogs(Tour tour)
