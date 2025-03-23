@@ -21,8 +21,9 @@ namespace TourPlanner.BusinessLayer.Models
         public TimeSpan EstimatedTime { get; set; }
         public List<TourLog> TourLogs { get; set; }
 
-        public Tour(string name, DateTime date, string description, string from, string to)
+        public Tour(Guid id, string name, DateTime date, string description, string from, string to)
         {
+            Id = id;
             Name = name;
             Date = date;
             Description = description;

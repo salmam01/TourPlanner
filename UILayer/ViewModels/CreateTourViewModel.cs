@@ -87,11 +87,13 @@ namespace TourPlanner.UILayer.ViewModels
         public CreateTourViewModel()
         {
             CreateTourCommand = new RelayCommand(execute => CreateTour());
+
+            Date = DateTime.Now;
         }
 
         public void CreateTour()
         {
-            Tour tour = new Tour(_name, _date, _description, _from, _to);
+            Tour tour = new Tour(Guid.NewGuid(), _name, _date, _description, _from, _to);
             TourCreated?.Invoke(tour);
 
             MessageBox.Show(tour.Name + " has been created");

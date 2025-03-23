@@ -37,9 +37,8 @@ namespace TourPlanner.UILayer.ViewModels
         {
             _tours = new ObservableCollection<Tour>
             {
-                new Tour("Bosnia Roadtrip", new DateTime(2025, 4, 20), "A roadtrip through Bosnia.", "Sarajevo", "Srebrenica")
+                new Tour(Guid.NewGuid(), "Bosnia Roadtrip", new DateTime(2025, 4, 20), "A roadtrip through Bosnia.", "Sarajevo", "Srebrenica")
                 {
-                    Id = Guid.NewGuid(),
                     TourLogs = new List<TourLog>()
                 }
             };
