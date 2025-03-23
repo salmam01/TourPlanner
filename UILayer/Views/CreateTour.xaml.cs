@@ -24,8 +24,6 @@ namespace TourPlanner.UILayer.Views
         public CreateTour()
         {
             InitializeComponent();
-
-            DataContext = new CreateTourViewModel();
         }
     }
 }

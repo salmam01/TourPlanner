@@ -12,7 +12,6 @@ namespace TourPlanner.UILayer.Views
         public Home()
         {
             InitializeComponent();
-            DataContext = new HomeViewModel();
         }
     }
 }

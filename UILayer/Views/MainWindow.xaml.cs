@@ -24,9 +24,6 @@ namespace TourPlanner
         public MainWindow()
         {
             InitializeComponent();
-
-            //  Data is coming from the Main View model
-            DataContext = new MainWindowViewModel();
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)

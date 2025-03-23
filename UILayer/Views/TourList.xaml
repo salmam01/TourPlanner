@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:TourPlanner.UILayer.Views"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="200">
+    
     <Grid>
         <ListView VerticalAlignment="Stretch"
                   HorizontalAlignment="Stretch"

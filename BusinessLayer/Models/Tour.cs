@@ -11,8 +11,7 @@ namespace TourPlanner.BusinessLayer.Models
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        //public DateTime Date { get; set; } will fix later, string for now
-        public string Date { get; set; }
+        public DateTime Date { get; set; }
         public string Description { get; set; }
         public string From { get; set; }
         public string To { get; set; }
@@ -22,7 +21,7 @@ namespace TourPlanner.BusinessLayer.Models
         public TimeSpan EstimatedTime { get; set; }
         public List<TourLog> TourLogs { get; set; }
 
-        public Tour(string name, string date, string description, string from, string to)
+        public Tour(string name, DateTime date, string description, string from, string to)
         {
             Name = name;
             Date = date;

@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using System.Windows.Input;
 using TourPlanner.BusinessLayer.Models;
 using TourPlanner.UILayer.Commands;
@@ -15,12 +8,9 @@ namespace TourPlanner.UILayer.ViewModels
 {
     public class MainWindowViewModel : BaseViewModel
     {
+        private HomeViewModel _homeViewModel;
+        private CreateTourViewModel _createTourViewModel;
         private UserControl _currentView;
-        private UserControl _homeView;
-        public ICommand ShowCreateTourCommand { get; }
-        public ICommand ShowHomeViewCommand { get; }
-        public ObservableCollection<Tour> Tours { get; set; } = new ObservableCollection<Tour>();
-
         public UserControl CurrentView
         {
             get => _currentView;
@@ -30,7 +20,7 @@ namespace TourPlanner.UILayer.ViewModels
                 OnPropertyChanged(nameof(CurrentView));
             }
         }
-
+        private UserControl _homeView;
         public UserControl HomeView
         {
             get => _homeView;
@@ -40,9 +30,15 @@ namespace TourPlanner.UILayer.ViewModels
                 OnPropertyChanged(nameof(HomeView));
             }
         }
+        public ICommand ShowCreateTourCommand { get; }
+        public ICommand ShowHomeViewCommand { get; }
+
 
         public MainWindowViewModel()
         {
+            _createTourViewModel = new CreateTourViewModel();
+            _homeViewModel = new HomeViewModel(_createTourViewModel);
+
             ShowCreateTourCommand = new RelayCommand(execute => ShowCreateTour());
             ShowHomeViewCommand = new RelayCommand(execute => ShowHomeView());
 
@@ -58,11 +54,6 @@ namespace TourPlanner.UILayer.ViewModels
         private void ShowHomeView()
         {
             CurrentView = _homeView;
-        }
-
-        private bool CanButtonClick()
-        {
-            return true;
         }
     }
 }

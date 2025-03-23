@@ -8,5 +8,6 @@ namespace TourPlanner.UILayer.ViewModels
 {
     public class CreateTourLogViewModel : BaseViewModel
     {
+        
     }
 }
