@@ -42,6 +42,17 @@ namespace TourPlanner
             WindowState = WindowState.Minimized;
         }
 
+        private void buttonSize_Click(object sender, RoutedEventArgs e)
+        {
+            if(WindowState != WindowState.Maximized)
+            {
+                WindowState = WindowState.Maximized;
+            } else
+            {
+                WindowState = WindowState.Normal;
+            }
+        }
+
         private void buttonClose_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();

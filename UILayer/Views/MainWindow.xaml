@@ -54,6 +54,7 @@
                         <ColumnDefinition/>
                         <ColumnDefinition Width="25"/>
                         <ColumnDefinition Width="25"/>
+                        <ColumnDefinition Width="25"/>
                         <ColumnDefinition Width="5"/>
                     </Grid.ColumnDefinitions>
 
@@ -87,8 +88,8 @@
 
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
-                                <Border Width="20" Height="20"
-                                        CornerRadius="10"
+                                <Border Width="22" Height="22"
+                                        CornerRadius="11"
                                         Background="{TemplateBinding Background}">
                                     <ContentPresenter VerticalAlignment="Center"
                                                       HorizontalAlignment="Center"/>
@@ -98,6 +99,37 @@
                     </Button>
 
                     <Button Grid.Column="7"
+                            x:Name="buttonSize"
+                            BorderThickness="0"
+                            Content="_"
+                            Foreground="White"
+                            FontSize="12"
+                            Cursor="Hand"
+                            Click="buttonSize_Click">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#86DC3D"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#86DC3D"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Width="22" Height="22"
+                                        CornerRadius="11"
+                                        Background="{TemplateBinding Background}">
+                                    <ContentPresenter VerticalAlignment="Center"
+                                                      HorizontalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+
+                    <Button Grid.Column="8"
                             x:Name="buttonClose"
                             BorderThickness="0"
                             Content="X"
@@ -118,8 +150,8 @@
 
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
-                                <Border Width="20" Height="20"
-                                        CornerRadius="10"
+                                <Border Width="22" Height="22"
+                                        CornerRadius="11"
                                         Background="{TemplateBinding Background}">
                                     <ContentPresenter VerticalAlignment="Center"
                                                       HorizontalAlignment="Center"/>
