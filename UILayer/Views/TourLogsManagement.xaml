@@ -7,37 +7,140 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TextBlock Text="TourLogs"
-                   Margin="10,0,0,0"
-                   Foreground="White"
-                   FontSize="18"
-                   FontFamily="Dubai"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Left"
-                   MaxHeight="35"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-        <StackPanel HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    Orientation="Horizontal"
-                    Height="35"
-                    Width="Auto">
-            <Button Content="+"
-                    Foreground="Black"
-                    FontSize="18"
-                    MinWidth="30"
-                    VerticalContentAlignment="Center"
-                    Command="{Binding CreateTourLogCommand}"/>
-            <Button Content="-"
-                    Foreground="Black"
-                    MinWidth="30"
-                    FontSize="18"
-                    VerticalContentAlignment="Center"
-                    Command="{Binding DeleteTourLogCommand}"/>
-            <Button Content="..."
-                    Foreground="Black"
-                    MinWidth="30"
-                    FontSize="18"
-                    VerticalContentAlignment="Center"/>
-        </StackPanel>
+        <!-- Header with Title and Buttons -->
+        <Grid Grid.Row="0" Background="#0078D7">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <TextBlock Text="Tour Logs"
+                      Margin="10,5"
+                      Foreground="White"
+                      FontSize="16"
+                      FontWeight="SemiBold"
+                      VerticalAlignment="Center"/>
+
+            <StackPanel Grid.Column="1"
+                       Orientation="Horizontal"
+                       HorizontalAlignment="Right"
+                       Margin="5,0">
+                <Button Content="+"
+                        Width="24"
+                        Height="24"
+                        Margin="2,0"
+                        Background="Transparent"
+                        Foreground="White"
+                        BorderThickness="0"
+                        Command="{Binding CreateTourLogCommand}"/>
+                <Button Content="-"
+                        Width="24"
+                        Height="24"
+                        Margin="2,0"
+                        Background="Transparent"
+                        Foreground="White"
+                        BorderThickness="0"
+                        Command="{Binding DeleteTourLogCommand}"/>
+                <Button Content="..."
+                        Width="24"
+                        Height="24"
+                        Margin="2,0,5,0"
+                        Background="Transparent"
+                        Foreground="White"
+                        BorderThickness="0"
+                        Command="{Binding EditTourLogCommand}"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Tour Logs Table -->
+        <ListView Grid.Row="1" 
+                  ItemsSource="{Binding TourLogs}"
+                  SelectedItem="{Binding SelectedTourLog, Mode=TwoWay}"
+                  Background="#F5F5F5"
+                  BorderThickness="0"
+                  Margin="0"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  AlternationCount="2">
+            <ListView.Resources>
+                <Style TargetType="GridViewColumnHeader">
+                    <Setter Property="Background" Value="#9CCB19"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="Height" Value="30"/>
+                    <Setter Property="Padding" Value="10,0"/>
+                    <Setter Property="BorderThickness" Value="0,0,1,0"/>
+                    <Setter Property="BorderBrush" Value="#89B717"/>
+                </Style>
+            </ListView.Resources>
+            
+            <ListView.View>
+                <GridView>
+                    <!-- Date Column -->
+                    <GridViewColumn Header="Date" Width="150">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Date, StringFormat=dd.MM.yyyy}"
+                                         Margin="10,5"
+                                         VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <!-- Duration Column -->
+                    <GridViewColumn Header="Duration" Width="150">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Margin="10,5" VerticalAlignment="Center">
+                                    <Run Text="{Binding TotalTime, StringFormat=hh}"/>
+                                    <Run Text=" : "/>
+                                    <Run Text="{Binding TotalTime, StringFormat=mm}"/>
+                                </TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <!-- Distance Column -->
+                    <GridViewColumn Header="Distance" Width="150">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Margin="10,5" VerticalAlignment="Center">
+                                    <Run Text="{Binding TotalDistance, StringFormat=F1}"/>
+                                    <Run Text=" km"/>
+                                </TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+            
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Height" Value="35"/>
+                    <Setter Property="Background" Value="White"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                    <Style.Triggers>
+                        <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                            <Setter Property="Background" Value="#E8E8E8"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#CCE8FF"/>
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True"/>
+                                <Condition Property="IsSelected" Value="False"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background" Value="#F0F0F0"/>
+                        </MultiTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.ItemContainerStyle>
+        </ListView>
     </Grid>
 </UserControl>

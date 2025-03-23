@@ -29,5 +29,11 @@ namespace TourPlanner.BusinessLayer.Models
             From = from;
             To = to;
         }
+
+        public Tour() {
+            TourLogs = new List<TourLog>();
+            
+            
+        }
     }
 }
