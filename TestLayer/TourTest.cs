@@ -2,16 +2,13 @@
 using TourPlanner.BusinessLayer.Models;
 using System;
 
-namespace TourPlanner.TestLayer
-{
+namespace TourPlanner.TestLayer {
     [TestClass]
-    public class TourTests
-    {
+    public class TourTests {
         private Tour testTour;
 
         [TestInitialize]
-        public void Setup()
-        {
+        public void Setup() {
             testTour = new Tour
             {
                 Name = "Test Tour",
@@ -22,37 +19,31 @@ namespace TourPlanner.TestLayer
         }
 
         [TestMethod]
-        public void TestTourNameIsCorrect()
-        {
-                     
+        public void TestTourNameIsCorrect() {
             // Assert
             Assert.AreEqual("Test Tour", testTour.Name);
         }
 
         [TestMethod]
-        public void TestTourDescriptionIsCorrect()
-        {
+        public void TestTourDescriptionIsCorrect() {
             // Assert
             Assert.AreEqual("Prob:description", testTour.Description);
         }
 
         [TestMethod]
-        public void TestTourDistanceIsPositive()
-        {
+        public void TestTourDistanceIsPositive() {
             // Assert
             Assert.IsTrue(testTour.Distance > 0);
         }
 
         [TestMethod]
-        public void TestEstimatedTimeIsValid()
-        {
+        public void TestEstimatedTimeIsValid() {
             // Assert
             Assert.AreEqual(TimeSpan.FromHours(2), testTour.EstimatedTime);
         }
 
         [TestMethod]
-        public void TestTourLogsInitiallyEmpty()
-        {
+        public void TestTourLogsInitiallyEmpty() {
             // Assert
             Assert.IsNotNull(testTour.TourLogs);
             Assert.AreEqual(0, testTour.TourLogs.Count);
