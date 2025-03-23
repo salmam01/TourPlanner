@@ -8,19 +8,21 @@ using System.Windows;
 using System.Windows.Input;
 using TourPlanner.BusinessLayer.Models;
 using TourPlanner.UILayer.Commands;
+using TourPlanner.UILayer.Stores;
 
 namespace TourPlanner.UILayer.ViewModels
 {
     public class CreateTourViewModel : BaseViewModel
     {
         private string _name;
-        private string _date;
+        private DateTime _date;
         private string _description;
         private string _transportType;
         private string _from;
         private string _to;
 
         public ICommand CreateTourCommand { get; }
+        public event Action<Tour> TourCreated;
 
         public string Name
         {
@@ -32,7 +34,7 @@ namespace TourPlanner.UILayer.ViewModels
             }
         }
 
-        public string Date
+        public DateTime Date
         {
             get => _date;
             set
@@ -85,11 +87,15 @@ namespace TourPlanner.UILayer.ViewModels
         public CreateTourViewModel()
         {
             CreateTourCommand = new RelayCommand(execute => CreateTour());
+
+            Date = DateTime.Now;
         }
 
         public void CreateTour()
         {
-            Tour tour = new Tour(_name, _date, _description, _from, _to);
+            Tour tour = new Tour(Guid.NewGuid(), _name, _date, _description, _from, _to);
+            TourCreated?.Invoke(tour);
+
             MessageBox.Show(tour.Name + " has been created");
         }
     }

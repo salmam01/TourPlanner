@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:vm="TourPlanner.UILayer.ViewModels"
+        xmlns:vm="clr-namespace:TourPlanner.UILayer.ViewModels"
         xmlns:views="clr-namespace:TourPlanner.UILayer.Views"
         mc:Ignorable="d"
         Title="TourPlanner" Height="550" Width="800"
@@ -13,6 +13,10 @@
         WindowStartupLocation="CenterScreen"
         MouseDown="Window_MouseDown"
         ResizeMode="NoResize">
+
+    <Window.DataContext>
+        <vm:MainWindowViewModel/>
+    </Window.DataContext>
     
     <Border CornerRadius="12">
         <Border.Background>

@@ -1,18 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TourPlanner.BusinessLayer.Models;
+using TourPlanner.UILayer.Stores;
 
 namespace TourPlanner.UILayer.ViewModels
 {
     public class TourListViewModel : BaseViewModel
     {
         private Tour _selectedTour;
-        public ObservableCollection<Tour> Tours { get; set; }
+        private ObservableCollection<Tour> _tours;
+
+        public ObservableCollection<Tour> Tours
+        {
+            get => _tours;
+            set
+            {
+                _tours = value;
+                OnPropertyChanged(nameof(Tours));
+            }
+        }
 
         public Tour SelectedTour
         {
@@ -25,18 +33,20 @@ namespace TourPlanner.UILayer.ViewModels
             }
         }
 
-       // public event EventHandler<Tour> SelectedTourChanged;
-
         public TourListViewModel()
         {
-            Tours = new ObservableCollection<Tour>();
-            // aample data for testing
-            Tour tour = new Tour("Test Tour", DateTime.Now.ToString(), "Test Description", "Vienna", "Salzburg")
+            _tours = new ObservableCollection<Tour>
             {
-                Id = Guid.NewGuid(),
-                TourLogs = new List<TourLog>()
+                new Tour(Guid.NewGuid(), "Bosnia Roadtrip", new DateTime(2025, 4, 20), "A roadtrip through Bosnia.", "Sarajevo", "Srebrenica")
+                {
+                    TourLogs = new List<TourLog>()
+                }
             };
-            Tours.Add(tour);
+        }
+
+        private void OnTourCreated(Tour tour)
+        {
+            _tours.Add(tour);
         }
     }
 }

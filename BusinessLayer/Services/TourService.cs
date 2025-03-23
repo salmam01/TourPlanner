@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TourPlanner.BusinessLayer.Services
 {
-    class TourService
+    public class TourService
     {
     }
 }
