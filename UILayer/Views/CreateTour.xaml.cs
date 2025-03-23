@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TourPlanner.UILayer.ViewModels;
 
 namespace TourPlanner.UILayer.Views
 {
@@ -23,6 +24,8 @@ namespace TourPlanner.UILayer.Views
         public CreateTour()
         {
             InitializeComponent();
+
+            DataContext = new CreateTourViewModel();
         }
     }
 }

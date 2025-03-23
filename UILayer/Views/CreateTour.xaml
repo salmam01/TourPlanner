@@ -148,7 +148,7 @@
                      Text="{Binding To, UpdateSourceTrigger=PropertyChanged}"/>
 
             <Button Grid.Column="2"
-                    x:Name="buttonSubmit"
+                    x:Name="submitButton"
                     BorderThickness="0"
                     Content="Create Tour"
                     Foreground="White"
@@ -157,7 +157,8 @@
                     Cursor="Hand"
                     VerticalAlignment="Bottom"
                     Margin="0,30,0,0"
-                    VerticalContentAlignment="Center">
+                    VerticalContentAlignment="Center"
+                    Command="{Binding CreateTourCommand}">
 
                 <Button.Style>
                     <Style TargetType="Button">
@@ -181,8 +182,6 @@
                     </ControlTemplate>
                 </Button.Template>
             </Button>
-
         </StackPanel>
-
     </Grid>
 </UserControl>

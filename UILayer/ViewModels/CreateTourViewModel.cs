@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using TourPlanner.BusinessLayer.Models;
 using TourPlanner.UILayer.Commands;
 
@@ -18,6 +19,8 @@ namespace TourPlanner.UILayer.ViewModels
         private string _transportType;
         private string _from;
         private string _to;
+
+        public ICommand CreateTourCommand { get; }
 
         public string Name
         {
@@ -97,10 +100,15 @@ namespace TourPlanner.UILayer.ViewModels
             }
         }
 
+        public CreateTourViewModel()
+        {
+            CreateTourCommand = new RelayCommand(execute => CreateTour());
+        }
+
         public void CreateTour()
         {
             Tour tour = new Tour(_name, _date, _description, _from, _to);
-            MessageBox.Show(tour.Name + "has been created");
+            MessageBox.Show(tour.Name + " has been created");
         }
     }
 }
