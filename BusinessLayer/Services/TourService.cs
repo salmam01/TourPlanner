@@ -9,27 +9,19 @@ namespace TourPlanner.BusinessLayer.Services
 {
     public class TourService
     {
-
-        public Tour CreateTour(string name, DateTime date, string description, string transportType, string from, string to)
+        //  TODO: unsure about the use of this class ... data base operations?
+        public Tour CreateTour(Tour tour)
         {
-            ValidateTourData(name, date, description, transportType, from, to);
-
-            Tour tour = new Tour(
-                name,
-                date,
-                description,
-                transportType,
-                from,
-                to
-            );
+            ValidateTourData(tour);
 
             return tour;
         }
 
         public void UpdateTour(Tour tour, string name, DateTime date, string description, string transportType, string from, string to)
         {
+            //  TODO: fix this method
             //  Could try with a switch using "valueToChange" & "value" parameters later
-            ValidateTourData(name, date, description, transportType, from, to);
+            ValidateTourData(tour);
 
             tour.Name = name;
             tour.Date = date;
@@ -44,30 +36,30 @@ namespace TourPlanner.BusinessLayer.Services
             //  Database stuff, probably
         }
 
-        public void ValidateTourData(string name, DateTime date, string description, string transportType, string from, string to)
+        public void ValidateTourData(Tour tour)
         {
-            if (name.Length <= 0 || name.Length >= 120)
+            if (tour.Name.Length <= 0 || tour.Name.Length >= 120)
             {
                 throw new ArgumentException("Invalid name length.");
             }
             //  If statement to check if date is less than the current day
-            if (date == null)
+            if (tour.Date == null)
             {
                 throw new ArgumentException("Date cannot be empty.");
             }
-            if (description.Length >= 255)
+            if (tour.Description.Length >= 255)
             {
                 throw new ArgumentException("Description cannot be longer than 255 words.");
             }
-            if (transportType != "Plane" || transportType != "Bus" || transportType != "Car" || transportType != "Train")
+            if (tour.TransportType != "Plane" || tour.TransportType != "Bus" || tour.TransportType != "Car" || tour.TransportType != "Train")
             {
                 throw new ArgumentException("Invalid Transport Type.");
             }
-            if (from.Length <= 0 || from.Length >= 255)
+            if (tour.Name.Length <= 0 || tour.Name.Length >= 255)
             {
                 throw new ArgumentException("Invalid From location length.");
             }
-            if (to.Length <= 0 || to.Length >= 255)
+            if (tour.Name.Length <= 0 || tour.Name.Length >= 255)
             {
                 throw new ArgumentException("Invalid To location length.");
             }

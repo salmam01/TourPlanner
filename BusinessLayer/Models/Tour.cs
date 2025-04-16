@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace TourPlanner.BusinessLayer.Models
 {
+    //  TODO: add OR / Mapping
     public class Tour
     {
         public Guid Id { get; set; }
