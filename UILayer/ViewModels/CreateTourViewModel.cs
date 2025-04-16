@@ -93,10 +93,10 @@ namespace TourPlanner.UILayer.ViewModels
 
         public void CreateTour()
         {
-            Tour tour = new Tour(Guid.NewGuid(), _name, _date, _description, _from, _to);
-            TourCreated?.Invoke(tour);
+            //Tour tour = new Tour(Guid.NewGuid(), _name, _date, _description, _from, _to);
+            //TourCreated?.Invoke(tour);
 
-            MessageBox.Show(tour.Name + " has been created");
+            //MessageBox.Show(tour.Name + " has been created");
         }
     }
 }
