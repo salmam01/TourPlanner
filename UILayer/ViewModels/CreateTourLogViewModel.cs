@@ -99,7 +99,7 @@ namespace TourPlanner.UILayer.ViewModels
             }
         }
 
-        public string ButtonText => _isEditing ? "Speichern" : "Erstellen";
+        public string ButtonText => _isEditing ? "Save" : "Create";
 
         public bool CanCreate => ValidateInput();
 
@@ -159,6 +159,7 @@ namespace TourPlanner.UILayer.ViewModels
             }
             else
             {
+                //  This seems unnecessary 
                 MessageBox.Show(
                     "Bitte füllen Sie alle Felder korrekt aus:\n" +
                     "- Kommentar darf nicht leer sein\n" +

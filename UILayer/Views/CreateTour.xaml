@@ -104,6 +104,7 @@
                 <ComboBoxItem Content="Train"/>
                 <ComboBoxItem Content="Plane"/>
                 <ComboBoxItem Content="Bus"/>
+                <ComboBoxItem Content="Car"/>
             </ComboBox>
 
             <TextBlock Text="From"

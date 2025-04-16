@@ -8,7 +8,6 @@ using System.Windows;
 using System.Windows.Input;
 using TourPlanner.BusinessLayer.Models;
 using TourPlanner.UILayer.Commands;
-using TourPlanner.UILayer.Stores;
 
 namespace TourPlanner.UILayer.ViewModels
 {
@@ -21,8 +20,8 @@ namespace TourPlanner.UILayer.ViewModels
         private string _from;
         private string _to;
 
-        public ICommand CreateTourCommand { get; }
-        public event Action<Tour> TourCreated;
+        public EventHandler<Tour> TourCreated;
+        public bool CanCreate => ValidateInput();
 
         public string Name
         {
@@ -31,6 +30,7 @@ namespace TourPlanner.UILayer.ViewModels
             {
                 _name = value;
                 OnPropertyChanged(nameof(Name));
+                OnPropertyChanged(nameof(CanCreate));
             }
         }
 
@@ -51,6 +51,7 @@ namespace TourPlanner.UILayer.ViewModels
             {
                 _description = value;
                 OnPropertyChanged(nameof(Description));
+                OnPropertyChanged(nameof(CanCreate));
             }
         }
 
@@ -61,6 +62,7 @@ namespace TourPlanner.UILayer.ViewModels
             {
                 _transportType = value;
                 OnPropertyChanged(nameof(TransportType));
+                OnPropertyChanged(nameof(CanCreate));
             }
         }
 
@@ -71,6 +73,7 @@ namespace TourPlanner.UILayer.ViewModels
             {
                 _from = value;
                 OnPropertyChanged(nameof(From));
+                OnPropertyChanged(nameof(CanCreate));
             }
         }
 
@@ -81,22 +84,44 @@ namespace TourPlanner.UILayer.ViewModels
             {
                 _to = value;
                 OnPropertyChanged(nameof(To));
+                OnPropertyChanged(nameof(CanCreate));
             }
         }
 
+        public ICommand CreateTourCommand => new RelayCommand(execute => CreateTour(), canExecute => CanCreate);
+
         public CreateTourViewModel()
         {
-            CreateTourCommand = new RelayCommand(execute => CreateTour());
-
-            Date = DateTime.Now;
+            //  TODO: check if this assignment is necessary and if you should be using the private or public properties
+            _name = "";
+            _date = DateTime.Now;
+            _description = "";
+            _from = "";
+            _to = "";
         }
 
-        public void CreateTour()
+        private void CreateTour()
         {
-            //Tour tour = new Tour(Guid.NewGuid(), _name, _date, _description, _from, _to);
-            //TourCreated?.Invoke(tour);
+            Tour tour = new Tour(
+                _name,
+                _date,
+                _description,
+                _transportType, //  maybe better to use character ? 
+                _from,
+                _to);
 
-            //MessageBox.Show(tour.Name + " has been created");
+            TourCreated?.Invoke(this, tour);
+        }
+
+        private bool ValidateInput()
+        {
+            // TODO: Add some validation
+            return !string.IsNullOrEmpty(Name) &&
+                   !string.IsNullOrEmpty(Description) &&
+                   !string.IsNullOrEmpty(TransportType) &&
+                   !string.IsNullOrEmpty(From) &&
+                   !string.IsNullOrEmpty(To) &&
+                   Date > DateTime.Now;
         }
     }
 }

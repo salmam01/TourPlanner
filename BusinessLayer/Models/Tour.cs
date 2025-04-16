@@ -15,13 +15,13 @@ namespace TourPlanner.BusinessLayer.Models
         public string Description { get; set; }
         public string From { get; set; }
         public string To { get; set; }
-        public char TransportType { get; set; }
+        public string TransportType { get; set; }
         public string RouteInformation { get; set; }
         public double Distance { get; set; }
         public TimeSpan EstimatedTime { get; set; }
         public List<TourLog> TourLogs { get; set; }
 
-        public Tour(string name, DateTime date, string description, char transportType, string from, string to)
+        public Tour(string name, DateTime date, string description, string transportType, string from, string to)
         {
             Name = name;
             Date = date;

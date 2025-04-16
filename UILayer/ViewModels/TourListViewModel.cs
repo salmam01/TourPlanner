@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using TourPlanner.BusinessLayer.Models;
-using TourPlanner.UILayer.Stores;
 
 namespace TourPlanner.UILayer.ViewModels
 {
@@ -35,13 +34,13 @@ namespace TourPlanner.UILayer.ViewModels
 
         public TourListViewModel()
         {
-            /*_tours = new ObservableCollection<Tour>
+            _tours = new ObservableCollection<Tour>
             {
-                new Tour(Guid.NewGuid(), "Bosnia Roadtrip", new DateTime(2025, 4, 20), "A roadtrip through Bosnia.", "Sarajevo", "Srebrenica")
+                new Tour("Bosnia Roadtrip", new DateTime(2025, 4, 20), "A roadtrip through Bosnia.", "Car", "Sarajevo", "Srebrenica")
                 {
                     TourLogs = new List<TourLog>()
                 }
-            };*/
+            };
         }
 
         private void OnTourCreated(Tour tour)

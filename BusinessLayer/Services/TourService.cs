@@ -10,7 +10,7 @@ namespace TourPlanner.BusinessLayer.Services
     public class TourService
     {
 
-        public Tour CreateTour(string name, DateTime date, string description, char transportType, string from, string to)
+        public Tour CreateTour(string name, DateTime date, string description, string transportType, string from, string to)
         {
             ValidateTourData(name, date, description, transportType, from, to);
 
@@ -26,7 +26,7 @@ namespace TourPlanner.BusinessLayer.Services
             return tour;
         }
 
-        public void UpdateTour(Tour tour, string name, DateTime date, string description, char transportType, string from, string to)
+        public void UpdateTour(Tour tour, string name, DateTime date, string description, string transportType, string from, string to)
         {
             //  Could try with a switch using "valueToChange" & "value" parameters later
             ValidateTourData(name, date, description, transportType, from, to);
@@ -44,7 +44,7 @@ namespace TourPlanner.BusinessLayer.Services
             //  Database stuff, probably
         }
 
-        public void ValidateTourData(string name, DateTime date, string description, char transportType, string from, string to)
+        public void ValidateTourData(string name, DateTime date, string description, string transportType, string from, string to)
         {
             if (name.Length <= 0 || name.Length >= 120)
             {
@@ -59,7 +59,7 @@ namespace TourPlanner.BusinessLayer.Services
             {
                 throw new ArgumentException("Description cannot be longer than 255 words.");
             }
-            if (transportType != 'C' || transportType != 'P' || transportType != 'T')
+            if (transportType != "Plane" || transportType != "Bus" || transportType != "Car" || transportType != "Train")
             {
                 throw new ArgumentException("Invalid Transport Type.");
             }

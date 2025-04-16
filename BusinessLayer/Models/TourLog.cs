@@ -17,7 +17,7 @@ namespace TourPlanner.BusinessLayer.Models
 
 
         public TourLog(DateTime date, int difficulty, double rating, string comment, double totalDistance, TimeSpan totalTime) {
-            Id = Guid.NewGuid();
+            Id = Guid.NewGuid(); // database will handle this
             Date = date;
             Difficulty = difficulty;
             Rating = rating;
