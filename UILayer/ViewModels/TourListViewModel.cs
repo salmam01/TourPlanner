@@ -43,9 +43,14 @@ namespace TourPlanner.UILayer.ViewModels
             };
         }
 
-        private void OnTourCreated(Tour tour)
+        public void OnTourCreated(Tour tour)
         {
             _tours.Add(tour);
+        }
+
+        public void OnTourDeleted(Tour tour)
+        {
+            _tours.Remove(tour);
         }
     }
 }

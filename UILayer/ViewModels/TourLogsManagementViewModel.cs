@@ -19,6 +19,7 @@ namespace TourPlanner.UILayer.ViewModels
         private ObservableCollection<TourLog> _tourLogs;
         private TourLog _selectedTourLog;
 
+
         public Tour SelectedTour
         {
             get => _selectedTour;
