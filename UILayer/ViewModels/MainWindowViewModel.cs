@@ -8,6 +8,7 @@ namespace TourPlanner.UILayer.ViewModels
 {
     public class MainWindowViewModel : BaseViewModel
     {
+        private readonly TourManagementViewModel _tourManagementViewModel;
         private UserControl _currentView;
         public UserControl CurrentView
         {
@@ -34,16 +35,21 @@ namespace TourPlanner.UILayer.ViewModels
 
         public MainWindowViewModel()
         {
+            _tourManagementViewModel = new TourManagementViewModel();
+
             ShowCreateTourCommand = new RelayCommand(execute => ShowCreateTour());
             ShowHomeViewCommand = new RelayCommand(execute => ShowHomeView());
 
             _homeView = new Home();
-            CurrentView = _homeView;
+            ShowHomeView();
         }
         
         private void ShowCreateTour()
         {
-            CurrentView = new CreateTour();
+            CurrentView = new CreateTour
+            {
+                DataContext = _tourManagementViewModel.CreateTourViewModel
+            };
         }
 
         private void ShowHomeView()

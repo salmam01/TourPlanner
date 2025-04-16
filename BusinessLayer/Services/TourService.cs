@@ -51,10 +51,10 @@ namespace TourPlanner.BusinessLayer.Services
             {
                 throw new ArgumentException("Description cannot be longer than 255 words.");
             }
-            if (tour.TransportType != "Plane" || tour.TransportType != "Bus" || tour.TransportType != "Car" || tour.TransportType != "Train")
+            /*if (tour.TransportType != "Plane" || tour.TransportType != "Bus" || tour.TransportType != "Car" || tour.TransportType != "Train")
             {
                 throw new ArgumentException("Invalid Transport Type.");
-            }
+            }*/
             if (tour.Name.Length <= 0 || tour.Name.Length >= 255)
             {
                 throw new ArgumentException("Invalid From location length.");
