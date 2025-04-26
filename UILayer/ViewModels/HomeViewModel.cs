@@ -31,6 +31,7 @@ namespace TourPlanner.UILayer.ViewModels
             TourLogsManagementViewModel = tourLogsManagementViewModel;
             SearchBarViewModel = searchBarViewModel;
 
+
         }
 
     }

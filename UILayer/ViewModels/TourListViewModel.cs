@@ -17,8 +17,10 @@ namespace TourPlanner.UILayer.ViewModels
                 if (_selectedTour == value) return;
                 _selectedTour = value;
                 OnPropertyChanged(nameof(SelectedTour));
+                TourSelected?.Invoke(this, _selectedTour);
             }
         }
+        public EventHandler<Tour> TourSelected;
 
         private ObservableCollection<Tour> _tours;
         public ObservableCollection<Tour> Tours

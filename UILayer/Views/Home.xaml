@@ -21,7 +21,8 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <views:TourManagement Grid.Row="0"/>
+            <views:TourManagement Grid.Row="0"
+                                  DataContext="{Binding TourManagementViewModel}"/>
             <views:SearchBar Grid.Row="1"/>
             <views:TourList x:Name="TourListView" 
                             Grid.Row="2"

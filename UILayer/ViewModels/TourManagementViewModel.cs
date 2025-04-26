@@ -15,20 +15,8 @@ namespace TourPlanner.UILayer.ViewModels
 
         public CreateTourViewModel CreateTourViewModel;
         public TourListViewModel TourListViewModel;
-
         private Tour _selectedTour;
-        public Tour SelectedTour
-        {
-            get => _selectedTour;
-            set 
-            {
-                if (_selectedTour == value) return;
-                _selectedTour = value;
-                OnPropertyChanged(nameof(SelectedTour));
-            }
-        }
-
-        public ICommand DeleteTourCommand => new RelayCommand(execute => OnDeleteTour());
+        public ICommand DeleteTourCommand => new RelayCommand(execute => DeleteTour());
 
         public TourManagementViewModel(CreateTourViewModel createTourViewModel, TourListViewModel tourListViewModel)
         {
@@ -37,6 +25,7 @@ namespace TourPlanner.UILayer.ViewModels
             TourListViewModel = tourListViewModel;
 
             CreateTourViewModel.TourCreated += OnTourCreated;
+            TourListViewModel.TourSelected += OnTourSelected;
         }
 
         public void OnTourCreated(object sender, Tour tour)
@@ -53,9 +42,15 @@ namespace TourPlanner.UILayer.ViewModels
                 $"To: {tour.To}");
         }
 
-        public void OnDeleteTour()
+        public void OnTourSelected(object sender, Tour tour)
         {
-            MessageBox.Show($"Tour {_selectedTour.Name} deleted!");
+            if (tour == null) return;
+            _selectedTour = tour;
+        }
+
+        public void DeleteTour()
+        {
+            Console.WriteLine($"Tour {_selectedTour.Name} deleted!");
 
             _tourService.DeleteTour(_selectedTour);
             TourListViewModel.OnTourDeleted(_selectedTour);
