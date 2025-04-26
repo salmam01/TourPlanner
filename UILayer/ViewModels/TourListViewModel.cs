@@ -46,11 +46,17 @@ namespace TourPlanner.UILayer.ViewModels
         public void OnTourCreated(Tour tour)
         {
             _tours.Add(tour);
+            Console.WriteLine("Tour added to Tour List!\nList:\n");
+            foreach (Tour t in _tours)
+            {
+                Console.WriteLine($"{t.Name} on the {t.Date}\n");
+            }
         }
 
         public void OnTourDeleted(Tour tour)
         {
             _tours.Remove(tour);
+            Console.WriteLine("Tour deleted from Tour List!");
         }
     }
 }

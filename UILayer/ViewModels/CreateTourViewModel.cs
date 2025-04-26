@@ -110,15 +110,6 @@ namespace TourPlanner.UILayer.ViewModels
                 _from,
                 _to);
 
-            /*
-            MessageBox.Show($"Tour created! \n" +
-                            $"Name: {tour.Name}\n" +
-                            $"Date: {tour.Date}\n" +
-                            $"Description: {tour.Description}\n" +
-                            $"Transport Type: {tour.TransportType}\n" +
-                            $"From: {tour.From}\n" +
-                            $"To: {tour.To}");*/
-
             TourCreated?.Invoke(this, tour);
         }
 

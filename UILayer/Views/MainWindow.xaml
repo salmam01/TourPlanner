@@ -14,10 +14,6 @@
         MouseDown="Window_MouseDown"
         ResizeMode="NoResize">
 
-    <Window.DataContext>
-        <vm:MainWindowViewModel/>
-    </Window.DataContext>
-    
     <Border CornerRadius="12">
         <Border.Background>
             <ImageBrush ImageSource="/UILayer/Resources/Images/Background.jpg"/>
