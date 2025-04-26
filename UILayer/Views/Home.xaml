@@ -23,7 +23,9 @@
 
             <views:TourManagement Grid.Row="0"/>
             <views:SearchBar Grid.Row="1"/>
-            <views:TourList x:Name="TourListView" Grid.Row="2"/>
+            <views:TourList x:Name="TourListView" 
+                            Grid.Row="2"
+                            DataContext="{Binding TourListViewModel}"/>
         </Grid>
 
         <!-- Right side: Tour Details and Logs -->

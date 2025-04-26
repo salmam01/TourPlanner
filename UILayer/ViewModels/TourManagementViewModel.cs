@@ -35,7 +35,6 @@ namespace TourPlanner.UILayer.ViewModels
             _tourService = new TourService();
             CreateTourViewModel = createTourViewModel;
             TourListViewModel = tourListViewModel;
-            Console.WriteLine("TourManagementViewModel initialized");
 
             CreateTourViewModel.TourCreated += OnTourCreated;
         }
