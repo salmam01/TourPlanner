@@ -23,8 +23,12 @@ namespace TourPlanner
 
             services.AddSingleton<MainWindowViewModel>();
             services.AddSingleton<HomeViewModel>();
+
             services.AddSingleton<TourManagementViewModel>();
             services.AddSingleton<CreateTourViewModel>();
+            services.AddSingleton<TourListViewModel>();
+            services.AddSingleton<SearchBarViewModel>();
+
             services.AddSingleton<TourLogsManagementViewModel>();
             services.AddSingleton<CreateTourLogViewModel>();
 

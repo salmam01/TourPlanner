@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 using TourPlanner.BusinessLayer.Models;
@@ -15,9 +17,6 @@ namespace TourPlanner.UILayer.ViewModels
         public TourListViewModel TourListViewModel;
 
         private Tour _selectedTour;
-
-        public ICommand DeleteTourCommand => new RelayCommand(execute => OnDeleteTour());
-
         public Tour SelectedTour
         {
             get => _selectedTour;
@@ -29,11 +28,14 @@ namespace TourPlanner.UILayer.ViewModels
             }
         }
 
-        public TourManagementViewModel()
+        public ICommand DeleteTourCommand => new RelayCommand(execute => OnDeleteTour());
+
+        public TourManagementViewModel(CreateTourViewModel createTourViewModel, TourListViewModel tourListViewModel)
         {
             _tourService = new TourService();
-            CreateTourViewModel = new CreateTourViewModel();
-            TourListViewModel = new TourListViewModel();
+            CreateTourViewModel = createTourViewModel;
+            TourListViewModel = tourListViewModel;
+            Console.WriteLine("TourManagementViewModel initialized");
 
             CreateTourViewModel.TourCreated += OnTourCreated;
         }

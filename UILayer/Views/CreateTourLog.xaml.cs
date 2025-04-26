@@ -25,7 +25,6 @@ namespace TourPlanner.UILayer.Views
         {
             InitializeComponent();
             DataContext = new CreateTourLogViewModel(); // for me:  Verknüpft das ViewModel mit der View und ermöglicht so die Datenbindung zwischen UI-Elementen und den Eigenschaften im ViewModel
-
         } 
     }
 }

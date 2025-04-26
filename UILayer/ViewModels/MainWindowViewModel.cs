@@ -8,11 +8,15 @@ namespace TourPlanner.UILayer.ViewModels
 {
     public class MainWindowViewModel : BaseViewModel
     {
+        private HomeViewModel _homeViewModel;
+        public HomeViewModel HomeViewModel => _homeViewModel;
+
         private CreateTourViewModel _createTourViewModel;
         public CreateTourViewModel TourManagementViewModel => _createTourViewModel;
 
-        private HomeViewModel _homeViewModel;
-        public HomeViewModel HomeViewModel => _homeViewModel;
+        private CreateTourLogViewModel _createTourLogViewModel;
+        public CreateTourLogViewModel CreateTourLogViewModel => _createTourLogViewModel;
+
 
         private UserControl _currentView;
         public UserControl CurrentView
@@ -35,25 +39,34 @@ namespace TourPlanner.UILayer.ViewModels
             }
         }
 
-        public ICommand ShowCreateTourCommand { get; }
         public ICommand ShowHomeViewCommand { get; }
+        public ICommand ShowCreateTourCommand { get; }
+        public ICommand ShowCreateTourLogCommand { get; }
 
 
-        public MainWindowViewModel(HomeViewModel homeViewModel, CreateTourViewModel createTourViewModel)
+        public MainWindowViewModel(HomeViewModel homeViewModel, CreateTourViewModel createTourViewModel, CreateTourLogViewModel createTourLogViewModel)
         {
             _createTourViewModel = createTourViewModel;
             _homeViewModel = homeViewModel;
+            _createTourLogViewModel = createTourLogViewModel;
 
             _homeView = new Home
             {
                 DataContext = _homeViewModel
             };
 
-            ShowCreateTourCommand = new RelayCommand(execute => ShowCreateTour());
             ShowHomeViewCommand = new RelayCommand(execute => ShowHomeView());
+            ShowCreateTourCommand = new RelayCommand(execute => ShowCreateTour());
+            ShowCreateTourLogCommand = new RelayCommand(execute => ShowCreateTourLog());
+
             ShowHomeView();
         }
-        
+
+        private void ShowHomeView()
+        {
+            CurrentView = _homeView;
+        }
+
         private void ShowCreateTour()
         {
             CurrentView = new CreateTour
@@ -62,9 +75,12 @@ namespace TourPlanner.UILayer.ViewModels
             };
         }
 
-        private void ShowHomeView()
+        private void ShowCreateTourLog()
         {
-            CurrentView = _homeView;
+            CurrentView = new CreateTourLog
+            {
+                DataContext = _createTourLogViewModel
+            };
         }
     }
 }

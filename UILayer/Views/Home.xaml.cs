@@ -16,7 +16,8 @@ namespace TourPlanner.UILayer.Views
         public Home()
         {
             InitializeComponent();
-            
+           
+            /*
             // Initialize ViewModels
             _tourListViewModel = new TourListViewModel();
             _tourLogsViewModel = new TourLogsManagementViewModel();
@@ -46,7 +47,7 @@ namespace TourPlanner.UILayer.Views
             else
             {
                 Debug.WriteLine("WARNING: TourLogsView is null!");
-            }
+            }*/
         }
     }
 }
