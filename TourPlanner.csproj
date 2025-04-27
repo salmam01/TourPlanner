@@ -70,6 +70,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="UILayer\Stores\TourLogStore.cs" />
     <Compile Include="UILayer\Stores\TourStore.cs" />
     <Compile Include="UILayer\ViewModels\BaseViewModel.cs" />
     <Compile Include="UILayer\ViewModels\CreateTourLogViewModel.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="UILayer\ViewModels\HomeViewModel.cs" />
     <Compile Include="UILayer\ViewModels\SearchBarViewModel.cs" />
     <Compile Include="UILayer\ViewModels\TourListViewModel.cs" />
+    <Compile Include="UILayer\ViewModels\TourLogListViewModel.cs" />
     <Compile Include="UILayer\ViewModels\TourLogsManagementViewModel.cs" />
     <Compile Include="UILayer\ViewModels\TourManagementViewModel.cs" />
     <Compile Include="UILayer\ViewModels\TourNavbarViewModel.cs" />

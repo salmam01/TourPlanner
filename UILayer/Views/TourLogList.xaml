@@ -8,14 +8,14 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <!-- Tour Logs Table -->
-        <ListView Grid.Row="1" 
-          ItemsSource="{Binding TourLogs}"
-          SelectedItem="{Binding SelectedTourLog, Mode=TwoWay}"
-          Background="#F5F5F5"
-          BorderThickness="0"
-          Margin="0"
-          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-          AlternationCount="2">
+        <ListView
+            ItemsSource="{Binding TourLogs}"
+            SelectedItem="{Binding SelectedTourLog, Mode=TwoWay}"
+            Background="#F5F5F5"
+            BorderThickness="0"
+            Margin="0"
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            AlternationCount="2">
             <ListView.Resources>
                 <Style TargetType="GridViewColumnHeader">
                     <Setter Property="Background" Value="#9CCB19"/>

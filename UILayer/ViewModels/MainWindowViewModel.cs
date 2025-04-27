@@ -59,6 +59,8 @@ namespace TourPlanner.UILayer.ViewModels
             ShowCreateTourCommand = new RelayCommand(execute => ShowCreateTour());
             ShowCreateTourLogCommand = new RelayCommand(execute => ShowCreateTourLog());
 
+            //_homeViewModel.CreateTourLog += ShowCreateTourLog;
+
             ShowHomeView();
         }
 

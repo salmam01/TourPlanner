@@ -9,47 +9,35 @@ using TourPlanner.BusinessLayer.Services;
 using TourPlanner.UILayer.Commands;
 using TourPlanner.UILayer.Views;
 using System.Windows.Media;
+using System.Linq;
 
 namespace TourPlanner.UILayer.ViewModels
 {
     public class TourLogsManagementViewModel : BaseViewModel
     {
-        private readonly TourLogService _tourLogService;
+        private readonly TourLogService _tourLogService;    //  feels pointless at the moment
+
+        public TourLogListViewModel TourLogListViewModel { get; }
+        private CreateTourLogViewModel _createTourLogViewModel;
+
         private Tour _selectedTour;
-        private ObservableCollection<TourLog> _tourLogs;
         private TourLog _selectedTourLog;
 
-
-        public ObservableCollection<TourLog> TourLogs
-        {
-            get => _tourLogs;
-            private set
-            {
-                _tourLogs = value;
-                OnPropertyChanged(nameof(TourLogs));
-            }
-        }
-
-        public TourLog SelectedTourLog
-        {
-            get => _selectedTourLog;
-            set
-            {
-                _selectedTourLog = value;
-                OnPropertyChanged(nameof(SelectedTourLog));
-            }
-        }
+        public EventHandler CreateTourLog;
 
         public RelayCommand CreateTourLogCommand => new RelayCommand(execute => OnCreateTourLog(), canExecute => _selectedTour != null);
-        public RelayCommand DeleteTourLogCommand => new RelayCommand(execute => OnDeleteTourLog(), canExecute => SelectedTourLog != null);
-        public RelayCommand EditTourLogCommand => new RelayCommand(execute => OnEditTourLog(), canExecute => SelectedTourLog != null);
+        public RelayCommand DeleteTourLogCommand => new RelayCommand(execute => OnDeleteTourLog(), canExecute => _selectedTourLog != null);
+        public RelayCommand EditTourLogCommand => new RelayCommand(execute => OnEditTourLog(), canExecute => _selectedTourLog != null);
 
-        public TourLogsManagementViewModel(TourListViewModel tourListViewModel)
+        public TourLogsManagementViewModel(CreateTourLogViewModel createTourLogViewModel, TourLogListViewModel tourLogListViewModel)
         {
             _tourLogService = new TourLogService();
-            TourLogs = new ObservableCollection<TourLog>();
+            TourLogListViewModel = tourLogListViewModel;
+            _createTourLogViewModel = createTourLogViewModel;
 
-            tourListViewModel.TourSelected += OnTourSelected;
+            //  TODO: Subscribe to selected Tour event
+            //  Have to make sure it doesn't need an instance of TourList
+            TourLogListViewModel.TourLogSelected += OnTourLogSelected;
         }
 
         public void OnTourSelected(object sender, Tour tour)
@@ -58,21 +46,30 @@ namespace TourPlanner.UILayer.ViewModels
             _selectedTour = tour;
         }
 
+        public void OnTourLogSelected(object sender, TourLog tourLog)
+        {
+            if (tourLog == null) return;
+            _selectedTourLog = tourLog;
+        }
+
         private void UpdateTourLogs()
         {
             if (_selectedTour != null)
             {
-                List<TourLog> logs = _tourLogService.GetTourLogs(_selectedTour);
-                TourLogs = new ObservableCollection<TourLog>(logs);
+                List<TourLog> tourLogs = _tourLogService.GetTourLogs(_selectedTour);
+                TourLogListViewModel.TourLogs = new ObservableCollection<TourLog>(tourLogs);
             }
             else
             {
-                TourLogs = new ObservableCollection<TourLog>();
+                return;
+                //TourLogs = new ObservableCollection<TourLog>();
             }
         }
 
         private void OnCreateTourLog() {
             if (_selectedTour == null) return;
+            CreateTourLog?.Invoke(this, EventArgs.Empty);
+            /*
             Window createTourLogWindow = new Window
             {
                 Title = "Create Tour Log",
@@ -86,6 +83,7 @@ namespace TourPlanner.UILayer.ViewModels
                 Background = new SolidColorBrush(Color.FromRgb(30, 70, 32))
             };
 
+            
             CreateTourLogViewModel viewModel = (CreateTourLogViewModel)((CreateTourLog)createTourLogWindow.Content).DataContext;
             viewModel.TourLogCreated += (sender, tourLog) =>
             {
@@ -115,26 +113,30 @@ namespace TourPlanner.UILayer.ViewModels
                 createTourLogWindow.Close();
             };
 
-            createTourLogWindow.ShowDialog();
+            createTourLogWindow.ShowDialog();*/
         }
 
         private void OnDeleteTourLog() {
-            if (SelectedTourLog == null || _selectedTour == null) return;
+            if (_selectedTourLog == null || _selectedTour == null) return;
             MessageBoxResult result = MessageBox.Show(
                 "Möchten Sie diesen Tour Log wirklich löschen?",
                 "DelteTour Log ",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Warning
             );
-
             if (result != MessageBoxResult.Yes) return;
-            _tourLogService.DeleteTourLog(SelectedTourLog, _selectedTour);
+
+            TourLogListViewModel.OnTourLogDeleted(_selectedTourLog);
+            _tourLogService.DeleteTourLog(_selectedTourLog, _selectedTour);
+            _selectedTourLog = null;
+            
+            /*
             UpdateTourLogs();
-            SelectedTourLog = null;
+            _selectedTourLog = null;*/
         }
 
         private void OnEditTourLog() {
-            if (SelectedTourLog == null || _selectedTour == null) return;
+            if (_selectedTourLog == null || _selectedTour == null) return;
             Window editTourLogWindow = new Window
             {
                 Title = "Edit Tour Log ",
@@ -149,14 +151,14 @@ namespace TourPlanner.UILayer.ViewModels
             };
 
             CreateTourLogViewModel viewModel = (CreateTourLogViewModel)((CreateTourLog)editTourLogWindow.Content).DataContext;
-            viewModel.LoadTourLog(SelectedTourLog);
+            viewModel.LoadTourLog(_selectedTourLog);
 
             viewModel.TourLogCreated += (sender, tourLog) =>
             {
                 try
                 { 
                     _tourLogService.UpdateTourLog(
-                        SelectedTourLog,
+                        _selectedTourLog,
                         tourLog.Date,
                         tourLog.Comment,
                         tourLog.Difficulty,

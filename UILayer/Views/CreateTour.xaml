@@ -16,6 +16,7 @@
                     Margin="0,20,0,0"
                     HorizontalAlignment="Center">
 
+            <!-- Title -->
             <TextBlock Text="Create a new Tour"
                        Foreground="White"
                        FontSize="20"
@@ -24,6 +25,7 @@
                        HorizontalAlignment="Center"
                        Margin="0,5,0,0"/>
 
+            <!-- Tour Name -->
             <TextBlock Text="Tour Name"
                        Foreground="White"
                        FontFamily="Dubai"
@@ -45,6 +47,7 @@
                      Margin="0,2,0,0"
                      Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
 
+            <!-- Tour Date -->
             <TextBlock Text="Date"
                        Foreground="White"
                        FontFamily="Dubai"
@@ -63,6 +66,7 @@
                         Margin="0,2,0,0"
                         SelectedDate="{Binding Date, UpdateSourceTrigger=PropertyChanged}"/>
 
+            <!-- Tour Description -->
             <TextBlock Text="Description"
                        FontFamily="Dubai"
                        Foreground="White"
@@ -84,6 +88,7 @@
                      Margin="0,2,0,0"
                      Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"/>
 
+            <!-- Tour Transport Type -->
             <TextBlock Text="Transport Type"
                        FontFamily="Dubai"
                        Foreground="White"
@@ -107,6 +112,7 @@
                 <ComboBoxItem Content="Car"/>
             </ComboBox>
 
+            <!-- Tour Starting Point -->
             <TextBlock Text="From"
                        Foreground="White"
                        FontFamily="Dubai"
@@ -128,6 +134,7 @@
                      Margin="0,2,0,0"
                      Text="{Binding From, UpdateSourceTrigger=PropertyChanged}"/>
 
+            <!-- Tour Destination -->
             <TextBlock Text="To"
                        FontFamily="Dubai"
                        Foreground="White"
@@ -149,6 +156,7 @@
                      Margin="0,2,0,0"
                      Text="{Binding To, UpdateSourceTrigger=PropertyChanged}"/>
 
+            <!-- Submit Button -->
             <Button Grid.Column="2"
                     x:Name="submitButton"
                     BorderThickness="0"

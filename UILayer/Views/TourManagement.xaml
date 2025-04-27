@@ -13,7 +13,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
+
+        <!-- Header with Title and Buttons -->
         <TextBlock Grid.Row="0" 
                    Text="Tours"
                    Margin="10,0,0,0"
@@ -24,6 +25,7 @@
                    HorizontalAlignment="Left"
                    MaxHeight="35"/>
 
+        <!-- Buttons for Tour management -->
         <StackPanel Grid.Row="0" 
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
@@ -46,12 +48,15 @@
                     Foreground="Black"
                     MinWidth="30"
                     FontSize="18"
-                    VerticalContentAlignment="Center"/>
+                    VerticalContentAlignment="Center"
+                    Command="{Binding EditTourCommand}"/>
         </StackPanel>
         
+        <!-- Search Bar -->
         <views:SearchBar Grid.Row="1"
                          DataContext="{Binding SearchBarViewModel}"/>
 
+        <!-- Tour List -->
         <views:TourList x:Name="TourListView" 
                         Grid.Row="2"
                         DataContext="{Binding TourListViewModel}"/>

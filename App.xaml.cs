@@ -31,6 +31,7 @@ namespace TourPlanner
 
             services.AddSingleton<TourLogsManagementViewModel>();
             services.AddSingleton<CreateTourLogViewModel>();
+            services.AddSingleton<TourLogListViewModel>();
 
             services.AddSingleton<MainWindow>(s => new MainWindow()
             {

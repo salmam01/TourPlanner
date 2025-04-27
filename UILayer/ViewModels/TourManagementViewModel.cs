@@ -13,23 +13,35 @@ namespace TourPlanner.UILayer.ViewModels
     {
         private readonly TourService _tourService;
 
-        public CreateTourViewModel CreateTourViewModel;
+        private CreateTourViewModel _createTourViewModel;
         public TourListViewModel TourListViewModel { get; }
         public SearchBarViewModel SearchBarViewModel { get; }
         private Tour _selectedTour;
 
-        public ICommand DeleteTourCommand => new RelayCommand(execute => DeleteTour());
+        public ICommand EditTourCommand => new RelayCommand(
+            execute => EditTour()
+            );
+        
+        public ICommand DeleteTourCommand => new RelayCommand(
+            execute => DeleteTour()
+            );
 
 
         public TourManagementViewModel(CreateTourViewModel createTourViewModel, TourListViewModel tourListViewModel, SearchBarViewModel searchBarViewModel)
         {
             _tourService = new TourService();
-            CreateTourViewModel = createTourViewModel;
+            _createTourViewModel = createTourViewModel;
             TourListViewModel = tourListViewModel;
             SearchBarViewModel = searchBarViewModel;
 
-            CreateTourViewModel.TourCreated += OnTourCreated;
+            _createTourViewModel.TourCreated += OnTourCreated;
             TourListViewModel.TourSelected += OnTourSelected;
+        }
+
+        public void OnTourSelected(object sender, Tour tour)
+        {
+            if (tour == null) return;
+            _selectedTour = tour;
         }
 
         public void OnTourCreated(object sender, Tour tour)
@@ -46,16 +58,21 @@ namespace TourPlanner.UILayer.ViewModels
                 $"To: {tour.To}");
         }
 
-        public void OnTourSelected(object sender, Tour tour)
+        public void EditTour()
         {
-            if (tour == null) return;
-            _selectedTour = tour;
+            if(_selectedTour == null)
+            {
+                MessageBox.Show("Please select a tour to edit.");
+                return;
+            }
+            _createTourViewModel.LoadTour(_selectedTour);
         }
 
         public void DeleteTour()
         {
             if(_selectedTour == null)
             {
+                MessageBox.Show("Please select a tour to delete.");
                 return;
             }
             Console.WriteLine($"Tour {_selectedTour.Name} deleted!");

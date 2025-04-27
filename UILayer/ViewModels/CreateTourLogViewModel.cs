@@ -108,16 +108,10 @@ namespace TourPlanner.UILayer.ViewModels
 
         public CreateTourLogViewModel()
         {
-            Date = DateTime.Now;
-            Comment = "";
-            Difficulty = 1;
-            Rating = 1;
-            TotalDistance = 0;
-            Hours = 0;
-            Minutes = 0;
-            _isEditing = false;
+            ResetForm();
         }
 
+        //  TODO: Refactor this
         private bool ValidateInput()
         {
             bool isValid = !string.IsNullOrWhiteSpace(Comment) &&
@@ -140,38 +134,22 @@ namespace TourPlanner.UILayer.ViewModels
 
         private void CreateTourLog()
         {
-            
-            if (ValidateInput())
+            TourLog tourLog = new TourLog
             {
-                TourLog tourLog = new TourLog
-                {
-                    Id = _isEditing ? _editingId : Guid.NewGuid(),
-                    Date = Date,
-                    Comment = Comment,
-                    Difficulty = Difficulty,
-                    Rating = Rating,
-                    TotalDistance = TotalDistance,
-                    TotalTime = new TimeSpan(Hours, Minutes, 0)
-                };
+                Id = _isEditing ? _editingId : Guid.NewGuid(),
+                Date = Date,
+                Comment = Comment,
+                Difficulty = Difficulty,
+                Rating = Rating,
+                TotalDistance = TotalDistance,
+                TotalTime = new TimeSpan(Hours, Minutes, 0)
+            };
 
-               // Debug.WriteLine($"Created tour log: Comment={tourLog.Comment}, Difficulty={tourLog.Difficulty}, Rating={tourLog.Rating}");
-                TourLogCreated?.Invoke(this, tourLog);
-            }
-            else
+            TourLogCreated?.Invoke(this, tourLog);
+
+            if(!_isEditing)
             {
-                //  This seems unnecessary 
-                MessageBox.Show(
-                    "Bitte füllen Sie alle Felder korrekt aus:\n" +
-                    "- Kommentar darf nicht leer sein\n" +
-                    "- Schwierigkeit muss zwischen 1 und 5 liegen\n" +
-                    "- Bewertung muss zwischen 1 und 5 liegen\n" +
-                    "- Distanz muss größer oder gleich 0 sein\n" +
-                    "- Stunden müssen größer oder gleich 0 sein\n" +
-                    "- Minuten müssen zwischen 0 und 59 liegen",
-                    "Validierungsfehler",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Warning
-                );
+                ResetForm();
             }
         }
 
@@ -192,6 +170,18 @@ namespace TourPlanner.UILayer.ViewModels
             Hours = tourLog.TotalTime.Hours;
             Minutes = tourLog.TotalTime.Minutes;
             OnPropertyChanged(nameof(ButtonText));
+        }
+
+        public void ResetForm()
+        {
+            Date = DateTime.Now;
+            Comment = "";
+            Difficulty = 1;
+            Rating = 1;
+            TotalDistance = 0;
+            Hours = 0;
+            Minutes = 0;
+            _isEditing = false;
         }
     }
 }

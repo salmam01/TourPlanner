@@ -21,6 +21,7 @@ namespace TourPlanner.UILayer.ViewModels
         private string _to;
 
         public EventHandler<Tour> TourCreated;
+        public bool _isEditing = false;
         public bool CanCreate => ValidateInput();
 
         public string Name
@@ -92,12 +93,7 @@ namespace TourPlanner.UILayer.ViewModels
 
         public CreateTourViewModel()
         {
-            //  TODO: check if this assignment is necessary and if you should be using the private or public properties
-            _name = "";
-            _date = DateTime.Now;
-            _description = "";
-            _from = "";
-            _to = "";
+            ResetForm();
         }
 
         private void CreateTour()
@@ -106,11 +102,30 @@ namespace TourPlanner.UILayer.ViewModels
                 _name,
                 _date,
                 _description,
-                _transportType, //  maybe better to use character ? 
+                _transportType,
                 _from,
                 _to);
 
             TourCreated?.Invoke(this, tour);
+
+            if (!_isEditing)
+            {
+                ResetForm();
+            }
+        }
+
+        //  TODO: Works but doesn't show in the UI yet
+        public void LoadTour(Tour tour)
+        {
+            _name = tour.Name;
+            _date = tour.Date;
+            _description = tour.Description;
+            _transportType = tour.TransportType;
+            _from = tour.From;
+            _to = tour.To;
+
+            _isEditing = true;
+            Console.WriteLine($"Tour loaded: {tour.Name}");
         }
 
         private bool ValidateInput()
@@ -122,6 +137,15 @@ namespace TourPlanner.UILayer.ViewModels
                    !string.IsNullOrEmpty(From) &&
                    !string.IsNullOrEmpty(To) &&
                    Date > DateTime.Now;
+        }
+
+        public void ResetForm()
+        {
+            _name = "";
+            _date = DateTime.Now;
+            _description = "";
+            _from = "";
+            _to = "";
         }
     }
 }

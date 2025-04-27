@@ -13,7 +13,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Left side: Tour List -->
+        <!-- Left side: Tour Management, Searchbar and Tour List -->
         <views:TourManagement Grid.Column="0"
                               DataContext="{Binding TourManagementViewModel}"/>
 
