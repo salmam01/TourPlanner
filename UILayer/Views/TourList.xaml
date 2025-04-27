@@ -10,13 +10,14 @@
         <ListView ItemsSource="{Binding Tours}"
                   SelectedItem="{Binding SelectedTour, Mode=TwoWay}" 
                   Background="Transparent"
-                  BorderThickness="0">
+                  BorderThickness="0"
+                  Height="300" Width="250">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Name}"
-                             Foreground="White"
-                             FontFamily="Dubai"
-                             FontSize="14"/>
+                               Foreground="White"
+                               FontFamily="Dubai"
+                               FontSize="14"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
             <ListView.ItemContainerStyle>

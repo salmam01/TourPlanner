@@ -3,11 +3,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:TourPlanner.UILayer.Views"
+             xmlns:views="clr-namespace:TourPlanner.UILayer.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="300">
+    
     <Grid>
-        <TextBlock Text="Tours"
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <TextBlock Grid.Row="0" 
+                   Text="Tours"
                    Margin="10,0,0,0"
                    Foreground="White"
                    FontSize="18"
@@ -16,7 +24,8 @@
                    HorizontalAlignment="Left"
                    MaxHeight="35"/>
 
-        <StackPanel HorizontalAlignment="Right"
+        <StackPanel Grid.Row="0" 
+                    HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Orientation="Horizontal"
                     MaxHeight="35"
@@ -39,5 +48,13 @@
                     FontSize="18"
                     VerticalContentAlignment="Center"/>
         </StackPanel>
+        
+        <views:SearchBar Grid.Row="1"
+                         DataContext="{Binding SearchBarViewModel}"/>
+
+        <views:TourList x:Name="TourListView" 
+                        Grid.Row="2"
+                        DataContext="{Binding TourListViewModel}"/>
+
     </Grid>
 </UserControl>

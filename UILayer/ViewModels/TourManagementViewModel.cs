@@ -14,15 +14,19 @@ namespace TourPlanner.UILayer.ViewModels
         private readonly TourService _tourService;
 
         public CreateTourViewModel CreateTourViewModel;
-        public TourListViewModel TourListViewModel;
+        public TourListViewModel TourListViewModel { get; }
+        public SearchBarViewModel SearchBarViewModel { get; }
         private Tour _selectedTour;
+
         public ICommand DeleteTourCommand => new RelayCommand(execute => DeleteTour());
 
-        public TourManagementViewModel(CreateTourViewModel createTourViewModel, TourListViewModel tourListViewModel)
+
+        public TourManagementViewModel(CreateTourViewModel createTourViewModel, TourListViewModel tourListViewModel, SearchBarViewModel searchBarViewModel)
         {
             _tourService = new TourService();
             CreateTourViewModel = createTourViewModel;
             TourListViewModel = tourListViewModel;
+            SearchBarViewModel = searchBarViewModel;
 
             CreateTourViewModel.TourCreated += OnTourCreated;
             TourListViewModel.TourSelected += OnTourSelected;
@@ -50,6 +54,10 @@ namespace TourPlanner.UILayer.ViewModels
 
         public void DeleteTour()
         {
+            if(_selectedTour == null)
+            {
+                return;
+            }
             Console.WriteLine($"Tour {_selectedTour.Name} deleted!");
 
             _tourService.DeleteTour(_selectedTour);

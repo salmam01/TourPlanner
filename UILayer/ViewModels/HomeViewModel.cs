@@ -15,23 +15,14 @@ namespace TourPlanner.UILayer.ViewModels
     public class HomeViewModel : BaseViewModel
     {
         public TourManagementViewModel TourManagementViewModel { get; }
-        public TourListViewModel TourListViewModel { get; }
         public TourLogsManagementViewModel TourLogsManagementViewModel { get; }
-        public SearchBarViewModel SearchBarViewModel { get; }
 
         public HomeViewModel(
             TourManagementViewModel tourManagementViewModel,
-            TourListViewModel tourListViewModel,
-            TourLogsManagementViewModel tourLogsManagementViewModel,
-            SearchBarViewModel searchBarViewModel
-            )
-        {
+            TourLogsManagementViewModel tourLogsManagementViewModel
+        ) {
             TourManagementViewModel = tourManagementViewModel;
-            TourListViewModel = tourListViewModel;
             TourLogsManagementViewModel = tourLogsManagementViewModel;
-            SearchBarViewModel = searchBarViewModel;
-
-
         }
 
     }

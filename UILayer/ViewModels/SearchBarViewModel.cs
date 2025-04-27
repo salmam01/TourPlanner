@@ -8,5 +8,9 @@ namespace TourPlanner.UILayer.ViewModels
 {
     public class SearchBarViewModel : BaseViewModel
     {
+        public SearchBarViewModel()
+        {
+            
+        }
     }
 }

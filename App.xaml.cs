@@ -25,7 +25,7 @@ namespace TourPlanner
             services.AddSingleton<HomeViewModel>();
 
             services.AddSingleton<TourManagementViewModel>();
-            services.AddSingleton<CreateTourViewModel>();
+            services.AddSingleton<CreateTourViewModel>();   //  needs to be changed to transient, cannot be a singleton
             services.AddSingleton<TourListViewModel>();
             services.AddSingleton<SearchBarViewModel>();
 

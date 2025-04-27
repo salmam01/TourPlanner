@@ -95,6 +95,9 @@
     <Compile Include="UILayer\Views\TourList.xaml.cs">
       <DependentUpon>TourList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UILayer\Views\TourLogList.xaml.cs">
+      <DependentUpon>TourLogList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UILayer\Views\TourLogsManagement.xaml.cs">
       <DependentUpon>TourLogsManagement.xaml</DependentUpon>
     </Compile>
@@ -147,6 +150,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UILayer\Views\TourList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UILayer\Views\TourLogList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

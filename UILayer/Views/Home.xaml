@@ -14,20 +14,8 @@
         </Grid.ColumnDefinitions>
 
         <!-- Left side: Tour List -->
-        <Grid Grid.Column="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-
-            <views:TourManagement Grid.Row="0"
-                                  DataContext="{Binding TourManagementViewModel}"/>
-            <views:SearchBar Grid.Row="1"/>
-            <views:TourList x:Name="TourListView" 
-                            Grid.Row="2"
-                            DataContext="{Binding TourListViewModel}"/>
-        </Grid>
+        <views:TourManagement Grid.Column="0"
+                              DataContext="{Binding TourManagementViewModel}"/>
 
         <!-- Right side: Tour Details and Logs -->
         <Grid Grid.Column="1">
@@ -44,8 +32,9 @@
             <Border Grid.Row="1" Background="#1E4620"/>
             
             <views:TourLogsManagement x:Name="TourLogsView" 
-                                     Grid.Row="2" 
-                                     Grid.RowSpan="2"/>
+                                      Grid.Row="2"
+                                      Grid.RowSpan="2"
+                                      DataContext="{Binding TourLogsManagementViewModel}"/>
         </Grid>
     </Grid>
 </UserControl>

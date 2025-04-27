@@ -20,7 +20,6 @@ namespace TourPlanner.UILayer.ViewModels
                 TourSelected?.Invoke(this, _selectedTour);
             }
         }
-        public EventHandler<Tour> TourSelected;
 
         private ObservableCollection<Tour> _tours;
         public ObservableCollection<Tour> Tours
@@ -33,6 +32,8 @@ namespace TourPlanner.UILayer.ViewModels
             }
         }
 
+        public EventHandler<Tour> TourSelected;
+
         public TourListViewModel()
         {
 
@@ -43,6 +44,8 @@ namespace TourPlanner.UILayer.ViewModels
                     TourLogs = new List<TourLog>()
                 }
             };
+
+            Console.WriteLine("TourListViewModel INITIALIZED");
         }
 
         public void OnTourCreated(Tour tour)
