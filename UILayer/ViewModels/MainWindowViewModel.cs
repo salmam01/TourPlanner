@@ -1,7 +1,10 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Diagnostics;
+using System.Windows.Controls;
 using System.Windows.Input;
 using TourPlanner.BusinessLayer.Models;
 using TourPlanner.UILayer.Commands;
+using TourPlanner.UILayer.Events;
 using TourPlanner.UILayer.Views;
 
 namespace TourPlanner.UILayer.ViewModels
@@ -17,6 +20,7 @@ namespace TourPlanner.UILayer.ViewModels
         private CreateTourLogViewModel _createTourLogViewModel;
         public CreateTourLogViewModel CreateTourLogViewModel => _createTourLogViewModel;
 
+        private readonly EventAggregator _eventAggregator;
 
         private UserControl _currentView;
         public UserControl CurrentView
@@ -44,11 +48,16 @@ namespace TourPlanner.UILayer.ViewModels
         public ICommand ShowCreateTourLogCommand { get; }
 
 
-        public MainWindowViewModel(HomeViewModel homeViewModel, CreateTourViewModel createTourViewModel, CreateTourLogViewModel createTourLogViewModel)
-        {
+        public MainWindowViewModel(
+            HomeViewModel homeViewModel,
+            CreateTourViewModel createTourViewModel,
+            CreateTourLogViewModel createTourLogViewModel,
+            EventAggregator eventAggregator
+        ) {
             _createTourViewModel = createTourViewModel;
             _homeViewModel = homeViewModel;
             _createTourLogViewModel = createTourLogViewModel;
+            _eventAggregator = eventAggregator;
 
             _homeView = new Home
             {
@@ -59,9 +68,30 @@ namespace TourPlanner.UILayer.ViewModels
             ShowCreateTourCommand = new RelayCommand(execute => ShowCreateTour());
             ShowCreateTourLogCommand = new RelayCommand(execute => ShowCreateTourLog());
 
-            //_homeViewModel.CreateTourLog += ShowCreateTourLog;
+            _eventAggregator.Subscribe<string>(NavigationHandler);
 
             ShowHomeView();
+        }
+
+        private void NavigationHandler(string message)
+        {
+            switch (message) {
+                case "ShowHomeView":
+                    ShowHomeView();
+                    break;
+
+                case "ShowCreateTour":
+                    ShowCreateTour();
+                    break;
+
+                case "ShowCreateTourLog":
+                    ShowCreateTourLog();
+                    break;
+
+                default:
+                    //"No such view found"
+                    return;
+            }
         }
 
         private void ShowHomeView()
@@ -79,6 +109,7 @@ namespace TourPlanner.UILayer.ViewModels
 
         private void ShowCreateTourLog()
         {
+            Console.WriteLine("ShowCreateTourLog called");
             CurrentView = new CreateTourLog
             {
                 DataContext = _createTourLogViewModel

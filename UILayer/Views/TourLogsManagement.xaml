@@ -37,7 +37,7 @@
                         Background="Transparent"
                         Foreground="White"
                         BorderThickness="0"
-                        Command="{Binding DataContext.CreateTourLogCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                        Command="{Binding CreateTourLogCommand}"/>
                 <Button Content="-"
                         Width="24"
                         Height="24"

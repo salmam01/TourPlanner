@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using TourPlanner.UILayer.Events;
 using TourPlanner.UILayer.ViewModels;
 
 namespace TourPlanner
@@ -23,6 +24,7 @@ namespace TourPlanner
 
             services.AddSingleton<MainWindowViewModel>();
             services.AddSingleton<HomeViewModel>();
+            services.AddSingleton<EventAggregator>();
 
             services.AddSingleton<TourManagementViewModel>();
             services.AddSingleton<CreateTourViewModel>();   //  needs to be changed to transient, cannot be a singleton

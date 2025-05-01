@@ -70,8 +70,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="UILayer\Stores\TourLogStore.cs" />
-    <Compile Include="UILayer\Stores\TourStore.cs" />
+    <Compile Include="UILayer\Events\EventAggregator.cs" />
     <Compile Include="UILayer\ViewModels\BaseViewModel.cs" />
     <Compile Include="UILayer\ViewModels\CreateTourLogViewModel.cs" />
     <Compile Include="UILayer\ViewModels\CreateTourViewModel.cs" />

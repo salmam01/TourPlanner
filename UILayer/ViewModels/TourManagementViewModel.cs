@@ -6,6 +6,7 @@ using System.Windows.Input;
 using TourPlanner.BusinessLayer.Models;
 using TourPlanner.BusinessLayer.Services;
 using TourPlanner.UILayer.Commands;
+using TourPlanner.UILayer.Events;
 
 namespace TourPlanner.UILayer.ViewModels
 {
@@ -16,6 +17,8 @@ namespace TourPlanner.UILayer.ViewModels
         private CreateTourViewModel _createTourViewModel;
         public TourListViewModel TourListViewModel { get; }
         public SearchBarViewModel SearchBarViewModel { get; }
+
+        private readonly EventAggregator _eventAggregator;
         private Tour _selectedTour;
 
         public ICommand EditTourCommand => new RelayCommand(
@@ -27,18 +30,23 @@ namespace TourPlanner.UILayer.ViewModels
             );
 
 
-        public TourManagementViewModel(CreateTourViewModel createTourViewModel, TourListViewModel tourListViewModel, SearchBarViewModel searchBarViewModel)
-        {
+        public TourManagementViewModel(
+            CreateTourViewModel createTourViewModel,
+            TourListViewModel tourListViewModel,
+            SearchBarViewModel searchBarViewModel,
+            EventAggregator eventAggregator
+        ) {
             _tourService = new TourService();
             _createTourViewModel = createTourViewModel;
             TourListViewModel = tourListViewModel;
             SearchBarViewModel = searchBarViewModel;
+            _eventAggregator = eventAggregator;
 
             _createTourViewModel.TourCreated += OnTourCreated;
-            TourListViewModel.TourSelected += OnTourSelected;
+            _eventAggregator.Subscribe<Tour>(OnTourSelected);
         }
 
-        public void OnTourSelected(object sender, Tour tour)
+        public void OnTourSelected(Tour tour)
         {
             if (tour == null) return;
             _selectedTour = tour;

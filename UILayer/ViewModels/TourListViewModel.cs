@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using TourPlanner.BusinessLayer.Models;
+using TourPlanner.UILayer.Events;
 
 namespace TourPlanner.UILayer.ViewModels
 {
@@ -17,7 +18,7 @@ namespace TourPlanner.UILayer.ViewModels
                 if (_selectedTour == value) return;
                 _selectedTour = value;
                 OnPropertyChanged(nameof(SelectedTour));
-                TourSelected?.Invoke(this, _selectedTour);
+                _eventAggregator.Publish(_selectedTour);
             }
         }
 
@@ -32,10 +33,11 @@ namespace TourPlanner.UILayer.ViewModels
             }
         }
 
-        public EventHandler<Tour> TourSelected;
+        private readonly EventAggregator _eventAggregator;
 
-        public TourListViewModel()
+        public TourListViewModel(EventAggregator eventAggregator)
         {
+            _eventAggregator = eventAggregator;
 
             _tours = new ObservableCollection<Tour>
             {
@@ -44,8 +46,6 @@ namespace TourPlanner.UILayer.ViewModels
                     TourLogs = new List<TourLog>()
                 }
             };
-
-            Console.WriteLine("TourListViewModel INITIALIZED");
         }
 
         public void OnTourCreated(Tour tour)
