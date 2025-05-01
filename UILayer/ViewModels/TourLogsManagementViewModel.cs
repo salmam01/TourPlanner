@@ -25,20 +25,18 @@ namespace TourPlanner.UILayer.ViewModels
         private Tour _selectedTour;
         private TourLog _selectedTourLog;
 
-        public EventHandler CreateTourLog;
-
         public RelayCommand CreateTourLogCommand => new RelayCommand(
-            execute => OnCreateTourLog(), 
+            execute => CreateTourLog(), 
             canExecute => _selectedTour != null
-            );
+        );
         public RelayCommand DeleteTourLogCommand => new RelayCommand(
-            execute => OnDeleteTourLog(), 
+            execute => DeleteTourLog(), 
             canExecute => _selectedTourLog != null
-            );
+        );
         public RelayCommand EditTourLogCommand => new RelayCommand(
-            execute => OnEditTourLog(), 
+            execute => EditTourLog(), 
             canExecute => _selectedTourLog != null
-            );
+        );
 
         public TourLogsManagementViewModel(
             CreateTourLogViewModel createTourLogViewModel,
@@ -52,13 +50,13 @@ namespace TourPlanner.UILayer.ViewModels
 
             _eventAggregator.Subscribe<Tour>(OnTourSelected);
             TourLogListViewModel.TourLogSelected += OnTourLogSelected;
+            _createTourLogViewModel.TourLogCreated += OnTourLogCreated;
         }
 
         public void OnTourSelected(Tour tour)
         {
             if (tour == null) return;
             _selectedTour = tour;
-            Console.WriteLine("Tour selected");
             UpdateTourLogs();
         }
 
@@ -66,6 +64,14 @@ namespace TourPlanner.UILayer.ViewModels
         {
             if (tourLog == null) return;
             _selectedTourLog = tourLog;
+        }
+
+        public void OnTourLogCreated(object sender, TourLog tourLog)
+        {
+            if (tourLog == null) return;
+            TourLogListViewModel.OnTourLogCreated(tourLog);
+            _eventAggregator.Publish("ShowHomeView");
+            UpdateTourLogs();
         }
 
         private void UpdateTourLogs()
@@ -81,17 +87,18 @@ namespace TourPlanner.UILayer.ViewModels
             }
         }
 
-        private void OnCreateTourLog() {
+        private void CreateTourLog() 
+        {
             if (_selectedTour == null) return;
-
-            Console.WriteLine("Create Tour log triggered");
             _eventAggregator.Publish("ShowCreateTourLog");
         }
 
-        private void OnDeleteTourLog() {
+        private void DeleteTourLog() 
+        {
             if (_selectedTourLog == null || _selectedTour == null) return;
+
             MessageBoxResult result = MessageBox.Show(
-                "Möchten Sie diesen Tour Log wirklich löschen?",
+                "Are you sure you would like to delete this tour log?",
                 "DelteTour Log ",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Warning
@@ -101,15 +108,13 @@ namespace TourPlanner.UILayer.ViewModels
             TourLogListViewModel.OnTourLogDeleted(_selectedTourLog);
             _tourLogService.DeleteTourLog(_selectedTourLog, _selectedTour);
             _selectedTourLog = null;
-            
-            /*
-            UpdateTourLogs();
-            _selectedTourLog = null;*/
         }
 
-        private void OnEditTourLog() {
+        private void EditTourLog() {
             if (_selectedTourLog == null || _selectedTour == null) return;
-            Window editTourLogWindow = new Window
+
+
+            /*Window editTourLogWindow = new Window
             {
                 Title = "Edit Tour Log ",
                 Content = new CreateTourLog(),
@@ -153,7 +158,7 @@ namespace TourPlanner.UILayer.ViewModels
                 editTourLogWindow.Close();
             };
 
-            editTourLogWindow.ShowDialog();
+            editTourLogWindow.ShowDialog();*/
         }
     }
 }

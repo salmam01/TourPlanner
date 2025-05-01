@@ -37,7 +37,7 @@
                     FontSize="18"
                     MinWidth="30"
                     VerticalContentAlignment="Center"
-                    Command="{Binding DataContext.ShowCreateTourCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                    Command="{Binding CreateTourCommand}"/>
             <Button Content="-"
                     Foreground="Black"
                     MinWidth="30"

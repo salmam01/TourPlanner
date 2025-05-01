@@ -15,13 +15,6 @@ namespace TourPlanner.UILayer.ViewModels
         ) {
             TourManagementViewModel = tourManagementViewModel;
             TourLogsManagementViewModel = tourLogsManagementViewModel;
-
-            TourLogsManagementViewModel.CreateTourLog += OnCreateTourLog;
-        }
-
-        private void OnCreateTourLog(object sender, EventArgs e)
-        {
-            CreateTourLog?.Invoke(sender, e);
         }
     }
 }

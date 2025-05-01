@@ -69,7 +69,6 @@ namespace TourPlanner.UILayer.ViewModels
             ShowCreateTourLogCommand = new RelayCommand(execute => ShowCreateTourLog());
 
             _eventAggregator.Subscribe<string>(NavigationHandler);
-
             ShowHomeView();
         }
 

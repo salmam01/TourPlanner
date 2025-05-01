@@ -3,6 +3,7 @@ using System.Windows;
 using System.Diagnostics;
 using TourPlanner.BusinessLayer.Models;
 using TourPlanner.UILayer.Commands;
+using TourPlanner.UILayer.Events;
 
 namespace TourPlanner.UILayer.ViewModels
 {
@@ -111,6 +112,18 @@ namespace TourPlanner.UILayer.ViewModels
             ResetForm();
         }
 
+        public void ResetForm()
+        {
+            Date = DateTime.Now;
+            Comment = "";
+            Difficulty = 1;
+            Rating = 1;
+            TotalDistance = 0;
+            Hours = 0;
+            Minutes = 0;
+            _isEditing = false;
+        }
+
         //  TODO: Refactor this
         private bool ValidateInput()
         {
@@ -147,7 +160,7 @@ namespace TourPlanner.UILayer.ViewModels
 
             TourLogCreated?.Invoke(this, tourLog);
 
-            if(!_isEditing)
+            if (!_isEditing)
             {
                 ResetForm();
             }
@@ -170,18 +183,6 @@ namespace TourPlanner.UILayer.ViewModels
             Hours = tourLog.TotalTime.Hours;
             Minutes = tourLog.TotalTime.Minutes;
             OnPropertyChanged(nameof(ButtonText));
-        }
-
-        public void ResetForm()
-        {
-            Date = DateTime.Now;
-            Comment = "";
-            Difficulty = 1;
-            Rating = 1;
-            TotalDistance = 0;
-            Hours = 0;
-            Minutes = 0;
-            _isEditing = false;
         }
     }
 }

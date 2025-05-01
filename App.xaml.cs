@@ -32,7 +32,7 @@ namespace TourPlanner
             services.AddSingleton<SearchBarViewModel>();
 
             services.AddSingleton<TourLogsManagementViewModel>();
-            services.AddSingleton<CreateTourLogViewModel>();
+            services.AddSingleton<CreateTourLogViewModel>();    //  needs to be changed to transient, cannot be a singleton
             services.AddSingleton<TourLogListViewModel>();
 
             services.AddSingleton<MainWindow>(s => new MainWindow()

@@ -21,13 +21,17 @@ namespace TourPlanner.UILayer.ViewModels
         private readonly EventAggregator _eventAggregator;
         private Tour _selectedTour;
 
+        public ICommand CreateTourCommand => new RelayCommand(
+            execute => CreateTour()
+        );
+
         public ICommand EditTourCommand => new RelayCommand(
             execute => EditTour()
-            );
+        );
         
         public ICommand DeleteTourCommand => new RelayCommand(
             execute => DeleteTour()
-            );
+        );
 
 
         public TourManagementViewModel(
@@ -64,6 +68,11 @@ namespace TourPlanner.UILayer.ViewModels
                 $"Transport Type: {tour.TransportType}\n" +
                 $"From: {tour.From}\n" +
                 $"To: {tour.To}");
+        }
+
+        public void CreateTour()
+        {
+            _eventAggregator.Publish("ShowCreateTour");
         }
 
         public void EditTour()
