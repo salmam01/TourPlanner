@@ -26,8 +26,7 @@ namespace TourPlanner.UILayer.ViewModels
         private TourLog _selectedTourLog;
 
         public RelayCommand CreateTourLogCommand => new RelayCommand(
-            execute => CreateTourLog(), 
-            canExecute => _selectedTour != null
+            execute => CreateTourLog()
         );
         public RelayCommand DeleteTourLogCommand => new RelayCommand(
             execute => DeleteTourLog(), 
@@ -71,7 +70,7 @@ namespace TourPlanner.UILayer.ViewModels
             if (tourLog == null) return;
             TourLogListViewModel.OnTourLogCreated(tourLog);
             _eventAggregator.Publish("ShowHomeView");
-            UpdateTourLogs();
+            //UpdateTourLogs();
         }
 
         private void UpdateTourLogs()

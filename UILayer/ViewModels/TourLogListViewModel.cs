@@ -39,23 +39,24 @@ namespace TourPlanner.UILayer.ViewModels
 
         public TourLogListViewModel()
         {
-            TourLogs = new ObservableCollection<TourLog>();
+            _tourLogs = new ObservableCollection<TourLog>();
 
             Console.WriteLine("TourLogsListViewModel INITIALIZED");
         }
 
         public void OnTourLogCreated(TourLog tourLog)
         {
-            if(tourLog == null) 
+            if(tourLog == null)
             { 
                 Console.WriteLine("Tour Log is null!");
                 return;
             }
 
-            TourLogs.Add(tourLog);
+            _tourLogs.Add(tourLog);
+            Console.WriteLine(_tourLogs.Count());
 
             Console.WriteLine("Tour Log added to Tour Log List!\nList:\n");
-            foreach (TourLog tl in TourLogs)
+            foreach (TourLog tl in _tourLogs)
             {
                 Console.WriteLine($"{tl.Comment} on the {tl.Date}\n");
             }
@@ -80,7 +81,7 @@ namespace TourPlanner.UILayer.ViewModels
                 return;
             }
 
-            TourLogs.Remove(tourLog);
+            _tourLogs.Remove(tourLog);
             Console.WriteLine("Tour Log removed from Tour Log List!\nList:\n");
         }
     }
