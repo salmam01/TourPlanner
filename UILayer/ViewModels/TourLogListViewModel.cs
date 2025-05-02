@@ -62,13 +62,13 @@ namespace TourPlanner.UILayer.ViewModels
             }
         }
 
-        public void OnTourLogUpdated(TourLog tourLog)
+        public void OnTourLogUpdated(TourLog updatedTourLog)
         {
             int i = 0;
-            foreach (TourLog tl in _tourLogs) {
-                if (tl.Id == _selectedTourLog.Id)
+            foreach (TourLog tourLog in _tourLogs) {
+                if (tourLog.Id == _selectedTourLog.Id)
                 {
-                    _tourLogs[i] = tourLog;
+                    _tourLogs[i] = updatedTourLog;
                     break;
                 }
                 i++;

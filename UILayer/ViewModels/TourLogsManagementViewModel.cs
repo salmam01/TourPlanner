@@ -113,7 +113,6 @@ namespace TourPlanner.UILayer.ViewModels
             if (result != MessageBoxResult.Yes) return;
 
             TourLogListViewModel.OnTourLogDeleted(_selectedTourLog);
-            _tourLogService.DeleteTourLog(_selectedTourLog, _selectedTour);
             _selectedTourLog = null;
         }
 

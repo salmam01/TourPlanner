@@ -102,8 +102,7 @@ namespace TourPlanner.UILayer.ViewModels
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Warning
             );
-
-            _tourService.DeleteTour(_selectedTour);
+            if (result != MessageBoxResult.Yes) return;
             TourListViewModel.OnTourDeleted(_selectedTour);
         }
     }

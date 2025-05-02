@@ -58,14 +58,19 @@ namespace TourPlanner.UILayer.ViewModels
             }
         }
 
-        public void OnTourUpdated(Tour tour)
+        public void OnTourUpdated(Tour updatedTour)
         {
             int i = 0;
-            foreach (Tour t in _tours)
+            foreach (Tour tour in _tours)
             {
-                if (t.Id == _selectedTour.Id)
+                if (tour.Id == _selectedTour.Id)
                 {
-                    _tours[i] = tour;
+                    _tours[i].Name = updatedTour.Name;
+                    _tours[i].Date = updatedTour.Date;
+                    _tours[i].Description = updatedTour.Description;
+                    _tours[i].TransportType = updatedTour.TransportType;
+                    _tours[i].From = updatedTour.From;
+                    _tours[i].To = updatedTour.To;
                     break;
                 }
                 i++;

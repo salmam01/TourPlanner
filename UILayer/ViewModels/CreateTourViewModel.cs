@@ -19,6 +19,7 @@ namespace TourPlanner.UILayer.ViewModels
         private string _transportType;
         private string _from;
         private string _to;
+        private Tour _editingTour;
 
         public EventHandler<Tour> TourCreated;
         public EventHandler<Tour> TourUpdated;
@@ -114,6 +115,7 @@ namespace TourPlanner.UILayer.ViewModels
             _name = "";
             _date = DateTime.Now;
             _description = "";
+            _transportType = "";
             _from = "";
             _to = "";
             _isEditing = false;
@@ -122,29 +124,36 @@ namespace TourPlanner.UILayer.ViewModels
 
         private void CreateTour()
         {
-            Tour tour = new Tour(
-                _name,
-                _date,
-                _description,
-                _transportType,
-                _from,
-                _to
-            );
-
-            if(_isEditing)
+            if(_isEditing && _editingTour != null)
             {
-                TourUpdated?.Invoke(this, tour);
+                _editingTour.Name = _name;
+                _editingTour.Date = _date;
+                _editingTour.Description = _description;
+                _editingTour.TransportType = _transportType;
+                _editingTour.From = _from;
+                _editingTour.To = _to;
+
+                TourUpdated?.Invoke(this, _editingTour);
             }
             else
             {
+                Tour tour = new Tour(
+                    _name,
+                    _date,
+                    _description,
+                    _transportType,
+                    _from,
+                    _to
+                );
+
                 TourCreated?.Invoke(this, tour);
             }
-
             ResetForm();
         }
 
         public void LoadTour(Tour tour)
         {
+            _editingTour = tour;
             _name = tour.Name;
             _date = tour.Date;
             _description = tour.Description;
@@ -153,6 +162,7 @@ namespace TourPlanner.UILayer.ViewModels
             _to = tour.To;
             OnPropertyChanged(nameof(SubmitButtonText));
             _isEditing = true;
+            _editingTour = null;
         }
 
         private bool ValidateInput()
