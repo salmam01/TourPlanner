@@ -9,8 +9,9 @@ namespace TourPlanner.BusinessLayer.Services
 {
     public class TourLogService
     {
-        public TourLog CreateTourLog(DateTime date, string comment, int difficulty, double rating, double totalDistance, TimeSpan totalTime, Tour tour)
+        public void CreateTourLog(Tour tour, TourLog tourLog)
         {
+            /*
             ValidateTourLogData(date, comment, difficulty, rating, totalDistance, totalTime);
 
             TourLog tourLog = new TourLog
@@ -22,20 +23,18 @@ namespace TourPlanner.BusinessLayer.Services
                 Rating = rating,
                 TotalDistance = totalDistance,
                 TotalTime = totalTime
-            };
+            };*/
 
             if (tour.TourLogs == null)
             {
                 tour.TourLogs = new List<TourLog>();
             }
             tour.TourLogs.Add(tourLog);
-
-            return tourLog;
         }
 
         public void UpdateTourLog(TourLog tourLog, DateTime date, string comment, int difficulty, double rating, double totalDistance, TimeSpan totalTime)
         {
-            ValidateTourLogData(date, comment, difficulty, rating, totalDistance, totalTime);
+            //ValidateTourLogData(date, comment, difficulty, rating, totalDistance, totalTime);
 
             tourLog.Date = date;
             tourLog.Comment = comment;
@@ -55,6 +54,7 @@ namespace TourPlanner.BusinessLayer.Services
         }
 
         //Diese Fehlermeldungen sind noch nicht sichtbar;  wenn die daten nicht stimmen kann man nicht auf create drücken(box ist grau), TODO: Fehlermeldungen anzeigen
+        /* These are a little unnecessary because you already validate in TourLogManagement VM
         private void ValidateTourLogData(DateTime date, string comment, int difficulty, double rating, double totalDistance, TimeSpan totalTime)
         {
             if (date > DateTime.Now)
@@ -74,6 +74,6 @@ namespace TourPlanner.BusinessLayer.Services
 
             if (totalTime.TotalMinutes < 0)
                 throw new ArgumentException("Zeit muss größer oder gleich 0 sein.");
-        }
+        }*/
     }
 }

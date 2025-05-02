@@ -69,8 +69,8 @@ namespace TourPlanner.UILayer.ViewModels
         {
             if (tourLog == null) return;
             TourLogListViewModel.OnTourLogCreated(tourLog);
+            _tourLogService.CreateTourLog(_selectedTour, tourLog);
             _eventAggregator.Publish("ShowHomeView");
-            //UpdateTourLogs();
         }
 
         private void UpdateTourLogs()
@@ -109,9 +109,13 @@ namespace TourPlanner.UILayer.ViewModels
             _selectedTourLog = null;
         }
 
+        //  TODO: Fix this 
         private void EditTourLog() {
             if (_selectedTourLog == null || _selectedTour == null) return;
+            _eventAggregator.Publish("ShowCreateTourLog");
 
+            _createTourLogViewModel.LoadTourLog(_selectedTourLog);
+            _eventAggregator.Publish("ShowCreateTourLog");
 
             /*Window editTourLogWindow = new Window
             {
