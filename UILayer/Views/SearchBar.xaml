@@ -9,25 +9,15 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        
+
         <TextBox x:Name="SearchTextBox"
                  Grid.Column="0"
                  FontSize="16"
                  Padding="5"
-                 Background="AliceBlue"
+                 Background="#E7E7E7"
                  VerticalContentAlignment="Center"
                  HorizontalAlignment="Stretch"
                  Text="{Binding SearchText}"/>
-
-        <Button x:Name="SearchButton"
-                Grid.Column="1"
-                Content="O"
-                MinWidth="35"
-                Width="Auto"
-                VerticalContentAlignment="Center"
-                HorizontalAlignment="Stretch"
-                Command="{Binding SearchCommand}"/>
     </Grid>
 </UserControl>

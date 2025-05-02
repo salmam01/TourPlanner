@@ -61,7 +61,7 @@
                     <TextBlock Grid.Column="0" 
                                Text="TourPlanner"
                                Foreground="LightCyan"
-                               FontSize="16"
+                               FontSize="20"
                                FontFamily="Dubai"
                                VerticalAlignment="Center"
                                Margin="10,0,0,0"/>
@@ -161,6 +161,7 @@
                     </Button>
 
                     <Button Grid.Column="1"
+                            Background="#9CCB19"
                             Content="File"
                             FontFamily="Dubai"
                             FontSize="14"
@@ -168,6 +169,7 @@
                             BorderThickness="0"/>
                     
                     <Button Grid.Column="2" 
+                            Background="#9CCB19"
                             Content="Edit"
                             FontFamily="Dubai"
                             FontSize="14"
@@ -175,6 +177,7 @@
                             BorderThickness="0"/>
                     
                     <Button Grid.Column="3" 
+                            Background="#9CCB19"
                             Content="Options"
                             FontFamily="Dubai"
                             FontSize="14"
@@ -182,6 +185,7 @@
                             BorderThickness="0"/>
 
                     <Button Grid.Column="4" 
+                            Background="#9CCB19"
                             Content="Help"
                             FontFamily="Dubai"
                             FontSize="14"

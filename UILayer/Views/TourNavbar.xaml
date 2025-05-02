@@ -12,12 +12,15 @@
                     VerticalAlignment="Center"
                     HorizontalAlignment="Stretch">
             <Button Content="General"
+                    Background="#0078D7"
                     FontSize="18"
                     VerticalContentAlignment="Center"/>
             <Button Content="Route"
+                    Background="#0078D7"
                     FontSize="18"
                     VerticalContentAlignment="Center"/>
             <Button Content="Misc"
+                    Background="#0078D7"
                     FontSize="18"
                     VerticalContentAlignment="Center"/>
         </StackPanel>

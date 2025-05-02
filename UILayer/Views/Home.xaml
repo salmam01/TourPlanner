@@ -10,6 +10,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="5"/> <!-- Spacer -->
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
@@ -18,10 +19,11 @@
                               DataContext="{Binding TourManagementViewModel}"/>
 
         <!-- Right side: Tour Details and Logs -->
-        <Grid Grid.Column="1">
+        <Grid Grid.Column="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>  <!-- Navbar height -->
-                <RowDefinition Height="230"/> <!-- Map/Image area -->
+                <RowDefinition Height="200"/> <!-- Map/Image area -->
+                <RowDefinition Height="5"/>   <!-- Spacer -->
                 <RowDefinition Height="Auto"/> <!-- Tour Logs header -->
                 <RowDefinition Height="*"/>   <!-- Tour Logs list -->
             </Grid.RowDefinitions>
@@ -29,10 +31,11 @@
             <views:TourNavbar Grid.Row="0"/>
             
             <!-- Placeholder for Map/Image -->
-            <Border Grid.Row="1" Background="#1E4620"/>
-            
+            <Border Grid.Row="1" Background="White"/>
+            <views:Map/>
+
             <views:TourLogsManagement x:Name="TourLogsView" 
-                                      Grid.Row="2"
+                                      Grid.Row="3"
                                       Grid.RowSpan="2"
                                       DataContext="{Binding TourLogsManagementViewModel}"/>
         </Grid>

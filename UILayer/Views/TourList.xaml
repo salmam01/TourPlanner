@@ -10,26 +10,24 @@
         <!-- List containing all Tours -->
         <ListView ItemsSource="{Binding Tours}"
                   SelectedItem="{Binding SelectedTour, Mode=TwoWay}" 
-                  Background="Transparent"
-                  BorderThickness="0"
-                  Height="300" Width="250">
+                  BorderThickness="0">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Name}"
-                               Foreground="White"
-                               FontFamily="Dubai"
-                               FontSize="14"/>
+                               Foreground="Black"
+                               FontSize="18"
+                               FontFamily="Dubai"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
-                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Background" Value="#FFF6B6"/>
                     <Style.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="#2E5E2E"/>
+                            <Setter Property="Background" Value="#FFDC4A"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="#2E5E2E"/>
+                            <Setter Property="Background" Value="#FFDC4A"/>
                         </Trigger>
                     </Style.Triggers>
                 </Style>

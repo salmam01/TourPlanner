@@ -12,13 +12,6 @@ namespace TourPlanner.UILayer.Views
         public TourList()
         {
             InitializeComponent();
-            Loaded += (s, e) => {
-                Console.WriteLine($"TourList DataContext: {DataContext?.GetType().Name}");
-                if (DataContext is TourListViewModel vm)
-                {
-                    Console.WriteLine($"Tours count: {vm.Tours?.Count}");
-                }
-            };
         }
     }
 }

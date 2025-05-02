@@ -2,14 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
-using System.Windows.Controls;
-using System.Diagnostics;
 using TourPlanner.BusinessLayer.Models;
 using TourPlanner.BusinessLayer.Services;
 using TourPlanner.UILayer.Commands;
-using TourPlanner.UILayer.Views;
-using System.Windows.Media;
-using System.Linq;
 using TourPlanner.UILayer.Events;
 
 namespace TourPlanner.UILayer.ViewModels
@@ -98,7 +93,7 @@ namespace TourPlanner.UILayer.ViewModels
 
             MessageBoxResult result = MessageBox.Show(
                 "Are you sure you would like to delete this tour log?",
-                "DelteTour Log ",
+                $"DelteTour Log {_selectedTourLog.Id}",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Warning
             );
