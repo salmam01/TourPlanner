@@ -75,7 +75,7 @@ namespace TourPlanner.UILayer.ViewModels
         private void NavigationHandler(string message)
         {
             switch (message) {
-                case "ShowHomeView":
+                case "ShowHome":
                     ShowHomeView();
                     break;
 

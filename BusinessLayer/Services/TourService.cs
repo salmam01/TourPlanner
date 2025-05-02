@@ -21,7 +21,7 @@ namespace TourPlanner.BusinessLayer.Services
         {
             //  TODO: fix this method
             //  Could try with a switch using "valueToChange" & "value" parameters later
-            ValidateTourData(tour);
+            //ValidateTourData(tour);
 
             tour.Name = name;
             tour.Date = date;

@@ -45,6 +45,8 @@ namespace TourPlanner.UILayer.ViewModels
             _eventAggregator.Subscribe<Tour>(OnTourSelected);
             TourLogListViewModel.TourLogSelected += OnTourLogSelected;
             _createTourLogViewModel.TourLogCreated += OnTourLogCreated;
+            _createTourLogViewModel.TourLogUpdated += OnTourLogUpdated;
+            _createTourLogViewModel.Cancelled += OnCancel;
         }
 
         public void OnTourSelected(Tour tour)
@@ -64,8 +66,20 @@ namespace TourPlanner.UILayer.ViewModels
         {
             if (tourLog == null) return;
             TourLogListViewModel.OnTourLogCreated(tourLog);
-            _tourLogService.CreateTourLog(_selectedTour, tourLog);
-            _eventAggregator.Publish("ShowHomeView");
+            //_tourLogService.CreateTourLog(_selectedTour, tourLog);
+            _eventAggregator.Publish("ShowHome");
+        }
+
+        public void OnTourLogUpdated(object sender, TourLog tourLog)
+        {
+            if(tourLog == null) return;
+            TourLogListViewModel.OnTourLogUpdated(tourLog);
+            _eventAggregator.Publish("ShowHome");
+        }
+
+        public void OnCancel(object sender, EventArgs e)
+        {
+            _eventAggregator.Publish("ShowHome");
         }
 
         private void UpdateTourLogs()
@@ -111,52 +125,6 @@ namespace TourPlanner.UILayer.ViewModels
 
             _createTourLogViewModel.LoadTourLog(_selectedTourLog);
             _eventAggregator.Publish("ShowCreateTourLog");
-
-            /*Window editTourLogWindow = new Window
-            {
-                Title = "Edit Tour Log ",
-                Content = new CreateTourLog(),
-                Width = 400,
-                Height = 600,
-                WindowStyle = WindowStyle.ToolWindow,
-                ResizeMode = ResizeMode.NoResize,
-                WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                Owner = Application.Current.MainWindow,
-                Background = new SolidColorBrush(Color.FromRgb(30, 70, 32))
-            };
-
-            CreateTourLogViewModel viewModel = (CreateTourLogViewModel)((CreateTourLog)editTourLogWindow.Content).DataContext;
-            viewModel.LoadTourLog(_selectedTourLog);
-
-            viewModel.TourLogCreated += (sender, tourLog) =>
-            {
-                try
-                { 
-                    _tourLogService.UpdateTourLog(
-                        _selectedTourLog,
-                        tourLog.Date,
-                        tourLog.Comment,
-                        tourLog.Difficulty,
-                        tourLog.Rating,
-                        tourLog.TotalDistance,
-                        tourLog.TotalTime
-                    );
-                        
-                    UpdateTourLogs();
-                    editTourLogWindow.Close();
-                }
-                catch (ArgumentException ex)
-                {
-                    MessageBox.Show(ex.Message, "Validierungsfehler", MessageBoxButton.OK, MessageBoxImage.Warning);
-                }
-            };
-
-            viewModel.Cancelled += (sender, args) =>
-            {
-                editTourLogWindow.Close();
-            };
-
-            editTourLogWindow.ShowDialog();*/
         }
     }
 }

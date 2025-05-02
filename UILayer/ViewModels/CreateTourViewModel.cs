@@ -21,7 +21,10 @@ namespace TourPlanner.UILayer.ViewModels
         private string _to;
 
         public EventHandler<Tour> TourCreated;
+        public EventHandler<Tour> TourUpdated;
         public bool _isEditing = false;
+        public string SubmitButtonText => _isEditing ? "Save Tour" : "Create Tour";
+
         public bool CanCreate => ValidateInput();
 
         public string Name
@@ -89,11 +92,30 @@ namespace TourPlanner.UILayer.ViewModels
             }
         }
 
+        public List<string> TransportTypeOptions { get; } = new List<string>
+        {
+            "Plane",
+            "Bus",
+            "Train",
+            "Car"
+        };
+
         public ICommand CreateTourCommand => new RelayCommand(execute => CreateTour(), canExecute => CanCreate);
 
         public CreateTourViewModel()
         {
             ResetForm();
+        }
+
+        public void ResetForm()
+        {
+            _name = "";
+            _date = DateTime.Now;
+            _description = "";
+            _from = "";
+            _to = "";
+            _isEditing = false;
+            OnPropertyChanged(nameof(SubmitButtonText));
         }
 
         private void CreateTour()
@@ -104,17 +126,21 @@ namespace TourPlanner.UILayer.ViewModels
                 _description,
                 _transportType,
                 _from,
-                _to);
+                _to
+            );
 
-            TourCreated?.Invoke(this, tour);
-
-            if (!_isEditing)
+            if(_isEditing)
             {
-                ResetForm();
+                TourUpdated?.Invoke(this, tour);
             }
+            else
+            {
+                TourCreated?.Invoke(this, tour);
+            }
+
+            ResetForm();
         }
 
-        //  TODO: Works but doesn't show in the UI yet
         public void LoadTour(Tour tour)
         {
             _name = tour.Name;
@@ -123,9 +149,8 @@ namespace TourPlanner.UILayer.ViewModels
             _transportType = tour.TransportType;
             _from = tour.From;
             _to = tour.To;
-
+            OnPropertyChanged(nameof(SubmitButtonText));
             _isEditing = true;
-            Console.WriteLine($"Tour loaded: {tour.Name}");
         }
 
         private bool ValidateInput()
@@ -137,15 +162,6 @@ namespace TourPlanner.UILayer.ViewModels
                    !string.IsNullOrEmpty(From) &&
                    !string.IsNullOrEmpty(To) &&
                    Date > DateTime.Now;
-        }
-
-        public void ResetForm()
-        {
-            _name = "";
-            _date = DateTime.Now;
-            _description = "";
-            _from = "";
-            _to = "";
         }
     }
 }

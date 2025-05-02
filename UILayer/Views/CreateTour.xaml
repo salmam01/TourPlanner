@@ -105,11 +105,8 @@
                       Height="28"
                       VerticalContentAlignment="Center"
                       Margin="0,2,0,0"
+                      ItemsSource="{Binding TransportTypeOptions}"
                       SelectedItem="{Binding TransportType, UpdateSourceTrigger=PropertyChanged}">
-                <ComboBoxItem Content="Train"/>
-                <ComboBoxItem Content="Plane"/>
-                <ComboBoxItem Content="Bus"/>
-                <ComboBoxItem Content="Car"/>
             </ComboBox>
 
             <!-- Tour Starting Point -->
@@ -160,7 +157,7 @@
             <Button Grid.Column="2"
                     x:Name="submitButton"
                     BorderThickness="0"
-                    Content="Create Tour"
+                    Content="{Binding SubmitButtonText}"
                     Foreground="White"
                     FontFamily="Dubai"
                     FontSize="18"

@@ -216,7 +216,7 @@
                     Background="#2E5E2E"
                     Foreground="White"
                     BorderBrush="Gray"/>
-            <Button Content="Create"
+            <Button Content="{Binding SubmitButtonText}"
                     Command="{Binding CreateCommand}"
                     Width="100"
                     Height="30"

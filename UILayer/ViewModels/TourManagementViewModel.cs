@@ -47,6 +47,7 @@ namespace TourPlanner.UILayer.ViewModels
             _eventAggregator = eventAggregator;
 
             _createTourViewModel.TourCreated += OnTourCreated;
+            _createTourViewModel.TourUpdated += OnTourUpdated;
             _eventAggregator.Subscribe<Tour>(OnTourSelected);
         }
 
@@ -58,16 +59,19 @@ namespace TourPlanner.UILayer.ViewModels
 
         public void OnTourCreated(object sender, Tour tour)
         {
-            _tourService.CreateTour(tour);
+            if (tour == null) return;
             TourListViewModel.OnTourCreated(tour);
+            MessageBox.Show($"Tour {tour.Name} created!");
 
-            MessageBox.Show($"Tour created! \n" +
-                $"Name: {tour.Name}\n" +
-                $"Date: {tour.Date}\n" +
-                $"Description: {tour.Description}\n" +
-                $"Transport Type: {tour.TransportType}\n" +
-                $"From: {tour.From}\n" +
-                $"To: {tour.To}");
+            _eventAggregator.Publish("ShowHome");
+        }
+
+        public void OnTourUpdated(object sender, Tour tour)
+        {
+            if (tour == null) return;
+            TourListViewModel.OnTourUpdated(tour);
+
+            _eventAggregator.Publish("ShowHome");
         }
 
         public void CreateTour()
@@ -83,6 +87,7 @@ namespace TourPlanner.UILayer.ViewModels
                 return;
             }
             _createTourViewModel.LoadTour(_selectedTour);
+            _eventAggregator.Publish("ShowCreateTour");
         }
 
         public void DeleteTour()
@@ -92,7 +97,13 @@ namespace TourPlanner.UILayer.ViewModels
                 MessageBox.Show("Please select a tour to delete.");
                 return;
             }
-            Console.WriteLine($"Tour {_selectedTour.Name} deleted!");
+
+            MessageBoxResult result = MessageBox.Show(
+                "Are you sure you would like to delete this tour log?",
+                $"Delete Tour {_selectedTour.Name}",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning
+            );
 
             _tourService.DeleteTour(_selectedTour);
             TourListViewModel.OnTourDeleted(_selectedTour);

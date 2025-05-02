@@ -15,8 +15,17 @@ namespace TourPlanner.UILayer.ViewModels
         private double _rating, _totalDistance;
         private bool _isEditing;
         private Guid _editingId;
+        public string SubmitButtonText => _isEditing ? "Save Tour Log" : "Create Tour Log";
+
+        public bool CanCreate => ValidateInput();
+        public RelayCommand CreateCommand => new RelayCommand(
+            execute => CreateTourLog(), 
+            canExecute => CanCreate
+        );
+        public RelayCommand CancelCommand => new RelayCommand(execute => Cancel());
 
         public event EventHandler<TourLog> TourLogCreated;
+        public event EventHandler<TourLog> TourLogUpdated;
         public event EventHandler Cancelled;
 
         public DateTime Date
@@ -100,13 +109,6 @@ namespace TourPlanner.UILayer.ViewModels
             }
         }
 
-        public string ButtonText => _isEditing ? "Save" : "Create";
-
-        public bool CanCreate => ValidateInput();
-
-        public RelayCommand CreateCommand => new RelayCommand(execute => CreateTourLog(), canExecute => CanCreate);
-        public RelayCommand CancelCommand => new RelayCommand(execute => Cancel());
-
         public CreateTourLogViewModel()
         {
             ResetForm();
@@ -122,6 +124,51 @@ namespace TourPlanner.UILayer.ViewModels
             Hours = 0;
             Minutes = 0;
             _isEditing = false;
+            OnPropertyChanged(nameof(SubmitButtonText));
+        }
+
+        private void CreateTourLog()
+        {
+            TourLog tourLog = new TourLog
+            {
+                Id = _isEditing ? _editingId : Guid.NewGuid(),
+                Date = Date,
+                Comment = Comment,
+                Difficulty = Difficulty,
+                Rating = Rating,
+                TotalDistance = TotalDistance,
+                TotalTime = new TimeSpan(Hours, Minutes, 0)
+            };
+
+            if(_isEditing)
+            {
+                TourLogUpdated?.Invoke(this, tourLog);
+            } 
+            else 
+            {
+                TourLogCreated?.Invoke(this, tourLog);
+            }
+
+            ResetForm();   
+        }
+
+        public void LoadTourLog(TourLog tourLog)
+        {
+            _isEditing = true;
+            _editingId = tourLog.Id;
+            _date = tourLog.Date;
+            _comment = tourLog.Comment;
+            _difficulty = tourLog.Difficulty;
+            _rating = tourLog.Rating;
+            _totalDistance = tourLog.TotalDistance;
+            _hours = tourLog.TotalTime.Hours;
+            _minutes = tourLog.TotalTime.Minutes;
+            OnPropertyChanged(nameof(SubmitButtonText));
+        }
+
+        private void Cancel()
+        {
+            Cancelled?.Invoke(this, EventArgs.Empty);
         }
 
         //  TODO: Refactor this
@@ -143,46 +190,6 @@ namespace TourPlanner.UILayer.ViewModels
             if (Minutes < 0 || Minutes >= 60) Debug.WriteLine("- Invalid Minutes");
 
             return false;
-        }
-
-        private void CreateTourLog()
-        {
-            TourLog tourLog = new TourLog
-            {
-                Id = _isEditing ? _editingId : Guid.NewGuid(),
-                Date = Date,
-                Comment = Comment,
-                Difficulty = Difficulty,
-                Rating = Rating,
-                TotalDistance = TotalDistance,
-                TotalTime = new TimeSpan(Hours, Minutes, 0)
-            };
-
-            TourLogCreated?.Invoke(this, tourLog);
-
-            if (!_isEditing)
-            {
-                ResetForm();
-            }
-        }
-
-        private void Cancel()
-        {
-            Cancelled?.Invoke(this, EventArgs.Empty);
-        }
-
-        public void LoadTourLog(TourLog tourLog)
-        {
-            _isEditing = true;
-            _editingId = tourLog.Id;
-            Date = tourLog.Date;
-            Comment = tourLog.Comment;
-            Difficulty = tourLog.Difficulty;
-            Rating = tourLog.Rating;
-            TotalDistance = tourLog.TotalDistance;
-            Hours = tourLog.TotalTime.Hours;
-            Minutes = tourLog.TotalTime.Minutes;
-            OnPropertyChanged(nameof(ButtonText));
         }
     }
 }

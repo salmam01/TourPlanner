@@ -58,6 +58,20 @@ namespace TourPlanner.UILayer.ViewModels
             }
         }
 
+        public void OnTourUpdated(Tour tour)
+        {
+            int i = 0;
+            foreach (Tour t in _tours)
+            {
+                if (t.Id == _selectedTour.Id)
+                {
+                    _tours[i] = tour;
+                    break;
+                }
+                i++;
+            }
+        }
+
         public void OnTourDeleted(Tour tour)
         {
             _tours.Remove(tour);
