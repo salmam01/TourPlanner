@@ -14,7 +14,7 @@ namespace TourPlanner.UILayer.ViewModels
         private readonly TourLogService _tourLogService;
 
         public TourLogListViewModel TourLogListViewModel { get; }
-        private CreateTourLogViewModel _createTourLogViewModel;
+        private readonly CreateTourLogViewModel _createTourLogViewModel;
 
         private readonly EventAggregator _eventAggregator;
         private Tour _selectedTour;
@@ -66,7 +66,6 @@ namespace TourPlanner.UILayer.ViewModels
         {
             if (tourLog == null) return;
             TourLogListViewModel.OnTourLogCreated(tourLog);
-            //_tourLogService.CreateTourLog(_selectedTour, tourLog);
             _eventAggregator.Publish("ShowHome");
         }
 
@@ -107,7 +106,7 @@ namespace TourPlanner.UILayer.ViewModels
 
             MessageBoxResult result = MessageBox.Show(
                 "Are you sure you would like to delete this tour log?",
-                $"DelteTour Log {_selectedTourLog.Id}",
+                $"Delete Tour Log {_selectedTourLog.Id}",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Warning
             );
@@ -118,11 +117,8 @@ namespace TourPlanner.UILayer.ViewModels
             _selectedTourLog = null;
         }
 
-        //  TODO: Fix this 
         private void EditTourLog() {
             if (_selectedTourLog == null || _selectedTour == null) return;
-            _eventAggregator.Publish("ShowCreateTourLog");
-
             _createTourLogViewModel.LoadTourLog(_selectedTourLog);
             _eventAggregator.Publish("ShowCreateTourLog");
         }

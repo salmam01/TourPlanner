@@ -43,9 +43,15 @@ namespace TourPlanner.UILayer.ViewModels
             }
         }
 
-        public ICommand ShowHomeViewCommand { get; }
-        public ICommand ShowCreateTourCommand { get; }
-        public ICommand ShowCreateTourLogCommand { get; }
+        public ICommand ShowHomeViewCommand => new RelayCommand(
+            execute => ShowHomeView()
+        );
+        public ICommand ShowCreateTourCommand => new RelayCommand(
+            execute => ShowCreateTour()
+        );
+        public ICommand ShowCreateTourLogCommand => new RelayCommand(
+            execute => ShowCreateTourLog()
+        );
 
 
         public MainWindowViewModel(
@@ -63,10 +69,6 @@ namespace TourPlanner.UILayer.ViewModels
             {
                 DataContext = _homeViewModel
             };
-
-            ShowHomeViewCommand = new RelayCommand(execute => ShowHomeView());
-            ShowCreateTourCommand = new RelayCommand(execute => ShowCreateTour());
-            ShowCreateTourLogCommand = new RelayCommand(execute => ShowCreateTourLog());
 
             _eventAggregator.Subscribe<string>(NavigationHandler);
             ShowHomeView();

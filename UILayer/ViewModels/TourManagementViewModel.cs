@@ -62,7 +62,6 @@ namespace TourPlanner.UILayer.ViewModels
             if (tour == null) return;
             TourListViewModel.OnTourCreated(tour);
             MessageBox.Show($"Tour {tour.Name} created!");
-
             _eventAggregator.Publish("ShowHome");
         }
 
@@ -70,7 +69,6 @@ namespace TourPlanner.UILayer.ViewModels
         {
             if (tour == null) return;
             TourListViewModel.OnTourUpdated(tour);
-
             _eventAggregator.Publish("ShowHome");
         }
 

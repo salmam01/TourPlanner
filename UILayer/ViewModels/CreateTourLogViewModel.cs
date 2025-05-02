@@ -3,7 +3,7 @@ using System.Windows;
 using System.Diagnostics;
 using TourPlanner.BusinessLayer.Models;
 using TourPlanner.UILayer.Commands;
-using TourPlanner.UILayer.Events;
+using System.Windows.Input;
 
 namespace TourPlanner.UILayer.ViewModels
 {
@@ -18,11 +18,13 @@ namespace TourPlanner.UILayer.ViewModels
         public string SubmitButtonText => _isEditing ? "Save Tour Log" : "Create Tour Log";
 
         public bool CanCreate => ValidateInput();
-        public RelayCommand CreateCommand => new RelayCommand(
+        public ICommand CreateCommand => new RelayCommand(
             execute => CreateTourLog(), 
             canExecute => CanCreate
         );
-        public RelayCommand CancelCommand => new RelayCommand(execute => Cancel());
+        public ICommand CancelCommand => new RelayCommand(
+            execute => Cancel()
+        );
 
         public event EventHandler<TourLog> TourLogCreated;
         public event EventHandler<TourLog> TourLogUpdated;

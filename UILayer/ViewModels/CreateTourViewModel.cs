@@ -22,10 +22,14 @@ namespace TourPlanner.UILayer.ViewModels
 
         public EventHandler<Tour> TourCreated;
         public EventHandler<Tour> TourUpdated;
-        public bool _isEditing = false;
+        public bool _isEditing;
         public string SubmitButtonText => _isEditing ? "Save Tour" : "Create Tour";
-
         public bool CanCreate => ValidateInput();
+        public ICommand CreateTourCommand => new RelayCommand(
+            execute => CreateTour(), 
+            canExecute => CanCreate
+        );
+
 
         public string Name
         {
@@ -99,8 +103,6 @@ namespace TourPlanner.UILayer.ViewModels
             "Train",
             "Car"
         };
-
-        public ICommand CreateTourCommand => new RelayCommand(execute => CreateTour(), canExecute => CanCreate);
 
         public CreateTourViewModel()
         {
