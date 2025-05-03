@@ -1,215 +1,35 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{749DC82F-56D7-4BCD-AA57-429CB3689F2F}</ProjectGuid>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>TourPlanner</RootNamespace>
-    <AssemblyName>TourPlanner</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <WarningLevel>4</WarningLevel>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Deterministic>true</Deterministic>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWPF>true</UseWPF>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=9.0.0.4, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.9.0.4\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.DependencyInjection, Version=9.0.0.4, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.Extensions.DependencyInjection.9.0.4\lib\net462\Microsoft.Extensions.DependencyInjection.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=9.0.0.4, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.Extensions.DependencyInjection.Abstractions.9.0.4\lib\net462\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-  </ItemGroup>
-  <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
-    <Compile Include="UILayer\Events\EventAggregator.cs" />
-    <Compile Include="UILayer\ViewModels\BaseViewModel.cs" />
-    <Compile Include="UILayer\ViewModels\CreateTourLogViewModel.cs" />
-    <Compile Include="UILayer\ViewModels\CreateTourViewModel.cs" />
-    <Compile Include="UILayer\ViewModels\HomeViewModel.cs" />
-    <Compile Include="UILayer\ViewModels\SearchBarViewModel.cs" />
-    <Compile Include="UILayer\ViewModels\TourListViewModel.cs" />
-    <Compile Include="UILayer\ViewModels\TourLogListViewModel.cs" />
-    <Compile Include="UILayer\ViewModels\TourLogsManagementViewModel.cs" />
-    <Compile Include="UILayer\ViewModels\TourManagementViewModel.cs" />
-    <Compile Include="UILayer\ViewModels\TourNavbarViewModel.cs" />
-    <Compile Include="UILayer\Views\CreateTour.xaml.cs">
-      <DependentUpon>CreateTour.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UILayer\Views\Home.xaml.cs">
-      <DependentUpon>Home.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UILayer\Views\Map.xaml.cs">
-      <DependentUpon>Map.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UILayer\Views\ReturnButton.xaml.cs">
-      <DependentUpon>ReturnButton.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UILayer\Views\SearchBar.xaml.cs">
-      <DependentUpon>SearchBar.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UILayer\Views\TourList.xaml.cs">
-      <DependentUpon>TourList.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UILayer\Views\TourLogList.xaml.cs">
-      <DependentUpon>TourLogList.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UILayer\Views\TourLogsManagement.xaml.cs">
-      <DependentUpon>TourLogsManagement.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UILayer\Views\TourManagement.xaml.cs">
-      <DependentUpon>TourManagement.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UILayer\Views\TourNavbar.xaml.cs">
-      <DependentUpon>TourNavbar.xaml</DependentUpon>
-    </Compile>
-    <Page Include="UILayer\Views\CreateTour.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UILayer\Views\CreateTourLog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UILayer\Views\Home.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UILayer\Views\MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="BusinessLayer\Models\Tour.cs" />
-    <Compile Include="BusinessLayer\Models\TourAttributes.cs" />
-    <Compile Include="BusinessLayer\Models\TourLog.cs" />
-    <Compile Include="BusinessLayer\Services\TourLogService.cs" />
-    <Compile Include="BusinessLayer\Services\TourService.cs" />
-    <Compile Include="UILayer\Commands\RelayCommand.cs" />
-    <Compile Include="UILayer\ViewModels\MainWindowViewModel.cs" />
-    <Compile Include="UILayer\Views\CreateTourLog.xaml.cs">
-      <DependentUpon>CreateTourLog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UILayer\Views\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="UILayer\Views\Map.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UILayer\Views\ReturnButton.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UILayer\Views\SearchBar.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UILayer\Views\TourList.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UILayer\Views\TourLogList.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UILayer\Views\TourLogsManagement.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UILayer\Views\TourManagement.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UILayer\Views\TourNavbar.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
   <ItemGroup>
     <Folder Include="DataLayer\Database\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="UILayer\Resources\Images\Background.jpg" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="9.0.4" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.4" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.4" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="DataLayer\Repositories\TourLogRepository.cs" />
+    <Compile Remove="DataLayer\Repositories\TourRepository.cs" />
+    <Compile Remove="TestLayer\AdditionalTourTests.cs" />
+    <Compile Remove="TestLayer\MSTestSettings.cs" />
+    <Compile Remove="TestLayer\Test1.cs" />
+    <Compile Remove="TestLayer\TourTest.cs" />
+    <Compile Remove="TourPlanner.UILayer\ViewModels\CreateTourLogViewModel.cs" />
+    <Compile Remove="TourPlanner.UILayer\ViewModels\EventAggregator.cs" />
+    <Compile Remove="UILayer\Views\TopNavbar.xaml.cs" />
+    <Page Remove="UILayer\Views\TopNavbar.xaml" />
+  </ItemGroup>
 </Project>
