@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  tourplanner-db:
+    image: postgres:latest
+    container_name: tourplanner-db
+    environment:
+      POSTGRES_USER: salma
+      POSTGRES_PASSWORD: tourplanner1234
+      POSTGRES_DB: TourPlanner
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U salma -d TourPlanner"]
+
+volumes:
+  pgdata:
