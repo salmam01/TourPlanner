@@ -22,7 +22,7 @@ namespace TourPlanner.BusinessLayer.Models
         public TimeSpan EstimatedTime { get; set; }
         public List<TourLog> TourLogs { get; set; }
 
-        public Tour(string name, DateTime date, string description, string transportType, string from, string to)
+        public Tour (string name, DateTime date, string description, string transportType, string from, string to)
         {
             Name = name;
             Date = date;
@@ -32,7 +32,8 @@ namespace TourPlanner.BusinessLayer.Models
             To = to;
         }
 
-        public Tour() {
+        public Tour () 
+        {
             TourLogs = new List<TourLog>();
         }
     }
