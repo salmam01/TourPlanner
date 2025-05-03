@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,10 +8,15 @@ using System.Threading.Tasks;
 namespace TourPlanner.BusinessLayer.Models
 {
     public class TourLog {
+        [Key]
         public Guid Id { get; set; }
+        [Required]
         public DateTime Date { get; set; }
+        [Required]
         public int Difficulty { get; set; }
+        [Required]
         public double Rating { get; set; }
+        [Required]
         public string Comment { get; set; }
         public double TotalDistance { get; set; }
         public TimeSpan TotalTime { get; set; }
@@ -34,7 +40,5 @@ namespace TourPlanner.BusinessLayer.Models
             TotalDistance = 0;
             TotalTime = TimeSpan.Zero;
         }
-
     }
-
 }

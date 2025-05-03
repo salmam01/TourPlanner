@@ -48,9 +48,11 @@ namespace TourPlanner.BusinessLayer.Services
             tour.TourLogs?.Remove(tourLog);
         }
 
+        //  TODO: fix this
         public List<TourLog> GetTourLogs(Tour tour)
         {
-            return tour.TourLogs ?? new List<TourLog>();
+            //return tour.TourLogs ?? new List<TourLog>();
+            return new List<TourLog>();
         }
 
         //Diese Fehlermeldungen sind noch nicht sichtbar;  wenn die daten nicht stimmen kann man nicht auf create drücken(box ist grau), TODO: Fehlermeldungen anzeigen
