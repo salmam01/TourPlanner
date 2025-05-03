@@ -7,7 +7,10 @@
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="DataLayer\Database\" />
+    <Compile Remove="DataLayer\Database\**" />
+    <EmbeddedResource Remove="DataLayer\Database\**" />
+    <None Remove="DataLayer\Database\**" />
+    <Page Remove="DataLayer\Database\**" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="UILayer\Resources\Images\Background.jpg" />
@@ -21,8 +24,6 @@
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="DataLayer\Repositories\TourLogRepository.cs" />
-    <Compile Remove="DataLayer\Repositories\TourRepository.cs" />
     <Compile Remove="TestLayer\AdditionalTourTests.cs" />
     <Compile Remove="TestLayer\MSTestSettings.cs" />
     <Compile Remove="TestLayer\Test1.cs" />
@@ -31,5 +32,9 @@
     <Compile Remove="TourPlanner.UILayer\ViewModels\EventAggregator.cs" />
     <Compile Remove="UILayer\Views\TopNavbar.xaml.cs" />
     <Page Remove="UILayer\Views\TopNavbar.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DataLayer\Data\" />
+    <Folder Include="DataLayer\APIClients\" />
   </ItemGroup>
 </Project>

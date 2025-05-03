@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TourPlanner.DataLayer.Repositories
 {
-    class TourRepository
+    public class TourRepository
     {
     }
 }
