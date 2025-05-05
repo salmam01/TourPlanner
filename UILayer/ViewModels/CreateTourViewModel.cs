@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,10 +10,8 @@ using System.Windows.Input;
 using TourPlanner.BusinessLayer.Models;
 using TourPlanner.UILayer.Commands;
 
-namespace TourPlanner.UILayer.ViewModels
-{
-    public class CreateTourViewModel : BaseViewModel
-    {
+namespace TourPlanner.UILayer.ViewModels {
+    public class CreateTourViewModel : BaseViewModel {
         private string _name;
         private DateTime _date;
         private string _description;
@@ -26,8 +25,9 @@ namespace TourPlanner.UILayer.ViewModels
         public bool _isEditing;
         public string SubmitButtonText => _isEditing ? "Save Tour" : "Create Tour";
         public bool CanCreate => ValidateInput();
+
         public ICommand CreateTourCommand => new RelayCommand(
-            execute => CreateTour(), 
+            execute => CreateTour(),
             canExecute => CanCreate
         );
 
@@ -35,10 +35,8 @@ namespace TourPlanner.UILayer.ViewModels
         public string Name
         {
             get => _name;
-            set
-            {
+            set {
                 _name = value;
-                OnPropertyChanged(nameof(Name));
                 OnPropertyChanged(nameof(CanCreate));
             }
         }
@@ -46,8 +44,7 @@ namespace TourPlanner.UILayer.ViewModels
         public DateTime Date
         {
             get => _date;
-            set
-            {
+            set {
                 _date = value;
                 OnPropertyChanged(nameof(Date));
             }
@@ -56,10 +53,8 @@ namespace TourPlanner.UILayer.ViewModels
         public string Description
         {
             get => _description;
-            set
-            {
+            set {
                 _description = value;
-                OnPropertyChanged(nameof(Description));
                 OnPropertyChanged(nameof(CanCreate));
             }
         }
@@ -67,10 +62,8 @@ namespace TourPlanner.UILayer.ViewModels
         public string TransportType
         {
             get => _transportType;
-            set
-            {
+            set {
                 _transportType = value;
-                OnPropertyChanged(nameof(TransportType));
                 OnPropertyChanged(nameof(CanCreate));
             }
         }
@@ -78,10 +71,8 @@ namespace TourPlanner.UILayer.ViewModels
         public string From
         {
             get => _from;
-            set
-            {
+            set {
                 _from = value;
-                OnPropertyChanged(nameof(From));
                 OnPropertyChanged(nameof(CanCreate));
             }
         }
@@ -89,10 +80,8 @@ namespace TourPlanner.UILayer.ViewModels
         public string To
         {
             get => _to;
-            set
-            {
+            set {
                 _to = value;
-                OnPropertyChanged(nameof(To));
                 OnPropertyChanged(nameof(CanCreate));
             }
         }
@@ -105,13 +94,11 @@ namespace TourPlanner.UILayer.ViewModels
             "Car"
         };
 
-        public CreateTourViewModel()
-        {
+        public CreateTourViewModel() {
             ResetForm();
         }
 
-        public void ResetForm()
-        {
+        public void ResetForm() {
             _name = "";
             _date = DateTime.Now;
             _description = "";
@@ -122,10 +109,8 @@ namespace TourPlanner.UILayer.ViewModels
             OnPropertyChanged(nameof(SubmitButtonText));
         }
 
-        private void CreateTour()
-        {
-            if(_isEditing && _editingTour != null)
-            {
+        private void CreateTour() {
+            if (_isEditing && _editingTour != null) {
                 _editingTour.Name = _name;
                 _editingTour.Date = _date;
                 _editingTour.Description = _description;
@@ -135,8 +120,7 @@ namespace TourPlanner.UILayer.ViewModels
 
                 TourUpdated?.Invoke(this, _editingTour);
             }
-            else
-            {
+            else {
                 Tour tour = new Tour(
                     _name,
                     _date,
@@ -151,8 +135,7 @@ namespace TourPlanner.UILayer.ViewModels
             ResetForm();
         }
 
-        public void LoadTour(Tour tour)
-        {
+        public void LoadTour(Tour tour) {
             _editingTour = tour;
             _name = tour.Name;
             _date = tour.Date;
@@ -164,16 +147,22 @@ namespace TourPlanner.UILayer.ViewModels
             _isEditing = true;
             _editingTour = null;
         }
+        
+        private bool ValidateInput() {
+            (bool IsValid, string Message)[] errors = new (bool IsValid, string Message)[]
+            {
+                (!string.IsNullOrWhiteSpace(Name), "Name is required"),
+                (!string.IsNullOrWhiteSpace(Description), "Description is required"),
+                (!string.IsNullOrWhiteSpace(TransportType), "TransportType is required"),
+                (!string.IsNullOrWhiteSpace(From), "From is required"),
+                (!string.IsNullOrWhiteSpace(To), "To is required"),
+                (Date > DateTime.Now, "Date must be in the future")
+            };
 
-        private bool ValidateInput()
-        {
-            // TODO: Add better validation
-            return !string.IsNullOrEmpty(Name) &&
-                   !string.IsNullOrEmpty(Description) &&
-                   !string.IsNullOrEmpty(TransportType) &&
-                   !string.IsNullOrEmpty(From) &&
-                   !string.IsNullOrEmpty(To) &&
-                   Date > DateTime.Now;
-        }
-    }
-}
+            foreach (var (isValid, message) in errors.Where(e => !e.IsValid))
+                Debug.WriteLine($"- {message}");
+
+            return errors.All(e => e.IsValid);
+         }
+    } 
+ }
