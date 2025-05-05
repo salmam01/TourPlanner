@@ -81,17 +81,10 @@ namespace TourPlanner.UILayer.ViewModels
             _eventAggregator.Publish("ShowHome");
         }
 
-        private void UpdateTourLogs()
-        {
-            if (_selectedTour != null)
-            {
-                List<TourLog> tourLogs = _tourLogService.GetTourLogs(_selectedTour);
-                TourLogListViewModel.TourLogs = new ObservableCollection<TourLog>(tourLogs);
-            }
-            else
-            {
-                return;
-            }
+        private void UpdateTourLogs() {
+            if (_selectedTour == null) return;
+            List<TourLog> tourLogs = _tourLogService.GetTourLogs(_selectedTour);
+            TourLogListViewModel.TourLogs = new ObservableCollection<TourLog>(tourLogs);
         }
 
         private void CreateTourLog() 

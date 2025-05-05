@@ -14,8 +14,7 @@ namespace TourPlanner.UILayer.ViewModels
         public TourLog SelectedTourLog
         {
             get => _selectedTourLog;
-            set
-            {
+            set {
                 if(_selectedTourLog == value) return;
                 _selectedTourLog = value;
                 OnPropertyChanged(nameof(SelectedTourLog));
@@ -27,8 +26,7 @@ namespace TourPlanner.UILayer.ViewModels
         public ObservableCollection<TourLog> TourLogs
         {
             get => _tourLogs;
-            set
-            {
+            set {
                 _tourLogs = value;
                 OnPropertyChanged(nameof(TourLogs));
             }

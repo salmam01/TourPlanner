@@ -13,11 +13,10 @@ namespace TourPlanner.UILayer.ViewModels
         public Tour SelectedTour
         {
             get => _selectedTour;
-            set
-            {
+            set {
                 if (_selectedTour == value) return;
                 _selectedTour = value;
-                OnPropertyChanged(nameof(SelectedTour));
+               OnPropertyChanged(nameof(SelectedTour));
                 _eventAggregator.Publish(_selectedTour);
             }
         }
@@ -26,8 +25,7 @@ namespace TourPlanner.UILayer.ViewModels
         public ObservableCollection<Tour> Tours
         {
             get => _tours;
-            set
-            {
+            set {
                 _tours = value;
                 OnPropertyChanged(nameof(Tours));
             }
