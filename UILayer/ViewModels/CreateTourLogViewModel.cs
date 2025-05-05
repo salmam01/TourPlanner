@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Windows;
 using System.Diagnostics;
+using System.Linq;
 using TourPlanner.BusinessLayer.Models;
 using TourPlanner.UILayer.Commands;
 using System.Windows.Input;
 
 namespace TourPlanner.UILayer.ViewModels
 {
-    public class CreateTourLogViewModel : BaseViewModel
-    {
+    public class CreateTourLogViewModel : BaseViewModel {
         private DateTime _date;
         private string _comment;
         private int _difficulty, _hours, _minutes;
@@ -18,12 +18,13 @@ namespace TourPlanner.UILayer.ViewModels
         public string SubmitButtonText => _isEditing ? "Save Tour Log" : "Create Tour Log";
 
         public bool CanCreate => ValidateInput();
+
         public ICommand CreateCommand => new RelayCommand(
-            execute => CreateTourLog(), 
+            execute => CreateTourLog(),
             canExecute => CanCreate
         );
-        public ICommand CancelCommand => new RelayCommand(
-            execute => Cancel()
+
+        public ICommand CancelCommand => new RelayCommand(execute => Cancel()
         );
 
         public event EventHandler<TourLog> TourLogCreated;
@@ -46,7 +47,6 @@ namespace TourPlanner.UILayer.ViewModels
             set
             {
                 _comment = value;
-                OnPropertyChanged(nameof(Comment));
                 OnPropertyChanged(nameof(CanCreate));
             }
         }
@@ -58,7 +58,6 @@ namespace TourPlanner.UILayer.ViewModels
             {
                 if (value < 1 || value > 5) return;
                 _difficulty = value;
-                OnPropertyChanged(nameof(Difficulty));
                 OnPropertyChanged(nameof(CanCreate));
             }
         }
@@ -70,7 +69,6 @@ namespace TourPlanner.UILayer.ViewModels
             {
                 if (!(value >= 1) || !(value <= 5)) return;
                 _rating = value;
-                OnPropertyChanged(nameof(Rating));
                 OnPropertyChanged(nameof(CanCreate));
             }
         }
@@ -82,7 +80,6 @@ namespace TourPlanner.UILayer.ViewModels
             {
                 if (!(value >= 0)) return;
                 _totalDistance = value;
-                OnPropertyChanged(nameof(TotalDistance));
                 OnPropertyChanged(nameof(CanCreate));
             }
         }
@@ -94,7 +91,6 @@ namespace TourPlanner.UILayer.ViewModels
             {
                 if (value < 0) return;
                 _hours = value;
-                OnPropertyChanged(nameof(Hours));
                 OnPropertyChanged(nameof(CanCreate));
             }
         }
@@ -106,18 +102,15 @@ namespace TourPlanner.UILayer.ViewModels
             {
                 if (value < 0 || value >= 60) return;
                 _minutes = value;
-                OnPropertyChanged(nameof(Minutes));
                 OnPropertyChanged(nameof(CanCreate));
             }
         }
-
-        public CreateTourLogViewModel()
-        {
+        public CreateTourLogViewModel() {
             ResetForm();
         }
+        
 
-        public void ResetForm()
-        {
+        public void ResetForm() {
             Date = DateTime.Now;
             Comment = "";
             Difficulty = 1;
@@ -129,8 +122,7 @@ namespace TourPlanner.UILayer.ViewModels
             OnPropertyChanged(nameof(SubmitButtonText));
         }
 
-        private void CreateTourLog()
-        {
+        private void CreateTourLog() {
             TourLog tourLog = new TourLog
             {
                 Id = _isEditing ? _editingId : Guid.NewGuid(),
@@ -142,19 +134,16 @@ namespace TourPlanner.UILayer.ViewModels
                 TotalTime = new TimeSpan(Hours, Minutes, 0)
             };
 
-            if(_isEditing)
-            {
+            if (_isEditing) {
                 TourLogUpdated?.Invoke(this, tourLog);
-            } 
-            else 
-            {
+            }
+            else {
                 TourLogCreated?.Invoke(this, tourLog);
             }
-
-            ResetForm();   
+            ResetForm();
         }
-
-        public void LoadTourLog(TourLog tourLog)
+        
+        public void LoadTourLog(TourLog tourLog) 
         {
             _isEditing = true;
             _editingId = tourLog.Id;
@@ -168,30 +157,29 @@ namespace TourPlanner.UILayer.ViewModels
             OnPropertyChanged(nameof(SubmitButtonText));
         }
 
-        private void Cancel()
-        {
+        private void Cancel() {
             Cancelled?.Invoke(this, EventArgs.Empty);
         }
 
-        //  TODO: Refactor this
         private bool ValidateInput()
         {
-            bool isValid = !string.IsNullOrWhiteSpace(Comment) &&
-                           Difficulty >= 1 && Difficulty <= 5 &&
-                           Rating >= 1 && Rating <= 5 &&
-                           TotalDistance >= 0 &&
-                           Hours >= 0 &&
-                           Minutes >= 0 && Minutes < 60;
-
-            if (isValid) return true;
-            if (string.IsNullOrWhiteSpace(Comment)) Debug.WriteLine("- Comment is empty");
-            if (Difficulty < 1 || Difficulty > 5) Debug.WriteLine("- Invalid Difficulty");
-            if (Rating < 1 || Rating > 5) Debug.WriteLine("- Invalid Rating");
-            if (TotalDistance < 0) Debug.WriteLine("- Invalid TotalDistance");
-            if (Hours < 0) Debug.WriteLine("- Invalid Hours");
-            if (Minutes < 0 || Minutes >= 60) Debug.WriteLine("- Invalid Minutes");
-
-            return false;
+            (bool IsValid, string Message)[] errors = new (bool IsValid, string Message)[]
+            {
+                (!string.IsNullOrWhiteSpace(Comment), "Comment is empty"),
+                (IsInRange(Difficulty, 1, 5), "Difficulty must be between 1 and 5"),
+                (IsInRange(Rating, 1.0, 5.0), "Rating must be between 1.0 and 5.0"),
+                (TotalDistance >= 0, "TotalDistance cannot be negative"),
+                (Hours >= 0, "Hours cannot be negative"),
+                (IsInRange(Minutes, 0, 59), "Minutes must be between 0 and 59")
+            };
+            
+            foreach (var (isValid, message) in errors.Where(e => !e.IsValid))
+                Debug.WriteLine($"- {message}");
+            return errors.All(e => e.IsValid);
         }
-    }
-}
+        
+        private static bool IsInRange<T>(T value, T min, T max) where T : IComparable<T> {
+            return value.CompareTo(min) >= 0 && value.CompareTo(max) <= 0;
+        }
+     }
+ }
