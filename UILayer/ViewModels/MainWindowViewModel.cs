@@ -26,8 +26,7 @@ namespace TourPlanner.UILayer.ViewModels
         public UserControl CurrentView
         {
             get => _currentView;
-            set
-            {
+            set {
                 _currentView = value;
                 OnPropertyChanged(nameof(CurrentView));
             }
@@ -36,8 +35,7 @@ namespace TourPlanner.UILayer.ViewModels
         public UserControl HomeView
         {
             get => _homeView;
-            set
-            {
+            set {
                 _homeView = value;
                 OnPropertyChanged(nameof(HomeView));
             }
