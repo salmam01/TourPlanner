@@ -28,19 +28,20 @@ namespace TourPlanner.UILayer.ViewModels
             canExecute => _selectedTourLog != null
         );
         public RelayCommand EditTourLogCommand => new RelayCommand(
-            execute => EditTourLog(), 
+            execute => UpdateTourLog(), 
             canExecute => _selectedTourLog != null
         );
 
         public TourLogsManagementViewModel(
             CreateTourLogViewModel createTourLogViewModel,
             TourLogListViewModel tourLogListViewModel,
-            EventAggregator eventAggregator
+            EventAggregator eventAggregator,
+            TourLogService tourLogService
         ) {
-            _tourLogService = new TourLogService();
             TourLogListViewModel = tourLogListViewModel;
             _createTourLogViewModel = createTourLogViewModel;
             _eventAggregator = eventAggregator;
+            _tourLogService = tourLogService;
 
             _eventAggregator.Subscribe<Tour>(OnTourSelected);
             TourLogListViewModel.TourLogSelected += OnTourLogSelected;
@@ -53,7 +54,7 @@ namespace TourPlanner.UILayer.ViewModels
         {
             if (tour == null) return;
             _selectedTour = tour;
-            UpdateTourLogs();
+            TourLogListViewModel.ReloadTourLogs(_tourLogService.GetTourLogs(tour));
         }
 
         public void OnTourLogSelected(object sender, TourLog tourLog)
@@ -65,7 +66,8 @@ namespace TourPlanner.UILayer.ViewModels
         public void OnTourLogCreated(object sender, TourLog tourLog)
         {
             if (tourLog == null) return;
-            TourLogListViewModel.OnTourLogCreated(tourLog);
+            _tourLogService.CreateTourLog(_selectedTour.Id, tourLog);
+            TourLogListViewModel.ReloadTourLogs(_tourLogService.GetTourLogs(_selectedTour));
             _eventAggregator.Publish("ShowHome");
         }
 
@@ -81,15 +83,16 @@ namespace TourPlanner.UILayer.ViewModels
             _eventAggregator.Publish("ShowHome");
         }
 
-        private void UpdateTourLogs() {
-            if (_selectedTour == null) return;
-            List<TourLog> tourLogs = _tourLogService.GetTourLogs(_selectedTour);
-            TourLogListViewModel.TourLogs = new ObservableCollection<TourLog>(tourLogs);
-        }
-
         private void CreateTourLog() 
         {
             if (_selectedTour == null) return;
+            _eventAggregator.Publish("ShowCreateTourLog");
+        }
+
+        private void UpdateTourLog()
+        {
+            if (_selectedTourLog == null || _selectedTour == null) return;
+            _createTourLogViewModel.LoadTourLog(_selectedTourLog);
             _eventAggregator.Publish("ShowCreateTourLog");
         }
 
@@ -105,14 +108,9 @@ namespace TourPlanner.UILayer.ViewModels
             );
             if (result != MessageBoxResult.Yes) return;
 
-            TourLogListViewModel.OnTourLogDeleted(_selectedTourLog);
+            _tourLogService.DeleteTourLog(_selectedTourLog);
+            TourLogListViewModel.ReloadTourLogs(_tourLogService.GetTourLogs(_selectedTour));
             _selectedTourLog = null;
-        }
-
-        private void EditTourLog() {
-            if (_selectedTourLog == null || _selectedTour == null) return;
-            _createTourLogViewModel.LoadTourLog(_selectedTourLog);
-            _eventAggregator.Publish("ShowCreateTourLog");
         }
     }
 }

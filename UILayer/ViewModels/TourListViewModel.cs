@@ -37,23 +37,17 @@ namespace TourPlanner.UILayer.ViewModels
         {
             _eventAggregator = eventAggregator;
 
-            _tours = new ObservableCollection<Tour>
-            {
-                new Tour("Bosnia Roadtrip", new DateTime(2025, 4, 20), "A roadtrip through Bosnia.", "Car", "Sarajevo", "Srebrenica")
-                {
-                    TourLogs = new List<TourLog>()
-                }
-            };
+            _tours = new ObservableCollection<Tour>();
         }
 
-        public void OnTourCreated(Tour tour)
+        public void ReloadTours(List<Tour> tours)
         {
-            _tours.Add(tour);
-            Console.WriteLine("Tour added to Tour List!\nList:\n");
-            foreach (Tour t in _tours)
+            _tours.Clear();
+            foreach (Tour tour in tours)
             {
-                Console.WriteLine($"{t.Name} on the {t.Date}\n");
+                _tours.Add(tour);
             }
+            Console.WriteLine("Tour List reloaded.");
         }
 
         public void OnTourUpdated(Tour updatedTour)
@@ -73,12 +67,6 @@ namespace TourPlanner.UILayer.ViewModels
                 }
                 i++;
             }
-        }
-
-        public void OnTourDeleted(Tour tour)
-        {
-            _tours.Remove(tour);
-            Console.WriteLine("Tour deleted from Tour List!");
         }
     }
 }

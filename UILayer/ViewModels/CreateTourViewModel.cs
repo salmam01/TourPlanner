@@ -98,7 +98,7 @@ namespace TourPlanner.UILayer.ViewModels {
             ResetForm();
         }
 
-        public void ResetForm() {
+        private void ResetForm() {
             _name = "";
             _date = DateTime.Now;
             _description = "";

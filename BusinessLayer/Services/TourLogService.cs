@@ -21,17 +21,10 @@ namespace TourPlanner.BusinessLayer.Services
             return _tourLogRepository.GetTourLogs(tour.Id);
         }
 
-        public void GetAllTourLogs(Tour tour)
+        public void CreateTourLog(Guid tourId, TourLog tourLog)
         {
-            _tourLogRepository.GetTourLogs(tour.Id);
-        }
-
-        public void CreateTourLog(Tour tour, TourLog tourLog)
-        {
-            tour.TourLogs.Add(tourLog);
-            tourLog.TourId = tour.Id;
-
-            _tourLogRepository.InsertTourLog(tour.Id, tourLog);
+            tourLog.TourId = tourId;
+            _tourLogRepository.InsertTourLog(tourId, tourLog);
         }
 
         public void UpdateTourLog(TourLog tourLog, DateTime date, string comment, int difficulty, double rating, double totalDistance, TimeSpan totalTime)
@@ -46,8 +39,7 @@ namespace TourPlanner.BusinessLayer.Services
             _tourLogRepository.UpdateTourLog(tourLog);
         }
 
-        public void DeleteTourLog(TourLog tourLog, Tour tour) {
-            tour.TourLogs?.Remove(tourLog);
+        public void DeleteTourLog(TourLog tourLog) {
             _tourLogRepository.DeleteTourLog(tourLog.Id);
         }
     }

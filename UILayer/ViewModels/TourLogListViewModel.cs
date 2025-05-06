@@ -41,22 +41,14 @@ namespace TourPlanner.UILayer.ViewModels
             Console.WriteLine("TourLogsListViewModel INITIALIZED");
         }
 
-        public void OnTourLogCreated(TourLog tourLog)
+        public void ReloadTourLogs(IEnumerable<TourLog> tourLogs)
         {
-            if(tourLog == null)
-            { 
-                Console.WriteLine("Tour Log is null!");
-                return;
-            }
-
-            _tourLogs.Add(tourLog);
-            Console.WriteLine(_tourLogs.Count());
-
-            Console.WriteLine("Tour Log added to Tour Log List!\nList:\n");
-            foreach (TourLog tl in _tourLogs)
+            _tourLogs.Clear();
+            foreach (TourLog tourLog in tourLogs)
             {
-                Console.WriteLine($"{tl.Comment} on the {tl.Date}\n");
+                _tourLogs.Add(tourLog);
             }
+            Console.WriteLine("TourLog List reloaded.");
         }
 
         public void OnTourLogUpdated(TourLog updatedTourLog)

@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using TourPlanner.BusinessLayer.Services;
 using TourPlanner.DataLayer.Data;
+using TourPlanner.DataLayer.Repositories.TourAttributesRepository;
+using TourPlanner.DataLayer.Repositories.TourDetailsRepository;
 using TourPlanner.DataLayer.Repositories.TourLogRepository;
 using TourPlanner.DataLayer.Repositories.TourRepository;
 using TourPlanner.UILayer.Events;
@@ -42,9 +44,13 @@ namespace TourPlanner
             services.AddDbContext<TourPlannerDbContext>();
             services.AddScoped<ITourRepository, TourRepository>();
             services.AddScoped<ITourLogRepository, TourLogRepository>();
+            services.AddScoped<ITourDetailsRepository, TourDetailsRepository>();
+            services.AddScoped<ITourAttributesRepository, TourAttributesRepository>();
 
             services.AddSingleton<TourService>();
             services.AddSingleton<TourLogService>();
+            services.AddSingleton<TourDetailsService>();
+            services.AddSingleton<TourAttributesService>();
 
             services.AddSingleton<MainWindow>(s => new MainWindow()
             {

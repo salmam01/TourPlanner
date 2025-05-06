@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using TourPlanner.BusinessLayer.Models;
@@ -26,7 +27,7 @@ namespace TourPlanner.UILayer.ViewModels
         );
 
         public ICommand EditTourCommand => new RelayCommand(
-            execute => EditTour()
+            execute => UpdateTour()
         );
         
         public ICommand DeleteTourCommand => new RelayCommand(
@@ -61,20 +62,20 @@ namespace TourPlanner.UILayer.ViewModels
         public void OnTourCreated(object sender, Tour tour)
         {
             if (tour == null) return;
-            TourListViewModel.OnTourCreated(tour);
-            MessageBox.Show($"Tour {tour.Name} created!");
-            _eventAggregator.Publish("ShowHome");
             _tourService.CreateTour(tour);
+            TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
+
+            _eventAggregator.Publish("ShowHome");
         }
 
         public void OnTourUpdated(object sender, Tour tour)
         {
             if (tour == null) return;
-            TourListViewModel.OnTourUpdated(tour);
-            _eventAggregator.Publish("ShowHome");
 
-            //  TODO: Implement this
-            //_tourService.UpdateTour(tour, tour.Name, tour.Date, tour.Description, tour.TransportType, tour.From, tour.To);
+            //  TODO: dafuq to do here?
+            _tourService.UpdateTour(tour, tour.Name, tour.Date, tour.Description, tour.TransportType, tour.From, tour.To);
+            TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
+            _eventAggregator.Publish("ShowHome");
         }
 
         public void CreateTour()
@@ -82,13 +83,14 @@ namespace TourPlanner.UILayer.ViewModels
             _eventAggregator.Publish("ShowCreateTour");
         }
 
-        public void EditTour()
+        public void UpdateTour()
         {
             if(_selectedTour == null)
             {
                 MessageBox.Show("Please select a tour to edit.");
                 return;
             }
+
             _createTourViewModel.LoadTour(_selectedTour);
             _eventAggregator.Publish("ShowCreateTour");
         }
@@ -108,8 +110,10 @@ namespace TourPlanner.UILayer.ViewModels
                 MessageBoxImage.Warning
             );
             if (result != MessageBoxResult.Yes) return;
-            TourListViewModel.OnTourDeleted(_selectedTour);
+
             _tourService.DeleteTour(_selectedTour);
+            TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
+            _selectedTour = null;
         }
     }
 }

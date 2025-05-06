@@ -19,7 +19,7 @@ namespace TourPlanner.DataLayer.Repositories.TourRepository
 
         public Tour GetTourById(Guid tourId) => _context.Tours.Find(tourId);
         
-        public IEnumerable<Tour> GetTours() => _context.Tours.ToList();
+        public IEnumerable<Tour> GetTours() => _context.Tours;
 
         public void InsertTour(Tour tour)
         {
