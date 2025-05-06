@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using TourPlanner.BusinessLayer.Models;
 using TourPlanner.DataLayer.Data;
 
-namespace TourPlanner.DataLayer.Repositories
+namespace TourPlanner.DataLayer.Repositories.TourRepository
 {
     public class TourRepository : ITourRepository
     {

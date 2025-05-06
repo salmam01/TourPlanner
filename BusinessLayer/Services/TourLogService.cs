@@ -4,64 +4,51 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TourPlanner.BusinessLayer.Models;
+using TourPlanner.DataLayer.Repositories.TourLogRepository;
 
 namespace TourPlanner.BusinessLayer.Services
 {
     public class TourLogService
     {
+        private readonly ITourLogRepository _tourLogRepository;
+        public TourLogService(ITourLogRepository tourLogRepository)
+        {
+            _tourLogRepository = tourLogRepository;
+        }
+
+        public IEnumerable<TourLog> GetTourLogs(Tour tour)
+        {
+            return _tourLogRepository.GetTourLogs(tour.Id);
+        }
+
+        public void GetAllTourLogs(Tour tour)
+        {
+            _tourLogRepository.GetTourLogs(tour.Id);
+        }
+
         public void CreateTourLog(Tour tour, TourLog tourLog)
         {
-            if (tour.TourLogs == null)
-            {
-                tour.TourLogs = new List<TourLog>();
-            }
             tour.TourLogs.Add(tourLog);
+            tourLog.TourId = tour.Id;
+
+            _tourLogRepository.InsertTourLog(tour.Id, tourLog);
         }
 
         public void UpdateTourLog(TourLog tourLog, DateTime date, string comment, int difficulty, double rating, double totalDistance, TimeSpan totalTime)
         {
-            //ValidateTourLogData(date, comment, difficulty, rating, totalDistance, totalTime);
-
             tourLog.Date = date;
             tourLog.Comment = comment;
             tourLog.Difficulty = difficulty;
             tourLog.Rating = rating;
             tourLog.TotalDistance = totalDistance;
             tourLog.TotalTime = totalTime;
+
+            _tourLogRepository.UpdateTourLog(tourLog);
         }
 
         public void DeleteTourLog(TourLog tourLog, Tour tour) {
             tour.TourLogs?.Remove(tourLog);
+            _tourLogRepository.DeleteTourLog(tourLog.Id);
         }
-
-        //  TODO: fix this
-        public List<TourLog> GetTourLogs(Tour tour)
-        {
-            //return tour.TourLogs ?? new List<TourLog>();
-            return new List<TourLog>();
-        }
-
-        //Diese Fehlermeldungen sind noch nicht sichtbar;  wenn die daten nicht stimmen kann man nicht auf create drücken(box ist grau), TODO: Fehlermeldungen anzeigen
-        /* These are a little unnecessary because you already validate in TourLogManagement VM
-        private void ValidateTourLogData(DateTime date, string comment, int difficulty, double rating, double totalDistance, TimeSpan totalTime)
-        {
-            if (date > DateTime.Now)
-                throw new ArgumentException("Das Datum kann nicht in der Zukunft liegen.");
-
-            if (string.IsNullOrWhiteSpace(comment))
-                throw new ArgumentException("Kommentar darf nicht leer sein.");
-
-            if (difficulty < 1 || difficulty > 5)
-                throw new ArgumentException("Schwierigkeit muss zwischen 1 und 5 liegen.");
-
-            if (rating < 1 || rating > 5)
-                throw new ArgumentException("Bewertung muss zwischen 1 und 5 liegen.");
-
-            if (totalDistance < 0)
-                throw new ArgumentException("Distanz muss größer oder gleich 0 sein.");
-
-            if (totalTime.TotalMinutes < 0)
-                throw new ArgumentException("Zeit muss größer oder gleich 0 sein.");
-        }*/
     }
 }

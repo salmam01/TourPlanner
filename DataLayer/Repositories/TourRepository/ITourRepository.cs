@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TourPlanner.BusinessLayer.Models;
 
-namespace TourPlanner.DataLayer.Repositories
+namespace TourPlanner.DataLayer.Repositories.TourRepository
 {
     public interface ITourRepository
     {

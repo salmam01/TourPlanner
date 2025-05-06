@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Security.RightsManagement;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TourPlanner.BusinessLayer.Models
 {
@@ -12,7 +8,7 @@ namespace TourPlanner.BusinessLayer.Models
     public class Tour
     {
         [Key]
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         [Required]
         public string Name { get; set; }
         [Required]
@@ -29,6 +25,11 @@ namespace TourPlanner.BusinessLayer.Models
         public TourAttributes TourAttributes { get; set; }
         public ICollection<TourLog> TourLogs { get; set; }
 
+        public Tour()
+        {
+            TourLogs = new List<TourLog>();
+        }
+
         public Tour (string name, DateTime date, string description, string transportType, string from, string to)
         {
             Name = name;
@@ -37,6 +38,7 @@ namespace TourPlanner.BusinessLayer.Models
             TransportType = transportType;
             From = from;
             To = to;
+            TourLogs = new List<TourLog>();
         }
     }
 }

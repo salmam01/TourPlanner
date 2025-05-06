@@ -5,14 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using TourPlanner.BusinessLayer.Models;
 
-namespace TourPlanner.DataLayer.Repositories
+namespace TourPlanner.DataLayer.Repositories.TourLogRepository
 {
     public interface ITourLogRepository
     {
-        TourLog GetTourLogById(Guid tourLogId);
-        IEnumerable<TourLog> GetTourLogs();
+        TourLog GetTourLog(Guid tourLogId);
+        IEnumerable<TourLog> GetTourLogs(Guid tourId);
 
-        void InsertTourLog(TourLog tourLog);
+        void InsertTourLog(Guid tourId, TourLog tourLog);
         void UpdateTourLog(TourLog tourLog);
         void DeleteTourLog(Guid tourLogId);
         void Save();

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TourPlanner.BusinessLayer.Models;
-using TourPlanner.DataLayer.Repositories;
+using TourPlanner.DataLayer.Repositories.TourRepository;
 
 namespace TourPlanner.BusinessLayer.Services
 {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using TourPlanner.BusinessLayer.Models;
 using TourPlanner.DataLayer.Data;
 
-namespace TourPlanner.DataLayer.Repositories
+namespace TourPlanner.DataLayer.Repositories.TourLogRepository
 {
     public class TourLogRepository : ITourLogRepository
     {
@@ -16,11 +16,18 @@ namespace TourPlanner.DataLayer.Repositories
             _context = context;
         }
 
-        public TourLog GetTourLogById(Guid tourLogId) => _context.TourLogs.Find(tourLogId);
+        public TourLog GetTourLog(Guid TourId) => _context.TourLogs.Find(TourId);
+
+        public IEnumerable<TourLog> GetTourLogs(Guid tourId)
+        {
+            return _context.TourLogs
+                .Where(log => log.TourId == tourId)
+                .ToList();
+        }
 
         public IEnumerable<TourLog> GetTourLogs() => _context.TourLogs.ToList();
 
-        public void InsertTourLog(TourLog tourLog)
+        public void InsertTourLog(Guid tourId, TourLog tourLog)
         {
             _context.TourLogs.Add(tourLog);
             Save();
@@ -43,5 +50,6 @@ namespace TourPlanner.DataLayer.Repositories
         {
             _context.SaveChanges();
         }
+
     }
 }

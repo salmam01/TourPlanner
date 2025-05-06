@@ -9,7 +9,7 @@ namespace TourPlanner.BusinessLayer.Models
 {
     public class TourLog {
         [Key]
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         [Required]
         public DateTime Date { get; set; }
         [Required]

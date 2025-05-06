@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using TourPlanner.BusinessLayer.Services;
 using TourPlanner.DataLayer.Data;
-using TourPlanner.DataLayer.Repositories;
+using TourPlanner.DataLayer.Repositories.TourLogRepository;
+using TourPlanner.DataLayer.Repositories.TourRepository;
 using TourPlanner.UILayer.Events;
 using TourPlanner.UILayer.ViewModels;
 

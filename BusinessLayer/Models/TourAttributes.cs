@@ -14,5 +14,6 @@ namespace TourPlanner.BusinessLayer.Models
         public double Popularity { get; set; }
         public bool ChildFriendliness { get; set; }
         public double SearchAlgorithmRanking { get; set; }
+
     }
 }
