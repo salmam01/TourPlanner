@@ -34,9 +34,10 @@ namespace TourPlanner.BusinessLayer.Models
             TotalDistance = totalDistance;
             TotalTime = totalTime;
         }
+
         public TourLog() {
             Id = Guid.NewGuid();
-            Date = DateTime.Now;
+            Date = DateTime.UtcNow;
             Difficulty = 1;
             Rating = 1;
             Comment = string.Empty;

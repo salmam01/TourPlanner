@@ -100,7 +100,7 @@ namespace TourPlanner.UILayer.ViewModels {
 
         private void ResetForm() {
             _name = "";
-            _date = DateTime.Now;
+            _date = DateTime.UtcNow;
             _description = "";
             _transportType = "";
             _from = "";
@@ -156,7 +156,7 @@ namespace TourPlanner.UILayer.ViewModels {
                 (!string.IsNullOrWhiteSpace(TransportType), "TransportType is required"),
                 (!string.IsNullOrWhiteSpace(From), "From is required"),
                 (!string.IsNullOrWhiteSpace(To), "To is required"),
-                (Date > DateTime.Now, "Date must be in the future")
+                (Date > DateTime.UtcNow, "Date must be in the future")
             };
 
             foreach (var (isValid, message) in errors.Where(e => !e.IsValid))

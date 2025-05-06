@@ -111,7 +111,7 @@ namespace TourPlanner.UILayer.ViewModels
         
 
         public void ResetForm() {
-            Date = DateTime.Now;
+            Date = DateTime.UtcNow;
             Comment = "";
             Difficulty = 1;
             Rating = 1;
