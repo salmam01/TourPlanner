@@ -24,7 +24,7 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Text="Tours"
+                <TextBlock Text="Tour Logs"
                    Margin="10"
                    Foreground="White"
                    FontSize="16"
