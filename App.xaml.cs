@@ -6,6 +6,9 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using TourPlanner.BusinessLayer.Services;
+using TourPlanner.DataLayer.Data;
+using TourPlanner.DataLayer.Repositories;
 using TourPlanner.UILayer.Events;
 using TourPlanner.UILayer.ViewModels;
 
@@ -27,14 +30,20 @@ namespace TourPlanner
             services.AddSingleton<EventAggregator>();
 
             services.AddSingleton<TourManagementViewModel>();
-            services.AddSingleton<CreateTourViewModel>();   //  needs to be changed to transient, cannot be a singleton
+            services.AddSingleton<CreateTourViewModel>();
             services.AddSingleton<TourListViewModel>();
             services.AddSingleton<SearchBarViewModel>();
 
             services.AddSingleton<TourLogsManagementViewModel>();
-            services.AddSingleton<CreateTourLogViewModel>();    //  needs to be changed to transient, cannot be a singleton
-            //services.AddTransient<CreateTourLogViewModel>();    // geändert zu transient:)
+            services.AddSingleton<CreateTourLogViewModel>();
             services.AddSingleton<TourLogListViewModel>();
+
+            services.AddDbContext<TourPlannerDbContext>();
+            services.AddScoped<ITourRepository, TourRepository>();
+            services.AddScoped<ITourLogRepository, TourLogRepository>();
+
+            services.AddSingleton<TourService>();
+            services.AddSingleton<TourLogService>();
 
             services.AddSingleton<MainWindow>(s => new MainWindow()
             {

@@ -11,20 +11,6 @@ namespace TourPlanner.BusinessLayer.Services
     {
         public void CreateTourLog(Tour tour, TourLog tourLog)
         {
-            /*
-            ValidateTourLogData(date, comment, difficulty, rating, totalDistance, totalTime);
-
-            TourLog tourLog = new TourLog
-            {
-                Id = Guid.NewGuid(),
-                Date = date,
-                Comment = comment,
-                Difficulty = difficulty,
-                Rating = rating,
-                TotalDistance = totalDistance,
-                TotalTime = totalTime
-            };*/
-
             if (tour.TourLogs == null)
             {
                 tour.TourLogs = new List<TourLog>();

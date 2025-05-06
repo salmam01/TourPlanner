@@ -38,13 +38,14 @@ namespace TourPlanner.UILayer.ViewModels
             CreateTourViewModel createTourViewModel,
             TourListViewModel tourListViewModel,
             SearchBarViewModel searchBarViewModel,
-            EventAggregator eventAggregator
+            EventAggregator eventAggregator,
+            TourService tourService
         ) {
-            _tourService = new TourService();
             _createTourViewModel = createTourViewModel;
             TourListViewModel = tourListViewModel;
             SearchBarViewModel = searchBarViewModel;
             _eventAggregator = eventAggregator;
+            _tourService = tourService;
 
             _createTourViewModel.TourCreated += OnTourCreated;
             _createTourViewModel.TourUpdated += OnTourUpdated;
@@ -63,6 +64,7 @@ namespace TourPlanner.UILayer.ViewModels
             TourListViewModel.OnTourCreated(tour);
             MessageBox.Show($"Tour {tour.Name} created!");
             _eventAggregator.Publish("ShowHome");
+            _tourService.CreateTour(tour);
         }
 
         public void OnTourUpdated(object sender, Tour tour)
@@ -70,6 +72,9 @@ namespace TourPlanner.UILayer.ViewModels
             if (tour == null) return;
             TourListViewModel.OnTourUpdated(tour);
             _eventAggregator.Publish("ShowHome");
+
+            //  TODO: Implement this
+            //_tourService.UpdateTour(tour, tour.Name, tour.Date, tour.Description, tour.TransportType, tour.From, tour.To);
         }
 
         public void CreateTour()
@@ -104,6 +109,7 @@ namespace TourPlanner.UILayer.ViewModels
             );
             if (result != MessageBoxResult.Yes) return;
             TourListViewModel.OnTourDeleted(_selectedTour);
+            _tourService.DeleteTour(_selectedTour);
         }
     }
 }
