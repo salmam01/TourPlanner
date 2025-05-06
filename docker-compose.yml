@@ -5,7 +5,7 @@ services:
     container_name: tourplanner-db
     environment:
       POSTGRES_USER: salma
-      POSTGRES_PASSWORD: tourplanner1234
+      POSTGRES_PASSWORD: tourPlanner1234
       POSTGRES_DB: TourPlanner
     ports:
       - "5432:5432"

@@ -3,10 +3,45 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TourPlanner.BusinessLayer.Models;
+using TourPlanner.DataLayer.Data;
 
 namespace TourPlanner.DataLayer.Repositories
 {
-    public class TourLogRepository
+    public class TourLogRepository : ITourLogRepository
     {
+        private TourPlannerDbContext _context;
+        public TourLogRepository(TourPlannerDbContext context)
+        {
+            _context = context;
+        }
+
+        public TourLog GetTourLogById(Guid tourLogId) => _context.TourLogs.Find(tourLogId);
+
+        public IEnumerable<TourLog> GetTourLogs() => _context.TourLogs.ToList();
+
+        public void InsertTourLog(TourLog tourLog)
+        {
+            _context.TourLogs.Add(tourLog);
+            Save();
+        }
+
+        public void UpdateTourLog(TourLog tourLog)
+        {
+            //  TODO: implement
+            Save();
+        }
+
+        public void DeleteTourLog(Guid tourLogId)
+        {
+            TourLog tourLog = _context.TourLogs.Find(tourLogId);
+            _context.TourLogs.Remove(tourLog);
+            Save();
+        }
+
+        public void Save()
+        {
+            _context.SaveChanges();
+        }
     }
 }
