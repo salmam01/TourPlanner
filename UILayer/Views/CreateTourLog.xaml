@@ -209,13 +209,9 @@
                     HorizontalAlignment="Right"
                     Margin="0,20,0,0">
             <Button Content="Cancel"
+                    Margin="30,0"
                     Command="{Binding CancelCommand}"
-                    Width="100"
-                    Height="30"
-                    Margin="0,0,10,0"
-                    Background="#2E5E2E"
-                    Foreground="White"
-                    BorderBrush="Gray"/>
+                    Style="{StaticResource CancelButtonStyle}"/>
             <Button Content="{Binding SubmitButtonText}"
                     Command="{Binding CreateCommand}"
                     Width="100"

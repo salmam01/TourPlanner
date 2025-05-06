@@ -13,9 +13,6 @@
     <Page Remove="DataLayer\Database\**" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="UILayer\Resources\Images\Background.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="9.0.4" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
@@ -34,9 +31,14 @@
     <Compile Remove="TourPlanner.UILayer\ViewModels\CreateTourLogViewModel.cs" />
     <Compile Remove="TourPlanner.UILayer\ViewModels\EventAggregator.cs" />
     <Compile Remove="UILayer\Views\TopNavbar.xaml.cs" />
+    <None Remove="UILayer\Resources\Fonts\Montserrat-Medium.ttf" />
     <Page Remove="UILayer\Views\TopNavbar.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DataLayer\APIClients\" />
+    <Folder Include="UILayer\Resources\Images\Icons\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UILayer\Resources\Fonts\Montserrat-Medium.ttf" />
   </ItemGroup>
 </Project>

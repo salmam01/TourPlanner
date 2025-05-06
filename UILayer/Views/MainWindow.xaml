@@ -6,7 +6,7 @@
         xmlns:vm="clr-namespace:TourPlanner.UILayer.ViewModels"
         xmlns:views="clr-namespace:TourPlanner.UILayer.Views"
         mc:Ignorable="d"
-        Title="TourPlanner" Height="550" Width="800"
+        Title="TourPlanner" Height="600" Width="920"
         Background="Transparent"
         AllowsTransparency="True"
         WindowStyle="None"
@@ -14,189 +14,56 @@
         MouseDown="Window_MouseDown"
         ResizeMode="NoResize">
 
-    <Border CornerRadius="12">
-        <Border.Background>
-            <ImageBrush ImageSource="/UILayer/Resources/Images/Background.jpg"/>
-        </Border.Background>
-        <Border CornerRadius="10"
-                BorderThickness="2"
-                Opacity="0.85">
+    <Border CornerRadius="12"
+            Background="#1D2E28">
 
-            <Border.Background>
-                <LinearGradientBrush StartPoint="1,1" EndPoint="1,0">
-                    <GradientStop Color="#1D2E28" Offset="0"/>
-                    <GradientStop Color="#234F1E" Offset="0.75"/>
-                </LinearGradientBrush>
-            </Border.Background>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-            <Border.BorderBrush>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                    <GradientStop Color="#378805" Offset="0"/>
-                    <GradientStop Color="#86DC3D" Offset="0.75"/>
-                    <GradientStop Color="#C5E90B" Offset="1"/>
-                </LinearGradientBrush>
-            </Border.BorderBrush>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="160"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="35"/>
+                    <ColumnDefinition Width="35"/>
+                    <ColumnDefinition Width="35"/>
+                    <ColumnDefinition Width="10"/>
+                </Grid.ColumnDefinitions>
 
-            <Grid>
-                                
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-                <Grid Grid.Row="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="120"/>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="25"/>
-                        <ColumnDefinition Width="25"/>
-                        <ColumnDefinition Width="25"/>
-                        <ColumnDefinition Width="5"/>
-                    </Grid.ColumnDefinitions>
-
-                    <TextBlock Grid.Column="0" 
-                               Text="TourPlanner"
-                               Foreground="LightCyan"
-                               FontSize="20"
-                               FontFamily="Dubai"
-                               VerticalAlignment="Center"
-                               Margin="10,0,0,0"/>
-
-                    <Button Grid.Column="6"
-                            x:Name="buttonMinimize"
-                            BorderThickness="0"
-                            Content="-"
-                            Foreground="White"
-                            FontSize="15"
-                            Cursor="Hand"
-                            Click="buttonMinimize_Click">
-
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Background" Value="#86DC3D"/>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#86DC3D"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-
-                        <Button.Template>
-                            <ControlTemplate TargetType="Button">
-                                <Border Width="22" Height="22"
-                                        CornerRadius="11"
-                                        Background="{TemplateBinding Background}">
-                                    <ContentPresenter VerticalAlignment="Center"
-                                                      HorizontalAlignment="Center"/>
-                                </Border>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Column="7"
-                            x:Name="buttonSize"
-                            BorderThickness="0"
-                            Content="_"
-                            Foreground="White"
-                            FontSize="12"
-                            Cursor="Hand"
-                            Click="buttonSize_Click">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Background" Value="#86DC3D"/>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#86DC3D"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-
-                        <Button.Template>
-                            <ControlTemplate TargetType="Button">
-                                <Border Width="22" Height="22"
-                                        CornerRadius="11"
-                                        Background="{TemplateBinding Background}">
-                                    <ContentPresenter VerticalAlignment="Center"
-                                                      HorizontalAlignment="Center"/>
-                                </Border>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Column="8"
-                            x:Name="buttonClose"
-                            BorderThickness="0"
-                            Content="X"
-                            Foreground="White"
-                            FontSize="12"
-                            Cursor="Hand"
-                            Click="buttonClose_Click">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Background" Value="#86DC3D"/>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#86DC3D"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-
-                        <Button.Template>
-                            <ControlTemplate TargetType="Button">
-                                <Border Width="22" Height="22"
-                                        CornerRadius="11"
-                                        Background="{TemplateBinding Background}">
-                                    <ContentPresenter VerticalAlignment="Center"
-                                                      HorizontalAlignment="Center"/>
-                                </Border>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Column="1"
-                            Background="#9CCB19"
-                            Content="File"
-                            FontFamily="Dubai"
-                            FontSize="14"
+                <TextBlock Grid.Column="0" 
+                            Text="TourPlanner"
+                            Foreground="LightCyan"
+                            FontSize="20"
                             VerticalAlignment="Center"
-                            BorderThickness="0"/>
-                    
-                    <Button Grid.Column="2" 
-                            Background="#9CCB19"
-                            Content="Edit"
-                            FontFamily="Dubai"
-                            FontSize="14"
-                            VerticalAlignment="Center"
-                            BorderThickness="0"/>
-                    
-                    <Button Grid.Column="3" 
-                            Background="#9CCB19"
-                            Content="Options"
-                            FontFamily="Dubai"
-                            FontSize="14"
-                            VerticalAlignment="Center"
-                            BorderThickness="0"/>
+                            FontFamily="/UILayer/Resources/Fonts/#Montserrat"
+                            FontWeight="Bold"
+                            Margin="15,0,0,0"/>
 
-                    <Button Grid.Column="4" 
-                            Background="#9CCB19"
-                            Content="Help"
-                            FontFamily="Dubai"
-                            FontSize="14"
-                            VerticalAlignment="Center"
-                            BorderThickness="0"/>
-                </Grid>
+                <Button Grid.Column="2"
+                        x:Name="buttonMinimize"
+                        Style="{StaticResource WindowButtonStyle}"
+                        Content="-"
+                        Click="buttonMinimize_Click"/>
 
-                <Grid Grid.Row="1">
-                    <ContentControl Content="{Binding CurrentView}"/>
-                </Grid>
+                <Button Grid.Column="3"
+                        x:Name="buttonSize"
+                        Style="{StaticResource WindowButtonStyle}"
+                        Content="_"
+                        Click="buttonSize_Click"/>
+
+                <Button Grid.Column="4"
+                        x:Name="buttonClose"
+                        Style="{StaticResource WindowButtonStyle}"
+                        Content="x"
+                        Click="buttonClose_Click"/>
             </Grid>
-        </Border>
+
+            <Grid Grid.Row="1">
+                <ContentControl Content="{Binding CurrentView}"/>
+            </Grid>
+        </Grid>
     </Border>
 </Window>

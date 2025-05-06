@@ -7,65 +7,59 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="300">
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+    <Border CornerRadius="10" 
+            BorderBrush="#0078D7"
+            BorderThickness="2">
 
-        <Grid Grid.Row="0" Background="#0078D7"></Grid>
-        
-        <!-- Header with Title and Buttons -->
-        <TextBlock Grid.Row="0" 
-                   Text="Tours"
-                   Margin="10,0,0,0"
+        <Grid Background="#0078D7">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header with Title and Buttons -->
+            <TextBlock Text="Tours"
+                   Margin="10"
                    Foreground="White"
-                   FontSize="18"
-                   FontFamily="Dubai"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Left"
-                   MaxHeight="35"/>
+                   FontSize="16"
+                   FontFamily="/UILayer/Resources/Fonts/#Montserrat"
+                   FontWeight="Medium"
+                   VerticalAlignment="Center"/>
 
-        <!-- Buttons for Tour management -->
-        <StackPanel Grid.Row="0"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
+            <StackPanel Grid.Column="1"
                     Orientation="Horizontal"
-                    MaxHeight="35"
-                    Width="Auto">
-            <Button Content="+"
-                    Background="#9CCB19"
-                    Foreground="Black"
-                    FontSize="18"
-                    MinWidth="30"
-                    VerticalContentAlignment="Center"
+                    HorizontalAlignment="Right"
+                    Margin="5">
+
+                <!-- Buttons for Tour management -->
+                <Button Grid.Column="2" 
+                    Content="+"
+                    Margin="2"
+                    Style="{StaticResource ActionButtonStyle}"
                     Command="{Binding CreateTourCommand}"/>
-            <Button Content="-"
-                    Background="#9CCB19"
-                    Foreground="Black"
-                    MinWidth="30"
-                    FontSize="18"
-                    VerticalContentAlignment="Center"
+                <Button Grid.Column="3"
+                    Content="-"
+                    Margin="2"
+                    Style="{StaticResource ActionButtonStyle}"
                     Command="{Binding DeleteTourCommand}"/>
-            <Button Content="..."
-                    Background="#9CCB19"
-                    Foreground="Black"
-                    MinWidth="30"
-                    FontSize="18"
-                    VerticalContentAlignment="Center"
+                <Button Grid.Column="4" 
+                    Content="..."
+                    Margin="2"
+                    Style="{StaticResource ActionButtonStyle}"
                     Command="{Binding EditTourCommand}"/>
-        </StackPanel>
-        
-        <!-- Search Bar -->
-        <views:SearchBar Grid.Row="1"
-                         DataContext="{Binding SearchBarViewModel}"/>
 
-        <!-- Tour List -->
-        <views:TourList x:Name="TourListView" 
-                        Grid.Row="2"
-                        Background="White"
-                        DataContext="{Binding TourListViewModel}"/>
+            </StackPanel>
 
-    </Grid>
+            <!-- Search Bar -->
+            <views:SearchBar Grid.Row="1"
+                             DataContext="{Binding SearchBarViewModel}"/>
+
+            <!-- Tour List -->
+            <views:TourList x:Name="TourListView"
+                            Grid.Row="2"
+                            Background="White"
+                            DataContext="{Binding TourListViewModel}"/>
+
+        </Grid>
+    </Border>
 </UserControl>

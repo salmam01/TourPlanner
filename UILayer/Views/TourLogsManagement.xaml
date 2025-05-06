@@ -6,59 +6,62 @@
              xmlns:views="clr-namespace:TourPlanner.UILayer.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
 
-        <!-- Header with Title and Buttons -->
-        <Grid Grid.Row="0" Background="#0078D7">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
+    <Border CornerRadius="10" 
+            BorderBrush="#0078D7"
+            BorderThickness="2">
 
-            <TextBlock Text="Tour Logs"
-                       Margin="10,5"
-                       Foreground="White"
-                       FontSize="16"
-                       FontWeight="SemiBold"
-                       VerticalAlignment="Center"/>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-            <StackPanel Grid.Column="1"
+            <!-- Header with Title and Buttons -->
+            <Grid Grid.Row="0" Background="#0078D7">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="Tours"
+                   Margin="10"
+                   Foreground="White"
+                   FontSize="16"
+                   FontFamily="/UILayer/Resources/Fonts/#Montserrat"
+                   FontWeight="Medium"
+                   VerticalAlignment="Center"/>
+
+                <StackPanel Grid.Column="1"
                        Orientation="Horizontal"
                        HorizontalAlignment="Right"
                        Margin="5,0">
-                <Button Content="+"
-                        Width="24"
-                        Height="24"
+                    <Button Content="+"
+                        Style="{StaticResource ActionButtonStyle}"
                         Margin="2,0"
                         Background="Transparent"
                         Foreground="White"
-                        BorderThickness="0"
                         Command="{Binding CreateTourLogCommand}"/>
-                <Button Content="-"
-                        Width="24"
-                        Height="24"
+                    <Button Content="-"
+                        Style="{StaticResource ActionButtonStyle}"
                         Margin="2,0"
                         Background="Transparent"
                         Foreground="White"
                         BorderThickness="0"
                         Command="{Binding DeleteTourLogCommand}"/>
-                <Button Content="..."
-                        Width="24"
-                        Height="24"
+                    <Button Content="..."
+                        Style="{StaticResource ActionButtonStyle}"
                         Margin="2,0,5,0"
                         Background="Transparent"
                         Foreground="White"
                         BorderThickness="0"
                         Command="{Binding EditTourLogCommand}"/>
-            </StackPanel>
-        </Grid>
-        
-        <!--- Tour Logs Table -->
-        <views:TourLogList Grid.Row="1"
+                </StackPanel>
+            </Grid>
+
+            <!--- Tour Logs Table -->
+            <views:TourLogList Grid.Row="1"
                            DataContext="{Binding TourLogListViewModel}"/>
-    </Grid>
+        </Grid>
+    </Border>
 </UserControl>

@@ -3,5 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:TourPlanner">
     <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/UILayer/Theme/WindowButtonTheme.xaml"/>
+                <ResourceDictionary Source="/UILayer/Theme/ActionButtonTheme.xaml"/>
+                <ResourceDictionary Source="/UILayer/Theme/NavbarButtonTheme.xaml"/>
+                <ResourceDictionary Source="/UILayer/Theme/CancelButtonTheme.xaml"/>
+                <ResourceDictionary Source="/UILayer/Theme/SubmitButtonTheme.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
