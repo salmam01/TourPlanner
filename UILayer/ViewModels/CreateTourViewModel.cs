@@ -22,6 +22,7 @@ namespace TourPlanner.UILayer.ViewModels {
 
         public EventHandler<Tour> TourCreated;
         public EventHandler<Tour> TourUpdated;
+        public event EventHandler Cancelled;
         public bool _isEditing;
         public string SubmitButtonText => _isEditing ? "Save Tour" : "Create Tour";
         public bool CanCreate => ValidateInput();
@@ -30,7 +31,9 @@ namespace TourPlanner.UILayer.ViewModels {
             execute => CreateTour(),
             canExecute => CanCreate
         );
-
+        public ICommand CancelCommand => new RelayCommand(
+            execute => Cancel()
+        );
 
         public string Name
         {
@@ -163,6 +166,11 @@ namespace TourPlanner.UILayer.ViewModels {
                 Debug.WriteLine($"- {message}");
 
             return errors.All(e => e.IsValid);
-         }
+        }
+
+        private void Cancel()
+        {
+            Cancelled?.Invoke(this, EventArgs.Empty);
+        }
     } 
  }

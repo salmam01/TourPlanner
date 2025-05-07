@@ -24,7 +24,8 @@ namespace TourPlanner.UILayer.ViewModels
             canExecute => CanCreate
         );
 
-        public ICommand CancelCommand => new RelayCommand(execute => Cancel()
+        public ICommand CancelCommand => new RelayCommand(
+            execute => Cancel()
         );
 
         public event EventHandler<TourLog> TourLogCreated;

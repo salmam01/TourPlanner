@@ -50,6 +50,7 @@ namespace TourPlanner.UILayer.ViewModels
 
             _createTourViewModel.TourCreated += OnTourCreated;
             _createTourViewModel.TourUpdated += OnTourUpdated;
+            _createTourViewModel.Cancelled += OnCancel;
             _eventAggregator.Subscribe<Tour>(OnTourSelected);
         }
 
@@ -75,6 +76,11 @@ namespace TourPlanner.UILayer.ViewModels
             //  TODO: dafuq to do here?
             _tourService.UpdateTour(tour, tour.Name, tour.Date, tour.Description, tour.TransportType, tour.From, tour.To);
             TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
+            _eventAggregator.Publish("ShowHome");
+        }
+
+        public void OnCancel(object sender, EventArgs e)
+        {
             _eventAggregator.Publish("ShowHome");
         }
 
