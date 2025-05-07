@@ -45,7 +45,7 @@
                 <Border Grid.Row="1"
                         BorderBrush="#A4B465"
                         BorderThickness="3"
-                        CornerRadius="0,0,10,10"/>
+                        CornerRadius="0,10,10,10"/>
                     <views:Map/>
 
                     <views:TourLogsManagement x:Name="TourLogsView" 

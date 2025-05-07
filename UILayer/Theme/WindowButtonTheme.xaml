@@ -3,17 +3,18 @@
     <Style x:Key="WindowButtonStyle"
            TargetType="Button">
         <Setter Property="Foreground" Value="Black"/>
-        <Setter Property="Background" Value="#F5ECD5"/>
+        <Setter Property="Background" Value="#F0BB78"/>
         <Setter Property="FontSize" Value="15"/>
         <Setter Property="FontFamily" Value="/UILayer/Resources/Fonts/#Montserrat"/>
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border Width="30" Height="30"
                             CornerRadius="7"
+                            BorderThickness="2.5"
+                            BorderBrush="#A4B465"
                             Background="{TemplateBinding Background}">
                         <ContentPresenter VerticalAlignment="Center"
                                           HorizontalAlignment="Center"/>
@@ -23,7 +24,7 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#F0BB78"/>
+                <Setter Property="Background" Value="#F5ECD5"/>
             </Trigger>
         </Style.Triggers>
     </Style>

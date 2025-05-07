@@ -20,8 +20,9 @@
                 <Style TargetType="GridViewColumnHeader">
                     <Setter Property="Background" Value="#F0BB78"/>
                     <Setter Property="Foreground" Value="White"/>
-                    <Setter Property="Height" Value="30"/>
-                    <Setter Property="Padding" Value="10,0"/>
+                    <Setter Property="FontFamily" Value="/UILayer/Resources/Fonts/#Montserrat"/>
+                    <Setter Property="FontSize" Value="14"/>
+                    <Setter Property="Padding" Value="7"/>
                     <Setter Property="BorderThickness" Value="0,0,1,0"/>
                     <Setter Property="BorderBrush" Value="#F0BB78"/>
                 </Style>
