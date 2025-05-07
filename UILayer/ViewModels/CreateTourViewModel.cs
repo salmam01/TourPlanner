@@ -22,6 +22,7 @@ namespace TourPlanner.UILayer.ViewModels {
 
         public EventHandler<Tour> TourCreated;
         public EventHandler<Tour> TourUpdated;
+        public event EventHandler Cancelled;
         public bool _isEditing;
         public string SubmitButtonText => _isEditing ? "Save Tour" : "Create Tour";
         public bool CanCreate => ValidateInput();
@@ -30,7 +31,9 @@ namespace TourPlanner.UILayer.ViewModels {
             execute => CreateTour(),
             canExecute => CanCreate
         );
-
+        public ICommand CancelCommand => new RelayCommand(
+            execute => Cancel()
+        );
 
         public string Name
         {
@@ -110,9 +113,11 @@ namespace TourPlanner.UILayer.ViewModels {
         }
 
         private void CreateTour() {
+            DateTime dateUtc = DateTime.SpecifyKind(_date.Date, DateTimeKind.Utc);
+
             if (_isEditing && _editingTour != null) {
                 _editingTour.Name = _name;
-                _editingTour.Date = _date;
+                _editingTour.Date = dateUtc;
                 _editingTour.Description = _description;
                 _editingTour.TransportType = _transportType;
                 _editingTour.From = _from;
@@ -121,9 +126,10 @@ namespace TourPlanner.UILayer.ViewModels {
                 TourUpdated?.Invoke(this, _editingTour);
             }
             else {
+
                 Tour tour = new Tour(
                     _name,
-                    _date,
+                    dateUtc,
                     _description,
                     _transportType,
                     _from,
@@ -143,9 +149,8 @@ namespace TourPlanner.UILayer.ViewModels {
             _transportType = tour.TransportType;
             _from = tour.From;
             _to = tour.To;
-            OnPropertyChanged(nameof(SubmitButtonText));
             _isEditing = true;
-            _editingTour = null;
+            OnPropertyChanged(nameof(SubmitButtonText));
         }
         
         private bool ValidateInput() {
@@ -163,6 +168,11 @@ namespace TourPlanner.UILayer.ViewModels {
                 Debug.WriteLine($"- {message}");
 
             return errors.All(e => e.IsValid);
-         }
+        }
+
+        private void Cancel()
+        {
+            Cancelled?.Invoke(this, EventArgs.Empty);
+        }
     } 
  }

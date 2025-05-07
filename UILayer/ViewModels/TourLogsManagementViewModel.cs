@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using TourPlanner.BusinessLayer.Models;
 using TourPlanner.BusinessLayer.Services;
@@ -66,6 +67,7 @@ namespace TourPlanner.UILayer.ViewModels
         public void OnTourLogCreated(object sender, TourLog tourLog)
         {
             if (tourLog == null) return;
+
             _tourLogService.CreateTourLog(_selectedTour.Id, tourLog);
             TourLogListViewModel.ReloadTourLogs(_tourLogService.GetTourLogs(_selectedTour));
             _eventAggregator.Publish("ShowHome");
@@ -74,7 +76,9 @@ namespace TourPlanner.UILayer.ViewModels
         public void OnTourLogUpdated(object sender, TourLog tourLog)
         {
             if(tourLog == null) return;
-            TourLogListViewModel.OnTourLogUpdated(tourLog);
+
+            _tourLogService.UpdateTourLog(tourLog);
+            TourLogListViewModel.ReloadTourLogs(_tourLogService.GetTourLogs(_selectedTour).ToList());
             _eventAggregator.Publish("ShowHome");
         }
 

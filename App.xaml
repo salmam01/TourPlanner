@@ -10,6 +10,8 @@
                 <ResourceDictionary Source="/UILayer/Theme/NavbarButtonTheme.xaml"/>
                 <ResourceDictionary Source="/UILayer/Theme/CancelButtonTheme.xaml"/>
                 <ResourceDictionary Source="/UILayer/Theme/SubmitButtonTheme.xaml"/>
+                <ResourceDictionary Source="/UILayer/Theme/FormFieldTheme.xaml"/>
+                <ResourceDictionary Source="/UILayer/Theme/FormTextBoxTheme.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

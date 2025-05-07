@@ -37,8 +37,6 @@ namespace TourPlanner.UILayer.ViewModels
         public TourLogListViewModel()
         {
             _tourLogs = new ObservableCollection<TourLog>();
-
-            Console.WriteLine("TourLogsListViewModel INITIALIZED");
         }
 
         public void ReloadTourLogs(IEnumerable<TourLog> tourLogs)
@@ -49,31 +47,6 @@ namespace TourPlanner.UILayer.ViewModels
                 _tourLogs.Add(tourLog);
             }
             Console.WriteLine("TourLog List reloaded.");
-        }
-
-        public void OnTourLogUpdated(TourLog updatedTourLog)
-        {
-            int i = 0;
-            foreach (TourLog tourLog in _tourLogs) {
-                if (tourLog.Id == _selectedTourLog.Id)
-                {
-                    _tourLogs[i] = updatedTourLog;
-                    break;
-                }
-                i++;
-            }
-        }
-
-        public void OnTourLogDeleted(TourLog tourLog)
-        {
-            if (tourLog == null)
-            {
-                Console.WriteLine("Tour Log is null!");
-                return;
-            }
-
-            _tourLogs.Remove(tourLog);
-            Console.WriteLine("Tour Log removed from Tour Log List!\nList:\n");
         }
     }
 }

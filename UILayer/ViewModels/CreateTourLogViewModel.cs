@@ -24,7 +24,8 @@ namespace TourPlanner.UILayer.ViewModels
             canExecute => CanCreate
         );
 
-        public ICommand CancelCommand => new RelayCommand(execute => Cancel()
+        public ICommand CancelCommand => new RelayCommand(
+            execute => Cancel()
         );
 
         public event EventHandler<TourLog> TourLogCreated;
@@ -123,10 +124,13 @@ namespace TourPlanner.UILayer.ViewModels
         }
 
         private void CreateTourLog() {
+
+            DateTime utcDate = DateTime.SpecifyKind(_date, DateTimeKind.Utc);
+
             TourLog tourLog = new TourLog
             {
                 Id = _isEditing ? _editingId : Guid.NewGuid(),
-                Date = Date,
+                Date = utcDate,
                 Comment = Comment,
                 Difficulty = Difficulty,
                 Rating = Rating,

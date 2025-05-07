@@ -8,187 +8,125 @@
              d:DesignHeight="500" d:DesignWidth="800">
 
     <Grid>
-        <views:ReturnButton Grid.Column="0"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="75"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Title -->
+        <TextBlock Text="Create a new Tour"
+                   Foreground="White"
+                   FontSize="22"
+                   FontFamily="/UILayer/Resources/Fonts/#Montserrat"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Margin="0,5,0,0"/>
 
-        <StackPanel Grid.Column="1"
-                    Width="250"
-                    Orientation="Vertical"
-                    Margin="0,20,0,0"
-                    HorizontalAlignment="Center">
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-            <!-- Title -->
-            <TextBlock Text="Create a new Tour"
-                       Foreground="White"
-                       FontSize="20"
-                       FontFamily="Dubai"
-                       FontWeight="Medium"
-                       HorizontalAlignment="Center"
-                       Margin="0,5,0,0"/>
+            <StackPanel Grid.Column="0"
+                        Width="350"
+                        Orientation="Vertical"
+                        HorizontalAlignment="Center">
 
-            <!-- Tour Name -->
-            <TextBlock Text="Tour Name"
-                       Foreground="White"
-                       FontFamily="Dubai"
-                       FontSize="12"
-                       FontWeight="Medium"
-                       Margin="0,10,0,0"/>
+                <!-- Tour Name -->
+                <TextBlock Text="Tour Name"
+                           Style="{StaticResource FormTextBoxStyle}"/>
 
-            <TextBox x:Name="name"
-                     FontSize="13"
-                     FontFamily="Dubai"
-                     FontWeight="Medium"
-                     Background="Transparent"
-                     Foreground="White"
-                     CaretBrush="LightGray"
-                     BorderBrush="DarkGray"
-                     BorderThickness="0,0,0,1"
-                     Height="28"
-                     VerticalContentAlignment="Center"
-                     Margin="0,2,0,0"
-                     Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox x:Name="name"
+                         Style="{StaticResource FormFieldStyle}"
+                         Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
 
-            <!-- Tour Date -->
-            <TextBlock Text="Date"
-                       Foreground="White"
-                       FontFamily="Dubai"
-                       FontSize="12"
-                       FontWeight="Medium"
-                       Margin="0,8,0,0"/>
+                <!-- Tour Date -->
+                <TextBlock Text="Date"
+                           Style="{StaticResource FormTextBoxStyle}"/>
 
-            <DatePicker x:Name="date"
-                        FontSize="13"
-                        FontFamily="Dubai"
-                        FontWeight="Medium"
-                        BorderBrush="DarkGray"
-                        BorderThickness="0,0,0,1"
-                        Height="28"
-                        VerticalContentAlignment="Center"
-                        Margin="0,2,0,0"
-                        SelectedDate="{Binding Date, UpdateSourceTrigger=PropertyChanged}"/>
+                <DatePicker x:Name="date"
+                            FontSize="16"
+                            FontFamily="/UILayer/Resources/Fonts/#Montserrat"
+                            VerticalContentAlignment="Center"
+                            Height="30"
+                            Margin="5"
+                            SelectedDate="{Binding Date, UpdateSourceTrigger=PropertyChanged}"/>
 
-            <!-- Tour Description -->
-            <TextBlock Text="Description"
-                       FontFamily="Dubai"
-                       Foreground="White"
-                       FontSize="12"
-                       FontWeight="Medium"
-                       Margin="0,8,0,0"/>
+                <!-- Tour Description -->
+                <TextBlock Text="Description"
+                           Style="{StaticResource FormTextBoxStyle}"/>
 
-            <TextBox x:Name="Description"
-                     FontSize="13"
-                     FontFamily="Dubai"
-                     FontWeight="Medium"
-                     Background="Transparent"
-                     Foreground="White"
-                     CaretBrush="LightGray"
-                     BorderBrush="DarkGray"
-                     BorderThickness="0,0,0,1"
-                     Height="28"
-                     VerticalContentAlignment="Center"
-                     Margin="0,2,0,0"
-                     Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox x:Name="Description"
+                         Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource FormFieldStyle}"
+                         AcceptsReturn="True"
+                         TextWrapping="Wrap"
+                         VerticalScrollBarVisibility="Auto"
+                         MinHeight="100"/>
+            </StackPanel>
 
-            <!-- Tour Transport Type -->
-            <TextBlock Text="Transport Type"
-                       FontFamily="Dubai"
-                       Foreground="White"
-                       FontSize="12"
-                       FontWeight="Medium"
-                       Margin="0,8,0,0"/>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="300"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-            <ComboBox x:Name="transporttype"
-                      FontFamily="Dubai"
-                      FontSize="13"
-                      FontWeight="Medium"
-                      BorderBrush="DarkGray"
-                      BorderThickness="0,0,0,1"
-                      Height="28"
-                      VerticalContentAlignment="Center"
-                      Margin="0,2,0,0"
-                      ItemsSource="{Binding TransportTypeOptions}"
-                      SelectedItem="{Binding TransportType, UpdateSourceTrigger=PropertyChanged}">
-            </ComboBox>
+                <StackPanel Grid.Row="0"
+                            Width="350"
+                            Orientation="Vertical"
+                            HorizontalAlignment="Center">
 
-            <!-- Tour Starting Point -->
-            <TextBlock Text="From"
-                       Foreground="White"
-                       FontFamily="Dubai"
-                       FontSize="12"
-                       FontWeight="Medium"
-                       Margin="0,8,0,0"/>
+                    <!-- Tour Transport Type -->
+                    <TextBlock Text="Transport Type"
+                               Style="{StaticResource FormTextBoxStyle}"/>
 
-            <TextBox x:Name="from"
-                     FontSize="13"
-                     FontFamily="Dubai"
-                     FontWeight="Medium"
-                     Background="Transparent"
-                     Foreground="White"
-                     CaretBrush="LightGray"
-                     BorderBrush="DarkGray"
-                     BorderThickness="0,0,0,1"
-                     Height="28"
-                     VerticalContentAlignment="Center"
-                     Margin="0,2,0,0"
-                     Text="{Binding From, UpdateSourceTrigger=PropertyChanged}"/>
+                    <ComboBox x:Name="transporttype"
+                              FontFamily="/UILayer/Resources/Fonts/#Montserrat"
+                              FontSize="16"
+                              Height="30"
+                              VerticalContentAlignment="Center"
+                              Margin="5"
+                              ItemsSource="{Binding TransportTypeOptions}"
+                              SelectedItem="{Binding TransportType, UpdateSourceTrigger=PropertyChanged}">
+                    </ComboBox>
 
-            <!-- Tour Destination -->
-            <TextBlock Text="To"
-                       FontFamily="Dubai"
-                       Foreground="White"
-                       FontSize="12"
-                       FontWeight="Medium"
-                       Margin="0,8,0,0"/>
+                    <!-- Tour Starting Point -->
+                    <TextBlock Text="From"
+                           Style="{StaticResource FormTextBoxStyle}"/>
 
-            <TextBox x:Name="to"
-                     FontSize="13"
-                     FontFamily="Dubai"
-                     FontWeight="Medium"
-                     Background="Transparent"
-                     Foreground="White"
-                     CaretBrush="LightGray"
-                     BorderBrush="DarkGray"
-                     BorderThickness="0,0,0,1"
-                     Height="28"
-                     VerticalContentAlignment="Center"
-                     Margin="0,2,0,0"
-                     Text="{Binding To, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBox x:Name="from"
+                         Text="{Binding From, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource FormFieldStyle}"/>
 
-            <!-- Submit Button -->
-            <Button Grid.Column="2"
-                    x:Name="submitButton"
-                    BorderThickness="0"
-                    Content="{Binding SubmitButtonText}"
-                    Foreground="White"
-                    FontFamily="Dubai"
-                    FontSize="18"
-                    Cursor="Hand"
-                    VerticalAlignment="Bottom"
-                    Margin="0,30,0,0"
-                    VerticalContentAlignment="Center"
-                    Command="{Binding CreateTourCommand}">
+                    <!-- Tour Destination -->
+                    <TextBlock Text="To"
+                           Style="{StaticResource FormTextBoxStyle}"/>
 
-                <Button.Style>
-                    <Style TargetType="Button">
-                        <Setter Property="Background" Value="#86DC3D"/>
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#86DC3D"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
+                    <TextBox x:Name="to"
+                         Text="{Binding To, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource FormFieldStyle}"/>
+                </StackPanel>
 
-                <Button.Template>
-                    <ControlTemplate TargetType="Button">
-                        <Border Width="auto" Height="40"
-                                       CornerRadius="20"
-                                       Background="{TemplateBinding Background}">
-                            <ContentPresenter VerticalAlignment="Center"
-                                                     HorizontalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
-        </StackPanel>
+                <StackPanel Grid.Row="1"
+                            HorizontalAlignment="Right"
+                            Margin="0,0,50,0"
+                            Orientation="Horizontal"
+                            Height="50">
+                    <!-- Submit Button -->
+                    <Button x:Name="submitButton"
+                            Content="{Binding SubmitButtonText}"
+                            Command="{Binding CreateTourCommand}"
+                            Style="{StaticResource SubmitButtonStyle}"
+                            Margin="0,0,5,0"/>
+
+                    <!-- Submit Button -->
+                    <Button Content="Cancel"
+                            Command="{Binding CancelCommand}"
+                            Style="{StaticResource CancelButtonStyle}"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
     </Grid>
 </UserControl>

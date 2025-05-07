@@ -35,7 +35,16 @@ namespace TourPlanner.DataLayer.Repositories.TourLogRepository
 
         public void UpdateTourLog(TourLog tourLog)
         {
-            //  TODO: implement
+            TourLog tourLogToUpdate = _context.TourLogs.Find(tourLog.Id);
+            if (tourLogToUpdate == null) return;
+
+            tourLogToUpdate.Rating = tourLog.Rating;
+            tourLogToUpdate.Difficulty = tourLog.Difficulty;
+            tourLogToUpdate.TotalDistance = tourLog.TotalDistance;
+            tourLogToUpdate.TotalTime = tourLog.TotalTime;
+            tourLogToUpdate.Comment = tourLog.Comment;
+            tourLogToUpdate.Date = tourLog.Date;
+
             Save();
         }
 
