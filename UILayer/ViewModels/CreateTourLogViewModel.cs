@@ -124,10 +124,13 @@ namespace TourPlanner.UILayer.ViewModels
         }
 
         private void CreateTourLog() {
+
+            DateTime utcDate = DateTime.SpecifyKind(_date, DateTimeKind.Utc);
+
             TourLog tourLog = new TourLog
             {
                 Id = _isEditing ? _editingId : Guid.NewGuid(),
-                Date = Date,
+                Date = utcDate,
                 Comment = Comment,
                 Difficulty = Difficulty,
                 Rating = Rating,

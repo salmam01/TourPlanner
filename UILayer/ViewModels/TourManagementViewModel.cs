@@ -52,6 +52,8 @@ namespace TourPlanner.UILayer.ViewModels
             _createTourViewModel.TourUpdated += OnTourUpdated;
             _createTourViewModel.Cancelled += OnCancel;
             _eventAggregator.Subscribe<Tour>(OnTourSelected);
+
+            TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
         }
 
         public void OnTourSelected(Tour tour)
