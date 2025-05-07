@@ -113,9 +113,11 @@ namespace TourPlanner.UILayer.ViewModels {
         }
 
         private void CreateTour() {
+            DateTime dateUtc = DateTime.SpecifyKind(_date.Date, DateTimeKind.Utc);
+
             if (_isEditing && _editingTour != null) {
                 _editingTour.Name = _name;
-                _editingTour.Date = _date;
+                _editingTour.Date = dateUtc;
                 _editingTour.Description = _description;
                 _editingTour.TransportType = _transportType;
                 _editingTour.From = _from;
@@ -124,9 +126,10 @@ namespace TourPlanner.UILayer.ViewModels {
                 TourUpdated?.Invoke(this, _editingTour);
             }
             else {
+
                 Tour tour = new Tour(
                     _name,
-                    _date,
+                    dateUtc,
                     _description,
                     _transportType,
                     _from,
