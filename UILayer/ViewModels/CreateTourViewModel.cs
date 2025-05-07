@@ -153,6 +153,7 @@ namespace TourPlanner.UILayer.ViewModels {
             OnPropertyChanged(nameof(SubmitButtonText));
         }
         
+        
         private bool ValidateInput() {
             (bool IsValid, string Message)[] errors = new (bool IsValid, string Message)[]
             {

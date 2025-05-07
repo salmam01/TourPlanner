@@ -8,10 +8,11 @@
              d:DesignHeight="450" d:DesignWidth="300">
 
     <Border CornerRadius="10" 
-            BorderBrush="#0078D7"
+            BorderBrush="#A4B465"
+            Background="#A4B465"
             BorderThickness="2">
 
-        <Grid Background="#0078D7">
+        <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
@@ -19,12 +20,12 @@
 
             <!-- Header with Title and Buttons -->
             <TextBlock Text="Tours"
-                   Margin="10"
-                   Foreground="White"
-                   FontSize="16"
-                   FontFamily="/UILayer/Resources/Fonts/#Montserrat"
-                   FontWeight="Medium"
-                   VerticalAlignment="Center"/>
+                       Margin="10"
+                       Foreground="White"
+                       FontSize="16"
+                       FontFamily="/UILayer/Resources/Fonts/#Montserrat"
+                       FontWeight="Medium"
+                       VerticalAlignment="Center"/>
 
             <StackPanel Grid.Column="1"
                     Orientation="Horizontal"
@@ -33,20 +34,20 @@
 
                 <!-- Buttons for Tour management -->
                 <Button Grid.Column="2" 
-                    Content="+"
-                    Margin="2"
-                    Style="{StaticResource ActionButtonStyle}"
-                    Command="{Binding CreateTourCommand}"/>
+                        Content="+"
+                        Margin="2"
+                        Style="{StaticResource ActionButtonStyle}"
+                        Command="{Binding CreateTourCommand}"/>
                 <Button Grid.Column="3"
-                    Content="-"
-                    Margin="2"
-                    Style="{StaticResource ActionButtonStyle}"
-                    Command="{Binding DeleteTourCommand}"/>
+                        Content="-"
+                        Margin="2"
+                        Style="{StaticResource ActionButtonStyle}"
+                        Command="{Binding DeleteTourCommand}"/>
                 <Button Grid.Column="4" 
-                    Content="..."
-                    Margin="2"
-                    Style="{StaticResource ActionButtonStyle}"
-                    Command="{Binding EditTourCommand}"/>
+                        Content="..."
+                        Margin="2"
+                        Style="{StaticResource ActionButtonStyle}"
+                        Command="{Binding EditTourCommand}"/>
 
             </StackPanel>
 

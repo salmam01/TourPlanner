@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style x:Key="SubmitButtonStyle"
            TargetType="Button">
-        <Setter Property="Background" Value="#86DC3D"/>
+        <Setter Property="Background" Value="#F5ECD5"/>
         <Setter Property="FontSize" Value="20"/>
         <Setter Property="FontFamily" Value="/UILayer/Resources/Fonts/#Montserrat"/>
         <Setter Property="FontWeight" Value="Medium"/>
@@ -25,7 +25,7 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#1F803E"/>
+                <Setter Property="Background" Value="#F0BB78"/>
             </Trigger>
         </Style.Triggers>
     </Style>

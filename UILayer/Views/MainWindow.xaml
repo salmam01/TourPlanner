@@ -15,7 +15,7 @@
         ResizeMode="NoResize">
 
     <Border CornerRadius="12"
-            Background="#1D2E28">
+            Background="#626F47">
 
         <Grid>
             <Grid.RowDefinitions>
@@ -35,7 +35,7 @@
 
                 <TextBlock Grid.Column="0" 
                             Text="TourPlanner"
-                            Foreground="LightCyan"
+                            Foreground="#F5ECD5"
                             FontSize="20"
                             VerticalAlignment="Center"
                             FontFamily="/UILayer/Resources/Fonts/#Montserrat"

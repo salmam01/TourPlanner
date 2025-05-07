@@ -3,6 +3,7 @@
     <Style x:Key="ActionButtonStyle"
            TargetType="Button">
         <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="Background" Value="#F5ECD5"/>
         <Setter Property="FontSize" Value="15"/>
         <Setter Property="FontFamily" Value="/UILayer/Resources/Fonts/#Montserrat"/>
         <Setter Property="FontWeight" Value="Medium"/>
@@ -22,7 +23,7 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#86DC3D"/>
+                <Setter Property="Background" Value="#F0BB78"/>
             </Trigger>
         </Style.Triggers>
     </Style>

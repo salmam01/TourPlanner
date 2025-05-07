@@ -18,12 +18,12 @@
             AlternationCount="2">
             <ListView.Resources>
                 <Style TargetType="GridViewColumnHeader">
-                    <Setter Property="Background" Value="#9CCB19"/>
+                    <Setter Property="Background" Value="#F0BB78"/>
                     <Setter Property="Foreground" Value="White"/>
                     <Setter Property="Height" Value="30"/>
                     <Setter Property="Padding" Value="10,0"/>
                     <Setter Property="BorderThickness" Value="0,0,1,0"/>
-                    <Setter Property="BorderBrush" Value="#89B717"/>
+                    <Setter Property="BorderBrush" Value="#F0BB78"/>
                 </Style>
             </ListView.Resources>
 
