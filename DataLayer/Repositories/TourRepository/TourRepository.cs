@@ -29,7 +29,16 @@ namespace TourPlanner.DataLayer.Repositories.TourRepository
 
         public void UpdateTour(Tour tour)
         {
-            //  TODO: Implement
+            Tour tourToUpdate = _context.Tours.Find(tour.Id);
+            if (tourToUpdate == null) return;
+
+            tourToUpdate.Name = tour.Name;
+            tourToUpdate.Date = tour.Date;
+            tourToUpdate.Description = tour.Description;
+            tourToUpdate.TransportType = tour.TransportType;
+            tourToUpdate.From = tour.From;
+            tourToUpdate.To = tour.To;
+
             Save();
         }
 

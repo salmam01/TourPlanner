@@ -149,9 +149,8 @@ namespace TourPlanner.UILayer.ViewModels {
             _transportType = tour.TransportType;
             _from = tour.From;
             _to = tour.To;
-            OnPropertyChanged(nameof(SubmitButtonText));
             _isEditing = true;
-            _editingTour = null;
+            OnPropertyChanged(nameof(SubmitButtonText));
         }
         
         private bool ValidateInput() {

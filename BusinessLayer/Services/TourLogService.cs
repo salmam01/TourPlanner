@@ -27,15 +27,8 @@ namespace TourPlanner.BusinessLayer.Services
             _tourLogRepository.InsertTourLog(tourId, tourLog);
         }
 
-        public void UpdateTourLog(TourLog tourLog, DateTime date, string comment, int difficulty, double rating, double totalDistance, TimeSpan totalTime)
+        public void UpdateTourLog(TourLog tourLog)
         {
-            tourLog.Date = date;
-            tourLog.Comment = comment;
-            tourLog.Difficulty = difficulty;
-            tourLog.Rating = rating;
-            tourLog.TotalDistance = totalDistance;
-            tourLog.TotalTime = totalTime;
-
             _tourLogRepository.UpdateTourLog(tourLog);
         }
 

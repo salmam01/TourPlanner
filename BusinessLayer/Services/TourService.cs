@@ -32,18 +32,9 @@ namespace TourPlanner.BusinessLayer.Services
             _tourRepository.InsertTour(tour);
         }
 
-        public void UpdateTour(Tour tour, string name, DateTime date, string description, string transportType, string from, string to)
+        public void UpdateTour(Tour tour)
         {
-            //  TODO: fix this method
-            //  Could try with a switch using "valueToChange" & "value" parameters later
-            //ValidateTourData(tour);
-
-            tour.Name = name;
-            tour.Date = date;
-            tour.Description = description;
-            tour.TransportType = transportType;
-            tour.From = from;
-            tour.To = to;
+            _tourRepository.UpdateTour(tour);
         }
 
         public void DeleteTour(Tour tour)

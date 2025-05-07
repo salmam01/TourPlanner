@@ -65,9 +65,9 @@ namespace TourPlanner.UILayer.ViewModels
         public void OnTourCreated(object sender, Tour tour)
         {
             if (tour == null) return;
+
             _tourService.CreateTour(tour);
             TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
-
             _eventAggregator.Publish("ShowHome");
         }
 
@@ -75,8 +75,7 @@ namespace TourPlanner.UILayer.ViewModels
         {
             if (tour == null) return;
 
-            //  TODO: dafuq to do here?
-            _tourService.UpdateTour(tour, tour.Name, tour.Date, tour.Description, tour.TransportType, tour.From, tour.To);
+            _tourService.UpdateTour(tour);
             TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
             _eventAggregator.Publish("ShowHome");
         }
