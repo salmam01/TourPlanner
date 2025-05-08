@@ -80,6 +80,7 @@ namespace TourPlanner.UILayer.ViewModels
             _eventAggregator.Publish("ShowHome");
         }
 
+        //  dont use magic strings, save as constant
         public void OnCancel(object sender, EventArgs e)
         {
             _eventAggregator.Publish("ShowHome");

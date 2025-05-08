@@ -18,7 +18,8 @@ namespace TourPlanner.DataLayer.Data
         //  Set the connection string
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //  TODO: Safely store the variables for the connection string
+            //  TODO: Safely store the variables for the connection string in config file
+            //  Micrsoft extension config
             string host = "localhost";
             string port = "5432";
             string database = "TourPlanner";

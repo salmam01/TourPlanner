@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace TourPlanner.UILayer.Events
 {
+    //  Helper folder / system comp folder
     public class EventAggregator
     {
         //  Note: you can add a lock for thread safety
