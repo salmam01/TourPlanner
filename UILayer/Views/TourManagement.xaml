@@ -10,7 +10,7 @@
     <Border CornerRadius="10" 
             BorderBrush="#A4B465"
             Background="#A4B465"
-            BorderThickness="2">
+            BorderThickness="3">
 
         <Grid>
             <Grid.RowDefinitions>
@@ -21,7 +21,7 @@
             <!-- Header with Title and Buttons -->
             <TextBlock Text="Tours"
                        Margin="10"
-                       Foreground="White"
+                       Foreground="Black"
                        FontSize="18"
                        FontFamily="/UILayer/Resources/Fonts/#Montserrat"
                        FontWeight="Medium"
@@ -34,18 +34,15 @@
                         Margin="5">
 
                 <!-- Buttons for Tour management -->
-                <Button Grid.Column="2" 
-                        Content="+"
+                <Button Content="+"
                         Margin="2"
                         Style="{StaticResource ActionButtonStyle}"
                         Command="{Binding CreateTourCommand}"/>
-                <Button Grid.Column="3"
-                        Content="-"
+                <Button Content="-"
                         Margin="2"
                         Style="{StaticResource ActionButtonStyle}"
                         Command="{Binding DeleteTourCommand}"/>
-                <Button Grid.Column="4" 
-                        Content="..."
+                <Button Content="..."
                         Margin="2"
                         Style="{StaticResource ActionButtonStyle}"
                         Command="{Binding EditTourCommand}"/>

@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:TourPlanner.UILayer.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    
     <Grid>
         <!-- Tour Logs Table -->
         <ListView
@@ -19,7 +20,7 @@
             <ListView.Resources>
                 <Style TargetType="GridViewColumnHeader">
                     <Setter Property="Background" Value="#F0BB78"/>
-                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="Foreground" Value="Black"/>
                     <Setter Property="FontFamily" Value="/UILayer/Resources/Fonts/#Montserrat"/>
                     <Setter Property="FontSize" Value="14"/>
                     <Setter Property="Padding" Value="7"/>

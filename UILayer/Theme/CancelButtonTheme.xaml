@@ -2,18 +2,19 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style x:Key="CancelButtonStyle"
            TargetType="Button">
-        <Setter Property="Background" Value="Gray"/>
+        <Setter Property="Background" Value="#BCCCDC"/>
         <Setter Property="FontSize" Value="20"/>
         <Setter Property="FontFamily" Value="/UILayer/Resources/Fonts/#Montserrat"/>
-        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="BorderThickness" Value="2.5"/>
-        <Setter Property="BorderBrush" Value="#232426"/>
+        <Setter Property="BorderBrush" Value="#9AA6B2"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border Padding="10"
-                            CornerRadius="5"
+                    <Border Height="60"
+                            Padding="20,10"
+                            CornerRadius="10"
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
@@ -25,7 +26,7 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#595959"/>
+                <Setter Property="Background" Value="#AAB99A"/>
             </Trigger>
         </Style.Triggers>
     </Style>
