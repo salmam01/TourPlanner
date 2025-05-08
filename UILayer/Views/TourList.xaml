@@ -22,7 +22,7 @@
             </ListView.ItemTemplate>
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
-                    <Setter Property="Background" Value="#FFF6B6"/>
+                    <Setter Property="Background" Value="#f7b2b2"/>
                     <Style.Triggers>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter Property="Background" Value="#FFDC4A"/>

@@ -12,7 +12,7 @@
         <ListView
             ItemsSource="{Binding TourLogs}"
             SelectedItem="{Binding SelectedTourLog, Mode=TwoWay}"
-            Background="#F5F5F5"
+            Background="#F5ECD5"
             BorderThickness="0"
             Margin="0"
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
