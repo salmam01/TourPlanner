@@ -10,7 +10,8 @@
         <!-- List containing all Tours -->
         <ListView ItemsSource="{Binding Tours}"
                   SelectedItem="{Binding SelectedTour, Mode=TwoWay}" 
-                  BorderThickness="0">
+                  BorderThickness="0"
+                  Background="#F5ECD5">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Name}"
@@ -22,15 +23,28 @@
             </ListView.ItemTemplate>
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
-                    <Setter Property="Background" Value="#f7b2b2"/>
-                    <Style.Triggers>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="#FFDC4A"/>
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="#FFDC4A"/>
-                        </Trigger>
-                    </Style.Triggers>
+                    <Setter Property="Background" Value="#FFF6B6"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListViewItem">
+                                <Border x:Name="Bd"
+                            Background="{TemplateBinding Background}"
+                            Padding="5"
+                            SnapsToDevicePixels="true">
+                                    <ContentPresenter />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="Bd" Property="Background" Value="#F0BB78"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="Bd" Property="Background" Value="#f7b2b2"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
                 </Style>
             </ListView.ItemContainerStyle>
         </ListView>
