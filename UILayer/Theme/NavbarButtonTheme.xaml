@@ -27,4 +27,27 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+
+    <!-- New style  for the Search tab button -->
+    <Style x:Key="SearchTabButtonStyle" TargetType="Button" BasedOn="{StaticResource NavbarButtonStyle}">
+        <Setter Property="Foreground" Value="#F4B91F"/> 
+        <Setter Property="Background" Value="#608A26"/> 
+        <Setter Property="Padding" Value="10,10"/> 
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}" CornerRadius="10,10,0,0" Padding="{TemplateBinding Padding}">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0" >
+                            <TextBlock Text="Search" FontWeight="Bold" Foreground="{TemplateBinding Foreground}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#7B8A3E"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 </ResourceDictionary>

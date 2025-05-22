@@ -60,13 +60,16 @@ namespace TourPlanner.UILayer.ViewModels
         {
             if (tour == null) return;
             _selectedTour = tour;
+            TourListViewModel.SelectedTour = tour;
         }
 
         public void OnTourCreated(object sender, Tour tour)
         {
             if (tour == null) return;
-
+        
             _tourService.CreateTour(tour);
+            // Clear search query to show all tours after create
+            TourListViewModel.SearchQuery = "";
             TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
             _eventAggregator.Publish("ShowHome");
         }
@@ -74,9 +77,14 @@ namespace TourPlanner.UILayer.ViewModels
         public void OnTourUpdated(object sender, Tour tour)
         {
             if (tour == null) return;
-
+        
             _tourService.UpdateTour(tour);
+            // Clear search query to show all tours after update
+            TourListViewModel.SearchQuery = "";
             TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
+            
+            _selectedTour = tour;
+            TourListViewModel.SelectedTour = tour;
             _eventAggregator.Publish("ShowHome");
         }
 

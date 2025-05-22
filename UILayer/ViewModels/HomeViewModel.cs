@@ -4,9 +4,9 @@ namespace TourPlanner.UILayer.ViewModels
 {
     public class HomeViewModel : BaseViewModel
     {
-        public TourManagementViewModel TourManagementViewModel { get; }
+        public TourManagementViewModel TourManagementViewModel { get; } 
         public TourLogsManagementViewModel TourLogsManagementViewModel { get; }
-
+        public bool ShowSearchBar { get; set; } = false;
         public EventHandler CreateTourLog;
 
         public HomeViewModel(
@@ -15,6 +15,7 @@ namespace TourPlanner.UILayer.ViewModels
         ) {
             TourManagementViewModel = tourManagementViewModel;
             TourLogsManagementViewModel = tourLogsManagementViewModel;
+            ShowSearchBar = false;
         }
     }
 }

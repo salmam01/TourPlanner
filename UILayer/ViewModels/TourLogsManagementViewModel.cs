@@ -13,25 +13,29 @@ namespace TourPlanner.UILayer.ViewModels
     public class TourLogsManagementViewModel : BaseViewModel
     {
         private readonly TourLogService _tourLogService;
-
         public TourLogListViewModel TourLogListViewModel { get; }
         private readonly CreateTourLogViewModel _createTourLogViewModel;
-
         private readonly EventAggregator _eventAggregator;
         private Tour _selectedTour;
         private TourLog _selectedTourLog;
+        
+        public TourLog SelectedTourLog
+        {
+            get => _selectedTourLog;
+            set {
+                if (_selectedTourLog == value) return;
+                _selectedTourLog = value;
+                OnPropertyChanged(nameof(SelectedTourLog));
+            }
+        }
 
-        public RelayCommand CreateTourLogCommand => new RelayCommand(
-            execute => CreateTourLog()
-        );
-        public RelayCommand DeleteTourLogCommand => new RelayCommand(
-            execute => DeleteTourLog(), 
-            canExecute => _selectedTourLog != null
-        );
-        public RelayCommand EditTourLogCommand => new RelayCommand(
-            execute => UpdateTourLog(), 
-            canExecute => _selectedTourLog != null
-        );
+        private readonly RelayCommand _createTourLogCommand;
+        private readonly RelayCommand _deleteTourLogCommand;
+        private readonly RelayCommand _editTourLogCommand;
+        
+        public RelayCommand CreateTourLogCommand => _createTourLogCommand;
+        public RelayCommand DeleteTourLogCommand => _deleteTourLogCommand;
+        public RelayCommand EditTourLogCommand => _editTourLogCommand;
 
         public TourLogsManagementViewModel(
             CreateTourLogViewModel createTourLogViewModel,
@@ -43,7 +47,19 @@ namespace TourPlanner.UILayer.ViewModels
             _createTourLogViewModel = createTourLogViewModel;
             _eventAggregator = eventAggregator;
             _tourLogService = tourLogService;
-
+        
+            _createTourLogCommand = new RelayCommand(
+                execute => CreateTourLog()
+            );
+            _deleteTourLogCommand = new RelayCommand(
+                execute => DeleteTourLog(),
+                canExecute => _selectedTourLog != null
+            );
+            _editTourLogCommand = new RelayCommand(
+                execute => UpdateTourLog(execute as TourPlanner.BusinessLayer.Models.TourLog),
+                canExecute => _selectedTour != null
+            );
+        
             _eventAggregator.Subscribe<Tour>(OnTourSelected);
             TourLogListViewModel.TourLogSelected += OnTourLogSelected;
             _createTourLogViewModel.TourLogCreated += OnTourLogCreated;
@@ -60,8 +76,7 @@ namespace TourPlanner.UILayer.ViewModels
 
         public void OnTourLogSelected(object sender, TourLog tourLog)
         {
-            if (tourLog == null) return;
-            _selectedTourLog = tourLog;
+            SelectedTourLog = tourLog;
         }
 
         public void OnTourLogCreated(object sender, TourLog tourLog)
@@ -93,10 +108,10 @@ namespace TourPlanner.UILayer.ViewModels
             _eventAggregator.Publish("ShowCreateTourLog");
         }
 
-        private void UpdateTourLog()
+        private void UpdateTourLog(TourPlanner.BusinessLayer.Models.TourLog tourLogToEdit)
         {
-            if (_selectedTourLog == null || _selectedTour == null) return;
-            _createTourLogViewModel.LoadTourLog(_selectedTourLog);
+            if (tourLogToEdit == null || _selectedTour == null) return;
+            _createTourLogViewModel.LoadTourLog(tourLogToEdit);
             _eventAggregator.Publish("ShowCreateTourLog");
         }
 

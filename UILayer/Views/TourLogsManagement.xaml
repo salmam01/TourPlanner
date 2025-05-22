@@ -21,10 +21,11 @@
             <!-- Header with Title and Buttons -->
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-
+            
                 <TextBlock Text="Tour Logs"
                    Margin="10"
                    Foreground="Black"
@@ -32,26 +33,27 @@
                    FontFamily="/UILayer/Resources/Fonts/#Montserrat"
                    FontWeight="Medium"
                    VerticalAlignment="Center"/>
-
-                <StackPanel Grid.Column="1"
-                       Orientation="Horizontal"
-                       HorizontalAlignment="Right"
-                       Margin="5,0">
+                
+                <StackPanel Grid.Column="2"
+                           Orientation="Horizontal"
+                           HorizontalAlignment="Right"
+                           Margin="5,0">
                     <Button Content="+"
-                        Style="{StaticResource ActionButtonStyle}"
-                        Margin="2,0"
-                        Command="{Binding CreateTourLogCommand}"/>
+                            Style="{StaticResource ActionButtonStyle}"
+                            Margin="2,0"
+                            Command="{Binding CreateTourLogCommand}"/>
                     <Button Content="-"
-                        Style="{StaticResource ActionButtonStyle}"
-                        Margin="2,0"
-                        Command="{Binding DeleteTourLogCommand}"/>
-                    <Button Content="..."
-                        Style="{StaticResource ActionButtonStyle}"
-                        Margin="2,0,5,0"
-                        Command="{Binding EditTourLogCommand}"/>
+                            Style="{StaticResource ActionButtonStyle}"
+                            Margin="2,0"
+                            Command="{Binding DeleteTourLogCommand}"/>
+                    <Button Content=".."
+                            Style="{StaticResource ActionButtonStyle}"
+                            Margin="2,0,5,0"
+                            Command="{Binding EditTourLogCommand}"
+                            CommandParameter="{Binding SelectedTourLog, Mode=OneWay}"/>
                 </StackPanel>
             </Grid>
-
+            
             <!--- Tour Logs Table -->
             <views:TourLogList Grid.Row="1"
                            DataContext="{Binding TourLogListViewModel}"/>

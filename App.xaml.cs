@@ -1,11 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System;
 using System.Windows;
+using Microsoft.Extensions.DependencyInjection;
 using TourPlanner.BusinessLayer.Services;
 using TourPlanner.DataLayer.Data;
 using TourPlanner.DataLayer.Repositories.TourAttributesRepository;
@@ -15,57 +10,60 @@ using TourPlanner.DataLayer.Repositories.TourRepository;
 using TourPlanner.UILayer.Events;
 using TourPlanner.UILayer.ViewModels;
 
-namespace TourPlanner
-{
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
-    {
-        private readonly IServiceProvider _serviceProvider;
+namespace TourPlanner;
 
-        public App()
-        {
-            IServiceCollection services = new ServiceCollection();
+/// <summary>
+///     Interaction logic for App.xaml
+/// </summary>
+public partial class App : Application {
+    private readonly IServiceProvider _serviceProvider;
 
-            services.AddSingleton<MainWindowViewModel>();
-            services.AddSingleton<HomeViewModel>();
-            services.AddSingleton<EventAggregator>();
+    public App() {
+        IServiceCollection services = new ServiceCollection();
 
-            services.AddSingleton<TourManagementViewModel>();
-            services.AddSingleton<CreateTourViewModel>();
-            services.AddSingleton<TourListViewModel>();
-            services.AddSingleton<SearchBarViewModel>();
+        services.AddSingleton<MainWindowViewModel>();
+        services.AddSingleton<HomeViewModel>();
+        services.AddSingleton<EventAggregator>();
 
-            services.AddSingleton<TourLogsManagementViewModel>();
-            services.AddSingleton<CreateTourLogViewModel>();
-            services.AddSingleton<TourLogListViewModel>();
+        services.AddSingleton<TourManagementViewModel>();
+        services.AddSingleton<CreateTourViewModel>();
+        services.AddSingleton<TourListViewModel>();
+        services.AddSingleton<SearchBarViewModel>();
 
-            services.AddDbContext<TourPlannerDbContext>();
-            services.AddScoped<ITourRepository, TourRepository>();
-            services.AddScoped<ITourLogRepository, TourLogRepository>();
-            services.AddScoped<ITourDetailsRepository, TourDetailsRepository>();
-            services.AddScoped<ITourAttributesRepository, TourAttributesRepository>();
+        services.AddSingleton<TourLogsManagementViewModel>();
+        services.AddSingleton<CreateTourLogViewModel>();
+        services.AddSingleton<TourLogListViewModel>();
 
-            services.AddSingleton<TourService>();
-            services.AddSingleton<TourLogService>();
-            services.AddSingleton<TourDetailsService>();
-            services.AddSingleton<TourAttributesService>();
+        services.AddDbContext<TourPlannerDbContext>();
+        services.AddScoped<ITourRepository, TourRepository>();
+        services.AddScoped<ITourLogRepository, TourLogRepository>();
+        services.AddScoped<ITourDetailsRepository, TourDetailsRepository>();
+        services.AddScoped<ITourAttributesRepository, TourAttributesRepository>();
+        services.AddSingleton(s =>
+            new TourListViewModel(
+                s.GetRequiredService<EventAggregator>(),
+                s.GetRequiredService<TourService>())
+        );
 
-            services.AddSingleton<MainWindow>(s => new MainWindow()
-            {
-                DataContext = s.GetRequiredService<MainWindowViewModel>()
-            });
+        services.AddSingleton(s =>
+            new SearchBarViewModel(
+                s.GetRequiredService<EventAggregator>())
+        );
+        
+        services.AddSingleton<TourService>();
+        services.AddSingleton<TourLogService>();
+        services.AddSingleton<TourDetailsService>();
+        services.AddSingleton<TourAttributesService>();
 
-            _serviceProvider = services.BuildServiceProvider();
-        }
+        services.AddSingleton(s => new MainWindow {
+            DataContext = s.GetRequiredService<MainWindowViewModel>()
+        });
+        _serviceProvider = services.BuildServiceProvider();
+    }
 
-        protected override void OnStartup(StartupEventArgs e)
-        {
-            MainWindow = _serviceProvider.GetRequiredService<MainWindow>();
-            MainWindow.Show();
-
-            base.OnStartup(e);
-        }
+    protected override void OnStartup(StartupEventArgs e) {
+        MainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+        MainWindow.Show();
+        base.OnStartup(e);
     }
 }

@@ -12,53 +12,58 @@
             Background="#A4B465"
             BorderThickness="3">
 
+        
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/> <!-- Header -->
+                <RowDefinition Height="Auto"/> <!-- SUCHLEISTE -->
+                <RowDefinition Height="*"/>   <!-- Liste -->
             </Grid.RowDefinitions>
 
-            <!-- Header with Title and Buttons -->
-            <TextBlock Text="Tours"
-                       Margin="10"
-                       Foreground="Black"
-                       FontSize="18"
-                       FontFamily="/UILayer/Resources/Fonts/#Montserrat"
-                       FontWeight="Medium"
-                       VerticalAlignment="Center"/>
-
-            <StackPanel Grid.Column="1"
-                        Orientation="Horizontal"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        Margin="5">
-
-                <!-- Buttons for Tour management -->
-                <Button Content="+"
-                        Margin="2"
-                        Style="{StaticResource ActionButtonStyle}"
-                        Command="{Binding CreateTourCommand}"/>
-                <Button Content="-"
-                        Margin="2"
-                        Style="{StaticResource ActionButtonStyle}"
-                        Command="{Binding DeleteTourCommand}"/>
-                <Button Content="..."
-                        Margin="2"
-                        Style="{StaticResource ActionButtonStyle}"
-                        Command="{Binding EditTourCommand}"/>
-
-            </StackPanel>
-
-            <!-- Search Bar -->
+            <!-- Search Bar direkt über die Liste -->
             <views:SearchBar Grid.Row="1"
                              DataContext="{Binding SearchBarViewModel}"/>
+            
+            <!-- Header with Title and Buttons -->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Tours"
+                           Margin="8"
+                           Foreground="Black"
+                           FontSize="18"
+                           FontFamily="/UILayer/Resources/Fonts/#Montserrat"
+                           FontWeight="Medium"
+                           VerticalAlignment="Center"/>
+                <StackPanel Grid.Column="1"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Margin="5">
+                    
+                    <!-- Buttons for Tour management -->
+                    <Button Content=" + "
+                            Margin="2"
+                            Style="{StaticResource ActionButtonStyle}"
+                            Command="{Binding CreateTourCommand}"/>
+                    <Button Content="-"
+                            Margin="2"
+                            Style="{StaticResource ActionButtonStyle}"
+                            Command="{Binding DeleteTourCommand}"/>
+                    <Button Content=".."
+                            Margin="2"
+                            Style="{StaticResource ActionButtonStyle}"
+                            Command="{Binding EditTourCommand}"/>
+                </StackPanel>
+            </Grid>
 
             <!-- Tour List -->
             <views:TourList x:Name="TourListView"
                             Grid.Row="2"
                             Background="#F5ECD5"
                             DataContext="{Binding TourListViewModel}"/>
-
         </Grid>
     </Border>
 </UserControl>

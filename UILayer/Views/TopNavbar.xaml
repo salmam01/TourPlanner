@@ -15,9 +15,16 @@
             <ColumnDefinition Width="100"/>
             <ColumnDefinition Width="100"/>
             <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="100"/>
         </Grid.ColumnDefinitions>
         
-        <TextBlock Grid.Column="0" 
+        <TextBlock Grid.Column="0"
                    Text="TourPlanner"
                    Foreground="LightCyan"
                    FontSize="16"
