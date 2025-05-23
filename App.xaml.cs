@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using TourPlanner.BusinessLayer.Services;
+using TourPlanner.Configuration;
 using TourPlanner.DataLayer.Data;
 using TourPlanner.DataLayer.Repositories.TourAttributesRepository;
 using TourPlanner.DataLayer.Repositories.TourDetailsRepository;
@@ -26,6 +28,17 @@ namespace TourPlanner
 
         public App()
         {
+            // Load configuration from appsettings.json
+            IConfiguration config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", false, true)
+                .Build();
+
+            Console.WriteLine(config["Database:Host"]);
+
+            // Bind configuration to the model classes
+            DatabaseConfig databaseConfig = config.Get<DatabaseConfig>();
+            Console.WriteLine(databaseConfig?.Database ?? string.Empty);
+
             IServiceCollection services = new ServiceCollection();
 
             services.AddSingleton<MainWindowViewModel>();
