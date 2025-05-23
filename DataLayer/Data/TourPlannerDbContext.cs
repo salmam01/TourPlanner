@@ -5,27 +5,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TourPlanner.BusinessLayer.Models;
+using TourPlanner.Configuration;
 
 namespace TourPlanner.DataLayer.Data
 {
     public class TourPlannerDbContext : DbContext
     {
+        private readonly DatabaseConfig _databaseConfig;
         public DbSet<Tour> Tours { get; set; }
         public DbSet<TourDetails> TourDetails { get; set; }
         public DbSet<TourAttributes> TourAttributes { get; set; }
         public DbSet<TourLog> TourLogs { get; set; }
 
-        //  Set the connection string
+        public TourPlannerDbContext(DbContextOptions<TourPlannerDbContext> options, DatabaseConfig databaseConfig)
+            : base(options)
+        {
+            _databaseConfig = databaseConfig;
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //  TODO: Safely store the variables for the connection string
-            string host = "localhost";
-            string port = "5432";
-            string database = "TourPlanner";
-            string username = "salma";
-            string password = "tourPlanner1234";
-
-            optionsBuilder.UseNpgsql($"Host={host};Port={port};Database={database};Username={username};Password={password}");
+            optionsBuilder.UseNpgsql(
+                $"Host={_databaseConfig.Host};Port={_databaseConfig.Port};Database={_databaseConfig.Database};Username={_databaseConfig.Username};Password={_databaseConfig.Password}"
+            );
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

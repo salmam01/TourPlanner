@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -30,16 +31,16 @@ namespace TourPlanner
         {
             // Load configuration from appsettings.json
             IConfiguration config = new ConfigurationBuilder()
+                // Set the file to Content and Copy-Always
                 .AddJsonFile("appsettings.json", false, true)
                 .Build();
 
-            Console.WriteLine(config["Database:Host"]);
-
             // Bind configuration to the model classes
-            DatabaseConfig databaseConfig = config.Get<DatabaseConfig>();
-            Console.WriteLine(databaseConfig?.Database ?? string.Empty);
+            DatabaseConfig databaseConfig = config.GetSection("Database").Get<DatabaseConfig>();
 
             IServiceCollection services = new ServiceCollection();
+
+            services.AddSingleton(databaseConfig);
 
             services.AddSingleton<MainWindowViewModel>();
             services.AddSingleton<HomeViewModel>();
