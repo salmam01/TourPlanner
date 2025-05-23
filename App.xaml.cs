@@ -1,7 +1,16 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using TourPlanner.BusinessLayer.Services;
+using TourPlanner.Configuration;
 using TourPlanner.DataLayer.Data;
 using TourPlanner.DataLayer.Repositories.TourAttributesRepository;
 using TourPlanner.DataLayer.Repositories.TourDetailsRepository;
@@ -18,12 +27,24 @@ namespace TourPlanner;
 public partial class App : Application {
     private readonly IServiceProvider _serviceProvider;
 
-    public App() {
-        IServiceCollection services = new ServiceCollection();
+        public App()
+        {
+            // Load configuration from appsettings.json
+            IConfiguration config = new ConfigurationBuilder()
+                // Set the file to Content and Copy-Always
+                .AddJsonFile("appsettings.json", false, true)
+                .Build();
 
-        services.AddSingleton<MainWindowViewModel>();
-        services.AddSingleton<HomeViewModel>();
-        services.AddSingleton<EventAggregator>();
+            // Bind configuration to the model classes
+            DatabaseConfig databaseConfig = config.GetSection("Database").Get<DatabaseConfig>();
+
+            IServiceCollection services = new ServiceCollection();
+
+            services.AddSingleton(databaseConfig);
+
+            services.AddSingleton<MainWindowViewModel>();
+            services.AddSingleton<HomeViewModel>();
+            services.AddSingleton<EventAggregator>();
 
         services.AddSingleton<TourManagementViewModel>();
         services.AddSingleton<CreateTourViewModel>();
