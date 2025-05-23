@@ -8,6 +8,7 @@ public interface ITourRepository {
     Tour GetTourById(Guid tourId);
     IEnumerable<Tour> GetTours();
     IEnumerable<Tour> SearchTours(string query);
+    IEnumerable<Tour> SearchTours(string query, double? minPopularity, bool? childFriendliness);
 
     void InsertTour(Tour tour);
     void UpdateTour(Tour tour);

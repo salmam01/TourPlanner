@@ -36,6 +36,42 @@ public class TourRepository : ITourRepository {
             ftsQuery
         ).ToList();
     }
+    public IEnumerable<Tour> SearchTours(string query, double? minPopularity, bool? childFriendliness)
+    {
+        // Filter base: Use FTS if query exists, else all tours
+        IQueryable<Tour> toursQueryable;
+        if (!string.IsNullOrWhiteSpace(query))
+        {
+            string ftsQuery = query.Trim().Replace(" ", " & ") + ":*";
+            toursQueryable = _context.Tours.FromSqlRaw(
+                "SELECT * FROM \"Tours\" WHERE \"SearchVector\" @@ to_tsquery('english', {0})", ftsQuery
+            );
+        }
+        else
+        {
+            toursQueryable = _context.Tours;
+        }
+
+        // Join in TourAttributes if not auto-included
+        if (minPopularity.HasValue || childFriendliness.HasValue)
+        {
+            toursQueryable = toursQueryable.Include(t => t.TourAttributes);
+        }
+
+        // Filter by popularity (>= minPopularity)
+        if (minPopularity.HasValue)
+        {
+            toursQueryable = toursQueryable.Where(t => t.TourAttributes != null && t.TourAttributes.Popularity >= minPopularity.Value);
+        }
+
+        // Filter by child-friendliness (exact true/false match if set)
+        if (childFriendliness.HasValue)
+        {
+            toursQueryable = toursQueryable.Where(t => t.TourAttributes != null && t.TourAttributes.ChildFriendliness == childFriendliness.Value);
+        }
+
+        return toursQueryable.ToList();
+    }
 
     public void InsertTour(Tour tour) {
         _context.Tours.Add(tour);

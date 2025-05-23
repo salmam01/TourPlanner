@@ -53,7 +53,7 @@ public partial class App : Application {
         services.AddSingleton<TourService>();
         services.AddSingleton<TourLogService>();
         services.AddSingleton<TourDetailsService>();
-        services.AddSingleton<TourAttributesService>();
+        // Removed: services.AddSingleton<TourAttributesService>(); -- static class, should not be added to DI
 
         services.AddSingleton(s => new MainWindow {
             DataContext = s.GetRequiredService<MainWindowViewModel>()

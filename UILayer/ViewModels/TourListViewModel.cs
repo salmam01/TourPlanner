@@ -17,18 +17,32 @@ public class TourListViewModel : BaseViewModel {
     private Tour _selectedTour;
     private ObservableCollection<Tour> _tours;
 
+    private double? _minPopularity;
+    private bool? _childFriendliness;
+
     public TourListViewModel(EventAggregator eventAggregator, TourService tourService) {
         _eventAggregator = eventAggregator;
         _tourService = tourService;
-        _eventAggregator.Subscribe<string>(query => { SearchQuery = query; });
         _tours = new ObservableCollection<Tour>();
+
+        // Old search (string only)
+        _eventAggregator.Subscribe<string>(query => {
+            SearchQuery = query;
+            MinPopularity = null;
+            ChildFriendliness = null;
+        });
+        // New search tuple (advanced parameters)
+        _eventAggregator.Subscribe<(string, double?, bool?)>(tuple => {
+            SearchQuery = tuple.Item1;
+            MinPopularity = tuple.Item2;
+            ChildFriendliness = tuple.Item3;
+        });
     }
 
     public Tour SelectedTour
     {
         get => _selectedTour;
-        set
-        {
+        set {
             if (_selectedTour == value) return;
             _selectedTour = value;
             OnPropertyChanged();
@@ -53,6 +67,28 @@ public class TourListViewModel : BaseViewModel {
         {
             if (_searchQuery == value) return;
             _searchQuery = value;
+            OnPropertyChanged();
+            PerformSearch();
+        }
+    }
+
+    public double? MinPopularity
+    {
+        get => _minPopularity;
+        set {
+            if (_minPopularity == value) return;
+            _minPopularity = value;
+            OnPropertyChanged();
+            PerformSearch();
+        }
+    }
+
+    public bool? ChildFriendliness
+    {
+        get => _childFriendliness;
+        set {
+            if (_childFriendliness == value) return;
+            _childFriendliness = value;
             OnPropertyChanged();
             PerformSearch();
         }
@@ -95,13 +131,22 @@ public class TourListViewModel : BaseViewModel {
     }
 
     private void PerformSearch() {
-        if (string.IsNullOrWhiteSpace(SearchQuery)) {
+        // Use advanced search if attribute params are provided
+        if (string.IsNullOrWhiteSpace(SearchQuery) && !MinPopularity.HasValue && !ChildFriendliness.HasValue) {
             ReloadTours(_tourService.GetAllTours().ToList());
             HasNoResults = false;
             return;
         }
 
-        (IEnumerable<Tour> tours, IEnumerable<TourLog> logs) = _tourService.SearchToursAndLogs(SearchQuery);
+        IEnumerable<Tour> tours;
+        IEnumerable<TourLog> logs;
+
+        if (MinPopularity.HasValue || ChildFriendliness.HasValue) {
+            (tours, logs) = _tourService.SearchToursAndLogs(SearchQuery, MinPopularity, ChildFriendliness);
+        }
+        else {
+            (tours, logs) = _tourService.SearchToursAndLogs(SearchQuery);
+        }
         ReloadTours(tours.ToList());
         HasNoResults = !tours.Any() && !logs.Any();
     }
