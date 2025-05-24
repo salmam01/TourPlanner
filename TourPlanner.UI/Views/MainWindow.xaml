@@ -1,0 +1,69 @@
+﻿<Window x:Class="TourPlanner.UI.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:TourPlanner.UI.Views"
+        xmlns:views="clr-namespace:TourPlanner.UI.Views"
+        mc:Ignorable="d"
+        Title="TourPlanner" Height="600" Width="920"
+        Background="Transparent"
+        AllowsTransparency="True"
+        WindowStyle="None"
+        WindowStartupLocation="CenterScreen"
+        MouseDown="Window_MouseDown"
+        ResizeMode="NoResize">
+
+    <Border CornerRadius="12"
+            Background="#626F47">
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="160"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="35"/>
+                    <ColumnDefinition Width="35"/>
+                    <ColumnDefinition Width="35"/>
+                    <ColumnDefinition Width="10"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" 
+                            Text="TourPlanner"
+                            Foreground="#F5ECD5"
+                            FontSize="20"
+                            VerticalAlignment="Center"
+                            FontFamily="/UI/Resources/Fonts/#Montserrat"
+                            FontWeight="Bold"
+                            Margin="15,0,0,0"/>
+
+                <Button Grid.Column="2"
+                        x:Name="buttonMinimize"
+                        Style="{StaticResource WindowButtonStyle}"
+                        Content="-"
+                        Click="buttonMinimize_Click"/>
+
+                <Button Grid.Column="3"
+                        x:Name="buttonSize"
+                        Style="{StaticResource WindowButtonStyle}"
+                        Content="_"
+                        Click="buttonSize_Click"/>
+
+                <Button Grid.Column="4"
+                        x:Name="buttonClose"
+                        Style="{StaticResource WindowButtonStyle}"
+                        Content="x"
+                        Click="buttonClose_Click"/>
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <ContentControl Content="{Binding CurrentView}"/>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

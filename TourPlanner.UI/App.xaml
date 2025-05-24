@@ -1,0 +1,20 @@
+﻿<Application x:Class="TourPlanner.UI.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:TourPlanner.UI">
+    
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Theme/WindowButtonTheme.xaml"/>
+                <ResourceDictionary Source="/Theme/ActionButtonTheme.xaml"/>
+                <ResourceDictionary Source="/Theme/NavbarButtonTheme.xaml"/>
+                <ResourceDictionary Source="/Theme/CancelButtonTheme.xaml"/>
+                <ResourceDictionary Source="/Theme/SubmitButtonTheme.xaml"/>
+                <ResourceDictionary Source="/Theme/FormFieldTheme.xaml"/>
+                <ResourceDictionary Source="/Theme/FormTextBoxTheme.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
