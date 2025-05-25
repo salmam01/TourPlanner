@@ -1,22 +1,29 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using TourPlanner.Models.Entities;
 using TourPlanner.DAL.Data;
+using TourPlanner.Models.Entities;
 
 namespace TourPlanner.DAL.Repositories.TourLogRepository;
 
 public class TourLogRepository : ITourLogRepository {
+    private readonly ILogger<TourLogRepository> _logger;
+
     private readonly TourPlannerDbContext _context;
 
-    public TourLogRepository(TourPlannerDbContext context) {
+    public TourLogRepository(TourPlannerDbContext context, ILogger<TourLogRepository> logger) {
         _context = context;
+        _logger = logger;
     }
 
     public IEnumerable<TourLog> SearchTourLogs(string query) {
         if (string.IsNullOrWhiteSpace(query))
+        {
+            _logger.LogWarning("Query is empty.");
             return _context.TourLogs.ToList();
+        }
 
         string ftsQuery = query.Trim().Replace(" ", " & ") + ":*";
         var likeQuery = $"%{query.Trim()}%";

@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 using TourPlanner.BL.Services;
@@ -19,6 +12,7 @@ using TourPlanner.UI.Events;
 using TourPlanner.UI.ViewModels;
 using TourPlanner.UI.Views;
 using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace TourPlanner.UI;
 
@@ -41,7 +35,7 @@ public partial class App : Application
         DatabaseConfig databaseConfig = config.GetSection("Database").Get<DatabaseConfig>();
         PathsConfig basePath = config.GetSection("Paths").Get<PathsConfig>();
 
-        //  Logging
+        //  Configure Serilog globally
         Log.Logger = new LoggerConfiguration()
             .ReadFrom.Configuration(config)
             .CreateLogger();
@@ -50,6 +44,11 @@ public partial class App : Application
         IServiceCollection services = new ServiceCollection();
 
         services.AddSingleton(databaseConfig);
+        services.AddLogging(loggingBuilder =>
+        {
+            loggingBuilder.ClearProviders();
+            loggingBuilder.AddSerilog();
+        });
 
         services.AddSingleton<MainWindowViewModel>();
         services.AddSingleton<HomeViewModel>();
