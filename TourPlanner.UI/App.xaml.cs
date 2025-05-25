@@ -61,21 +61,10 @@ public partial class App : Application
         services.AddScoped<ITourLogRepository, TourLogRepository>();
         services.AddScoped<ITourDetailsRepository, TourDetailsRepository>();
         services.AddScoped<ITourAttributesRepository, TourAttributesRepository>();
-        services.AddSingleton(s =>
-            new TourListViewModel(
-                s.GetRequiredService<EventAggregator>(),
-                s.GetRequiredService<TourService>())
-        );
-
-        services.AddSingleton(s =>
-            new SearchBarViewModel(
-                s.GetRequiredService<EventAggregator>())
-        );
 
         services.AddSingleton<TourService>();
         services.AddSingleton<TourLogService>();
         services.AddSingleton<TourDetailsService>();
-        // Removed: services.AddSingleton<TourAttributesService>(); -- static class, should not be added to DI
 
         services.AddSingleton(s => new MainWindow
         {
