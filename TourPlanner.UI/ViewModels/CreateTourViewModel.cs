@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -125,6 +126,7 @@ namespace TourPlanner.UI.ViewModels
                 _editingTour.To = _to;
 
                 TourUpdated?.Invoke(this, _editingTour);
+                Log.Information("Tour edited => {@_editingTour}", _editingTour);
             }
             else {
 
@@ -138,6 +140,7 @@ namespace TourPlanner.UI.ViewModels
                 );
 
                 TourCreated?.Invoke(this, tour);
+                Log.Information("Tour created => {@tour}", tour);
             }
             ResetForm();
         }

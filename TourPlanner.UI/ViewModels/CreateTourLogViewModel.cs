@@ -1,10 +1,11 @@
-﻿using System;
-using System.Windows;
+﻿using Serilog;
+using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows;
+using System.Windows.Input;
 using TourPlanner.Models.Entities;
 using TourPlanner.UI.Commands;
-using System.Windows.Input;
 
 namespace TourPlanner.UI.ViewModels
 {
@@ -140,9 +141,11 @@ namespace TourPlanner.UI.ViewModels
 
             if (_isEditing) {
                 TourLogUpdated?.Invoke(this, tourLog);
+                Log.Information("Tour Log edited => {@_tourLog}", tourLog);
             }
             else {
                 TourLogCreated?.Invoke(this, tourLog);
+                Log.Information("Tour Log created => {@_tourLog}", tourLog);
             }
             ResetForm();
         }

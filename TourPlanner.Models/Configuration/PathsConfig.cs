@@ -8,6 +8,6 @@ namespace TourPlanner.Models.Configuration
 {
     public class PathsConfig
     {
-        public string BaseDirectory { get; set; } = string.Empty;
+        public required string BaseDirectory { get; set; }
     }
 }

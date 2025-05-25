@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
-using TourPlanner.Models.Entities;
 using TourPlanner.BL.Services;
+using TourPlanner.Models.Entities;
 using TourPlanner.UI.Commands;
 using TourPlanner.UI.Events;
 
@@ -129,6 +130,7 @@ namespace TourPlanner.UI.ViewModels
 
             _tourLogService.DeleteTourLog(_selectedTourLog);
             TourLogListViewModel.ReloadTourLogs(_tourLogService.GetTourLogs(_selectedTour));
+            Log.Information("Tour Log deleted => {@_selectedTourLog}", _selectedTourLog);
             _selectedTourLog = null;
         }
     }

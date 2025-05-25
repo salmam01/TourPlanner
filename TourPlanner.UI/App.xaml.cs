@@ -18,6 +18,7 @@ using TourPlanner.DAL.Repositories.TourRepository;
 using TourPlanner.UI.Events;
 using TourPlanner.UI.ViewModels;
 using TourPlanner.UI.Views;
+using Serilog;
 
 namespace TourPlanner.UI;
 
@@ -30,15 +31,22 @@ public partial class App : Application
 
     public App()
     {
-        // Load configuration from appsettings.json
+        //  Load configuration from appsettings.json
         IConfiguration config = new ConfigurationBuilder()
             // Set the file to Content and Copy-Always
             .AddJsonFile("appsettings.json", false, true)
             .Build();
 
-        // Bind configuration to the model classes
+        //  Bind configuration to the model classes
         DatabaseConfig databaseConfig = config.GetSection("Database").Get<DatabaseConfig>();
+        PathsConfig basePath = config.GetSection("Paths").Get<PathsConfig>();
 
+        //  Logging
+        Log.Logger = new LoggerConfiguration()
+            .ReadFrom.Configuration(config)
+            .CreateLogger();
+
+        //  Dependency Injection
         IServiceCollection services = new ServiceCollection();
 
         services.AddSingleton(databaseConfig);
