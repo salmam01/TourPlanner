@@ -24,7 +24,7 @@
                 <TextBlock Text="Create a new Tour"
                        Foreground="Black"
                        FontSize="22"
-                       FontFamily="/UI/Resources/Fonts/#Montserrat"
+                       FontFamily="/Resources/Fonts/#Montserrat"
                        FontWeight="Bold"
                        HorizontalAlignment="Left"
                        VerticalAlignment="Center"
@@ -56,7 +56,7 @@
 
                     <DatePicker x:Name="date"
                                 FontSize="16"
-                                FontFamily="/UI/Resources/Fonts/#Montserrat"
+                                FontFamily="/Resources/Fonts/#Montserrat"
                                 VerticalContentAlignment="Center"
                                 Height="30"
                                 Margin="5,0,5,5"
@@ -91,7 +91,7 @@
                                    Style="{StaticResource FormTextBoxStyle}"/>
 
                         <ComboBox x:Name="transporttype"
-                                  FontFamily="/UI/Resources/Fonts/#Montserrat"
+                                  FontFamily="/Resources/Fonts/#Montserrat"
                                   FontSize="16"
                                   Height="30"
                                   VerticalContentAlignment="Center"

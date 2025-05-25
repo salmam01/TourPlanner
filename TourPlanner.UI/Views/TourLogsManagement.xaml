@@ -30,7 +30,7 @@
                    Margin="10"
                    Foreground="Black"
                    FontSize="18"
-                   FontFamily="/UI/Resources/Fonts/#Montserrat"
+                   FontFamily="/Resources/Fonts/#Montserrat"
                    FontWeight="Medium"
                    VerticalAlignment="Center"/>
                 

@@ -11,7 +11,7 @@
                 BorderThickness="0"
                 Content="Return"
                 Foreground="White"
-                FontFamily="Dubai"
+                FontFamily="/Resources/Fonts/#Montserrat"
                 FontSize="18"
                 Cursor="Hand"
                 MinWidth="75"

@@ -32,7 +32,7 @@
                            Foreground="Black"
                            VerticalAlignment="Center"
                            FontSize="22"
-                           FontFamily="/UI/Resources/Fonts/#Montserrat"
+                           FontFamily="/Resources/Fonts/#Montserrat"
                            FontWeight="Bold"
                            Padding="15"/>
             </Border>
@@ -46,14 +46,14 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Date"
                            Foreground="Black"
-                           FontFamily="/UI/Resources/Fonts/#Montserrat"
+                           FontFamily="/Resources/Fonts/#Montserrat"
                            FontSize="16"
                            Padding="5"
                            VerticalAlignment="Center"/>
                 <DatePicker Grid.Column="1"
                             VerticalAlignment="Center"
                             SelectedDate="{Binding Date}"
-                            FontFamily="/UI/Resources/Fonts/#Montserrat"
+                            FontFamily="/Resources/Fonts/#Montserrat"
                             FontSize="16"/>
             </Grid>
 
@@ -65,13 +65,13 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Comment"
                            Foreground="Black"
-                           FontFamily="/UI/Resources/Fonts/#Montserrat"
+                           FontFamily="/Resources/Fonts/#Montserrat"
                            FontSize="16"
                            VerticalAlignment="Top"
                            Padding="5"/>
                 <TextBox Grid.Column="1"
                          Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged}"
-                         FontFamily="/UI/Resources/Fonts/#Montserrat"
+                         FontFamily="/Resources/Fonts/#Montserrat"
                          FontSize="16"
                          Foreground="Black"
                          BorderBrush="Gray"
@@ -93,7 +93,7 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Difficulty"
                            Foreground="Black"
-                           FontFamily="/UI/Resources/Fonts/#Montserrat"
+                           FontFamily="/Resources/Fonts/#Montserrat"
                            FontSize="16"
                            Padding="5"
                            VerticalAlignment="Center"/>
@@ -108,7 +108,7 @@
                 <TextBlock Grid.Column="2"
                            Text="{Binding Difficulty, StringFormat=F0}"
                            Foreground="Black"
-                           FontFamily="/UI/Resources/Fonts/#Montserrat"
+                           FontFamily="/Resources/Fonts/#Montserrat"
                            FontSize="16"
                            Padding="5"
                            VerticalAlignment="Center"
@@ -124,7 +124,7 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Rating"
                            Foreground="Black"
-                           FontFamily="/UI/Resources/Fonts/#Montserrat"
+                           FontFamily="/Resources/Fonts/#Montserrat"
                            FontSize="16"
                            Padding="5"
                            VerticalAlignment="Center"/>
@@ -140,7 +140,7 @@
                            Padding="5"
                            Text="{Binding Rating, StringFormat=F0}"
                            Foreground="Black"
-                           FontFamily="/UI/Resources/Fonts/#Montserrat"
+                           FontFamily="/Resources/Fonts/#Montserrat"
                            FontSize="16"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Center"/>
@@ -154,7 +154,7 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Total Distance"
                            Foreground="Black"
-                           FontFamily="/UI/Resources/Fonts/#Montserrat"
+                           FontFamily="/Resources/Fonts/#Montserrat"
                            FontSize="16"
                            Padding="5"
                            Margin="0,0,10,0"
@@ -165,7 +165,7 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBox Text="{Binding TotalDistance, UpdateSourceTrigger=PropertyChanged}"
-                             FontFamily="/UI/Resources/Fonts/#Montserrat"
+                             FontFamily="/Resources/Fonts/#Montserrat"
                              FontSize="16"
                              Padding="5"
                              Foreground="Black"
@@ -176,7 +176,7 @@
                     <TextBlock Grid.Column="1"
                                Text="km"
                                Foreground="Black"
-                               FontFamily="/UI/Resources/Fonts/#Montserrat"
+                               FontFamily="/Resources/Fonts/#Montserrat"
                                FontSize="16"
                                Padding="5"
                                Margin="5,0,0,0"
@@ -193,7 +193,7 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Total Time"
                            Foreground="Black"
-                           FontFamily="/UI/Resources/Fonts/#Montserrat"
+                           FontFamily="/Resources/Fonts/#Montserrat"
                            FontSize="16"
                            Padding="5"
                            VerticalAlignment="Center"/>
@@ -205,7 +205,7 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBox Text="{Binding Hours, UpdateSourceTrigger=PropertyChanged}"
-                             FontFamily="/UI/Resources/Fonts/#Montserrat"
+                             FontFamily="/Resources/Fonts/#Montserrat"
                              FontSize="16"
                              Padding="5"
                              VerticalAlignment="Center"
@@ -215,7 +215,7 @@
                     <TextBlock Grid.Column="1"
                                Text="h"
                                Foreground="Black"
-                               FontFamily="/UI/Resources/Fonts/#Montserrat"
+                               FontFamily="/Resources/Fonts/#Montserrat"
                                FontSize="16"
                                HorizontalAlignment="Left"
                                VerticalAlignment="Center"
@@ -223,7 +223,7 @@
                                Margin="2,0,10,0"/>
                     <TextBox Grid.Column="2"
                              Text="{Binding Minutes, UpdateSourceTrigger=PropertyChanged}"
-                             FontFamily="/UI/Resources/Fonts/#Montserrat"
+                             FontFamily="/Resources/Fonts/#Montserrat"
                              FontSize="16"
                              Padding="5"
                              VerticalAlignment="Bottom"
@@ -233,7 +233,7 @@
                     <TextBlock Grid.Column="3"
                                Text="m"
                                Foreground="Black"
-                               FontFamily="/UI/Resources/Fonts/#Montserrat"
+                               FontFamily="/Resources/Fonts/#Montserrat"
                                FontSize="16"
                                Padding="5"
                                HorizontalAlignment="Left"
