@@ -24,7 +24,7 @@
                 <TextBlock Text="Create a new Tour"
                        Foreground="Black"
                        FontSize="22"
-                       FontFamily="/Resources/Fonts/#Montserrat"
+                       FontFamily="/UI/Resources/Fonts/#Montserrat"
                        FontWeight="Bold"
                        HorizontalAlignment="Left"
                        VerticalAlignment="Center"
@@ -48,7 +48,8 @@
 
                     <TextBox x:Name="name"
                              Style="{StaticResource FormFieldStyle}"
-                             Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+                             Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"/>
+                    <TextBlock Text="{Binding NameError}" Foreground="Red" FontSize="12" />
 
                     <!-- Tour Date -->
                     <TextBlock Text="Date"
@@ -56,23 +57,25 @@
 
                     <DatePicker x:Name="date"
                                 FontSize="16"
-                                FontFamily="/Resources/Fonts/#Montserrat"
+                                FontFamily="/UI/Resources/Fonts/#Montserrat"
                                 VerticalContentAlignment="Center"
                                 Height="30"
                                 Margin="5,0,5,5"
-                                SelectedDate="{Binding Date, UpdateSourceTrigger=PropertyChanged}"/>
+                                SelectedDate="{Binding Date, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"/>
+                    <TextBlock Text="{Binding DateError}" Foreground="Red" FontSize="12" />
 
                     <!-- Tour Description -->
                     <TextBlock Text="Description"
                                Style="{StaticResource FormTextBoxStyle}"/>
 
                     <TextBox x:Name="Description"
-                             Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                             Text="{Binding Description, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
                              Style="{StaticResource FormFieldStyle}"
                              AcceptsReturn="True"
                              TextWrapping="Wrap"
                              VerticalScrollBarVisibility="Auto"
                              MinHeight="100"/>
+                    <TextBlock Text="{Binding DescriptionError}" Foreground="Red" FontSize="12" />
                 </StackPanel>
 
                 <Grid Grid.Column="1">
@@ -91,30 +94,33 @@
                                    Style="{StaticResource FormTextBoxStyle}"/>
 
                         <ComboBox x:Name="transporttype"
-                                  FontFamily="/Resources/Fonts/#Montserrat"
+                                  FontFamily="/UI/Resources/Fonts/#Montserrat"
                                   FontSize="16"
                                   Height="30"
                                   VerticalContentAlignment="Center"
                                   Margin="5,0,5,5"
                                   ItemsSource="{Binding TransportTypeOptions}"
-                                  SelectedItem="{Binding TransportType, UpdateSourceTrigger=PropertyChanged}">
+                                  SelectedItem="{Binding TransportType, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}">
                         </ComboBox>
+                        <TextBlock Text="{Binding TransportTypeError}" Foreground="Red" FontSize="12" />
 
                         <!-- Tour Starting Point -->
                         <TextBlock Text="From"
                                Style="{StaticResource FormTextBoxStyle}"/>
 
                         <TextBox x:Name="from"
-                             Text="{Binding From, UpdateSourceTrigger=PropertyChanged}"
+                             Text="{Binding From, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
                              Style="{StaticResource FormFieldStyle}"/>
+                        <TextBlock Text="{Binding FromError}" Foreground="Red" FontSize="12" />
 
                         <!-- Tour Destination -->
                         <TextBlock Text="To"
                                Style="{StaticResource FormTextBoxStyle}"/>
 
                         <TextBox x:Name="to"
-                             Text="{Binding To, UpdateSourceTrigger=PropertyChanged}"
+                             Text="{Binding To, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
                              Style="{StaticResource FormFieldStyle}"/>
+                        <TextBlock Text="{Binding ToError}" Foreground="Red" FontSize="12" />
                     </StackPanel>
 
                     <StackPanel Grid.Row="1"
@@ -133,7 +139,6 @@
                                 Content="{Binding SubmitButtonText}"
                                 Command="{Binding CreateTourCommand}"
                                 Style="{StaticResource SubmitButtonStyle}"/>
-
                     </StackPanel>
                 </Grid>
             </Grid>

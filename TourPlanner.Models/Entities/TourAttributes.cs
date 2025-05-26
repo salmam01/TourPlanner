@@ -15,5 +15,11 @@ namespace TourPlanner.Models.Entities
         public bool ChildFriendliness { get; set; }
         public double SearchAlgorithmRanking { get; set; }
 
+        // Always ensure a new GUID is set if not specified
+        public TourAttributes()
+        {
+            if (Id == Guid.Empty)
+                Id = Guid.NewGuid();
+        }
     }
 }
