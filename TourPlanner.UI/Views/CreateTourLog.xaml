@@ -13,248 +13,235 @@
             CornerRadius="12"
             Margin="15">
         
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <Grid Margin="0,0,0,20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-            <Border Background="#A4B465"
-                    CornerRadius="10,10,0,0">
+                <Border Background="#A4B465"
+                        CornerRadius="10,10,0,0">
 
-                <TextBlock Text="Create Tour Log"
-                           Foreground="Black"
-                           VerticalAlignment="Center"
-                           FontSize="22"
-                           FontFamily="/Resources/Fonts/#Montserrat"
-                           FontWeight="Bold"
-                           Padding="15"/>
-            </Border>
-            
-            <!-- Date -->
-            <Grid Grid.Row="1" Margin="10,15,10,10"
-                  HorizontalAlignment="Left">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="120"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="Date"
-                           Foreground="Black"
-                           FontFamily="/Resources/Fonts/#Montserrat"
-                           FontSize="16"
-                           Padding="5"
-                           VerticalAlignment="Center"/>
-                <DatePicker Grid.Column="1"
-                            VerticalAlignment="Center"
-                            SelectedDate="{Binding Date}"
-                            FontFamily="/Resources/Fonts/#Montserrat"
-                            FontSize="16"/>
-            </Grid>
-
-            <!-- Comment -->
-            <Grid Grid.Row="2" Margin="10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="120"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="Comment"
-                           Foreground="Black"
-                           FontFamily="/Resources/Fonts/#Montserrat"
-                           FontSize="16"
-                           VerticalAlignment="Top"
-                           Padding="5"/>
-                <TextBox Grid.Column="1"
-                         Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged}"
-                         FontFamily="/Resources/Fonts/#Montserrat"
-                         FontSize="16"
-                         Foreground="Black"
-                         BorderBrush="Gray"
-                         TextWrapping="Wrap"
-                         AcceptsReturn="True"
-                         Padding="5"
-                         Height="80"
-                         Width="400"
-                         HorizontalAlignment="Left"
-                         VerticalScrollBarVisibility="Auto"/>
-            </Grid>
-
-            <!-- Difficulty -->
-            <Grid Grid.Row="3" Margin="10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="120"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="50"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="Difficulty"
-                           Foreground="Black"
-                           FontFamily="/Resources/Fonts/#Montserrat"
-                           FontSize="16"
-                           Padding="5"
-                           VerticalAlignment="Center"/>
-                <Slider Grid.Column="1"
-                        Value="{Binding Difficulty}"
-                        Minimum="1"
-                        Maximum="5"
-                        IsSnapToTickEnabled="True"
-                        TickFrequency="1"
-                        Padding="5"
-                        VerticalAlignment="Center"/>
-                <TextBlock Grid.Column="2"
-                           Text="{Binding Difficulty, StringFormat=F0}"
-                           Foreground="Black"
-                           FontFamily="/Resources/Fonts/#Montserrat"
-                           FontSize="16"
-                           Padding="5"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Center"/>
-            </Grid>
-
-            <!-- Rating -->
-            <Grid Grid.Row="4" Margin="10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="120"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="50"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="Rating"
-                           Foreground="Black"
-                           FontFamily="/Resources/Fonts/#Montserrat"
-                           FontSize="16"
-                           Padding="5"
-                           VerticalAlignment="Center"/>
-                <Slider Grid.Column="1"
-                        Padding="5"
-                        Value="{Binding Rating}"
-                        Minimum="1"
-                        Maximum="5"
-                        IsSnapToTickEnabled="True"
-                        TickFrequency="1"
-                        VerticalAlignment="Center"/>
-                <TextBlock Grid.Column="2"
-                           Padding="5"
-                           Text="{Binding Rating, StringFormat=F0}"
-                           Foreground="Black"
-                           FontFamily="/Resources/Fonts/#Montserrat"
-                           FontSize="16"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Center"/>
-            </Grid>
-
-            <!-- Total Distance -->
-            <Grid Grid.Row="5" Margin="10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="120"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="Total Distance"
-                           Foreground="Black"
-                           FontFamily="/Resources/Fonts/#Montserrat"
-                           FontSize="16"
-                           Padding="5"
-                           Margin="0,0,10,0"
-                           VerticalAlignment="Center"/>
-                <Grid Grid.Column="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBox Text="{Binding TotalDistance, UpdateSourceTrigger=PropertyChanged}"
-                             FontFamily="/Resources/Fonts/#Montserrat"
-                             FontSize="16"
-                             Padding="5"
-                             Foreground="Black"
-                             BorderBrush="Gray"
-                             VerticalAlignment="Center"
-                             Width="100"
-                             HorizontalAlignment="Left"/>
-                    <TextBlock Grid.Column="1"
-                               Text="km"
+                    <TextBlock Text="Create Tour Log"
                                Foreground="Black"
-                               FontFamily="/Resources/Fonts/#Montserrat"
-                               FontSize="16"
-                               Padding="5"
-                               Margin="5,0,0,0"
-                               HorizontalAlignment="Left"
-                               VerticalAlignment="Center"/>
-                </Grid>
-            </Grid>
-
-            <!-- Total Time -->
-            <Grid Grid.Row="6" Margin="10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="120"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="Total Time"
-                           Foreground="Black"
-                           FontFamily="/Resources/Fonts/#Montserrat"
-                           FontSize="16"
-                           Padding="5"
-                           VerticalAlignment="Center"/>
-                <Grid Grid.Column="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBox Text="{Binding Hours, UpdateSourceTrigger=PropertyChanged}"
-                             FontFamily="/Resources/Fonts/#Montserrat"
-                             FontSize="16"
-                             Padding="5"
-                             VerticalAlignment="Center"
-                             Foreground="Black"
-                             BorderBrush="Gray"
-                             HorizontalAlignment="Left"/>
-                    <TextBlock Grid.Column="1"
-                               Text="h"
-                               Foreground="Black"
-                               FontFamily="/Resources/Fonts/#Montserrat"
-                               FontSize="16"
-                               HorizontalAlignment="Left"
                                VerticalAlignment="Center"
-                               Padding="5"
-                               Margin="2,0,10,0"/>
-                    <TextBox Grid.Column="2"
-                             Text="{Binding Minutes, UpdateSourceTrigger=PropertyChanged}"
-                             FontFamily="/Resources/Fonts/#Montserrat"
-                             FontSize="16"
-                             Padding="5"
-                             VerticalAlignment="Bottom"
-                             Foreground="Black"
-                             BorderBrush="Gray"
-                             HorizontalAlignment="Left"/>
-                    <TextBlock Grid.Column="3"
-                               Text="m"
+                               FontSize="22"
+                               FontFamily="/Resources/Fonts/#Montserrat"
+                               FontWeight="Bold"
+                               Padding="15"/>
+                </Border>
+                
+                <!-- Date -->
+                <Grid Grid.Row="1" Margin="10,15,10,10"
+                      HorizontalAlignment="Left">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Date"
                                Foreground="Black"
                                FontFamily="/Resources/Fonts/#Montserrat"
                                FontSize="16"
                                Padding="5"
-                               HorizontalAlignment="Left"
-                               VerticalAlignment="Bottom"
-                               Margin="2,0"/>
+                               VerticalAlignment="Center"/>
+                    
+                    <DatePicker Grid.Column="1" 
+                                VerticalAlignment="Center"
+                                SelectedDate="{Binding Date, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
+                                Style="{StaticResource FormDatePickerFieldStyle}"/>
                 </Grid>
-            </Grid>
+                <TextBlock Text="{Binding DateError}" Foreground="Red" FontSize="12" Margin="20,0,0,2"/>
 
-            <!-- Buttons -->
-            <StackPanel Grid.Row="8"
-                        Orientation="Horizontal"
-                        HorizontalAlignment="Right"
-                        Margin="30,10">
-                <Button Content="Cancel"
-                        Margin="0,0,20,0"
-                        Command="{Binding CancelCommand}"
-                        Style="{StaticResource CancelButtonStyle}"/>
-                <Button Content="{Binding SubmitButtonText}"
-                        Command="{Binding CreateCommand}"
-                        Style="{StaticResource SubmitButtonStyle}"/>
-            </StackPanel>
-        </Grid>
+                <!-- Comment -->
+                <StackPanel Grid.Row="2" Orientation="Vertical" Margin="6">
+                    <TextBlock Text="Comment"
+                               Foreground="Black"
+                               FontFamily="/Resources/Fonts/#Montserrat"
+                               FontSize="16"
+                               VerticalAlignment="Top"
+                               Padding="5"/>
+                    <TextBox
+                             Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
+                             Style="{StaticResource FormFieldStyle}"
+                             TextWrapping="Wrap"
+                             AcceptsReturn="True"
+                             Padding="5"
+                             Height="80"
+                             Width="400"
+                             HorizontalAlignment="Left"
+                             VerticalScrollBarVisibility="Auto"/>
+                    <TextBlock
+                        Text="{Binding CommentError}"
+                        Foreground="Red"
+                        FontSize="12"
+                        Margin="5,0,0,0"/>
+                </StackPanel>
+
+                <!-- Difficulty -->
+                <Grid Grid.Row="3" Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="50"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Difficulty"
+                               Foreground="Black"
+                               FontFamily="/Resources/Fonts/#Montserrat"
+                               FontSize="16"
+                               Padding="5"
+                               VerticalAlignment="Center"/>
+                    <Slider Grid.Column="1"
+                            Value="{Binding Difficulty, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
+                            Minimum="1"
+                            Maximum="5"
+                            IsSnapToTickEnabled="True"
+                            TickFrequency="1"
+                            Padding="5"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource FormSliderFieldStyle}"/>
+                    <TextBlock Grid.Column="2"
+                               Text="{Binding Difficulty, StringFormat=F0}"
+                               Foreground="Black"
+                               FontFamily="/Resources/Fonts/#Montserrat"
+                               FontSize="16"
+                               Padding="5"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center"/>
+                </Grid>
+                <TextBlock Text="{Binding DifficultyError}" Foreground="Red" FontSize="12" Margin="20,0,0,0"/>
+
+                <!-- Rating -->
+                <Grid Grid.Row="4" Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="50"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Rating"
+                               Foreground="Black"
+                               FontFamily="/Resources/Fonts/#Montserrat"
+                               FontSize="16"
+                               Padding="5"
+                               VerticalAlignment="Center"/>
+                    <Slider Grid.Column="1"
+                            Padding="5"
+                            Value="{Binding Rating, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
+                            Minimum="1"
+                            Maximum="5"
+                            IsSnapToTickEnabled="True"
+                            TickFrequency="1"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource FormSliderFieldStyle}"/>
+                    <TextBlock Grid.Column="2"
+                               Padding="5"
+                               Text="{Binding Rating, StringFormat=F0}"
+                               Foreground="Black"
+                               FontFamily="/Resources/Fonts/#Montserrat"
+                               FontSize="16"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center"/>
+                </Grid>
+                <TextBlock Text="{Binding RatingError}" Foreground="Red" FontSize="12" Margin="20,0,0,0"/>
+
+                <!-- Total Distance and Total Time side by side -->
+                <StackPanel Grid.Row="5" Orientation="Horizontal" Margin="10">
+                    <!-- Total Distance -->
+                    <StackPanel Orientation="Vertical" Margin="0,0,40,0">
+                        <TextBlock Text="Total Distance"
+                                   Foreground="Black"
+                                   FontFamily="/Resources/Fonts/#Montserrat"
+                                   FontSize="16"
+                                   Padding="5"
+                                   VerticalAlignment="Center"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox Text="{Binding TotalDistance, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
+                                     Style="{StaticResource FormFieldStyle}"
+                                     VerticalAlignment="Center"
+                                     Width="100"
+                                     HorizontalAlignment="Left"/>
+                            <TextBlock
+                                Text="km"
+                                Foreground="Black"
+                                FontFamily="/Resources/Fonts/#Montserrat"
+                                FontSize="16"
+                                Padding="5"
+                                Margin="5,0,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <TextBlock
+                            Text="{Binding TotalDistanceError}"
+                            Foreground="Red"
+                            FontSize="12"
+                            Margin="5,0,0,0"/>
+                    </StackPanel>
+
+                    <!-- Total Time -->
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="Total Time"
+                                   Foreground="Black"
+                                   FontFamily="/Resources/Fonts/#Montserrat"
+                                   FontSize="16"
+                                   Padding="5"
+                                   VerticalAlignment="Center"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox Text="{Binding Hours, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
+                                     Style="{StaticResource FormFieldStyle}"
+                                     VerticalAlignment="Center"
+                                     Width="50"
+                                     HorizontalAlignment="Left"/>
+                            <TextBlock
+                                Text="h"
+                                Foreground="Black"
+                                FontFamily="/Resources/Fonts/#Montserrat"
+                                FontSize="16"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Padding="5"
+                                Margin="2,0,10,0"/>
+                            <TextBox Text="{Binding Minutes, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
+                                     Style="{StaticResource FormFieldStyle}"
+                                     Width="50"
+                                     VerticalAlignment="Center"
+                                     HorizontalAlignment="Left"/>
+                            <TextBlock
+                                Text="m"
+                                Foreground="Black"
+                                FontFamily="/Resources/Fonts/#Montserrat"
+                                FontSize="16"
+                                Padding="5"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Margin="2,0"/>
+                        </StackPanel>
+                        <TextBlock
+                            Text="{Binding TotalTimeError}"
+                            Foreground="Red"
+                            FontSize="12"
+                            Margin="5,0,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Buttons -->
+                <StackPanel Grid.Row="6"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            Margin="30,20,30,20">
+                    <Button Content="Cancel"
+                            Margin="0,0,20,0"
+                            Command="{Binding CancelCommand}"
+                            Style="{StaticResource CancelButtonStyle}"/>
+                    <Button Content="{Binding SubmitButtonText}"
+                            Command="{Binding CreateCommand}"
+                            Style="{StaticResource SubmitButtonStyle}"/>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
     </Border>
 </UserControl>
