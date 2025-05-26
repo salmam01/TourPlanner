@@ -10,21 +10,28 @@ namespace TourPlanner.BL.Services;
 public class TourService {
     private readonly ITourLogRepository _tourLogRepository;
     private readonly ITourRepository _tourRepository;
-    
-    public TourService(ITourRepository tourRepository, ITourLogRepository tourLogRepository) {
+    private readonly TourAttributesService _tourAttributesService;
+
+    public TourService(
+        ITourRepository tourRepository,
+        ITourLogRepository tourLogRepository,
+        TourAttributesService tourAttributesService
+    ) {
         _tourRepository = tourRepository;
         _tourLogRepository = tourLogRepository;
+        _tourAttributesService = tourAttributesService;
     }
     public Tour GetTourById(Guid tourId) {
         var tour = _tourRepository.GetTourById(tourId);
-        TourAttributesService.UpdateAttributes(tour);
+        _tourAttributesService.UpdateAttributes(tour);
         return tour;
     }
+
     public IEnumerable<Tour> GetAllTours() {
         var tours = _tourRepository.GetTours();
         foreach (var tour in tours)
         {
-            TourAttributesService.UpdateAttributes(tour);
+            _tourAttributesService.UpdateAttributes(tour);
         }
         return tours;
     }

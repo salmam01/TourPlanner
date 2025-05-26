@@ -1,16 +1,24 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TourPlanner.Models.Entities;
 
 namespace TourPlanner.BL.Services
 {
-    public static class TourAttributesService
+    public class TourAttributesService
     {
+        private readonly ILogger<TourAttributesService> _logger;
+
+        public TourAttributesService(ILogger<TourAttributesService> logger)
+        {
+            _logger = logger;
+        }
+
         /// <summary>
         /// Computes popularity based on the number of logs.
         /// </summary>
-        public static double ComputePopularity(ICollection<TourLog> logs)
+        public int ComputePopularity(ICollection<TourLog> logs)
         {
             return logs?.Count ?? 0;
         }
@@ -19,7 +27,7 @@ namespace TourPlanner.BL.Services
         /// Computes child-friendliness based on average difficulty, time, and distance.
         /// Returns true if child-friendly, false otherwise.
         /// </summary>
-        public static bool ComputeChildFriendliness(ICollection<TourLog> logs)
+        public bool ComputeChildFriendliness(ICollection<TourLog> logs)
         {
             if (logs == null || logs.Count == 0)
                 return false; // No logs, assume not child-friendly
@@ -40,11 +48,13 @@ namespace TourPlanner.BL.Services
         /// <summary>
         /// Updates a Tour's TourAttributes object based on logs.
         /// </summary>
-        public static void UpdateAttributes(Tour tour)
+        public void UpdateAttributes(Tour tour)
         {
-            if (tour == null) return;
-            if (tour.TourAttributes == null)
-                tour.TourAttributes = new TourAttributes();
+            if (tour == null)
+            {
+                _logger.LogWarning("Tour is null.");
+                return;
+            }
 
             tour.TourAttributes.Popularity = ComputePopularity(tour.TourLogs);
             tour.TourAttributes.ChildFriendliness = ComputeChildFriendliness(tour.TourLogs);

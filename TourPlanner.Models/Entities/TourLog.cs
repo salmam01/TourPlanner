@@ -21,7 +21,6 @@ namespace TourPlanner.Models.Entities
         public string Comment { get; set; }
         public double TotalDistance { get; set; }
         public TimeSpan TotalTime { get; set; }
-
         public Guid TourId { get; set; }
         public Tour Tour { get; set; }
 

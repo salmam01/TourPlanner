@@ -18,7 +18,7 @@ public class TourLogService {
 
     public void CreateTourLog(Guid tourId, TourLog tourLog) {
         tourLog.TourId = tourId;
-        _tourLogRepository.InsertTourLog(tourId, tourLog);
+        _tourLogRepository.InsertTourLog(tourLog);
     }
 
     public void UpdateTourLog(TourLog tourLog) {

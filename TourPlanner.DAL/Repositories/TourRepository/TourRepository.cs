@@ -36,6 +36,7 @@ public class TourRepository : ITourRepository {
             ftsQuery
         ).ToList();
     }
+
     public IEnumerable<Tour> SearchTours(string query, double? minPopularity, bool? childFriendliness)
     {
         // Filter base: Use FTS if query exists, else all tours
@@ -88,7 +89,10 @@ public class TourRepository : ITourRepository {
         tourToUpdate.TransportType = tour.TransportType;
         tourToUpdate.From = tour.From;
         tourToUpdate.To = tour.To;
-        
+        tourToUpdate.Distance = tour.Distance;
+        tourToUpdate.EstimatedTime = tour.EstimatedTime;
+        tourToUpdate.RouteInformation = tour.RouteInformation;
+
         Save();
     }
 

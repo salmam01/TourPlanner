@@ -1,18 +1,18 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Windows;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Windows;
-using TourPlanner.BL.Services;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Serilog;
 using TourPlanner.Models.Configuration;
+using TourPlanner.BL.Services;
 using TourPlanner.DAL.Data;
 using TourPlanner.DAL.Repositories.TourAttributesRepository;
-using TourPlanner.DAL.Repositories.TourDetailsRepository;
 using TourPlanner.DAL.Repositories.TourLogRepository;
 using TourPlanner.DAL.Repositories.TourRepository;
 using TourPlanner.UI.Events;
 using TourPlanner.UI.ViewModels;
 using TourPlanner.UI.Views;
-using Serilog;
-using Microsoft.Extensions.Logging;
 
 namespace TourPlanner.UI;
 
@@ -63,15 +63,23 @@ public partial class App : Application
         services.AddSingleton<CreateTourLogViewModel>();
         services.AddSingleton<TourLogListViewModel>();
 
-        services.AddDbContext<TourPlannerDbContext>();
+        services.AddDbContext<TourPlannerDbContext>( options =>
+        {
+            options.UseNpgsql(
+                $"Host={databaseConfig.Host};" +
+                $"Port={databaseConfig.Port};" +
+                $"Database={databaseConfig.Database};" +
+                $"Username={databaseConfig.Username};" +
+                $"Password={databaseConfig.Password}"
+            );
+        });
         services.AddScoped<ITourRepository, TourRepository>();
         services.AddScoped<ITourLogRepository, TourLogRepository>();
-        services.AddScoped<ITourDetailsRepository, TourDetailsRepository>();
         services.AddScoped<ITourAttributesRepository, TourAttributesRepository>();
 
         services.AddSingleton<TourService>();
         services.AddSingleton<TourLogService>();
-        services.AddSingleton<TourDetailsService>();
+        services.AddSingleton<TourAttributesService>();
 
         services.AddSingleton(s => new MainWindow
         {

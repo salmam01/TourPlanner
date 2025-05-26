@@ -21,12 +21,15 @@ namespace TourPlanner.Models.Entities
         public string To { get; set; }
         [Required]
         public string TransportType { get; set; }
-        public TourDetails TourDetails { get; set; }
+        public double Distance { get; set; }
+        public TimeSpan EstimatedTime { get; set; }
+        public string RouteInformation { get; set; }
         public TourAttributes TourAttributes { get; set; }
         public ICollection<TourLog> TourLogs { get; set; }
 
         public Tour()
         {
+            TourAttributes = new TourAttributes();
             TourLogs = new List<TourLog>();
         }
 
@@ -38,6 +41,10 @@ namespace TourPlanner.Models.Entities
             TransportType = transportType;
             From = from;
             To = to;
+            Distance = 0;
+            EstimatedTime = TimeSpan.Zero;
+            RouteInformation = "";
+            TourAttributes = new TourAttributes();
             TourLogs = new List<TourLog>();
         }
     }

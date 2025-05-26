@@ -11,9 +11,14 @@ namespace TourPlanner.Models.Entities
     {
         [Key]
         public Guid Id { get; set; }
-        public double Popularity { get; set; }
+        public int Popularity { get; set; }
         public bool ChildFriendliness { get; set; }
         public double SearchAlgorithmRanking { get; set; }
-
+        public Tour Tour { get; set; }
+        public TourAttributes() {
+            Popularity = 0;
+            ChildFriendliness = false;
+            SearchAlgorithmRanking = 0;
+        }
     }
 }

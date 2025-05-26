@@ -9,27 +9,23 @@ using TourPlanner.Models.Entities;
 namespace TourPlanner.DAL.Repositories.TourLogRepository;
 
 public class TourLogRepository : ITourLogRepository {
-    private readonly ILogger<TourLogRepository> _logger;
+    private readonly TourPlannerDbContext _dbContext;
 
-    private readonly TourPlannerDbContext _context;
-
-    public TourLogRepository(TourPlannerDbContext context, ILogger<TourLogRepository> logger) {
-        _context = context;
-        _logger = logger;
+    public TourLogRepository(TourPlannerDbContext context) {
+        _dbContext = context;
     }
 
     public IEnumerable<TourLog> SearchTourLogs(string query) {
         if (string.IsNullOrWhiteSpace(query))
         {
-            _logger.LogWarning("Query is empty.");
-            return _context.TourLogs.ToList();
+            return _dbContext.TourLogs.ToList();
         }
 
         string ftsQuery = query.Trim().Replace(" ", " & ") + ":*";
         var likeQuery = $"%{query.Trim()}%";
         
         // Suche auf mehreren Feldern + computed field
-        return _context.TourLogs.FromSqlRaw(
+        return _dbContext.TourLogs.FromSqlRaw(
             "SELECT * FROM \"TourLogs\" " +
             "WHERE \"SearchVector\" @@ to_tsquery('english', {0}) " +
             "OR CAST(\"Difficulty\" AS TEXT) ILIKE {1} " +
@@ -42,22 +38,22 @@ public class TourLogRepository : ITourLogRepository {
     }
 
     public TourLog GetTourLog(Guid TourId) {
-        return _context.TourLogs.Find(TourId);
+        return _dbContext.TourLogs.Find(TourId);
     }
 
     public IEnumerable<TourLog> GetTourLogs(Guid tourId) {
-        return _context.TourLogs
+        return _dbContext.TourLogs
             .Where(log => log.TourId == tourId)
             .ToList();
     }
     
-    public void InsertTourLog(Guid tourId, TourLog tourLog) {
-        _context.TourLogs.Add(tourLog);
+    public void InsertTourLog(TourLog tourLog) {
+        _dbContext.TourLogs.Add(tourLog);
         Save();
     }
     
     public void UpdateTourLog(TourLog tourLog) {
-        TourLog tourLogToUpdate = _context.TourLogs.Find(tourLog.Id);
+        TourLog tourLogToUpdate = _dbContext.TourLogs.Find(tourLog.Id);
         if (tourLogToUpdate == null) return;
         
         tourLogToUpdate.Rating = tourLog.Rating;
@@ -71,16 +67,12 @@ public class TourLogRepository : ITourLogRepository {
     }
     
     public void DeleteTourLog(Guid tourLogId) {
-        TourLog tourLog = _context.TourLogs.Find(tourLogId);
-        _context.TourLogs.Remove(tourLog);
+        TourLog tourLog = _dbContext.TourLogs.Find(tourLogId);
+        _dbContext.TourLogs.Remove(tourLog);
         Save();
     }
     
     public void Save() {
-        _context.SaveChanges();
-    }
-    
-    public IEnumerable<TourLog> GetTourLogs() {
-        return _context.TourLogs.ToList();
+        _dbContext.SaveChanges();
     }
 }
