@@ -27,11 +27,12 @@
             <!-- Header with Title and Buttons -->
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*" />
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Tours"
-                           Margin="8"
+                           Grid.Column="0"
+                           Margin="14"
                            Foreground="Black"
                            FontSize="18"
                            FontFamily="/Resources/Fonts/#Montserrat"
@@ -41,14 +42,14 @@
                             Orientation="Horizontal"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Center"
-                            Margin="5">
+                            Margin="7">
                     
                     <!-- Buttons for Tour management -->
                     <Button Content=" + "
                             Margin="2"
                             Style="{StaticResource ActionButtonStyle}"
                             Command="{Binding CreateTourCommand}"/>
-                    <Button Content="-"
+                    <Button Content=" - "
                             Margin="2"
                             Style="{StaticResource ActionButtonStyle}"
                             Command="{Binding DeleteTourCommand}"/>
@@ -56,6 +57,24 @@
                             Margin="2"
                             Style="{StaticResource ActionButtonStyle}"
                             Command="{Binding EditTourCommand}"/>
+                    
+                    <!-- Import Button -->
+                    <Button Margin="2"
+                            Style="{StaticResource ActionButtonStyle}"
+                            Command="{Binding ImportToursCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE898;" FontSize="16" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                    
+                    <!-- Export Button -->
+                    <Button Margin="1"
+                            Style="{StaticResource ActionButtonStyle}"
+                            Command="{Binding ExportToursCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8B8;" FontSize="16" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
                 </StackPanel>
             </Grid>
 
