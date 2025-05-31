@@ -7,112 +7,46 @@
              d:DesignHeight="450" d:DesignWidth="800">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>  <!-- Row 0: Add/Menu + Suchleiste -->
-            <RowDefinition Height="Auto"/>  <!-- Row 1: Filter-Controls -->
-            <RowDefinition Height="*"/>     <!-- Row 2: ListView -->
-        </Grid.RowDefinitions>
-
-        <!-- Row 0: Add + Menu Button (rechts), Suchleiste (links) -->
-        <Grid Grid.Row="0" Margin="0,10,10,0" Height="40">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />  <!-- Suchleiste (links) -->
-                <ColumnDefinition Width="90" /> <!-- Buttons (rechts) -->
-            </Grid.ColumnDefinitions>
-            <!-- Suchleiste -->
-            <TextBox Grid.Column="0"
-                     Margin="10,0,5,0"
-                     VerticalAlignment="Center"
-                     Height="30"
-                     FontSize="16"
-                     FontFamily="/Resources/Fonts/#Montserrat"
-                     Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                     MinWidth="80"
-                     Background="#FFFBE9"
-                     BorderBrush="#999966"
-                     BorderThickness="1"
-                     />
-            <!-- Add & Menu Buttons -->
-            <Grid Grid.Column="1" HorizontalAlignment="Right">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="40" />
-                    <ColumnDefinition Width="40" />
-                </Grid.ColumnDefinitions>
-                <Button Content="+" Command="{Binding AddTourCommand}"
-                        Style="{StaticResource ActionButtonStyle}"
-                        Grid.Column="0"
-                        Width="36" Height="36" Margin="2" />
-                <Button Content="..." Command="{Binding MoreMenuCommand}"
-                        Style="{StaticResource ActionButtonStyle}"
-                        Grid.Column="1"
-                        Width="36" Height="36" Margin="2" />
-            </Grid>
-        </Grid>
-
-        <!-- Row 1: Filter Controls -->
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10,0,10,3" VerticalAlignment="Top" Height="36">
-            <TextBlock Margin="3,0" VerticalAlignment="Center" Text="Popularity"/>
-            <TextBox Width="50" Margin="3,0" VerticalAlignment="Center"
-                     Text="{Binding MinPopularity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            <TextBlock Margin="14,0,3,0" VerticalAlignment="Center" Text="Child"/>
-            <ComboBox Width="70" Margin="2,0" VerticalAlignment="Center"
-                      SelectedValue="{Binding ChildFriendliness, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="Tag">
-                <ComboBoxItem Content="Nvm" Tag="{x:Null}" IsSelected="True"/>
-                <ComboBoxItem Content="Yes" Tag="True"/>
-                <ComboBoxItem Content="No" Tag="False"/>
-            </ComboBox>
-        </StackPanel>
-
-        <!-- Row 2: Tour List -->
-        <Grid Grid.Row="2">
-            <ListView ItemsSource="{Binding Tours}"
-                      SelectedItem="{Binding SelectedTour, Mode=TwoWay}"
-                      BorderThickness="0"
-                      Background="#F5ECD5">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Name}"
-                                   Foreground="Black"
-                                   FontSize="16"
-                                   Margin="0,10"
-                                   FontFamily="/Resources/Fonts/#Montserrat" />
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="Background" Value="#FFF6B6" />
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="ListViewItem">
-                                    <Border x:Name="Bd"
-                                            Background="{TemplateBinding Background}"
-                                            Padding="5"
-                                            SnapsToDevicePixels="true">
-                                        <ContentPresenter />
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter TargetName="Bd" Property="Background" Value="#F0BB78" />
-                                        </Trigger>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="Bd" Property="Background" Value="#f7b2b2" />
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </ListView.ItemContainerStyle>
-            </ListView>
-            <TextBlock Text="No results found."
-                       Visibility="{Binding HasNoResults, Converter={StaticResource BooleanToVisibilityConverter}}"
-                       Foreground="Red"
-                       FontSize="14"
-                       FontFamily="/Resources/Fonts/#Montserrat"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Margin="5" />
-        </Grid>
+        <!-- List containing all Tours -->
+        <ListView ItemsSource="{Binding Tours}"
+                  SelectedItem="{Binding SelectedTour, Mode=TwoWay}" 
+                  BorderThickness="0"
+                  Background="#F5ECD5">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"
+                               Foreground="Black"
+                               FontSize="16"
+                               Margin="0,10"
+                               FontFamily="/UILayer/Resources/Fonts/#Montserrat"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Background" Value="#FFF6B6"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListViewItem">
+                                <Border x:Name="Bd"
+                            Background="{TemplateBinding Background}"
+                            Padding="5"
+                            SnapsToDevicePixels="true">
+                                    <ContentPresenter />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="Bd" Property="Background" Value="#F0BB78"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="Bd" Property="Background" Value="#f7b2b2"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
+        </ListView>
     </Grid>
 </UserControl>

@@ -126,10 +126,9 @@ namespace TourPlanner.UI.ViewModels
                 _editingTour.To = _to;
 
                 TourUpdated?.Invoke(this, _editingTour);
-                Log.Information("Tour edited => {@_editingTour}", _editingTour);
+                //Log.Information("Tour edited => {@_editingTour}", _editingTour);
             }
             else {
-
                 Tour tour = new Tour(
                     _name,
                     dateUtc,
@@ -140,7 +139,7 @@ namespace TourPlanner.UI.ViewModels
                 );
 
                 TourCreated?.Invoke(this, tour);
-                Log.Information("Tour created => {@tour}", tour);
+                //Log.Information("Tour created => {@tour}", tour);
             }
             ResetForm();
         }
@@ -177,6 +176,7 @@ namespace TourPlanner.UI.ViewModels
 
         private void Cancel()
         {
+            ResetForm();
             Cancelled?.Invoke(this, EventArgs.Empty);
         }
     } 

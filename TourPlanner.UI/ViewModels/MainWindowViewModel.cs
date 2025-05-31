@@ -13,7 +13,6 @@ public class MainWindowViewModel : BaseViewModel {
     private readonly EventAggregator _eventAggregator;
     private readonly TourLogListViewModel _tourLogListViewModel;
     private readonly TourService _tourService;
-    private CombinedSearchResultsViewModel _combinedSearchResultsViewModel;
     private UserControl _currentView;
     private UserControl _homeView;
     
@@ -46,16 +45,12 @@ public class MainWindowViewModel : BaseViewModel {
             DataContext = TourManagementViewModel
         };
 
-        SearchBarViewModel.SearchTextChanged += (sender, searchText) => { _eventAggregator.Publish(searchText); };
-
         _eventAggregator.Subscribe<string>(searchText =>
         {
             if (_tourLogListViewModel != null) {
                 _tourLogListViewModel.SearchQuery = searchText;
             }
         });
-
-        _eventAggregator.Subscribe<string>(searchText => { TourListViewModel.SearchQuery = searchText; });
 
         _eventAggregator.Subscribe<string>(NavigationHandler);
         ShowHomeView();
@@ -86,27 +81,6 @@ public class MainWindowViewModel : BaseViewModel {
         }
     }
 
-    /*public ICommand ShowHomeViewCommand => new RelayCommand(execute => ShowHomeView());
-    public ICommand ShowCreateTourCommand => new RelayCommand(execute => ShowCreateTour());
-    public ICommand ShowCreateTourLogCommand => new RelayCommand(execute => ShowCreateTourLog());*/
-    
-    public CombinedSearchResultsViewModel CombinedSearchResultsViewModel
-    {
-        get => _combinedSearchResultsViewModel;
-        set {
-            if (_combinedSearchResultsViewModel == value) return;
-            _combinedSearchResultsViewModel = value;
-            OnPropertyChanged();
-        }
-    }
-
-    private void ShowCombinedSearchResultsView() {
-        CombinedSearchResultsViewModel ??= new CombinedSearchResultsViewModel(_tourService, _eventAggregator);
-        CurrentView = new CombinedSearchResults {
-            DataContext = this
-        };
-    }
-
     private void NavigationHandler(string message) {
         switch (message) {
             case "ShowHome":
@@ -117,9 +91,6 @@ public class MainWindowViewModel : BaseViewModel {
                 break;
             case "ShowCreateTourLog":
                 ShowCreateTourLog();
-                break;
-            case "ShowSearchResults":
-                ShowCombinedSearchResultsView();
                 break;
             default:
                 //"No such view found"
@@ -138,7 +109,6 @@ public class MainWindowViewModel : BaseViewModel {
     }
 
     private void ShowCreateTourLog() {
-        Console.WriteLine("ShowCreateTourLog called");
         CurrentView = new CreateTourLog {
             DataContext = CreateTourLogViewModel
         };

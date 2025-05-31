@@ -8,7 +8,9 @@ namespace TourPlanner.BL.Services;
 public class TourLogService {
     private readonly ITourLogRepository _tourLogRepository;
 
-    public TourLogService(ITourLogRepository tourLogRepository) {
+    public TourLogService(
+        ITourLogRepository tourLogRepository
+    ) {
         _tourLogRepository = tourLogRepository;
     }
     

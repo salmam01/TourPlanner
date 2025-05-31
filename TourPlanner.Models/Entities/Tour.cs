@@ -29,7 +29,10 @@ namespace TourPlanner.Models.Entities
 
         public Tour()
         {
-            TourAttributes = new TourAttributes();
+            TourAttributes = new TourAttributes
+            {
+                Id = Id
+            };
             TourLogs = new List<TourLog>();
         }
 
@@ -44,7 +47,12 @@ namespace TourPlanner.Models.Entities
             Distance = 0;
             EstimatedTime = TimeSpan.Zero;
             RouteInformation = "";
-            TourAttributes = new TourAttributes();
+
+            TourAttributes = new TourAttributes
+            {
+                Id = Id
+            };
+
             TourLogs = new List<TourLog>();
         }
     }

@@ -165,6 +165,7 @@ namespace TourPlanner.UI.ViewModels
         }
 
         private void Cancel() {
+            ResetForm();
             Cancelled?.Invoke(this, EventArgs.Empty);
         }
 

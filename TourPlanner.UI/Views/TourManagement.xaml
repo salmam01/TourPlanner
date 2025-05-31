@@ -16,11 +16,11 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/> <!-- Header -->
-                <RowDefinition Height="Auto"/> <!-- SUCHLEISTE -->
-                <RowDefinition Height="*"/>   <!-- Liste -->
+                <RowDefinition Height="Auto"/> <!-- Searchbar -->
+                <RowDefinition Height="*"/>   <!-- List -->
             </Grid.RowDefinitions>
 
-            <!-- Search Bar direkt über die Liste -->
+            <!-- Search Bar -->
             <views:SearchBar Grid.Row="1"
                              DataContext="{Binding SearchBarViewModel}"/>
             
@@ -42,7 +42,7 @@
                             HorizontalAlignment="Right"
                             VerticalAlignment="Center"
                             Margin="5">
-                    
+
                     <!-- Buttons for Tour management -->
                     <Button Content=" + "
                             Margin="2"

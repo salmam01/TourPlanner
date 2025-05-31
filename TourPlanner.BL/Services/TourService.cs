@@ -21,15 +21,16 @@ public class TourService {
         _tourLogRepository = tourLogRepository;
         _tourAttributesService = tourAttributesService;
     }
+
     public Tour GetTourById(Guid tourId) {
-        var tour = _tourRepository.GetTourById(tourId);
+        Tour tour = _tourRepository.GetTourById(tourId);
         _tourAttributesService.UpdateAttributes(tour);
         return tour;
     }
 
     public IEnumerable<Tour> GetAllTours() {
-        var tours = _tourRepository.GetTours();
-        foreach (var tour in tours)
+        IEnumerable<Tour> tours = _tourRepository.GetTours();
+        foreach (Tour tour in tours)
         {
             _tourAttributesService.UpdateAttributes(tour);
         }
@@ -38,6 +39,7 @@ public class TourService {
     
     public void CreateTour(Tour tour) {
         _tourRepository.InsertTour(tour);
+        _tourAttributesService.InsertTourAttributes(tour.TourAttributes);
     }
     
     public void UpdateTour(Tour tour) {
@@ -50,17 +52,8 @@ public class TourService {
         }
     }
     
-    public (IEnumerable<Tour> Tours, IEnumerable<TourLog> Logs) SearchToursAndLogs(string query, double? minPopularity, bool? childFriendliness)
-    {
-        IEnumerable<Tour> tours = _tourRepository.SearchTours(query, minPopularity, childFriendliness);
-        // Filtering on logs by popularity/child-friendliness doesn't make sense. Return empty logs for this path.
-        IEnumerable<TourLog> logs = Enumerable.Empty<TourLog>();
-        return (tours, logs);
-    }
-    
-    public (IEnumerable<Tour> Tours, IEnumerable<TourLog> Logs) SearchToursAndLogs(string query) {
+    public IEnumerable<Tour> SearchTours(string query) {
         IEnumerable<Tour> tours = _tourRepository.SearchTours(query);
-        IEnumerable<TourLog> logs = _tourLogRepository.SearchTourLogs(query);
-        return (tours, logs);
+        return tours;
     }
 }

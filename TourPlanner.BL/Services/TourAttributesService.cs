@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TourPlanner.DAL.Repositories.TourAttributesRepository;
 using TourPlanner.Models.Entities;
 
 namespace TourPlanner.BL.Services
@@ -9,10 +10,19 @@ namespace TourPlanner.BL.Services
     public class TourAttributesService
     {
         private readonly ILogger<TourAttributesService> _logger;
+        private readonly ITourAttributesRepository _tourAttributesRepository;
 
-        public TourAttributesService(ILogger<TourAttributesService> logger)
-        {
+        public TourAttributesService(
+            ITourAttributesRepository tourAttributesRepository,
+            ILogger<TourAttributesService> logger
+        ){
+            _tourAttributesRepository = tourAttributesRepository;
             _logger = logger;
+        }
+
+        public void InsertTourAttributes(TourAttributes tourAttributes)
+        {
+            _tourAttributesRepository.InsertTourAttributes(tourAttributes);
         }
 
         /// <summary>

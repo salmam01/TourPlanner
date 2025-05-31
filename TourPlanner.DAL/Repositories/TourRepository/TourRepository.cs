@@ -23,9 +23,6 @@ public class TourRepository : ITourRepository {
     }
 
     public IEnumerable<Tour> SearchTours(string query) {
-        if (string.IsNullOrWhiteSpace(query))
-            return _context.Tours.ToList();
-
         // Use PostgreSQL Full-Text Search on the "SearchVector" column
         string ftsQuery = query.Trim().Replace(" ", " & ") + ":*";
         var likeQuery = $"%{query.Trim()}%";

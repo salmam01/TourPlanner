@@ -14,7 +14,6 @@ namespace TourPlanner.Models.Entities
         public int Popularity { get; set; }
         public bool ChildFriendliness { get; set; }
         public double SearchAlgorithmRanking { get; set; }
-        public Tour Tour { get; set; }
         public TourAttributes() {
             Popularity = 0;
             ChildFriendliness = false;

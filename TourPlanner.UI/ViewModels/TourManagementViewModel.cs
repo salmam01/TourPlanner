@@ -30,7 +30,7 @@ namespace TourPlanner.UI.ViewModels
         public ICommand EditTourCommand => new RelayCommand(
             execute => UpdateTour()
         );
-        
+
         public ICommand DeleteTourCommand => new RelayCommand(
             execute => DeleteTour()
         );
@@ -42,7 +42,8 @@ namespace TourPlanner.UI.ViewModels
             SearchBarViewModel searchBarViewModel,
             EventAggregator eventAggregator,
             TourService tourService
-        ) {
+        )
+        {
             _createTourViewModel = createTourViewModel;
             TourListViewModel = tourListViewModel;
             SearchBarViewModel = searchBarViewModel;
@@ -51,6 +52,7 @@ namespace TourPlanner.UI.ViewModels
 
             _createTourViewModel.TourCreated += OnTourCreated;
             _createTourViewModel.TourUpdated += OnTourUpdated;
+            SearchBarViewModel.SearchParamsChanged += OnPerformSearch;
             _createTourViewModel.Cancelled += OnCancel;
             _eventAggregator.Subscribe<Tour>(OnTourSelected);
 
@@ -64,36 +66,6 @@ namespace TourPlanner.UI.ViewModels
             TourListViewModel.SelectedTour = tour;
         }
 
-        public void OnTourCreated(object sender, Tour tour)
-        {
-            if (tour == null) return;
-        
-            _tourService.CreateTour(tour);
-            // Clear search query to show all tours after create
-            TourListViewModel.SearchQuery = "";
-            TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
-            _eventAggregator.Publish("ShowHome");
-        }
-
-        public void OnTourUpdated(object sender, Tour tour)
-        {
-            if (tour == null) return;
-        
-            _tourService.UpdateTour(tour);
-            // Clear search query to show all tours after update
-            TourListViewModel.SearchQuery = "";
-            TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
-            
-            _selectedTour = tour;
-            TourListViewModel.SelectedTour = tour;
-            _eventAggregator.Publish("ShowHome");
-        }
-
-        //  dont use magic strings, save as constant
-        public void OnCancel(object sender, EventArgs e)
-        {
-            _eventAggregator.Publish("ShowHome");
-        }
 
         public void CreateTour()
         {
@@ -102,7 +74,7 @@ namespace TourPlanner.UI.ViewModels
 
         public void UpdateTour()
         {
-            if(_selectedTour == null)
+            if (_selectedTour == null)
             {
                 MessageBox.Show("Please select a tour to edit.");
                 return;
@@ -114,7 +86,7 @@ namespace TourPlanner.UI.ViewModels
 
         public void DeleteTour()
         {
-            if(_selectedTour == null)
+            if (_selectedTour == null)
             {
                 MessageBox.Show("Please select a tour to delete.");
                 return;
@@ -132,6 +104,49 @@ namespace TourPlanner.UI.ViewModels
             TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
             Log.Information("Tour deleted => {@_selectedTour}", _selectedTour);
             _selectedTour = null;
+        }
+
+        public void OnTourCreated(object sender, Tour tour)
+        {
+            if (tour == null) return;
+
+            _tourService.CreateTour(tour);
+            // Clear search query to show all tours after create
+            //TourListViewModel.SearchQuery = "";
+            TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
+            _eventAggregator.Publish("ShowHome");
+        }
+
+        public void OnTourUpdated(object sender, Tour tour)
+        {
+            if (tour == null) return;
+
+            _tourService.UpdateTour(tour);
+            // Clear search query to show all tours after update
+            //TourListViewModel.SearchQuery = "";
+            TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
+
+            _selectedTour = tour;
+            TourListViewModel.SelectedTour = tour;
+            _eventAggregator.Publish("ShowHome");
+        }
+
+        public void OnPerformSearch(object sender, string searchText)
+        {
+            if(string.IsNullOrEmpty(searchText)) { 
+                TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
+            }
+            else
+            {
+                TourListViewModel.ReloadTours(_tourService.SearchTours(searchText).ToList());
+            }
+
+        }
+
+        //  dont use magic strings, save as constant
+        public void OnCancel(object sender, EventArgs e)
+        {
+            _eventAggregator.Publish("ShowHome");
         }
     }
 }
