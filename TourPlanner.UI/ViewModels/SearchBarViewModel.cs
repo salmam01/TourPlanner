@@ -7,10 +7,6 @@ using TourPlanner.UI.Events;
 namespace TourPlanner.UI.ViewModels;
 
 public class SearchBarViewModel : INotifyPropertyChanged {
-    public SearchBarViewModel() {
-        SearchCommand = new RelayCommand(ExecuteSearch);
-    }
-
     private string _searchText;
     public string SearchText
     {
@@ -23,13 +19,8 @@ public class SearchBarViewModel : INotifyPropertyChanged {
         }
     }
 
-    public ICommand SearchCommand { get; }
     public event PropertyChangedEventHandler PropertyChanged;
     public event EventHandler<string> SearchParamsChanged;
-
-    private void ExecuteSearch(object obj) {
-        OnSearchParamsChanged();
-    }
 
     private void OnSearchParamsChanged()
     {

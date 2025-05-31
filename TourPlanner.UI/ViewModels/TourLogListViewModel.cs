@@ -37,10 +37,22 @@ namespace TourPlanner.UI.ViewModels
             }
         }
 
+        private bool _hasNoResults;
+        public bool HasNoResults
+        {
+            get => _hasNoResults;
+            set
+            {
+                if (_hasNoResults == value) return;
+                _hasNoResults = value;
+                OnPropertyChanged();
+            }
+        }
+
         private void LoadTourLogsForTour(Guid tourId)
         {
             Tour tour = new Tour { Id = tourId };
-            List<TourLog> logs = _tourLogService.GetTourLogs(tour).ToList();
+            List<TourLog> logs = _tourLogService.GetAllTourLogs(tour).ToList();
             ReloadTourLogs(logs);
         }
 
@@ -55,33 +67,35 @@ namespace TourPlanner.UI.ViewModels
             }
         }
         
-        public TourLogListViewModel(TourLogService tourLogService, EventAggregator eventAggregator)
-        {
+        public TourLogListViewModel(
+            TourLogService tourLogService, 
+            EventAggregator eventAggregator
+        ) {
             _tourLogService = tourLogService;
             _eventAggregator = eventAggregator;
             _tourLogs = new ObservableCollection<TourLog>();
 
+            /*
             _eventAggregator.Subscribe<string>(query =>
             {
                 Console.WriteLine($"Searching for: {query}");
                 SearchQuery = query;
                 var filteredLogs = _tourLogService.SearchTourLogs(SearchQuery).ToList();
                 ReloadTourLogs(filteredLogs);
-            });
+            });*/
         }
 
         public void ReloadTourLogs(IEnumerable<TourLog> tourLogs)
         {
-           // Console.WriteLine($"Anzahl der gefilterten Logs: {tourLogs.Count()}");
             _tourLogs.Clear();
             foreach (TourLog tourLog in tourLogs) {
                 _tourLogs.Add(tourLog);
             }
             OnPropertyChanged(nameof(TourLogs));
-           // Console.WriteLine($"Neue Anzahl in ObservableCollection: {_tourLogs.Count}");
+            HasNoResults = _tourLogs.Count == 0;
         }
-        
-         private TourLog _selectedTourLog;
+
+        private TourLog _selectedTourLog;
         public TourLog SelectedTourLog
         {
             get => _selectedTourLog;

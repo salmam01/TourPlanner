@@ -140,7 +140,6 @@ namespace TourPlanner.UI.ViewModels
             {
                 TourListViewModel.ReloadTours(_tourService.SearchTours(searchText).ToList());
             }
-
         }
 
         //  dont use magic strings, save as constant

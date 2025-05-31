@@ -14,7 +14,7 @@ public class TourLogService {
         _tourLogRepository = tourLogRepository;
     }
     
-    public IEnumerable<TourLog> GetTourLogs(Tour tour) {
+    public IEnumerable<TourLog> GetAllTourLogs(Tour tour) {
         return _tourLogRepository.GetTourLogs(tour.Id);
     }
 
@@ -31,7 +31,7 @@ public class TourLogService {
         _tourLogRepository.DeleteTourLog(tourLog.Id);
     }
 
-    public IEnumerable<TourLog> SearchTourLogs(string query) {
-        return _tourLogRepository.SearchTourLogs(query);
+    public IEnumerable<TourLog> SearchTourLogs(Tour tour, string query) {
+        return _tourLogRepository.SearchTourLogs(tour.Id, query);
     }
 }

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Windows.Controls;
-using System.Windows.Input;
-using TourPlanner.BL.Services;
-using TourPlanner.UI.Commands;
 using TourPlanner.UI.Events;
 using TourPlanner.UI.Views;
 
@@ -12,7 +9,6 @@ public class MainWindowViewModel : BaseViewModel {
 
     private readonly EventAggregator _eventAggregator;
     private readonly TourLogListViewModel _tourLogListViewModel;
-    private readonly TourService _tourService;
     private UserControl _currentView;
     private UserControl _homeView;
     
@@ -24,8 +20,7 @@ public class MainWindowViewModel : BaseViewModel {
         TourListViewModel tourListViewModel,
         TourLogListViewModel tourLogListViewModel,
         SearchBarViewModel searchBarViewModel,
-        EventAggregator eventAggregator,
-        TourService tourService
+        EventAggregator eventAggregator
     ) {
         TourManagementViewModel = tourManagementViewModel;
         HomeViewModel = homeViewModel;
@@ -35,7 +30,6 @@ public class MainWindowViewModel : BaseViewModel {
         _tourLogListViewModel = tourLogListViewModel;
         SearchBarViewModel = searchBarViewModel;
         _eventAggregator = eventAggregator;
-        _tourService = tourService;
 
         _homeView = new Home {
             DataContext = HomeViewModel

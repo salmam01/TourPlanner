@@ -20,11 +20,5 @@
                  VerticalContentAlignment="Center"
                  HorizontalAlignment="Stretch"
                  Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
-        <Button
-            Grid.Column="1"
-            Content="🔍"
-            Command="{Binding SearchCommand}"
-            Margin="5,0,0,0"
-            Padding="10,0" />
     </Grid>
 </UserControl>

@@ -57,7 +57,7 @@ public partial class App : Application
         services.AddSingleton<TourManagementViewModel>();
         services.AddSingleton<CreateTourViewModel>();
         services.AddSingleton<TourListViewModel>();
-        services.AddSingleton<SearchBarViewModel>();
+        services.AddTransient<SearchBarViewModel>();
 
         services.AddSingleton<TourLogsManagementViewModel>();
         services.AddSingleton<CreateTourLogViewModel>();

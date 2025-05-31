@@ -45,15 +45,14 @@ public class TourService {
     public void UpdateTour(Tour tour) {
         _tourRepository.UpdateTour(tour);
     }
-    
+    public IEnumerable<Tour> SearchTours(string query) {
+        IEnumerable<Tour> tours = _tourRepository.SearchTours(query);
+        return tours;
+    }
+
     public void DeleteTour(Tour tour) {
         if (tour != null) {
             _tourRepository.DeleteTour(tour.Id);
         }
-    }
-    
-    public IEnumerable<Tour> SearchTours(string query) {
-        IEnumerable<Tour> tours = _tourRepository.SearchTours(query);
-        return tours;
     }
 }

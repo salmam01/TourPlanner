@@ -15,6 +15,18 @@ public class TourLogRepository : ITourLogRepository {
         _dbContext = context;
     }
 
+    public IEnumerable<TourLog> SearchTourLogs(Guid tourId, string query)
+    {
+        string ftsQuery = query.Trim().Replace(" ", " & ") + ":*";
+
+        return _dbContext.TourLogs.FromSqlRaw(
+            "SELECT * FROM \"TourLogs\" " +
+            "WHERE \"TourId\" = {0} AND \"SearchVector\" @@ to_tsquery('simple', {1})",
+            tourId, ftsQuery
+        ).ToList();
+    }
+
+    /*
     public IEnumerable<TourLog> SearchTourLogs(string query) {
         if (string.IsNullOrWhiteSpace(query))
         {
@@ -35,7 +47,7 @@ public class TourLogRepository : ITourLogRepository {
             ftsQuery,
             likeQuery
         ).ToList();
-    }
+    }*/
 
     public TourLog GetTourLog(Guid TourId) {
         return _dbContext.TourLogs.Find(TourId);
