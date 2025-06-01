@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,29 +24,6 @@ public class TourLogRepository : ITourLogRepository {
             tourId, ftsQuery
         ).ToList();
     }
-
-    /*
-    public IEnumerable<TourLog> SearchTourLogs(string query) {
-        if (string.IsNullOrWhiteSpace(query))
-        {
-            return _dbContext.TourLogs.ToList();
-        }
-
-        string ftsQuery = query.Trim().Replace(" ", " & ") + ":*";
-        var likeQuery = $"%{query.Trim()}%";
-        
-        // Suche auf mehreren Feldern + computed field
-        return _dbContext.TourLogs.FromSqlRaw(
-            "SELECT * FROM \"TourLogs\" " +
-            "WHERE \"SearchVector\" @@ to_tsquery('english', {0}) " +
-            "OR CAST(\"Difficulty\" AS TEXT) ILIKE {1} " +
-            "OR CAST(\"Rating\" AS TEXT) ILIKE {1} " +
-            "OR \"Comment\" ILIKE {1} " +
-            "OR CONCAT(\"Comment\", ' ', \"Difficulty\", ' ', \"Rating\") ILIKE {1} ",
-            ftsQuery,
-            likeQuery
-        ).ToList();
-    }*/
 
     public TourLog GetTourLog(Guid TourId) {
         return _dbContext.TourLogs.Find(TourId);

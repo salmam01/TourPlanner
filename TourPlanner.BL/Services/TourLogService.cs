@@ -1,17 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using TourPlanner.Models.Entities;
+﻿using Microsoft.Extensions.Logging;
 using TourPlanner.DAL.Repositories.TourLogRepository;
+using TourPlanner.Models.Entities;
 
 namespace TourPlanner.BL.Services;
 
 public class TourLogService {
+
     private readonly ITourLogRepository _tourLogRepository;
+    private readonly ILogger<TourLogRepository> _logger;
 
     public TourLogService(
-        ITourLogRepository tourLogRepository
+        ITourLogRepository tourLogRepository,
+        ILogger<TourLogRepository> logger
     ) {
         _tourLogRepository = tourLogRepository;
+        _logger = logger;
     }
     
     public IEnumerable<TourLog> GetAllTourLogs(Tour tour) {

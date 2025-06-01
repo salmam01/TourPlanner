@@ -14,12 +14,10 @@ public class TourRepository : ITourRepository {
         _context = context;
     }
 
-    public Tour GetTourById(Guid tourId) {
-        return _context.Tours.Find(tourId);
-    }
-
     public IEnumerable<Tour> GetTours() {
-        return _context.Tours;
+        return _context.Tours
+            .Include(t => t.TourAttributes)
+            .Include(t => t.TourLogs);
     }
 
     public IEnumerable<Tour> SearchTours(string query) {
@@ -34,9 +32,11 @@ public class TourRepository : ITourRepository {
         ).ToList();
     }
 
+    /*
     public IEnumerable<Tour> SearchTours(string query, double? minPopularity, bool? childFriendliness)
     {
         // Filter base: Use FTS if query exists, else all tours
+        
         IQueryable<Tour> toursQueryable;
         if (!string.IsNullOrWhiteSpace(query))
         {
@@ -69,7 +69,7 @@ public class TourRepository : ITourRepository {
         }
 
         return toursQueryable.ToList();
-    }
+    }*/
 
     public void InsertTour(Tour tour) {
         _context.Tours.Add(tour);

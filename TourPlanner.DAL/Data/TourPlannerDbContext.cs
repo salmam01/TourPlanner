@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
 using TourPlanner.Models.Entities;
-using TourPlanner.Models.Configuration;
-using Microsoft.Extensions.Logging;
-using Npgsql;
+
 
 namespace TourPlanner.DAL.Data
 {

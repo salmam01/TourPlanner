@@ -1,7 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using TourPlanner.DAL.Repositories.TourAttributesRepository;
 using TourPlanner.Models.Entities;
 
@@ -9,8 +6,8 @@ namespace TourPlanner.BL.Services
 {
     public class TourAttributesService
     {
-        private readonly ILogger<TourAttributesService> _logger;
         private readonly ITourAttributesRepository _tourAttributesRepository;
+        private readonly ILogger<TourAttributesService> _logger;
 
         public TourAttributesService(
             ITourAttributesRepository tourAttributesRepository,
@@ -55,6 +52,16 @@ namespace TourPlanner.BL.Services
                 avgMinutes <= 150.0;
         }
 
+        public double ComputeSearchAlgorithmRanking(double Popularity, bool Childfriendliness)
+        {
+            double SearchAlgorithmRanking = Popularity / 100;
+
+            if(Childfriendliness)
+                SearchAlgorithmRanking *= 1.5;
+
+            return Math.Min(SearchAlgorithmRanking, 1.0);
+        }
+
         /// <summary>
         /// Updates a Tour's TourAttributes object based on logs.
         /// </summary>
@@ -68,6 +75,9 @@ namespace TourPlanner.BL.Services
 
             tour.TourAttributes.Popularity = ComputePopularity(tour.TourLogs);
             tour.TourAttributes.ChildFriendliness = ComputeChildFriendliness(tour.TourLogs);
+            tour.TourAttributes.SearchAlgorithmRanking = ComputeSearchAlgorithmRanking(tour.TourAttributes.Popularity, tour.TourAttributes.ChildFriendliness);
+
+            _tourAttributesRepository.UpdateTourAttributes(tour.TourAttributes);
         }
     }
 }

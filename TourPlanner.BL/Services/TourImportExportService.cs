@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using ClosedXML.Excel;
+using Microsoft.Extensions.Logging;
 using System.Text.Json;
-using System.Threading.Tasks;
-using ClosedXML.Excel;
 using TourPlanner.Models.Entities;
 
 /// <summary>
@@ -14,6 +11,8 @@ namespace TourPlanner.BL.Services
 {
     public class TourImportExportService
     {
+        private readonly ILogger<TourImportExportService> _logger;
+
         public async Task ExportToursToJsonAsync(IEnumerable<Tour> tours, string filePath)
         {
             JsonSerializerOptions options;

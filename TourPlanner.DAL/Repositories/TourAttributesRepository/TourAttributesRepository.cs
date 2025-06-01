@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TourPlanner.DAL.Data;
+﻿using TourPlanner.DAL.Data;
 using TourPlanner.Models.Entities;
 
 namespace TourPlanner.DAL.Repositories.TourAttributesRepository
@@ -24,6 +19,7 @@ namespace TourPlanner.DAL.Repositories.TourAttributesRepository
         public void InsertTourAttributes(TourAttributes tourAttributes)
         {
             _dbContext.TourAttributes.Add(tourAttributes);
+            Save();
         }
 
         public void UpdateTourAttributes(TourAttributes tourAttributes)

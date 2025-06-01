@@ -224,7 +224,6 @@ namespace TourPlanner.UI.ViewModels
             OnPropertyChanged(nameof(SubmitButtonText));
         }
 
-
         private bool ValidateInput()
         {
             return

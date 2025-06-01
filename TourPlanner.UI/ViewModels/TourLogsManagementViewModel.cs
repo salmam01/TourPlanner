@@ -9,6 +9,7 @@ namespace TourPlanner.UI.ViewModels
 {
     public class TourLogsManagementViewModel : BaseViewModel
     {
+        private readonly TourService _tourService;
         private readonly TourLogService _tourLogService;
         public TourLogListViewModel TourLogListViewModel { get; }
         public SearchBarViewModel SearchBarViewModel { get; }
@@ -40,11 +41,13 @@ namespace TourPlanner.UI.ViewModels
             TourLogListViewModel tourLogListViewModel,
             SearchBarViewModel searchBarViewModel,
             EventAggregator eventAggregator,
+            TourService tourService,
             TourLogService tourLogService
         ) {
             TourLogListViewModel = tourLogListViewModel;
             _createTourLogViewModel = createTourLogViewModel;
             _eventAggregator = eventAggregator;
+            _tourService = tourService;
             _tourLogService = tourLogService;
             SearchBarViewModel = searchBarViewModel;
 
@@ -72,7 +75,7 @@ namespace TourPlanner.UI.ViewModels
         {
             if (tour == null) return;
             _selectedTour = tour;
-            TourLogListViewModel.ReloadTourLogs(_tourLogService.GetAllTourLogs(tour));
+            TourLogListViewModel.ReloadTourLogs(tour.TourLogs);
         }
 
         public void OnTourLogSelected(object sender, TourLog tourLog)
@@ -85,7 +88,9 @@ namespace TourPlanner.UI.ViewModels
             if (tourLog == null) return;
 
             _tourLogService.CreateTourLog(_selectedTour.Id, tourLog);
-            TourLogListViewModel.ReloadTourLogs(_tourLogService.GetAllTourLogs(_selectedTour));
+            _tourService.RecalculateTourAttributes(_selectedTour);
+            TourLogListViewModel.ReloadTourLogs(_selectedTour.TourLogs);
+
             _eventAggregator.Publish("ShowHome");
         }
 
@@ -94,7 +99,9 @@ namespace TourPlanner.UI.ViewModels
             if(tourLog == null) return;
 
             _tourLogService.UpdateTourLog(tourLog);
-            TourLogListViewModel.ReloadTourLogs(_tourLogService.GetAllTourLogs(_selectedTour).ToList());
+            _tourService.RecalculateTourAttributes(_selectedTour);
+            TourLogListViewModel.ReloadTourLogs(_selectedTour.TourLogs);
+
             _eventAggregator.Publish("ShowHome");
         }
 
@@ -103,13 +110,9 @@ namespace TourPlanner.UI.ViewModels
             if (_selectedTour == null) return;
             
             if (string.IsNullOrEmpty(searchText))
-            {
-                TourLogListViewModel.ReloadTourLogs(_tourLogService.GetAllTourLogs(_selectedTour).ToList());
-            }
+                TourLogListViewModel.ReloadTourLogs(_selectedTour.TourLogs);
             else
-            {
-                TourLogListViewModel.ReloadTourLogs(_tourLogService.SearchTourLogs(_selectedTour, searchText).ToList());
-            }
+                TourLogListViewModel.ReloadTourLogs(_tourLogService.SearchTourLogs(_selectedTour, searchText));
         }
 
         public void OnCancel(object sender, EventArgs e)
@@ -142,9 +145,10 @@ namespace TourPlanner.UI.ViewModels
             );
             if (result != MessageBoxResult.Yes) return;
 
-            _tourLogService.DeleteTourLog(_selectedTourLog);
-            TourLogListViewModel.ReloadTourLogs(_tourLogService.GetAllTourLogs(_selectedTour));
             Log.Information("Tour Log deleted => {@_selectedTourLog}", _selectedTourLog);
+            _tourLogService.DeleteTourLog(_selectedTourLog);
+            _tourService.RecalculateTourAttributes(_selectedTour);
+            TourLogListViewModel.ReloadTourLogs(_selectedTour.TourLogs);
             _selectedTourLog = null;
         }
     }
