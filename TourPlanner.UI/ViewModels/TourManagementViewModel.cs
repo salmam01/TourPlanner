@@ -15,6 +15,7 @@ namespace TourPlanner.UI.ViewModels
     public class TourManagementViewModel : BaseViewModel
     {
         private readonly TourService _tourService;
+        private readonly TourImportExportService _importExportService;
 
         private CreateTourViewModel _createTourViewModel;
         public TourListViewModel TourListViewModel { get; }
@@ -34,7 +35,8 @@ namespace TourPlanner.UI.ViewModels
         public ICommand DeleteTourCommand => new RelayCommand(
             execute => DeleteTour()
         );
-
+        public ICommand ImportToursCommand { get; }
+        public ICommand ExportToursCommand { get; }
 
         public TourManagementViewModel(
             CreateTourViewModel createTourViewModel,
@@ -49,12 +51,16 @@ namespace TourPlanner.UI.ViewModels
             SearchBarViewModel = searchBarViewModel;
             _eventAggregator = eventAggregator;
             _tourService = tourService;
+            _importExportService = new TourImportExportService();
 
             _createTourViewModel.TourCreated += OnTourCreated;
             _createTourViewModel.TourUpdated += OnTourUpdated;
             SearchBarViewModel.SearchParamsChanged += OnPerformSearch;
             _createTourViewModel.Cancelled += OnCancel;
             _eventAggregator.Subscribe<Tour>(OnTourSelected);
+
+            ImportToursCommand = new RelayCommand(execute => ImportTours());
+            ExportToursCommand = new RelayCommand(execute => ExportTours());
 
             TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
         }
@@ -146,6 +152,70 @@ namespace TourPlanner.UI.ViewModels
         public void OnCancel(object sender, EventArgs e)
         {
             _eventAggregator.Publish("ShowHome");
+        }
+
+        private async void ImportTours()
+        {
+            try
+            {
+                var openFileDialog = new Microsoft.Win32.OpenFileDialog
+                {
+                    Filter = "JSON files (*.json)|*.json|Excel files (*.xlsx)|*.xlsx",
+                    Title = "Import Tour Data"
+                };
+
+                if (openFileDialog.ShowDialog() == true)
+                {
+                    List<Tour> importedTours = new List<Tour>();
+                    if (openFileDialog.FileName.EndsWith(".json"))
+                        importedTours = await _importExportService.ImportToursFromJsonAsync(openFileDialog.FileName);
+                    if (openFileDialog.FileName.EndsWith(".xlsx"))
+                        importedTours = _importExportService.ImportToursFromExcel(openFileDialog.FileName);
+
+                    if (importedTours.Count == 0)
+                    {
+                        MessageBox.Show("No tours found in the selected file.", "Import Result", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+
+                    foreach (var tour in importedTours)
+                    {
+                        _tourService.CreateTour(tour);
+                    }
+
+                    TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
+                    MessageBox.Show("Tours imported successfully.", "Import Result", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to import tours.\nDetails: {ex.Message}", "Import Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private async void ExportTours()
+        {
+            try
+            {
+                var saveFileDialog = new Microsoft.Win32.SaveFileDialog
+                {
+                    Filter = "JSON files (*.json)|*.json|Excel files (*.xlsx)|*.xlsx",
+                    Title = "Export Tour Data",
+                    FileName = "TourExport"
+                };
+                if (saveFileDialog.ShowDialog() != true) return;
+                var tours = _tourService.GetAllTours();
+                if (saveFileDialog.FileName.EndsWith(".json"))
+                    await _importExportService.ExportToursToJsonAsync(tours, saveFileDialog.FileName);
+                if (saveFileDialog.FileName.EndsWith(".xlsx"))
+                    _importExportService.ExportToursToExcel(tours, saveFileDialog.FileName);
+
+                MessageBox.Show("Tours exported successfully.", "Export Result", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to export tours.\nDetails: {ex.Message}", "Export Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }
