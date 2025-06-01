@@ -23,7 +23,12 @@ public class TourService {
     public IEnumerable<Tour> GetAllTours() {
         return _tourRepository.GetTours();
     }
-    
+
+    public IEnumerable<Tour> SearchTours(string query)
+    {
+        return _tourRepository.SearchTours(query);
+    }
+
     public void CreateTour(Tour tour) {
         if (tour == null)
         {
@@ -68,10 +73,6 @@ public class TourService {
         }
     }
 
-    public IEnumerable<Tour> SearchTours(string query) {
-        return _tourRepository.SearchTours(query);
-    }
-
     public void RecalculateTourAttributes(Tour tour)
     {
         if (tour == null)
@@ -105,8 +106,8 @@ public class TourService {
 
         try
         {
-            _logger.LogInformation("Tour deleted => {@TourName}", tour.Name);
             _tourRepository.DeleteTour(tour.Id);
+            _logger.LogInformation("Tour deleted => {@TourName}", tour.Name);
         }
         catch (PostgresException pgEx)
         {
