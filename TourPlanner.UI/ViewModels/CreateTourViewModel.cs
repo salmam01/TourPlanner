@@ -41,15 +41,14 @@ namespace TourPlanner.UI.ViewModels
         public string Name
         {
             get => _name;
-            set {
-                if (_name != value)
-                {
-                    _name = value;
-                    ValidateName();
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(CanCreate));
-                    OnPropertyChanged(nameof(NameError));
-                }
+            set
+            {
+                if (_name == value) return;
+                _name = value;
+                ValidateName();
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(CanCreate));
+                OnPropertyChanged(nameof(NameError));
             }
         }
         public string NameError => GetFirstError(nameof(Name));
@@ -57,15 +56,14 @@ namespace TourPlanner.UI.ViewModels
         public DateTime Date
         {
             get => _date;
-            set {
-                if (_date != value)
-                {
-                    _date = value;
-                    ValidateDate();
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(CanCreate));
-                    OnPropertyChanged(nameof(DateError));
-                }
+            set
+            {
+                if (_date == value) return;
+                _date = value;
+                ValidateDate();
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(CanCreate));
+                OnPropertyChanged(nameof(DateError));
             }
         }
         public string DateError => GetFirstError(nameof(Date));
@@ -73,15 +71,14 @@ namespace TourPlanner.UI.ViewModels
         public string Description
         {
             get => _description;
-            set {
-                if (_description != value)
-                {
-                    _description = value;
-                    ValidateDescription();
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(CanCreate));
-                    OnPropertyChanged(nameof(DescriptionError));
-                }
+            set
+            {
+                if (_description == value) return;
+                _description = value;
+                ValidateDescription();
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(CanCreate));
+                OnPropertyChanged(nameof(DescriptionError));
             }
         }
         public string DescriptionError => GetFirstError(nameof(Description));
@@ -89,15 +86,14 @@ namespace TourPlanner.UI.ViewModels
         public string TransportType
         {
             get => _transportType;
-            set {
-                if (_transportType != value)
-                {
-                    _transportType = value;
-                    ValidateTransportType();
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(CanCreate));
-                    OnPropertyChanged(nameof(TransportTypeError));
-                }
+            set
+            {
+                if (_transportType == value) return;
+                _transportType = value;
+                ValidateTransportType();
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(CanCreate));
+                OnPropertyChanged(nameof(TransportTypeError));
             }
         }
         public string TransportTypeError => GetFirstError(nameof(TransportType));
@@ -105,15 +101,14 @@ namespace TourPlanner.UI.ViewModels
         public string From
         {
             get => _from;
-            set {
-                if (_from != value)
-                {
-                    _from = value;
-                    ValidateFrom();
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(CanCreate));
-                    OnPropertyChanged(nameof(FromError));
-                }
+            set
+            {
+                if (_from == value) return;
+                _from = value;
+                ValidateFrom();
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(CanCreate));
+                OnPropertyChanged(nameof(FromError));
             }
         }
         public string FromError => GetFirstError(nameof(From));
@@ -121,15 +116,14 @@ namespace TourPlanner.UI.ViewModels
         public string To
         {
             get => _to;
-            set {
-                if (_to != value)
-                {
-                    _to = value;
-                    ValidateTo();
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(CanCreate));
-                    OnPropertyChanged(nameof(ToError));
-                }
+            set
+            {
+                if (_to == value) return;
+                _to = value;
+                ValidateTo();
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(CanCreate));
+                OnPropertyChanged(nameof(ToError));
             }
         }
         public string ToError => GetFirstError(nameof(To));

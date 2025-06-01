@@ -38,14 +38,12 @@ namespace TourPlanner.UI.ViewModels
             get => _date;
             set
             {
-                if (_date != value)
-                {
-                    _date = value;
-                    ValidateDate();
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(CanCreate));
-                    OnPropertyChanged(nameof(DateError));
-                }
+                if (_date == value) return;
+                _date = value;
+                ValidateDate();
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(CanCreate));
+                OnPropertyChanged(nameof(DateError));
             }
         }
         public string DateError => GetFirstError(nameof(Date));
@@ -55,14 +53,12 @@ namespace TourPlanner.UI.ViewModels
             get => _comment;
             set
             {
-                if (_comment != value)
-                {
-                    _comment = value;
-                    ValidateComment();
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(CanCreate));
-                    OnPropertyChanged(nameof(CommentError));
-                }
+                if (_comment == value) return;
+                _comment = value;
+                ValidateComment();
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(CanCreate));
+                OnPropertyChanged(nameof(CommentError));
             }
         }
         public string CommentError => GetFirstError(nameof(Comment));
@@ -72,14 +68,12 @@ namespace TourPlanner.UI.ViewModels
             get => _difficulty;
             set
             {
-                if (_difficulty != value)
-                {
-                    _difficulty = value;
-                    ValidateDifficulty();
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(CanCreate));
-                    OnPropertyChanged(nameof(DifficultyError));
-                }
+                if (_difficulty == value) return;
+                _difficulty = value;
+                ValidateDifficulty();
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(CanCreate));
+                OnPropertyChanged(nameof(DifficultyError));
             }
         }
         public string DifficultyError => GetFirstError(nameof(Difficulty));
@@ -89,14 +83,12 @@ namespace TourPlanner.UI.ViewModels
             get => _rating;
             set
             {
-                if (_rating != value)
-                {
-                    _rating = value;
-                    ValidateRating();
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(CanCreate));
-                    OnPropertyChanged(nameof(RatingError));
-                }
+                if (_rating == value) return;
+                _rating = value;
+                ValidateRating();
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(CanCreate));
+                OnPropertyChanged(nameof(RatingError));
             }
         }
         public string RatingError => GetFirstError(nameof(Rating));
@@ -106,14 +98,12 @@ namespace TourPlanner.UI.ViewModels
             get => _totalDistance;
             set
             {
-                if (_totalDistance != value)
-                {
-                    _totalDistance = value;
-                    ValidateTotalDistance();
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(CanCreate));
-                    OnPropertyChanged(nameof(TotalDistanceError));
-                }
+                if (_totalDistance == value) return;
+                _totalDistance = value;
+                ValidateTotalDistance();
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(CanCreate));
+                OnPropertyChanged(nameof(TotalDistanceError));
             }
         }
         public string TotalDistanceError => GetFirstError(nameof(TotalDistance));
@@ -123,14 +113,12 @@ namespace TourPlanner.UI.ViewModels
             get => _hours;
             set
             {
-                if (_hours != value)
-                {
-                    _hours = value;
-                    ValidateTotalTime();
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(CanCreate));
-                    OnPropertyChanged(nameof(TotalTimeError));
-                }
+                if (_hours == value) return;
+                _hours = value;
+                ValidateTotalTime();
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(CanCreate));
+                OnPropertyChanged(nameof(TotalTimeError));
             }
         }
 
@@ -139,14 +127,12 @@ namespace TourPlanner.UI.ViewModels
             get => _minutes;
             set
             {
-                if (_minutes != value)
-                {
-                    _minutes = value;
-                    ValidateTotalTime();
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(CanCreate));
-                    OnPropertyChanged(nameof(TotalTimeError));
-                }
+                if (_minutes == value) return;
+                _minutes = value;
+                ValidateTotalTime();
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(CanCreate));
+                OnPropertyChanged(nameof(TotalTimeError));
             }
         }
         // Zeigt TotalTime-bezogenen Fehler für beide Zeiteingaben an (Hours & Minutes)
