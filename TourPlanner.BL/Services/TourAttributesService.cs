@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Npgsql;
 using TourPlanner.DAL.Repositories.TourAttributesRepository;
 using TourPlanner.Models.Entities;
 
@@ -17,10 +18,6 @@ namespace TourPlanner.BL.Services
             _logger = logger;
         }
 
-        public void InsertTourAttributes(TourAttributes tourAttributes)
-        {
-            _tourAttributesRepository.InsertTourAttributes(tourAttributes);
-        }
 
         /// <summary>
         /// Computes popularity based on the number of logs.
@@ -37,7 +34,9 @@ namespace TourPlanner.BL.Services
         public bool ComputeChildFriendliness(ICollection<TourLog> logs)
         {
             if (logs == null || logs.Count == 0)
-                return false; // No logs, assume not child-friendly
+            {
+                return false;
+            }
 
             // Average difficulty: 1-5, threshold <= 2 (easy/moderate)
             double avgDifficulty = logs.Average(l => l.Difficulty);
@@ -67,15 +66,15 @@ namespace TourPlanner.BL.Services
         /// </summary>
         public void UpdateAttributes(Tour tour)
         {
-            if (tour == null)
-            {
-                _logger.LogWarning("Tour is null.");
-                return;
-            }
-
             tour.TourAttributes.Popularity = ComputePopularity(tour.TourLogs);
             tour.TourAttributes.ChildFriendliness = ComputeChildFriendliness(tour.TourLogs);
             tour.TourAttributes.SearchAlgorithmRanking = ComputeSearchAlgorithmRanking(tour.TourAttributes.Popularity, tour.TourAttributes.ChildFriendliness);
+
+            _logger.LogInformation("Updating TourAttributes for Tour => {@TourId} | Popularity: {Popularity}, ChildFriendliness: {ChildFriendly}, Ranking: {Ranking}",
+                tour.Id,
+                tour.TourAttributes.Popularity,
+                tour.TourAttributes.ChildFriendliness,
+                tour.TourAttributes.SearchAlgorithmRanking);
 
             _tourAttributesRepository.UpdateTourAttributes(tour.TourAttributes);
         }

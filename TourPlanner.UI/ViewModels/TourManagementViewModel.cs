@@ -43,7 +43,8 @@ namespace TourPlanner.UI.ViewModels
             TourListViewModel tourListViewModel,
             SearchBarViewModel searchBarViewModel,
             EventAggregator eventAggregator,
-            TourService tourService
+            TourService tourService,
+            TourImportExportService tourImportExportService
         )
         {
             _createTourViewModel = createTourViewModel;
@@ -51,7 +52,7 @@ namespace TourPlanner.UI.ViewModels
             SearchBarViewModel = searchBarViewModel;
             _eventAggregator = eventAggregator;
             _tourService = tourService;
-            _importExportService = new TourImportExportService();
+            _importExportService = tourImportExportService;
 
             _createTourViewModel.TourCreated += OnTourCreated;
             _createTourViewModel.TourUpdated += OnTourUpdated;
@@ -117,8 +118,6 @@ namespace TourPlanner.UI.ViewModels
             if (tour == null) return;
 
             _tourService.CreateTour(tour);
-            // Clear search query to show all tours after create
-            //TourListViewModel.SearchQuery = "";
             TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
             _eventAggregator.Publish("ShowHome");
         }
@@ -128,8 +127,6 @@ namespace TourPlanner.UI.ViewModels
             if (tour == null) return;
 
             _tourService.UpdateTour(tour);
-            // Clear search query to show all tours after update
-            //TourListViewModel.SearchQuery = "";
             TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
 
             _selectedTour = tour;

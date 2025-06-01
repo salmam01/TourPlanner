@@ -13,6 +13,11 @@ namespace TourPlanner.BL.Services
     {
         private readonly ILogger<TourImportExportService> _logger;
 
+        public TourImportExportService(ILogger<TourImportExportService> logger)
+        {
+            _logger = logger;
+        }
+
         public async Task ExportToursToJsonAsync(IEnumerable<Tour> tours, string filePath)
         {
             JsonSerializerOptions options;

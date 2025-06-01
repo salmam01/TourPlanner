@@ -16,12 +16,6 @@ namespace TourPlanner.DAL.Repositories.TourAttributesRepository
             return _dbContext.TourAttributes.ToList();
         }
 
-        public void InsertTourAttributes(TourAttributes tourAttributes)
-        {
-            _dbContext.TourAttributes.Add(tourAttributes);
-            Save();
-        }
-
         public void UpdateTourAttributes(TourAttributes tourAttributes)
         {
             TourAttributes tourAttributesToUpdate = _dbContext.TourAttributes.Find(tourAttributes.Id);
