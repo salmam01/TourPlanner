@@ -74,15 +74,6 @@ namespace TourPlanner.UI.ViewModels
             _tourLogService = tourLogService;
             _eventAggregator = eventAggregator;
             _tourLogs = new ObservableCollection<TourLog>();
-
-            /*
-            _eventAggregator.Subscribe<string>(query =>
-            {
-                Console.WriteLine($"Searching for: {query}");
-                SearchQuery = query;
-                var filteredLogs = _tourLogService.SearchTourLogs(SearchQuery).ToList();
-                ReloadTourLogs(filteredLogs);
-            });*/
         }
 
         public void ReloadTourLogs(IEnumerable<TourLog> tourLogs)

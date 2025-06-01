@@ -9,11 +9,11 @@ using TourPlanner.UI.Commands;
 
 namespace TourPlanner.UI.ViewModels
 {
-    public class CreateTourLogViewModel : BaseViewModel {
-        private DateTime _date;
+    public class CreateTourLogViewModel : BaseFormViewModel {
+        private DateTime? _date;
         private string _comment;
-        private int _difficulty, _hours, _minutes;
-        private double _rating, _totalDistance;
+        private int? _difficulty, _hours, _minutes;
+        private double? _rating, _totalDistance;
         private bool _isEditing;
         private Guid _editingId;
         public string SubmitButtonText => _isEditing ? "Save Tour Log" : "Create Tour Log";
@@ -33,80 +33,125 @@ namespace TourPlanner.UI.ViewModels
         public event EventHandler<TourLog> TourLogUpdated;
         public event EventHandler Cancelled;
 
-        public DateTime Date
+        public DateTime? Date
         {
             get => _date;
             set
             {
-                _date = value;
-                OnPropertyChanged(nameof(Date));
+                if (_date != value)
+                {
+                    _date = value;
+                    ValidateDate();
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(CanCreate));
+                    OnPropertyChanged(nameof(DateError));
+                }
             }
         }
+        public string DateError => GetFirstError(nameof(Date));
 
         public string Comment
         {
             get => _comment;
             set
             {
-                _comment = value;
-                OnPropertyChanged(nameof(CanCreate));
+                if (_comment != value)
+                {
+                    _comment = value;
+                    ValidateComment();
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(CanCreate));
+                    OnPropertyChanged(nameof(CommentError));
+                }
             }
         }
+        public string CommentError => GetFirstError(nameof(Comment));
 
-        public int Difficulty
+        public int? Difficulty
         {
             get => _difficulty;
             set
             {
-                if (value < 1 || value > 5) return;
-                _difficulty = value;
-                OnPropertyChanged(nameof(CanCreate));
+                if (_difficulty != value)
+                {
+                    _difficulty = value;
+                    ValidateDifficulty();
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(CanCreate));
+                    OnPropertyChanged(nameof(DifficultyError));
+                }
             }
         }
+        public string DifficultyError => GetFirstError(nameof(Difficulty));
 
-        public double Rating
+        public double? Rating
         {
             get => _rating;
             set
             {
-                if (!(value >= 1) || !(value <= 5)) return;
-                _rating = value;
-                OnPropertyChanged(nameof(CanCreate));
+                if (_rating != value)
+                {
+                    _rating = value;
+                    ValidateRating();
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(CanCreate));
+                    OnPropertyChanged(nameof(RatingError));
+                }
             }
         }
+        public string RatingError => GetFirstError(nameof(Rating));
 
-        public double TotalDistance
+        public double? TotalDistance
         {
             get => _totalDistance;
             set
             {
-                if (!(value >= 0)) return;
-                _totalDistance = value;
-                OnPropertyChanged(nameof(CanCreate));
+                if (_totalDistance != value)
+                {
+                    _totalDistance = value;
+                    ValidateTotalDistance();
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(CanCreate));
+                    OnPropertyChanged(nameof(TotalDistanceError));
+                }
             }
         }
+        public string TotalDistanceError => GetFirstError(nameof(TotalDistance));
 
-        public int Hours
+        public int? Hours
         {
             get => _hours;
             set
             {
-                if (value < 0) return;
-                _hours = value;
-                OnPropertyChanged(nameof(CanCreate));
+                if (_hours != value)
+                {
+                    _hours = value;
+                    ValidateTotalTime();
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(CanCreate));
+                    OnPropertyChanged(nameof(TotalTimeError));
+                }
             }
         }
 
-        public int Minutes
+        public int? Minutes
         {
             get => _minutes;
             set
             {
-                if (value < 0 || value >= 60) return;
-                _minutes = value;
-                OnPropertyChanged(nameof(CanCreate));
+                if (_minutes != value)
+                {
+                    _minutes = value;
+                    ValidateTotalTime();
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(CanCreate));
+                    OnPropertyChanged(nameof(TotalTimeError));
+                }
             }
         }
+        // Zeigt TotalTime-bezogenen Fehler für beide Zeiteingaben an (Hours & Minutes)
+        public string TotalTimeError => GetFirstError(nameof(Hours)) ?? GetFirstError(nameof(Minutes));
+
         public CreateTourLogViewModel() {
             ResetForm();
         }
@@ -121,27 +166,44 @@ namespace TourPlanner.UI.ViewModels
             Hours = 0;
             Minutes = 0;
             _isEditing = false;
+
+            ClearErrors(nameof(Date));
+            ClearErrors(nameof(Comment));
+            ClearErrors(nameof(Difficulty));
+            ClearErrors(nameof(Rating));
+            ClearErrors(nameof(TotalDistance));
+            ClearErrors(nameof(Hours));
+            ClearErrors(nameof(Minutes));
+            OnPropertyChanged(nameof(SubmitButtonText));
+
             OnPropertyChanged(nameof(SubmitButtonText));
         }
 
         private void CreateTourLog() {
+            ValidateDate();
+            ValidateComment();
+            ValidateDifficulty();
+            ValidateRating();
+            ValidateTotalDistance();
+            ValidateTotalTime();
 
-            DateTime utcDate = DateTime.SpecifyKind(_date, DateTimeKind.Utc);
+            if (!ValidateInput()) return;
+
+            DateTime utcDate = DateTime.SpecifyKind(Date ?? DateTime.UtcNow, DateTimeKind.Utc);
 
             TourLog tourLog = new TourLog
             {
                 Id = _isEditing ? _editingId : Guid.NewGuid(),
                 Date = utcDate,
                 Comment = Comment,
-                Difficulty = Difficulty,
-                Rating = Rating,
-                TotalDistance = TotalDistance,
-                TotalTime = new TimeSpan(Hours, Minutes, 0)
+                Difficulty = Difficulty ?? 1,
+                Rating = Rating ?? 1,
+                TotalDistance = TotalDistance ?? 0,
+                TotalTime = new TimeSpan(Hours ?? 0, Minutes ?? 0, 0)
             };
 
             if (_isEditing) {
                 TourLogUpdated?.Invoke(this, tourLog);
-                Log.Information("Tour Log edited => {@_tourLog}", tourLog);
             }
             else {
                 TourLogCreated?.Invoke(this, tourLog);
@@ -168,26 +230,85 @@ namespace TourPlanner.UI.ViewModels
             ResetForm();
             Cancelled?.Invoke(this, EventArgs.Empty);
         }
-
+        
         private bool ValidateInput()
         {
-            (bool IsValid, string Message)[] errors = new (bool IsValid, string Message)[]
+            return
+                string.IsNullOrWhiteSpace(GetFirstError(nameof(Date))) &&
+                string.IsNullOrWhiteSpace(GetFirstError(nameof(Comment))) &&
+                string.IsNullOrWhiteSpace(GetFirstError(nameof(Difficulty))) &&
+                string.IsNullOrWhiteSpace(GetFirstError(nameof(Rating))) &&
+                string.IsNullOrWhiteSpace(GetFirstError(nameof(TotalDistance))) &&
+                string.IsNullOrWhiteSpace(GetFirstError(nameof(Hours))) &&
+                string.IsNullOrWhiteSpace(GetFirstError(nameof(Minutes)));
+        }
+
+        private string GetFirstError(string propertyName)
+        {
+            var errors = GetErrors(propertyName) as System.Collections.Generic.List<string>;
+            return errors != null && errors.Any() ? errors.First() : null;
+        }
+
+        private void ValidateDate()
+        {
+            var error = BL.Services.TourLogValidator.ValidateDate(Date);
+            if (!string.IsNullOrEmpty(error))
+                SetError(nameof(Date), error);
+            else
+                ClearErrors(nameof(Date));
+        }
+
+        private void ValidateComment()
+        {
+            var error = BL.Services.TourLogValidator.ValidateComment(Comment);
+            if (!string.IsNullOrEmpty(error))
+                SetError(nameof(Comment), error);
+            else
+                ClearErrors(nameof(Comment));
+        }
+
+        private void ValidateDifficulty()
+        {
+            var error = BL.Services.TourLogValidator.ValidateDifficulty(Difficulty);
+            if (!string.IsNullOrEmpty(error))
+                SetError(nameof(Difficulty), error);
+            else
+                ClearErrors(nameof(Difficulty));
+        }
+
+        private void ValidateRating()
+        {
+            var error = BL.Services.TourLogValidator.ValidateRating(Rating.HasValue ? (int?)Rating : null);
+            if (!string.IsNullOrEmpty(error))
+                SetError(nameof(Rating), error);
+            else
+                ClearErrors(nameof(Rating));
+        }
+
+        private void ValidateTotalDistance()
+        {
+            var error = BL.Services.TourLogValidator.ValidateTotalDistance(TotalDistance);
+            if (!string.IsNullOrEmpty(error))
+                SetError(nameof(TotalDistance), error);
+            else
+                ClearErrors(nameof(TotalDistance));
+        }
+
+        private void ValidateTotalTime()
+        {
+            var time = new TimeSpan(Hours ?? 0, Minutes ?? 0, 0);
+            var error = BL.Services.TourLogValidator.ValidateTotalTime(time);
+            if (!string.IsNullOrEmpty(error))
             {
-                (!string.IsNullOrWhiteSpace(Comment), "Comment is empty"),
-                (IsInRange(Difficulty, 1, 5), "Difficulty must be between 1 and 5"),
-                (IsInRange(Rating, 1.0, 5.0), "Rating must be between 1.0 and 5.0"),
-                (TotalDistance >= 0, "TotalDistance cannot be negative"),
-                (Hours >= 0, "Hours cannot be negative"),
-                (IsInRange(Minutes, 0, 59), "Minutes must be between 0 and 59")
-            };
-            
-            foreach (var (isValid, message) in errors.Where(e => !e.IsValid))
-                Debug.WriteLine($"- {message}");
-            return errors.All(e => e.IsValid);
+                SetError(nameof(Hours), error);
+                SetError(nameof(Minutes), error);
+            }
+            else
+            {
+                ClearErrors(nameof(Hours));
+                ClearErrors(nameof(Minutes));
+            }
         }
-        
-        private static bool IsInRange<T>(T value, T min, T max) where T : IComparable<T> {
-            return value.CompareTo(min) >= 0 && value.CompareTo(max) <= 0;
-        }
-     }
- }
+
+    }
+}
