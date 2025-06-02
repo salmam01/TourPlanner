@@ -63,6 +63,7 @@ public partial class App : Application
         services.AddSingleton<CreateTourLogViewModel>();
         services.AddSingleton<TourLogListViewModel>();
 
+        //  Change
         services.AddDbContext<TourPlannerDbContext>( options =>
         {
             options.UseNpgsql(

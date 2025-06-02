@@ -29,6 +29,8 @@ public class TourService {
         return _tourRepository.SearchTours(query);
     }
 
+    //  Send error to UI layer, so user knows
+    //  Result type (better) or boolean, FluentResult, C# functional extension
     public void CreateTour(Tour tour) {
         if (tour == null)
         {

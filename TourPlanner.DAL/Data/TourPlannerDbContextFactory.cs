@@ -14,6 +14,7 @@ namespace TourPlanner.DAL.Data
                 .AddJsonFile("appsettings.json", false, false)
                 .Build();
 
+            //  one connection string
             DatabaseConfig databaseConfig = config.GetSection("Database").Get<DatabaseConfig>();
 
             string connectionString = 
