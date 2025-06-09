@@ -1,6 +1,7 @@
 ﻿using ClosedXML.Excel;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using TourPlanner.Models.Entities;
 
 /// <summary>
@@ -22,7 +23,11 @@ namespace TourPlanner.BL.Services
         {
             try {
                 _logger.LogInformation("Exporting {Count} tours to JSON file: {FilePath}", tours?.Count() ?? 0, filePath);
-                JsonSerializerOptions options = new JsonSerializerOptions { WriteIndented = true };
+                JsonSerializerOptions options = new JsonSerializerOptions 
+                { 
+                    WriteIndented = true,
+                    ReferenceHandler = ReferenceHandler.Preserve
+                };
                 using (FileStream fs = File.Create(filePath))
                 {
                     await JsonSerializer.SerializeAsync(fs, tours, options);
@@ -39,9 +44,13 @@ namespace TourPlanner.BL.Services
         {
             try {
                 _logger.LogInformation("Importing tours from JSON file: {FilePath}", filePath);
+                JsonSerializerOptions options = new JsonSerializerOptions 
+                { 
+                    ReferenceHandler = ReferenceHandler.Preserve
+                };
                 using (FileStream fs = File.OpenRead(filePath))
                 {
-                    List<Tour>? tours = await JsonSerializer.DeserializeAsync<List<Tour>>(fs);
+                    List<Tour>? tours = await JsonSerializer.DeserializeAsync<List<Tour>>(fs, options);
                     _logger.LogInformation("Imported {Count} tours from JSON: {FilePath}", tours?.Count ?? 0, filePath);
                     return tours ?? new List<Tour>();
                 }
@@ -62,13 +71,15 @@ namespace TourPlanner.BL.Services
                     IXLWorksheet toursSheet = workbook.Worksheets.Add("Tours");
                     toursSheet.Cell(1, 1).Value = "Id";
                     toursSheet.Cell(1, 2).Value = "Name";
-                    toursSheet.Cell(1, 3).Value = "Description";
-                    toursSheet.Cell(1, 4).Value = "From";
-                    toursSheet.Cell(1, 5).Value = "To";
-                    toursSheet.Cell(1, 6).Value = "TransportType";
-                    toursSheet.Cell(1, 7).Value = "Distance";
-                    toursSheet.Cell(1, 8).Value = "EstimatedTime";
-                    toursSheet.Cell(1, 9).Value = "TourLogsCount";
+                    toursSheet.Cell(1, 3).Value = "Date";
+                    toursSheet.Cell(1, 4).Value = "Description";
+                    toursSheet.Cell(1, 5).Value = "From";
+                    toursSheet.Cell(1, 6).Value = "To";
+                    toursSheet.Cell(1, 7).Value = "TransportType";
+                    toursSheet.Cell(1, 8).Value = "Distance";
+                    toursSheet.Cell(1, 9).Value = "EstimatedTime";
+                    toursSheet.Cell(1, 10).Value = "RouteInformation";
+                    toursSheet.Cell(1, 11).Value = "TourLogsCount";
                     int tourRow = 2;
 
                     var tourList = tours.ToList();
@@ -76,13 +87,33 @@ namespace TourPlanner.BL.Services
                     {
                         toursSheet.Cell(tourRow, 1).Value = tour.Id.ToString();
                         toursSheet.Cell(tourRow, 2).Value = tour.Name ?? "";
-                        toursSheet.Cell(tourRow, 3).Value = tour.Description ?? "";
-                        toursSheet.Cell(tourRow, 4).Value = tour.From ?? "";
-                        toursSheet.Cell(tourRow, 5).Value = tour.To ?? "";
-                        toursSheet.Cell(tourRow, 6).Value = tour.TransportType ?? "";
-                        toursSheet.Cell(tourRow, 9).Value = tour.TourLogs?.Count ?? 0;
+                        var dateCell = toursSheet.Cell(tourRow, 3);
+                        dateCell.Value = tour.Date;
+                        dateCell.Style.NumberFormat.Format = "DD.MM.YYYY";
+                        dateCell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                        toursSheet.Cell(tourRow, 4).Value = tour.Description ?? "";
+                        toursSheet.Cell(tourRow, 5).Value = tour.From ?? "";
+                        toursSheet.Cell(tourRow, 6).Value = tour.To ?? "";
+                        toursSheet.Cell(tourRow, 7).Value = tour.TransportType ?? "";
+                        toursSheet.Cell(tourRow, 8).Value = tour.Distance;
+                        toursSheet.Cell(tourRow, 9).Value = tour.EstimatedTime.ToString();
+                        toursSheet.Cell(tourRow, 10).Value = tour.RouteInformation ?? "";
+                        toursSheet.Cell(tourRow, 11).Value = tour.TourLogs?.Count ?? 0;
                         tourRow++;
                     }
+
+                    // Set column widths
+                    toursSheet.Column(1).Width = 36; // Id (ID-Spalten sind 36 Zeichen breit (für GUIDs))
+                    toursSheet.Column(2).Width = 20; // Name
+                    toursSheet.Column(3).Width = 15; // Date
+                    toursSheet.Column(4).Width = 30; // Description
+                    toursSheet.Column(5).Width = 20; // From
+                    toursSheet.Column(6).Width = 20; // To
+                    toursSheet.Column(7).Width = 15; // TransportType
+                    toursSheet.Column(8).Width = 12; // Distance
+                    toursSheet.Column(9).Width = 15; // EstimatedTime
+                    toursSheet.Column(10).Width = 30; // RouteInformation
+                    toursSheet.Column(11).Width = 12; // TourLogsCount
 
                     // TourLogs sheet
                     IXLWorksheet logsSheet = workbook.Worksheets.Add("TourLogs");
@@ -106,7 +137,10 @@ namespace TourPlanner.BL.Services
                         {
                             logsSheet.Cell(logRow, 1).Value = log.Id.ToString();
                             logsSheet.Cell(logRow, 2).Value = tour.Id.ToString();
-                            logsSheet.Cell(logRow, 3).Value = log.Date;
+                            var dateCell = logsSheet.Cell(logRow, 3);
+                            dateCell.Value = log.Date;
+                            dateCell.Style.NumberFormat.Format = "DD.MM.YYYY";
+                            dateCell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
                             logsSheet.Cell(logRow, 4).Value = log.Difficulty;
                             logsSheet.Cell(logRow, 5).Value = log.Rating;
                             logsSheet.Cell(logRow, 6).Value = log.Comment ?? "";
@@ -116,6 +150,17 @@ namespace TourPlanner.BL.Services
                             totalLogs++;
                         }
                     }
+
+                    // Set column widths for TourLogs sheet
+                    logsSheet.Column(1).Width = 36; // Id
+                    logsSheet.Column(2).Width = 36; // TourId
+                    logsSheet.Column(3).Width = 15; // Date
+                    logsSheet.Column(4).Width = 12; // Difficulty
+                    logsSheet.Column(5).Width = 12; // Rating
+                    logsSheet.Column(6).Width = 30; // Comment
+                    logsSheet.Column(7).Width = 12; // TotalDistance
+                    logsSheet.Column(8).Width = 15; // TotalTime
+
                     workbook.SaveAs(filePath);
                     _logger.LogInformation("Tour export to Excel successful: {FilePath}. Tours: {TourCount}, Logs: {LogCount}", filePath, tourList.Count, totalLogs);
                 }
@@ -144,10 +189,14 @@ namespace TourPlanner.BL.Services
                         {
                             Id = tourId,
                             Name = row.Cell(2).GetString(),
-                            Description = row.Cell(3).GetString(),
-                            From = row.Cell(4).GetString(),
-                            To = row.Cell(5).GetString(),
-                            TransportType = row.Cell(6).GetString(),
+                            Date = DateTime.TryParse(row.Cell(3).GetString(), out var date) ? date : DateTime.Now,
+                            Description = row.Cell(4).GetString(),
+                            From = row.Cell(5).GetString(),
+                            To = row.Cell(6).GetString(),
+                            TransportType = row.Cell(7).GetString(),
+                            Distance = double.TryParse(row.Cell(8).GetString(), out var dist) ? dist : 0,
+                            EstimatedTime = TimeSpan.TryParse(row.Cell(9).GetString(), out var time) ? time : TimeSpan.Zero,
+                            RouteInformation = row.Cell(10).GetString(),
                             TourLogs = new List<TourLog>()
                         };
                         tours.Add(tour);

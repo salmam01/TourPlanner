@@ -23,6 +23,7 @@ namespace TourPlanner.Models.Entities
         public string TransportType { get; set; }
         public double Distance { get; set; }
         public TimeSpan EstimatedTime { get; set; }
+        [Required]
         public string RouteInformation { get; set; }
         public TourAttributes TourAttributes { get; set; }
         public ICollection<TourLog> TourLogs { get; set; }
@@ -34,6 +35,7 @@ namespace TourPlanner.Models.Entities
                 Id = Id
             };
             TourLogs = new List<TourLog>();
+            RouteInformation = "";
         }
 
         public Tour (string name, DateTime date, string description, string transportType, string from, string to)
