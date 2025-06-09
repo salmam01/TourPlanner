@@ -189,7 +189,7 @@ namespace TourPlanner.BL.Services
                         {
                             Id = tourId,
                             Name = row.Cell(2).GetString(),
-                            Date = DateTime.TryParse(row.Cell(3).GetString(), out var date) ? date : DateTime.Now,
+                            Date = DateTime.TryParse(row.Cell(3).GetString(), out var date) ? DateTime.SpecifyKind(date, DateTimeKind.Utc) : DateTime.UtcNow,
                             Description = row.Cell(4).GetString(),
                             From = row.Cell(5).GetString(),
                             To = row.Cell(6).GetString(),
@@ -199,6 +199,16 @@ namespace TourPlanner.BL.Services
                             RouteInformation = row.Cell(10).GetString(),
                             TourLogs = new List<TourLog>()
                         };
+
+                        // Initialize TourAttributes
+                        tour.TourAttributes = new TourAttributes
+                        {
+                            Id = tour.Id,
+                            Popularity = 0,
+                            ChildFriendliness = false,
+                            SearchAlgorithmRanking = 0
+                        };
+
                         tours.Add(tour);
                         tourMap[tour.Id] = tour;
                     }
@@ -219,7 +229,7 @@ namespace TourPlanner.BL.Services
                             {
                                 Id = logId,
                                 TourId = parentTourId,
-                                Date = DateTime.TryParse(row.Cell(3).GetString(), out var date) ? date : DateTime.UtcNow,
+                                Date = DateTime.TryParse(row.Cell(3).GetString(), out var date) ? DateTime.SpecifyKind(date, DateTimeKind.Utc) : DateTime.UtcNow,
                                 Difficulty = int.TryParse(row.Cell(4).GetString(), out var diff) ? diff : 1,
                                 Rating = double.TryParse(row.Cell(5).GetString(), out var rating) ? rating : 1.0,
                                 Comment = row.Cell(6).GetString(),
@@ -232,8 +242,27 @@ namespace TourPlanner.BL.Services
                                 parentTour.TourLogs.Add(log);
                                 totalLogs++;
                             }
+                            else
+                            {
+                                _logger.LogWarning("TourLog {LogId} references non-existent Tour {TourId}", logId, parentTourId);
+                            }
                         }
                     }
+
+                    // Recalculate TourAttributes for all tours
+                    foreach (var tour in tours)
+                    {
+                        if (tour.TourLogs.Any())
+                        {
+                            tour.TourAttributes.Popularity = tour.TourLogs.Count;
+                            tour.TourAttributes.ChildFriendliness = tour.TourLogs.All(log => log.Difficulty <= 2);
+                            tour.TourAttributes.SearchAlgorithmRanking = tour.TourAttributes.Popularity / 100.0;
+                            if (tour.TourAttributes.ChildFriendliness)
+                                tour.TourAttributes.SearchAlgorithmRanking *= 1.5;
+                            tour.TourAttributes.SearchAlgorithmRanking = Math.Min(tour.TourAttributes.SearchAlgorithmRanking, 1.0);
+                        }
+                    }
+
                     _logger.LogInformation("Imported {TourCount} tours and {LogCount} logs from Excel: {FilePath}", tours.Count, totalLogs, filePath);
                 }
                 return tours;
