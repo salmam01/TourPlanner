@@ -14,6 +14,42 @@
         MouseDown="Window_MouseDown"
         ResizeMode="NoResize">
 
+    <Window.Resources>
+        <Style x:Key="LogButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#F5ECD5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="FontFamily" Value="/Resources/Fonts/#Montserrat"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#4A5A36"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Storyboard x:Key="FadeIn">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                            From="0" To="1" Duration="0:0:0.2"/>
+        </Storyboard>
+        <Storyboard x:Key="FadeOut">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                            From="1" To="0" Duration="0:0:0.2"/>
+        </Storyboard>
+    </Window.Resources>
+
     <Border CornerRadius="12"
             Background="#626F47">
 
@@ -42,27 +78,275 @@
                             FontWeight="Bold"
                             Margin="15,0,0,0"/>
 
+                <Button Grid.Column="1"
+                        x:Name="buttonShowLogs"
+                        Style="{StaticResource LogButtonStyle}"
+                        Content="Show Logs"
+                        HorizontalAlignment="Right"
+                        Margin="0,0,10,0"
+                        Click="buttonShowLogs_Click"
+                        Background="Transparent"
+                        Foreground="#F5ECD5"
+                        BorderThickness="0"
+                        Padding="10,5">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="5">
+                                <ContentPresenter HorizontalAlignment="Center" 
+                                                VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
                 <Button Grid.Column="2"
                         x:Name="buttonMinimize"
-                        Style="{StaticResource WindowButtonStyle}"
                         Content="-"
-                        Click="buttonMinimize_Click"/>
+                        Click="buttonMinimize_Click"
+                        Background="Transparent"
+                        Foreground="#F5ECD5"
+                        BorderThickness="0"
+                        Padding="10,5"
+                        FontSize="16"
+                        FontWeight="Bold">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="5">
+                                <ContentPresenter HorizontalAlignment="Center" 
+                                                VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#4A5A36"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Resources>
+                </Button>
 
                 <Button Grid.Column="3"
                         x:Name="buttonSize"
-                        Style="{StaticResource WindowButtonStyle}"
                         Content="_"
-                        Click="buttonSize_Click"/>
+                        Click="buttonSize_Click"
+                        Background="Transparent"
+                        Foreground="#F5ECD5"
+                        BorderThickness="0"
+                        Padding="10,5"
+                        FontSize="16"
+                        FontWeight="Bold">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="5">
+                                <ContentPresenter HorizontalAlignment="Center" 
+                                                VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#4A5A36"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Resources>
+                </Button>
 
                 <Button Grid.Column="4"
                         x:Name="buttonClose"
-                        Style="{StaticResource WindowButtonStyle}"
-                        Content="x"
-                        Click="buttonClose_Click"/>
+                        Content="×"
+                        Click="buttonClose_Click"
+                        Background="Transparent"
+                        Foreground="#F5ECD5"
+                        BorderThickness="0"
+                        Padding="10,5"
+                        FontSize="16"
+                        FontWeight="Bold">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="5">
+                                <ContentPresenter HorizontalAlignment="Center" 
+                                                VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#4A5A36"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Resources>
+                </Button>
             </Grid>
 
             <Grid Grid.Row="1">
                 <ContentControl Content="{Binding CurrentView}"/>
+                
+                <!-- Log Viewer Overlay -->
+                <Grid x:Name="LogViewerOverlay" 
+                      Visibility="Collapsed"
+                      Opacity="0">
+                    <Grid.Background>
+                        <SolidColorBrush Color="Black" Opacity="0.5"/>
+                    </Grid.Background>
+                    
+                    <Border Background="#F5ECD5"
+                            Margin="40"
+                            CornerRadius="12"
+                            Effect="{DynamicResource MaterialDesignElevationShadow2}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Header -->
+                            <Border Grid.Row="0" 
+                                    Background="#626F47"
+                                    CornerRadius="12,12,0,0"
+                                    Height="60">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    
+                                    <StackPanel Grid.Column="0" 
+                                              Orientation="Horizontal"
+                                              Margin="20,0,0,0">
+                                        <TextBlock Text="TourPlanner Logs"
+                                                 Foreground="#F5ECD5"
+                                                 FontSize="20"
+                                                 VerticalAlignment="Center"
+                                                 FontFamily="/Resources/Fonts/#Montserrat"
+                                                 FontWeight="Bold"/>
+                                        
+                                        <Button Content="Refresh"
+                                                Command="{Binding RefreshCommand}"
+                                                Style="{StaticResource LogButtonStyle}"
+                                                Margin="20,0,0,0"
+                                                Padding="20,8"
+                                                Background="#4A5A36"
+                                                Foreground="#F5ECD5"
+                                                FontFamily="/Resources/Fonts/#Montserrat"
+                                                FontSize="14">
+                                            <Button.Template>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border Background="{TemplateBinding Background}"
+                                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                                            CornerRadius="6">
+                                                        <Grid>
+                                                            <ContentPresenter HorizontalAlignment="Center" 
+                                                                            VerticalAlignment="Center"/>
+                                                        </Grid>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                            <Button.Resources>
+                                                <Style TargetType="Border">
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Background" Value="#5A6A46"/>
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Resources>
+                                        </Button>
+
+                                        <StackPanel Orientation="Horizontal" 
+                                                  Margin="30,0,0,0"
+                                                  VerticalAlignment="Center">
+                                            <TextBlock Text="Legend:" 
+                                                     Foreground="#F5ECD5"
+                                                     VerticalAlignment="Center"
+                                                     Margin="0,0,10,0"/>
+                                            <TextBlock Text="Error" 
+                                                     Foreground="#FF6B6B"
+                                                     VerticalAlignment="Center"
+                                                     Margin="5,0"/>
+                                            <TextBlock Text="Warning" 
+                                                     Foreground="#FFB86C"
+                                                     VerticalAlignment="Center"
+                                                     Margin="5,0"/>
+                                            <TextBlock Text="Info" 
+                                                     Foreground="#8BE9FD"
+                                                     VerticalAlignment="Center"
+                                                     Margin="5,0"/>
+                                            <TextBlock Text="Success" 
+                                                     Foreground="#50FA7B"
+                                                     VerticalAlignment="Center"
+                                                     Margin="5,0"/>
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <Button Grid.Column="1"
+                                            x:Name="buttonCloseLogs"
+                                            Style="{StaticResource WindowButtonStyle}"
+                                            Content="×"
+                                            Click="buttonCloseLogs_Click"
+                                            Margin="0,0,10,0"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- Log Content -->
+                            <ScrollViewer Grid.Row="1" 
+                                        Margin="20"
+                                        VerticalScrollBarVisibility="Auto">
+                                <ItemsControl ItemsSource="{Binding Logs}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Background="White" 
+                                                    Margin="0,5" 
+                                                    Padding="15"
+                                                    CornerRadius="8"
+                                                    BorderThickness="1"
+                                                    BorderBrush="#E0E0E0">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Grid.Column="0"
+                                                             Text="{Binding Type}"
+                                                             Foreground="{Binding Color}"
+                                                             FontWeight="Bold"
+                                                             Margin="0,0,15,0"
+                                                             VerticalAlignment="Center"/>
+                                                    <TextBlock Grid.Column="1"
+                                                             Text="{Binding Message}"
+                                                             TextWrapping="Wrap"
+                                                             FontFamily="Consolas"
+                                                             Foreground="#333333"/>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Grid>
+                    </Border>
+                </Grid>
             </Grid>
         </Grid>
     </Border>

@@ -22,6 +22,7 @@ namespace TourPlanner.UI;
 public partial class App : Application
 {
     private readonly IServiceProvider _serviceProvider;
+    public IServiceProvider ServiceProvider => _serviceProvider;
 
     public App()
     {
@@ -53,6 +54,7 @@ public partial class App : Application
         services.AddSingleton<MainWindowViewModel>();
         services.AddSingleton<HomeViewModel>();
         services.AddSingleton<EventAggregator>();
+        services.AddSingleton<LogViewerViewModel>();
 
         services.AddSingleton<TourManagementViewModel>();
         services.AddSingleton<CreateTourViewModel>();
