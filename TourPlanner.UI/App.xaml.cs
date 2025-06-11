@@ -84,6 +84,7 @@ public partial class App : Application
         services.AddSingleton<TourLogService>();
         services.AddSingleton<TourAttributesService>();
         services.AddSingleton<TourImportExportService>();
+        services.AddSingleton<ReportGenerationService>();
 
         services.AddSingleton(s => new MainWindow
         {

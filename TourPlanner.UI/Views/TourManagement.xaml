@@ -17,6 +17,7 @@
                 <RowDefinition Height="Auto"/> <!-- Header -->
                 <RowDefinition Height="Auto"/> <!-- Searchbar -->
                 <RowDefinition Height="*"/>   <!-- List -->
+                <RowDefinition Height="Auto"/> <!-- Report Buttons -->
             </Grid.RowDefinitions>
 
             <!-- Search Bar -->
@@ -48,18 +49,22 @@
                     <Button Content="+"
                             Margin="2"
                             Style="{StaticResource ActionButtonStyle}"
+                            ToolTip="Create Tour"
                             Command="{Binding CreateTourCommand}"/>
                     <Button Content="-"
                             Margin="2"
                             Style="{StaticResource ActionButtonStyle}"
+                            ToolTip="Delete Tour"
                             Command="{Binding DeleteTourCommand}"/>
                     <Button Content=" .. "
                             Margin="2"
                             Style="{StaticResource ActionButtonStyle}"
+                            ToolTip="Edit Tour"
                             Command="{Binding EditTourCommand}"/>
                     <!-- Import Button -->
                     <Button Margin="2"
                             Style="{StaticResource ActionButtonStyle}"
+                            ToolTip="Import Tour"
                             Command="{Binding ImportToursCommand}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE898;" FontSize="16" VerticalAlignment="Center" />
@@ -69,6 +74,7 @@
                     <!-- Export Button -->
                     <Button Margin="1"
                             Style="{StaticResource ActionButtonStyle}"
+                            ToolTip="Export Tour"
                             Command="{Binding ExportToursCommand}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8B8;" FontSize="16" VerticalAlignment="Center" />
@@ -82,6 +88,32 @@
                             Grid.Row="2"
                             Background="#F5ECD5"
                             DataContext="{Binding TourListViewModel}"/>
+
+            <!-- Report Buttons at bottom -->
+            <StackPanel Grid.Row="3" 
+                        Orientation="Horizontal" 
+                        HorizontalAlignment="Left" 
+                        Margin="10,5">
+                <!-- Generate Tour Report-->
+                <Button Command="{Binding GenerateTourReportCommand}"
+                        Style="{StaticResource ActionButtonStyle}"
+                        ToolTip="Generate Tour Report"
+                        Margin="0,0,5,0">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8A5;" FontSize="16" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                        <TextBlock Text="Tour Report" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <!-- Generate Summary Report-->
+                <Button Command="{Binding GenerateSummaryReportCommand}"
+                        Style="{StaticResource ActionButtonStyle}"
+                        ToolTip="Generate Summary Report">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE9D9;" FontSize="16" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                        <TextBlock Text="Summary Report" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
         </Grid>
     </Border>
 </UserControl>

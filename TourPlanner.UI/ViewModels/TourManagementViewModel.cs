@@ -3,19 +3,26 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using TourPlanner.BL.Services;
 using TourPlanner.Models.Entities;
 using TourPlanner.UI.Commands;
 using TourPlanner.UI.Events;
+using Microsoft.Extensions.Logging;
+using TourPlanner.UI.Views;
 
 namespace TourPlanner.UI.ViewModels
 {
     public class TourManagementViewModel : BaseViewModel
     {
         private readonly TourService _tourService;
+        private readonly TourLogService _tourLogService; 
         private readonly TourImportExportService _importExportService;
+        private readonly ReportGenerationService _reportGenerationService;
+        private readonly ILogger<TourManagementViewModel> _logger;
 
         private CreateTourViewModel _createTourViewModel;
         public TourListViewModel TourListViewModel { get; }
@@ -37,6 +44,8 @@ namespace TourPlanner.UI.ViewModels
         );
         public ICommand ImportToursCommand { get; }
         public ICommand ExportToursCommand { get; }
+        public ICommand GenerateTourReportCommand => new RelayCommand(_ => GenerateTourReport());
+        public ICommand GenerateSummaryReportCommand => new RelayCommand(_ => GenerateSummaryReport());
 
         public TourManagementViewModel(
             CreateTourViewModel createTourViewModel,
@@ -44,7 +53,10 @@ namespace TourPlanner.UI.ViewModels
             SearchBarViewModel searchBarViewModel,
             EventAggregator eventAggregator,
             TourService tourService,
-            TourImportExportService tourImportExportService
+            TourLogService tourLogService,
+            TourImportExportService tourImportExportService,
+            ReportGenerationService reportGenerationService,
+            ILogger<TourManagementViewModel> logger
         )
         {
             _createTourViewModel = createTourViewModel;
@@ -52,7 +64,10 @@ namespace TourPlanner.UI.ViewModels
             SearchBarViewModel = searchBarViewModel;
             _eventAggregator = eventAggregator;
             _tourService = tourService;
+            _tourLogService = tourLogService;
             _importExportService = tourImportExportService;
+            _reportGenerationService = reportGenerationService;
+            _logger = logger;
 
             _createTourViewModel.TourCreated += OnTourCreated;
             _createTourViewModel.TourUpdated += OnTourUpdated;
@@ -212,6 +227,68 @@ namespace TourPlanner.UI.ViewModels
             catch (Exception ex)
             {
                 MessageBox.Show($"Failed to export tours.\nDetails: {ex.Message}", "Export Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void GenerateTourReport()
+        {
+            if (_selectedTour == null)
+            {
+                MessageBox.Show("Please select a tour first.", "No Tour Selected", MessageBoxButton.OK, MessageBoxImage.Warning);
+                _logger.LogWarning("Attempted to generate tour report without selecting a tour");
+                return;
+            }
+
+            try
+            {
+                var saveFileDialog = new Microsoft.Win32.SaveFileDialog
+                {
+                    Filter = "PDF files (*.pdf)|*.pdf",
+                    Title = "Save Tour Report",
+                    FileName = $"TourReport_{_selectedTour.Name}_{DateTime.Now:yyyyMMdd}"
+                };
+
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    _reportGenerationService.GenerateTourReport(_selectedTour, saveFileDialog.FileName);
+                    _logger.LogInformation("Tour report generated successfully: {FilePath}", saveFileDialog.FileName);
+                    MessageBox.Show("Tour report generated successfully.", "Export Result", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to generate tour report");
+                MessageBox.Show($"Failed to generate tour report.\nDetails: {ex.Message}", "Report Generation Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
+            }
+        }
+
+        private void GenerateSummaryReport()
+        {
+            try
+            {
+                var saveFileDialog = new Microsoft.Win32.SaveFileDialog
+                {
+                    Filter = "PDF files (*.pdf)|*.pdf",
+                    Title = "Save Summary Report",
+                    FileName = $"TourSummary_{DateTime.Now:yyyyMMdd}"
+                };
+
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    var tours = _tourService.GetAllTours();
+                    _reportGenerationService.GenerateSummaryReport(tours, saveFileDialog.FileName);
+                    _logger.LogInformation("Summary report generated successfully: {FilePath}", saveFileDialog.FileName);
+                    MessageBox.Show("Summary report generated successfully.", "Export Result", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to generate summary report");
+                MessageBox.Show($"Failed to generate summary report.\nDetails: {ex.Message}", "Export Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
             }
         }
     }
