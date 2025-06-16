@@ -14,14 +14,14 @@ public class TourLogRepository : ITourLogRepository {
         _dbContext = context;
     }
 
-    public IEnumerable<TourLog> SearchTourLogs(Guid tourId, string query)
+    public IEnumerable<TourLog> SearchTourLogs(string query)
     {
         string ftsQuery = query.Trim().Replace(" ", " & ") + ":*";
 
         return _dbContext.TourLogs.FromSqlRaw(
             "SELECT * FROM \"TourLogs\" " +
-            "WHERE \"TourId\" = {0} AND \"SearchVector\" @@ to_tsquery('simple', {1})",
-            tourId, ftsQuery
+            "WHERE \"SearchVector\" @@ to_tsquery('simple', {0})",
+            ftsQuery
         ).ToList();
     }
 

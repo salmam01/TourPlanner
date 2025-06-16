@@ -116,14 +116,5 @@
                 </Style>
             </ListView.ItemContainerStyle>
         </ListView>
-        <TextBlock Text="No results found."
-                   Foreground="Red"
-                   FontSize="14"
-                   FontFamily="/Resources/Fonts/#Montserrat"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
-                   Margin="5"
-                   Visibility="{Binding HasNoResults, 
-                                Converter={StaticResource BooleanToVisibilityConverter}}"/>
     </Grid>
 </UserControl>

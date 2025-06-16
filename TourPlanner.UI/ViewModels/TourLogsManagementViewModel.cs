@@ -68,7 +68,6 @@ namespace TourPlanner.UI.ViewModels
             TourLogListViewModel.TourLogSelected += OnTourLogSelected;
             _createTourLogViewModel.TourLogCreated += OnTourLogCreated;
             _createTourLogViewModel.TourLogUpdated += OnTourLogUpdated;
-            SearchBarViewModel.SearchParamsChanged += OnPerformSearch;
             _createTourLogViewModel.Cancelled += OnCancel;
         }
 
@@ -116,16 +115,6 @@ namespace TourPlanner.UI.ViewModels
                 ShowErrorMessage(result);
 
             _eventAggregator.Publish("ShowHome");
-        }
-
-        public void OnPerformSearch(object sender, string searchText)
-        {
-            if (_selectedTour == null) return;
-            
-            if (string.IsNullOrEmpty(searchText))
-                TourLogListViewModel.ReloadTourLogs(_selectedTour.TourLogs);
-            else
-                TourLogListViewModel.ReloadTourLogs(_tourLogService.SearchTourLogs(_selectedTour, searchText));
         }
 
         public void OnCancel(object sender, EventArgs e)

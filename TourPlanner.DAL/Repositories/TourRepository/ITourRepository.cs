@@ -5,6 +5,8 @@ using TourPlanner.Models.Entities;
 namespace TourPlanner.DAL.Repositories.TourRepository;
 
 public interface ITourRepository {
+
+    Tour? GetTourById(Guid id);
     IEnumerable<Tour> GetTours();
     IEnumerable<Tour> SearchTours(string query);
     //IEnumerable<Tour> SearchTours(string query, double? minPopularity, bool? childFriendliness);

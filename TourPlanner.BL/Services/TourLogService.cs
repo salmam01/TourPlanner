@@ -23,9 +23,9 @@ public class TourLogService {
         return _tourLogRepository.GetTourLogs(tour.Id);
     }
 
-    public IEnumerable<TourLog> SearchTourLogs(Tour tour, string query)
+    public IEnumerable<TourLog> SearchTourLogs(string query)
     {
-        return _tourLogRepository.SearchTourLogs(tour.Id, query);
+        return _tourLogRepository.SearchTourLogs(query);
     }
 
     public Result CreateTourLog(Guid tourId, TourLog tourLog) {

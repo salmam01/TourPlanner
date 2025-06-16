@@ -1,8 +1,9 @@
-﻿using TourPlanner.Models.Entities;
-using TourPlanner.DAL.Repositories.TourRepository;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Npgsql;
+using System.Linq;
 using TourPlanner.BL.Utils;
+using TourPlanner.DAL.Repositories.TourRepository;
+using TourPlanner.Models.Entities;
 
 namespace TourPlanner.BL.Services;
 
@@ -25,9 +26,33 @@ public class TourService {
         return _tourRepository.GetTours();
     }
 
-    public IEnumerable<Tour> SearchTours(string query)
+    public List<Tour> SearchToursAndLogs(string query, IEnumerable<TourLog> tourLogsResult)
     {
-        return _tourRepository.SearchTours(query);
+        //  Query tours
+        List<Tour> tours = _tourRepository.SearchTours(query).ToList();
+
+        //  Extract tour Ids from the tour log list
+        List<Guid> tourIds = [];
+        foreach (TourLog log in tourLogsResult)
+        {
+            if(!tourIds.Contains(log.TourId))
+            {
+                tourIds.Add(log.TourId);
+            }
+        }
+
+        //  Get the tours from the database & combine the list
+        foreach (Guid tourId in tourIds)
+        {
+            Tour? tour = _tourRepository.GetTourById(tourId);
+            if (tour != null && !tours.Contains(tour))
+            {
+                tours.Add(tour);
+            }
+        }
+
+        //  Sort the list by algorithm & display combined list
+        return tours.OrderByDescending(t => t.TourAttributes.SearchAlgorithmRanking).ToList();
     }
 
     public Result CreateTour(Tour tour) {

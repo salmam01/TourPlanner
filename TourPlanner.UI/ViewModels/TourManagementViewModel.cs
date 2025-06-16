@@ -168,13 +168,16 @@ namespace TourPlanner.UI.ViewModels
 
         public void OnPerformSearch(object sender, string searchText)
         {
+            //  If the search bar is empty, show all tours again
             if(string.IsNullOrEmpty(searchText)) 
                 TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
             else
-                TourListViewModel.ReloadTours(_tourService.SearchTours(searchText).ToList());
+                TourListViewModel.ReloadTours(
+                    _tourService.SearchToursAndLogs(searchText, _tourLogService.SearchTourLogs(searchText))
+                );
         }
 
-        //  dont use magic strings, save as constant
+        //  dont use magic strings, save as constants
         public void OnCancel(object sender, EventArgs e)
         {
             _eventAggregator.Publish("ShowHome");

@@ -6,7 +6,8 @@ using TourPlanner.UI.Events;
 
 namespace TourPlanner.UI.ViewModels;
 
-public class SearchBarViewModel : INotifyPropertyChanged {
+public class SearchBarViewModel : BaseViewModel {
+
     private string _searchText;
     public string SearchText
     {
@@ -19,15 +20,10 @@ public class SearchBarViewModel : INotifyPropertyChanged {
         }
     }
 
-    public event PropertyChangedEventHandler PropertyChanged;
     public event EventHandler<string> SearchParamsChanged;
 
     private void OnSearchParamsChanged()
     {
         SearchParamsChanged?.Invoke(this, SearchText);
-    }
-
-    protected void OnPropertyChanged(string propertyName) {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }
