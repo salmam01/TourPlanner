@@ -13,6 +13,7 @@ using TourPlanner.UI.Commands;
 using TourPlanner.UI.Events;
 using Microsoft.Extensions.Logging;
 using TourPlanner.UI.Views;
+using TourPlanner.BL.Utils;
 
 namespace TourPlanner.UI.ViewModels
 {
@@ -114,26 +115,38 @@ namespace TourPlanner.UI.ViewModels
                 return;
             }
 
-            MessageBoxResult result = MessageBox.Show(
+            MessageBoxResult warning = MessageBox.Show(
                 "Are you sure you would like to delete this tour log?",
                 $"Delete Tour {_selectedTour.Name}",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Warning
             );
-            if (result != MessageBoxResult.Yes) return;
+            if (warning != MessageBoxResult.Yes) return;
 
-            _tourService.DeleteTour(_selectedTour);
-            TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
-            Log.Information("Tour deleted => {@_selectedTour}", _selectedTour);
+            Result result = _tourService.DeleteTour(_selectedTour);
+
+            if (result.Code == Result.ResultCode.Success)
+            {
+                TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
+                _selectedTour = null;
+            }
+            else
+                ShowErrorMessage(result);
+
             _selectedTour = null;
         }
 
         public void OnTourCreated(object sender, Tour tour)
         {
             if (tour == null) return;
+            
+            Result result = _tourService.CreateTour(tour);
 
-            _tourService.CreateTour(tour);
-            TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
+            if (result.Code == Result.ResultCode.Success)
+                TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
+            else
+                ShowErrorMessage(result);
+
             _eventAggregator.Publish("ShowHome");
         }
 
@@ -141,8 +154,12 @@ namespace TourPlanner.UI.ViewModels
         {
             if (tour == null) return;
 
-            _tourService.UpdateTour(tour);
-            TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
+            Result result = _tourService.UpdateTour(tour);
+
+            if (result.Code == Result.ResultCode.Success)
+                TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
+            else
+                ShowErrorMessage(result);
 
             _selectedTour = tour;
             TourListViewModel.SelectedTour = tour;
@@ -151,13 +168,10 @@ namespace TourPlanner.UI.ViewModels
 
         public void OnPerformSearch(object sender, string searchText)
         {
-            if(string.IsNullOrEmpty(searchText)) { 
+            if(string.IsNullOrEmpty(searchText)) 
                 TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
-            }
             else
-            {
                 TourListViewModel.ReloadTours(_tourService.SearchTours(searchText).ToList());
-            }
         }
 
         //  dont use magic strings, save as constant
@@ -290,6 +304,26 @@ namespace TourPlanner.UI.ViewModels
                 MessageBox.Show($"Failed to generate summary report.\nDetails: {ex.Message}", "Export Error", MessageBoxButton.OK, MessageBoxImage.Error);
 
             }
+        }
+
+        private void ShowErrorMessage(Result result)
+        {
+            string message = string.Empty;
+
+            switch(result.Code)
+            {
+                case Result.ResultCode.NullError:
+                    message = "Please provide valid Tour details.";
+                    break;
+                case Result.ResultCode.DatabaseError:
+                    message = "Database error occurred. Please try again later.";
+                    break;
+                case Result.ResultCode.UnknownError:
+                    message = "An unknown error occurred.";
+                    break;
+            }
+
+            MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }

@@ -66,6 +66,7 @@ namespace TourPlanner.BL.Services
         /// </summary>
         public void UpdateAttributes(Tour tour)
         {
+            //  Errors are handled by TourService
             tour.TourAttributes.Popularity = ComputePopularity(tour.TourLogs);
             tour.TourAttributes.ChildFriendliness = ComputeChildFriendliness(tour.TourLogs);
             tour.TourAttributes.SearchAlgorithmRanking = ComputeSearchAlgorithmRanking(tour.TourAttributes.Popularity, tour.TourAttributes.ChildFriendliness);

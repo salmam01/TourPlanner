@@ -65,16 +65,9 @@ public partial class App : Application
         services.AddSingleton<CreateTourLogViewModel>();
         services.AddSingleton<TourLogListViewModel>();
 
-        //  Change
-        services.AddDbContext<TourPlannerDbContext>( options =>
+        services.AddDbContext<TourPlannerDbContext>(options =>
         {
-            options.UseNpgsql(
-                $"Host={databaseConfig.Host};" +
-                $"Port={databaseConfig.Port};" +
-                $"Database={databaseConfig.Database};" +
-                $"Username={databaseConfig.Username};" +
-                $"Password={databaseConfig.Password}"
-            );
+            options.UseNpgsql(databaseConfig.ConnectionString);
         });
         services.AddScoped<ITourRepository, TourRepository>();
         services.AddScoped<ITourLogRepository, TourLogRepository>();

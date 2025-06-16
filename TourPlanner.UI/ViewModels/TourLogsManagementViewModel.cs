@@ -1,6 +1,7 @@
 ﻿using Serilog;
 using System.Windows;
 using TourPlanner.BL.Services;
+using TourPlanner.BL.Utils;
 using TourPlanner.Models.Entities;
 using TourPlanner.UI.Commands;
 using TourPlanner.UI.Events;
@@ -87,9 +88,15 @@ namespace TourPlanner.UI.ViewModels
         {
             if (tourLog == null) return;
 
-            _tourLogService.CreateTourLog(_selectedTour.Id, tourLog);
-            _tourService.RecalculateTourAttributes(_selectedTour);
-            TourLogListViewModel.ReloadTourLogs(_selectedTour.TourLogs);
+            Result result = _tourLogService.CreateTourLog(_selectedTour.Id, tourLog);
+
+            if (result.Code == Result.ResultCode.Success)
+            {
+                _tourService.RecalculateTourAttributes(_selectedTour);
+                TourLogListViewModel.ReloadTourLogs(_selectedTour.TourLogs);
+            }
+            else
+                ShowErrorMessage(result);
 
             _eventAggregator.Publish("ShowHome");
         }
@@ -98,9 +105,15 @@ namespace TourPlanner.UI.ViewModels
         {
             if(tourLog == null) return;
 
-            _tourLogService.UpdateTourLog(tourLog);
-            _tourService.RecalculateTourAttributes(_selectedTour);
-            TourLogListViewModel.ReloadTourLogs(_selectedTour.TourLogs);
+            Result result = _tourLogService.UpdateTourLog(tourLog);
+
+            if (result.Code == Result.ResultCode.Success)
+            {
+                _tourService.RecalculateTourAttributes(_selectedTour);
+                TourLogListViewModel.ReloadTourLogs(_selectedTour.TourLogs);
+            }
+            else
+                ShowErrorMessage(result);
 
             _eventAggregator.Publish("ShowHome");
         }
@@ -137,19 +150,43 @@ namespace TourPlanner.UI.ViewModels
         {
             if (_selectedTourLog == null || _selectedTour == null) return;
 
-            MessageBoxResult result = MessageBox.Show(
+            MessageBoxResult warning = MessageBox.Show(
                 "Are you sure you would like to delete this tour log?",
                 $"Delete Tour Log {_selectedTourLog.Id}",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Warning
             );
-            if (result != MessageBoxResult.Yes) return;
+            if (warning != MessageBoxResult.Yes) return;
 
-            Log.Information("Tour Log deleted => {@_selectedTourLog}", _selectedTourLog);
-            _tourLogService.DeleteTourLog(_selectedTourLog);
-            _tourService.RecalculateTourAttributes(_selectedTour);
-            TourLogListViewModel.ReloadTourLogs(_selectedTour.TourLogs);
-            _selectedTourLog = null;
+            Result deleteResult = _tourLogService.DeleteTourLog(_selectedTourLog);
+            if (deleteResult.Code == Result.ResultCode.Success)
+            {
+                _tourService.RecalculateTourAttributes(_selectedTour);
+                TourLogListViewModel.ReloadTourLogs(_selectedTour.TourLogs);
+                _selectedTourLog = null;
+            }
+            else
+                ShowErrorMessage(deleteResult);
+        }
+
+        private void ShowErrorMessage(Result result)
+        {
+            string message = string.Empty;
+
+            switch (result.Code)
+            {
+                case Result.ResultCode.NullError:
+                    message = "Please provide valid Tour Log details.";
+                    break;
+                case Result.ResultCode.DatabaseError:
+                    message = "Database error occurred. Please try again later.";
+                    break;
+                case Result.ResultCode.UnknownError:
+                    message = "An unknown error occurred.";
+                    break;
+            }
+
+            MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }

@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using iText.Kernel.Exceptions;
 using iText.Kernel.Font;
 using iText.Kernel.Pdf;
 using iText.Layout;
 using iText.Layout.Element;
 using iText.Layout.Properties;
 using Microsoft.Extensions.Logging;
+using TourPlanner.BL.Utils;
 using TourPlanner.Models.Entities;
 
 namespace TourPlanner.BL.Services
@@ -24,7 +26,7 @@ namespace TourPlanner.BL.Services
             _tourAttributesService = tourAttributesService;
         }
 
-        public void GenerateTourReport(Tour tour, string filePath)
+        public Result GenerateTourReport(Tour tour, string filePath)
         {
             try
             {
@@ -89,15 +91,31 @@ namespace TourPlanner.BL.Services
                 }
 
                 _logger.LogInformation("Tour report generated successfully: {FilePath}", filePath);
+                return new Result(Result.ResultCode.Success);
             }
-            catch (Exception ex)
+            catch (UnauthorizedAccessException e)
             {
-                _logger.LogError(ex, "Error generating tour report: {FilePath}", filePath);
-                throw;
+                _logger.LogError(e, "Access denied writing report to {FilePath}", filePath);
+                return new Result(Result.ResultCode.FileAccessError);
+            }
+            catch (IOException e)
+            {
+                _logger.LogError(e, "Input / Output error writing report to {FilePath}", filePath);
+                return new Result(Result.ResultCode.FileAccessError);
+            }
+            catch (PdfException e)
+            {
+                _logger.LogError(e, "PDF generation error for {FilePath}", filePath);
+                return new Result(Result.ResultCode.PdfGenerationError);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error generating tour report for {FilePath}", filePath);
+                return new Result(Result.ResultCode.UnknownError);
             }
         }
 
-        public void GenerateSummaryReport(IEnumerable<Tour> tours, string filePath)
+        public Result GenerateSummaryReport(IEnumerable<Tour> tours, string filePath)
         {
             try
             {
@@ -146,11 +164,27 @@ namespace TourPlanner.BL.Services
 
                 document.Add(summaryTable);
                 _logger.LogInformation("Summary report generated successfully: {FilePath}", filePath);
+                return new Result(Result.ResultCode.Success);
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                _logger.LogError(e, "Access denied writing report to {FilePath}", filePath);
+                return new Result(Result.ResultCode.FileAccessError);
+            }
+            catch (IOException e)
+            {
+                _logger.LogError(e, "Input / Output error writing report to {FilePath}", filePath);
+                return new Result(Result.ResultCode.FileAccessError);
+            }
+            catch (PdfException e)
+            {
+                _logger.LogError(e, "PDF generation error for {FilePath}", filePath);
+                return new Result(Result.ResultCode.PdfGenerationError);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error generating summary report: {FilePath}", filePath);
-                throw;
+                _logger.LogError(ex, "Error generating summary report for {FilePath}", filePath);
+                return new Result(Result.ResultCode.UnknownError);
             }
         }
 
