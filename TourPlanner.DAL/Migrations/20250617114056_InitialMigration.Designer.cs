@@ -13,8 +13,8 @@ using TourPlanner.DAL.Data;
 namespace TourPlanner.DAL.Migrations
 {
     [DbContext(typeof(TourPlannerDbContext))]
-    [Migration("20250526163904_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250617114056_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -60,7 +60,7 @@ namespace TourPlanner.DAL.Migrations
                     b.Property<NpgsqlTsVector>("SearchVector")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("tsvector")
-                        .HasComputedColumnSql("to_tsvector('simple', coalesce(\"Name\", '') || ' ' || coalesce(\"Description\", '') || ' ' || coalesce(\"From\", '') || ' ' || coalesce(\"To\", ''))", true);
+                        .HasComputedColumnSql("to_tsvector('simple', coalesce(\"Name\", '') || ' ' || coalesce(\"Description\", '') || ' ' || coalesce(\"From\", '') || ' ' || coalesce(\"To\", '') || ' ' || coalesce(\"TransportType\", '') || ' ' || coalesce(\"Distance\"::text, ''))", true);
 
                     b.Property<string>("To")
                         .IsRequired()
@@ -93,12 +93,7 @@ namespace TourPlanner.DAL.Migrations
                     b.Property<double>("SearchAlgorithmRanking")
                         .HasColumnType("double precision");
 
-                    b.Property<Guid>("TourId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("TourId");
 
                     b.ToTable("TourAttributes");
                 });
@@ -125,7 +120,7 @@ namespace TourPlanner.DAL.Migrations
                     b.Property<NpgsqlTsVector>("SearchVector")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("tsvector")
-                        .HasComputedColumnSql("to_tsvector('simple', coalesce(\"Difficulty\"::text, '') || ' ' || coalesce(\"Rating\"::text, '') || ' ' || coalesce(\"Comment\", ''))", true);
+                        .HasComputedColumnSql("to_tsvector('simple', coalesce(\"Difficulty\"::text, '') || ' ' || coalesce(\"Rating\"::text, '') || ' ' || coalesce(\"Comment\", '') || ' ' || coalesce(\"TotalDistance\"::text, ''))", true);
 
                     b.Property<double>("TotalDistance")
                         .HasColumnType("double precision");
@@ -154,14 +149,6 @@ namespace TourPlanner.DAL.Migrations
                         .HasForeignKey("TourPlanner.Models.Entities.TourAttributes", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("TourPlanner.Models.Entities.Tour", "Tour")
-                        .WithMany()
-                        .HasForeignKey("TourId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Tour");
                 });
 
             modelBuilder.Entity("TourPlanner.Models.Entities.TourLog", b =>

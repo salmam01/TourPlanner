@@ -40,7 +40,10 @@ namespace TourPlanner.DAL.Data
                         "coalesce(\"Name\", '') || ' ' || " +
                         "coalesce(\"Description\", '') || ' ' || " +
                         "coalesce(\"From\", '') || ' ' || " +
-                        "coalesce(\"To\", ''))",
+                        "coalesce(\"To\", '') || ' ' || " +
+                        "coalesce(\"TransportType\", '') || ' ' || " +
+                        "coalesce(\"Distance\"::text, '')" +
+                        ")",
                         stored: true
                     );
                 t.HasIndex("SearchVector").HasMethod("GIN");
@@ -54,7 +57,9 @@ namespace TourPlanner.DAL.Data
                         "to_tsvector('simple', " +
                         "coalesce(\"Difficulty\"::text, '') || ' ' || " +
                         "coalesce(\"Rating\"::text, '') || ' ' || " +
-                        "coalesce(\"Comment\", ''))",
+                        "coalesce(\"Comment\", '') || ' ' || " +
+                        "coalesce(\"TotalDistance\"::text, '')" +
+                        ")",
                         stored: true
                     );
                 tl.HasIndex("SearchVector").HasMethod("GIN");

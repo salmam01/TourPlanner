@@ -57,7 +57,7 @@ namespace TourPlanner.DAL.Migrations
                     b.Property<NpgsqlTsVector>("SearchVector")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("tsvector")
-                        .HasComputedColumnSql("to_tsvector('simple', coalesce(\"Name\", '') || ' ' || coalesce(\"Description\", '') || ' ' || coalesce(\"From\", '') || ' ' || coalesce(\"To\", ''))", true);
+                        .HasComputedColumnSql("to_tsvector('simple', coalesce(\"Name\", '') || ' ' || coalesce(\"Description\", '') || ' ' || coalesce(\"From\", '') || ' ' || coalesce(\"To\", '') || ' ' || coalesce(\"TransportType\", '') || ' ' || coalesce(\"Distance\"::text, ''))", true);
 
                     b.Property<string>("To")
                         .IsRequired()
@@ -117,7 +117,7 @@ namespace TourPlanner.DAL.Migrations
                     b.Property<NpgsqlTsVector>("SearchVector")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("tsvector")
-                        .HasComputedColumnSql("to_tsvector('simple', coalesce(\"Difficulty\"::text, '') || ' ' || coalesce(\"Rating\"::text, '') || ' ' || coalesce(\"Comment\", ''))", true);
+                        .HasComputedColumnSql("to_tsvector('simple', coalesce(\"Difficulty\"::text, '') || ' ' || coalesce(\"Rating\"::text, '') || ' ' || coalesce(\"Comment\", '') || ' ' || coalesce(\"TotalDistance\"::text, ''))", true);
 
                     b.Property<double>("TotalDistance")
                         .HasColumnType("double precision");

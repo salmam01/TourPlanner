@@ -7,7 +7,7 @@ using NpgsqlTypes;
 namespace TourPlanner.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -26,7 +26,7 @@ namespace TourPlanner.DAL.Migrations
                     Distance = table.Column<double>(type: "double precision", nullable: false),
                     EstimatedTime = table.Column<TimeSpan>(type: "interval", nullable: false),
                     RouteInformation = table.Column<string>(type: "text", nullable: false),
-                    SearchVector = table.Column<NpgsqlTsVector>(type: "tsvector", nullable: true, computedColumnSql: "to_tsvector('simple', coalesce(\"Name\", '') || ' ' || coalesce(\"Description\", '') || ' ' || coalesce(\"From\", '') || ' ' || coalesce(\"To\", ''))", stored: true)
+                    SearchVector = table.Column<NpgsqlTsVector>(type: "tsvector", nullable: true, computedColumnSql: "to_tsvector('simple', coalesce(\"Name\", '') || ' ' || coalesce(\"Description\", '') || ' ' || coalesce(\"From\", '') || ' ' || coalesce(\"To\", '') || ' ' || coalesce(\"TransportType\", '') || ' ' || coalesce(\"Distance\"::text, ''))", stored: true)
                 },
                 constraints: table =>
                 {
@@ -40,8 +40,7 @@ namespace TourPlanner.DAL.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Popularity = table.Column<int>(type: "integer", nullable: false),
                     ChildFriendliness = table.Column<bool>(type: "boolean", nullable: false),
-                    SearchAlgorithmRanking = table.Column<double>(type: "double precision", nullable: false),
-                    TourId = table.Column<Guid>(type: "uuid", nullable: false)
+                    SearchAlgorithmRanking = table.Column<double>(type: "double precision", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -49,12 +48,6 @@ namespace TourPlanner.DAL.Migrations
                     table.ForeignKey(
                         name: "FK_TourAttributes_Tours_Id",
                         column: x => x.Id,
-                        principalTable: "Tours",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_TourAttributes_Tours_TourId",
-                        column: x => x.TourId,
                         principalTable: "Tours",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -72,7 +65,7 @@ namespace TourPlanner.DAL.Migrations
                     TotalDistance = table.Column<double>(type: "double precision", nullable: false),
                     TotalTime = table.Column<TimeSpan>(type: "interval", nullable: false),
                     TourId = table.Column<Guid>(type: "uuid", nullable: false),
-                    SearchVector = table.Column<NpgsqlTsVector>(type: "tsvector", nullable: true, computedColumnSql: "to_tsvector('simple', coalesce(\"Difficulty\"::text, '') || ' ' || coalesce(\"Rating\"::text, '') || ' ' || coalesce(\"Comment\", ''))", stored: true)
+                    SearchVector = table.Column<NpgsqlTsVector>(type: "tsvector", nullable: true, computedColumnSql: "to_tsvector('simple', coalesce(\"Difficulty\"::text, '') || ' ' || coalesce(\"Rating\"::text, '') || ' ' || coalesce(\"Comment\", '') || ' ' || coalesce(\"TotalDistance\"::text, ''))", stored: true)
                 },
                 constraints: table =>
                 {
@@ -84,11 +77,6 @@ namespace TourPlanner.DAL.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TourAttributes_TourId",
-                table: "TourAttributes",
-                column: "TourId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TourLogs_SearchVector",
