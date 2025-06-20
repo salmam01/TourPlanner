@@ -13,6 +13,7 @@ using TourPlanner.UI.Commands;
 using TourPlanner.UI.Events;
 using Microsoft.Extensions.Logging;
 using TourPlanner.BL.Utils;
+using TourPlanner.BL.API;
 
 namespace TourPlanner.UI.ViewModels
 {
@@ -22,6 +23,7 @@ namespace TourPlanner.UI.ViewModels
         private readonly TourLogService _tourLogService; 
         private readonly TourImportExportService _importExportService;
         private readonly ReportGenerationService _reportGenerationService;
+        private readonly OpenRouteService _openRouteService;
         private readonly ILogger<TourManagementViewModel> _logger;
 
         private CreateTourViewModel _createTourViewModel;
@@ -56,9 +58,11 @@ namespace TourPlanner.UI.ViewModels
             TourLogService tourLogService,
             TourImportExportService tourImportExportService,
             ReportGenerationService reportGenerationService,
+            OpenRouteService openRouteService,
             ILogger<TourManagementViewModel> logger
         )
         {
+            //  Dependencies
             _createTourViewModel = createTourViewModel;
             TourListViewModel = tourListViewModel;
             SearchBarViewModel = searchBarViewModel;
@@ -67,14 +71,17 @@ namespace TourPlanner.UI.ViewModels
             _tourLogService = tourLogService;
             _importExportService = tourImportExportService;
             _reportGenerationService = reportGenerationService;
+            _openRouteService = openRouteService;
             _logger = logger;
 
+            //  Events
             _createTourViewModel.TourCreated += OnTourCreated;
             _createTourViewModel.TourUpdated += OnTourUpdated;
             SearchBarViewModel.SearchParamsChanged += OnPerformSearch;
             _createTourViewModel.Cancelled += OnCancel;
             _eventAggregator.Subscribe<Tour>(OnTourSelected);
 
+            //  Commands
             ImportToursCommand = new RelayCommand(execute => ImportTours());
             ExportToursCommand = new RelayCommand(execute => ExportTours());
 
@@ -87,7 +94,6 @@ namespace TourPlanner.UI.ViewModels
             _selectedTour = tour;
             TourListViewModel.SelectedTour = tour;
         }
-
 
         public void CreateTour()
         {
@@ -135,10 +141,11 @@ namespace TourPlanner.UI.ViewModels
             _selectedTour = null;
         }
 
-        public void OnTourCreated(object sender, Tour tour)
+        public async void OnTourCreated(object sender, Tour tour)
         {
             if (tour == null) return;
-            
+
+            tour = await _openRouteService.GetTourInformationAsync(tour);
             Result result = _tourService.CreateTour(tour);
 
             if (result.Code == Result.ResultCode.Success)
