@@ -12,25 +12,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using TourPlanner.UI.ViewModels;
 
 namespace TourPlanner.UI.Views
 {
     /// <summary>
-    /// Interaction logic for CreateTour.xaml
+    /// Interaction logic for TourDetails.xaml
     /// </summary>
-    public partial class CreateTour : UserControl
+    public partial class TourDetails : UserControl
     {
-        public CreateTour()
+        public TourDetails()
         {
             InitializeComponent();
-        }
-        private void ComboBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
-        {
-            if (sender is ComboBox comboBox && !comboBox.IsDropDownOpen)
-            {
-                comboBox.IsDropDownOpen = true;
-            }
         }
     }
 }

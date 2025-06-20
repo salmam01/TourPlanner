@@ -13,6 +13,8 @@ using TourPlanner.DAL.Repositories.TourRepository;
 using TourPlanner.UI.Events;
 using TourPlanner.UI.ViewModels;
 using TourPlanner.UI.Views;
+using TourPlanner.BL.API;
+using TourPlanner.BL.Utils;
 
 namespace TourPlanner.UI;
 
@@ -35,6 +37,7 @@ public partial class App : Application
         //  Bind configuration to the model classes
         DatabaseConfig databaseConfig = config.GetSection("Database").Get<DatabaseConfig>();
         PathsConfig basePath = config.GetSection("Paths").Get<PathsConfig>();
+        ApiConfig apiConfig = config.GetSection("Api").Get<ApiConfig>();
 
         //  Configure Serilog globally
         Log.Logger = new LoggerConfiguration()
@@ -51,20 +54,28 @@ public partial class App : Application
             loggingBuilder.AddSerilog();
         });
 
+        //  Base classes
         services.AddSingleton<MainWindowViewModel>();
         services.AddSingleton<HomeViewModel>();
         services.AddSingleton<EventAggregator>();
         services.AddSingleton<LogViewerViewModel>();
 
+        //  Tour
         services.AddSingleton<TourManagementViewModel>();
         services.AddSingleton<CreateTourViewModel>();
         services.AddSingleton<TourListViewModel>();
         services.AddTransient<SearchBarViewModel>();
 
+        //  Tour logs
         services.AddSingleton<TourLogsManagementViewModel>();
         services.AddSingleton<CreateTourLogViewModel>();
         services.AddSingleton<TourLogListViewModel>();
 
+        //  Navigation bar
+        services.AddSingleton<TourNavbarViewModel>();
+        services.AddSingleton<MapViewModel>();
+
+        //  Database
         services.AddDbContext<TourPlannerDbContext>(options =>
         {
             options.UseNpgsql(databaseConfig.ConnectionString);
@@ -73,11 +84,25 @@ public partial class App : Application
         services.AddScoped<ITourLogRepository, TourLogRepository>();
         services.AddScoped<ITourAttributesRepository, TourAttributesRepository>();
 
+        //  Internal Services
         services.AddSingleton<TourService>();
         services.AddSingleton<TourLogService>();
         services.AddSingleton<TourAttributesService>();
         services.AddSingleton<TourImportExportService>();
         services.AddSingleton<ReportGenerationService>();
+
+        //  API Services
+        services.AddSingleton<Parser>();
+        services.AddSingleton(s =>
+            new OpenRouteService(
+                apiConfig.OpenRouteServiceKey,
+                s.GetRequiredService<Parser>(),
+                apiConfig.BaseUrl,
+                apiConfig.FocusPointLat,
+                apiConfig.FocusPointLon
+            )
+        );
+        services.AddSingleton<LeafletService>();
 
         services.AddSingleton(s => new MainWindow
         {

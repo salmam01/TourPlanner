@@ -12,7 +12,6 @@ using TourPlanner.Models.Entities;
 using TourPlanner.UI.Commands;
 using TourPlanner.UI.Events;
 using Microsoft.Extensions.Logging;
-using TourPlanner.UI.Views;
 using TourPlanner.BL.Utils;
 
 namespace TourPlanner.UI.ViewModels

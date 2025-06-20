@@ -3,20 +3,28 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:TourPlanner.UI.Views"
+             xmlns:views="clr-namespace:TourPlanner.UI.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
     <Grid>
-        <StackPanel Orientation="Horizontal"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Stretch">
-            <Button Content="General"
-                    Style="{StaticResource NavbarButtonStyle}"/>
-            <Button Content="Route"
-                    Style="{StaticResource NavbarButtonStyle}"/>
-            <Button Content="Misc"
-                    Style="{StaticResource NavbarButtonStyle}"/>
-        </StackPanel>
+        <TabControl>
+            <TabItem Header="Route">
+                <Border BorderBrush="#A4B465"
+                        Background="#F5ECD5"
+                        BorderThickness="3"
+                        CornerRadius="10">
+                    <views:Map/>
+                </Border>
+            </TabItem>
+            <TabItem Header="Details">
+                <Border BorderBrush="#A4B465"
+                        Background="#F5ECD5"
+                        BorderThickness="3"
+                        CornerRadius="10">
+                    <views:TourDetails/>
+                </Border>
+            </TabItem>
+        </TabControl>
     </Grid>
 </UserControl>

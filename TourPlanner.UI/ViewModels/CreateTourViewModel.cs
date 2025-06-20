@@ -8,21 +8,29 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using TourPlanner.BL.Services;
+using TourPlanner.BL.API;
+using TourPlanner.BL.Utils.Validators;
 using TourPlanner.Models.Entities;
 using TourPlanner.UI.Commands;
+using TourPlanner.UI.Events;
 
 namespace TourPlanner.UI.ViewModels
 {
     public class CreateTourViewModel : BaseFormViewModel {
+        private OpenRouteService _openRouteService;
+        private readonly static int _minQueryLength = 3;
+
         private string _name;
         private DateTime _date;
         private string _description;
         private string _transportType;
         private string _from;
+        private string _selectedFromSuggestion;
         private string _to;
+        private string _selectedToSuggestion;
         private Tour _editingTour;
 
+        public EventAggregator _eventAggretator;
         public EventHandler<Tour> TourCreated;
         public EventHandler<Tour> TourUpdated;
         public event EventHandler Cancelled;
@@ -109,8 +117,21 @@ namespace TourPlanner.UI.ViewModels
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(CanCreate));
                 OnPropertyChanged(nameof(FromError));
+                _ = OnFromToParamsChanged();
             }
         }
+
+        public string SelectedFromSuggestion
+        {
+            get => _selectedFromSuggestion;
+            set
+            {
+                _selectedFromSuggestion = value;
+                From = value;
+                OnPropertyChanged();
+            }
+        }
+
         public string FromError => GetFirstError(nameof(From));
 
         public string To
@@ -124,8 +145,20 @@ namespace TourPlanner.UI.ViewModels
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(CanCreate));
                 OnPropertyChanged(nameof(ToError));
+                _ = OnFromToParamsChanged();
             }
         }
+        public string SelectedToSuggestion
+        {
+            get => _selectedToSuggestion;
+            set
+            {
+                _selectedToSuggestion = value;
+                From = value;
+                OnPropertyChanged();
+            }
+        }
+
         public string ToError => GetFirstError(nameof(To));
 
         public List<string> TransportTypeOptions { get; } = new List<string>
@@ -136,7 +169,10 @@ namespace TourPlanner.UI.ViewModels
             "Car"
         };
 
-        public CreateTourViewModel() {
+        public List<string> LocationSuggestions { get; set; } = [];
+
+        public CreateTourViewModel(OpenRouteService openRouteService) {
+            _openRouteService = openRouteService;
             ResetForm();
         }
 
@@ -233,6 +269,20 @@ namespace TourPlanner.UI.ViewModels
         {
             ResetForm();
             Cancelled?.Invoke(this, EventArgs.Empty);
+        }
+
+        private async Task OnFromToParamsChanged()
+        {
+            if (!string.IsNullOrEmpty(From) || From.Length >= _minQueryLength && From.Length % _minQueryLength == 0)
+            {
+                LocationSuggestions = await _openRouteService.GetLocationsSuggestionsAsync(From);
+                OnPropertyChanged(nameof(LocationSuggestions));
+            }
+            else if (!string.IsNullOrEmpty(To) || To.Length >= _minQueryLength && To.Length % _minQueryLength == 0)
+            {
+                LocationSuggestions = await _openRouteService.GetLocationsSuggestionsAsync(To);
+                OnPropertyChanged(nameof(LocationSuggestions));
+            }
         }
 
         private void ValidateName()

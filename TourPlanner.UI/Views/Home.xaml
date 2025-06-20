@@ -27,16 +27,6 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-
-                <!-- Use new SearchResults and hide SearchBar for Home -->
-                <!--<views:SearchResults Grid.Row="1"
-                                     DataContext="{Binding}"
-                                     ShowSearchBar="{Binding ShowSearchBar}" />-->
-
-               <!-- <views:SearchBar Grid.Row="0"
-                                 Grid.Column="0"
-                                 HorizontalAlignment="Center"
-                                 DataContext="{Binding SearchBarViewModel}" />-->
             </Grid>
 
             <!-- Right side: Tour Details and Logs -->
@@ -44,23 +34,16 @@
                   Margin="5,0,0,0">
 
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
                     <!-- Navbar height -->
                     <RowDefinition Height="*"/>
-                    <!-- Map/Image area -->
-                    <RowDefinition Height="Auto"/>
                     <!-- Tour Logs header -->
                     <RowDefinition Height="*"/>
-                    <!-- Tour Logs list -->
+                    
                 </Grid.RowDefinitions>
 
                 <views:TourNavbar Grid.Row="0"/>
 
-                <!-- Placeholder for Map/Image -->
-                <views:Map Grid.Row="1"/>
-
-                <views:TourLogsManagement Grid.Row="3"
-                                          Grid.RowSpan="2"
+                <views:TourLogsManagement Grid.Row="1"
                                           DataContext="{Binding TourLogsManagementViewModel}"/>
             </Grid>
         </Grid>

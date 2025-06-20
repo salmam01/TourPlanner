@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using TourPlanner.BL.Utils.Validators;
 using TourPlanner.Models.Entities;
 using TourPlanner.UI.Commands;
 
@@ -237,7 +238,7 @@ namespace TourPlanner.UI.ViewModels
 
         private void ValidateDate()
         {
-            var error = BL.Services.TourLogValidator.ValidateDate(Date);
+            var error = TourLogValidator.ValidateDate(Date);
             if (!string.IsNullOrEmpty(error))
                 SetError(nameof(Date), error);
             else
@@ -246,7 +247,7 @@ namespace TourPlanner.UI.ViewModels
 
         private void ValidateComment()
         {
-            var error = BL.Services.TourLogValidator.ValidateComment(Comment);
+            var error = TourLogValidator.ValidateComment(Comment);
             if (!string.IsNullOrEmpty(error))
                 SetError(nameof(Comment), error);
             else
@@ -255,7 +256,7 @@ namespace TourPlanner.UI.ViewModels
 
         private void ValidateDifficulty()
         {
-            var error = BL.Services.TourLogValidator.ValidateDifficulty(Difficulty);
+            var error = TourLogValidator.ValidateDifficulty(Difficulty);
             if (!string.IsNullOrEmpty(error))
                 SetError(nameof(Difficulty), error);
             else
@@ -264,7 +265,7 @@ namespace TourPlanner.UI.ViewModels
 
         private void ValidateRating()
         {
-            var error = BL.Services.TourLogValidator.ValidateRating(Rating.HasValue ? (int?)Rating : null);
+            var error = TourLogValidator.ValidateRating(Rating.HasValue ? (int?)Rating : null);
             if (!string.IsNullOrEmpty(error))
                 SetError(nameof(Rating), error);
             else
@@ -273,7 +274,7 @@ namespace TourPlanner.UI.ViewModels
 
         private void ValidateTotalDistance()
         {
-            var error = BL.Services.TourLogValidator.ValidateTotalDistance(TotalDistance);
+            var error = TourLogValidator.ValidateTotalDistance(TotalDistance);
             if (!string.IsNullOrEmpty(error))
                 SetError(nameof(TotalDistance), error);
             else
@@ -283,7 +284,7 @@ namespace TourPlanner.UI.ViewModels
         private void ValidateTotalTime()
         {
             var time = new TimeSpan(Hours ?? 0, Minutes ?? 0, 0);
-            var error = BL.Services.TourLogValidator.ValidateTotalTime(time);
+            var error = TourLogValidator.ValidateTotalTime(time);
             if (!string.IsNullOrEmpty(error))
             {
                 SetError(nameof(Hours), error);

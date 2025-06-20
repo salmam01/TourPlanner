@@ -6,11 +6,7 @@ using System.Threading.Tasks;
 
 namespace TourPlanner.UI.ViewModels
 {
-    public class TourNavbarViewModel : BaseViewModel
+    public class MapViewModel: BaseViewModel
     {
-        public TourNavbarViewModel()
-        {
-            
-        }
     }
 }
