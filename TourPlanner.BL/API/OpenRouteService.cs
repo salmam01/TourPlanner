@@ -33,10 +33,9 @@ namespace TourPlanner.BL.API
             _parser = parser;
             _focusPointLat = focusPointLat;
             _focusPointLon = focusPointLon;
-
-            Debug.WriteLine($"key: {_openRouteKey}, endpoint: {endPoint}, focusPoint Lat: {_focusPointLat}, focusPoint Lon: {_focusPointLon}");
         }
 
+        //  TODO: return Result with data instead!
         public async Task<List<string>> GetLocationsSuggestionsAsync(string query)
         {
             List<string> locations = [];
@@ -47,6 +46,7 @@ namespace TourPlanner.BL.API
                     Debug.WriteLine("Query null!");
                     return locations;
                 }
+                Debug.WriteLine(query);
 
                 //  Focus the search on Austria but don't limit it
                 string url = ($"geocode/autocomplete?" +
@@ -57,21 +57,16 @@ namespace TourPlanner.BL.API
                                 $"&focus.point.lon={_focusPointLon.ToString(CultureInfo.InvariantCulture)}" +
                                 $"&layers=address,street");
 
-                Debug.WriteLine(url);
-                Debug.WriteLine(query);
-
                 HttpResponseMessage response = await _client.GetAsync(url);
                 if (response.IsSuccessStatusCode)
                 {
-                    Debug.WriteLine("got response!");
                     //  Will return a JSON response with coordinates and bbox
                     //  bbox are the coordinates of the bounding box for the map
                     locations = _parser.ParseLocationSuggestions(await response.Content.ReadAsStringAsync());
-                    Debug.WriteLine(locations);
                 }
                 else
                 {
-                    Debug.WriteLine($"Request failed with status: {response.StatusCode}, {response.Content}, {response.ReasonPhrase}");
+                    Debug.WriteLine($"Request failed with status: {response.StatusCode}, {response.Content}");
                 }
             }
             catch (Exception ex)

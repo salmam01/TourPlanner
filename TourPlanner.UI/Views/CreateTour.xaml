@@ -126,7 +126,7 @@
                                          UpdateSourceTrigger=PropertyChanged,
                                          ValidatesOnDataErrors=True,
                                          NotifyOnValidationError=True}"
-                                  ItemsSource="{Binding LocationSuggestions}"
+                                  ItemsSource="{Binding FromLocationSuggestions}"
                                   SelectedItem="{Binding SelectedFromSuggestion}"
                                   PreviewTextInput="ComboBox_PreviewTextInput"/>
 
@@ -152,7 +152,7 @@
                                          UpdateSourceTrigger=PropertyChanged,
                                          ValidatesOnDataErrors=True,
                                          NotifyOnValidationError=True}"
-                                  ItemsSource="{Binding LocationSuggestions}"
+                                  ItemsSource="{Binding ToLocationSuggestions}"
                                   SelectedItem="{Binding SelectedToSuggestion}"
                                   PreviewTextInput="ComboBox_PreviewTextInput"/>
                         

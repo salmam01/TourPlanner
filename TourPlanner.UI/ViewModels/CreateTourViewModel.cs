@@ -117,7 +117,7 @@ namespace TourPlanner.UI.ViewModels
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(CanCreate));
                 OnPropertyChanged(nameof(FromError));
-                _ = OnFromToParamsChanged();
+                _ = OnFromParamsChanged();
             }
         }
 
@@ -145,7 +145,7 @@ namespace TourPlanner.UI.ViewModels
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(CanCreate));
                 OnPropertyChanged(nameof(ToError));
-                _ = OnFromToParamsChanged();
+                _ = OnToParamsChanged();
             }
         }
         public string SelectedToSuggestion
@@ -154,7 +154,7 @@ namespace TourPlanner.UI.ViewModels
             set
             {
                 _selectedToSuggestion = value;
-                From = value;
+                To = value;
                 OnPropertyChanged();
             }
         }
@@ -169,7 +169,8 @@ namespace TourPlanner.UI.ViewModels
             "Car"
         };
 
-        public List<string> LocationSuggestions { get; set; } = [];
+        public List<string> FromLocationSuggestions { get; set; } = [];
+        public List<string> ToLocationSuggestions { get; set; } = [];
 
         public CreateTourViewModel(OpenRouteService openRouteService) {
             _openRouteService = openRouteService;
@@ -271,17 +272,21 @@ namespace TourPlanner.UI.ViewModels
             Cancelled?.Invoke(this, EventArgs.Empty);
         }
 
-        private async Task OnFromToParamsChanged()
+        private async Task OnFromParamsChanged()
         {
-            if (!string.IsNullOrEmpty(From) || From.Length >= _minQueryLength && From.Length % _minQueryLength == 0)
+            if (!string.IsNullOrEmpty(From) && From.Length >= _minQueryLength && From.Length % _minQueryLength == 0)
             {
-                LocationSuggestions = await _openRouteService.GetLocationsSuggestionsAsync(From);
-                OnPropertyChanged(nameof(LocationSuggestions));
+                FromLocationSuggestions = await _openRouteService.GetLocationsSuggestionsAsync(From);
+                OnPropertyChanged(nameof(FromLocationSuggestions));
             }
-            else if (!string.IsNullOrEmpty(To) || To.Length >= _minQueryLength && To.Length % _minQueryLength == 0)
+        }
+
+        private async Task OnToParamsChanged()
+        {
+            if (!string.IsNullOrEmpty(To) && To.Length >= _minQueryLength && To.Length % _minQueryLength == 0)
             {
-                LocationSuggestions = await _openRouteService.GetLocationsSuggestionsAsync(To);
-                OnPropertyChanged(nameof(LocationSuggestions));
+                ToLocationSuggestions = await _openRouteService.GetLocationsSuggestionsAsync(To);
+                OnPropertyChanged(nameof(ToLocationSuggestions));
             }
         }
 
