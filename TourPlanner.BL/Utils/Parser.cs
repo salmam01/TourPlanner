@@ -54,68 +54,71 @@ namespace TourPlanner.BL.Utils
                 return geoCoordinates;
             }
 
-            geoCoordinates.Coordinates = jsonObject["features"][0]["geometry"]["coordinates"].ToObject<double[]>();
-            geoCoordinates.Bbox = jsonObject["bbox"].ToObject<double[]>();
-
-            Debug.WriteLine(geoCoordinates.Coordinates[0]);
-            Debug.WriteLine(geoCoordinates.Coordinates[1]);
+            geoCoordinates.Latitude = jsonObject["features"][0]["geometry"]["coordinates"].ToObject<double>();
+            geoCoordinates.Longitude = jsonObject["features"][0]["geometry"]["coordinates"].ToObject<double>();
 
             return geoCoordinates;
         }
 
-        public double ParseDistance(string jsonString)
+        public MapGeometry ParseMapGeometry(string jsonString)
         {
-            if (jsonString == null)
-            {
-                return 0;
-            }
-
-            JObject jsonObject = JObject.Parse(jsonString);
-            if (jsonObject == null)
-            {
-                return 0;
-            }
-
-            Debug.WriteLine(jsonObject.ToString(Newtonsoft.Json.Formatting.Indented));
-            return jsonObject["features"][0]["properties"]["summary"]["distance"].ToObject<double>();
-        }
-
-        public TimeSpan ParseDuration(string jsonString)
-        {
-            if (jsonString == null)
-            {
-                return TimeSpan.Zero;
-            }
-
-            JObject jsonObject = JObject.Parse(jsonString);
-            if(jsonObject == null)
-            {
-                return TimeSpan.Zero;
-            }
-
-            double duration = jsonObject["features"][0]["properties"]["summary"]["duration"].ToObject<double>();
-            return TimeSpan.FromSeconds(duration);
-        }
-
-        public List<double[]> ParseWayPoints(string jsonString)
-        {
-            List<double[]> wayPoints = [];
+            MapGeometry mapGeometry = new();
             if (jsonString == null || string.IsNullOrEmpty(jsonString))
             {
-                return wayPoints;
+                return mapGeometry;
             }
 
             //  Dynamic JSON object
             JObject jsonObject = JObject.Parse(jsonString);
             if (jsonObject == null)
             {
-                return wayPoints;
+                return mapGeometry;
             }
 
-            //  what do here ? idk
-            //wayPoints = jsonObject["features"]["properties"]["geometry"]["coordinates"].ToObject<double[]>;
+            int wayPointsLength = jsonObject["features"][0]["geometry"]["coordinates"].Count();
+            if (wayPointsLength > 0)
+            {
+                for (int i = 0; i < wayPointsLength; i++)
+                {
+                    GeoCoordinates wayPointCoordinates = new();
+                    wayPointCoordinates.Latitude = jsonObject["features"][0]["geometry"]["coordinates"][i][0].ToObject<double>();
+                    wayPointCoordinates.Longitude = jsonObject["features"][0]["geometry"]["coordinates"][i][1].ToObject<double>();
+                    mapGeometry.WayPoints.Add(wayPointCoordinates);
+                }
+            }
 
-            return wayPoints;
+            mapGeometry.Bbox = new BboxCoordinates
+            {
+                MinLongitude = jsonObject["bbox"][0].ToObject<double>(),
+                MinLatitude = jsonObject["bbox"][1].ToObject<double>(),
+                MaxLongitude = jsonObject["bbox"][2].ToObject<double>(),
+                MaxLatitude = jsonObject["bbox"][3].ToObject<double>()
+            };
+
+            return mapGeometry;
+        }
+
+        public MapGeometry ParseRouteInformation(string jsonString)
+        {
+            MapGeometry mapGeometry = new();
+            if (jsonString == null)
+            {
+                return mapGeometry;
+            }
+
+            JObject jsonObject = JObject.Parse(jsonString);
+            if (jsonObject == null)
+            {
+                return mapGeometry;
+            }
+
+            Debug.WriteLine(jsonObject.ToString(Newtonsoft.Json.Formatting.Indented));
+
+            double duration = jsonObject["features"][0]["properties"]["summary"]["duration"].ToObject<double>();
+            mapGeometry.Distance = jsonObject["features"][0]["properties"]["summary"]["distance"].ToObject<double>();
+            mapGeometry.Duration = TimeSpan.FromSeconds(duration);
+
+            return mapGeometry;
         }
     }
 }

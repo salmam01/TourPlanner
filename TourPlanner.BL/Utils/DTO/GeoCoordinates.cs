@@ -8,7 +8,9 @@ namespace TourPlanner.BL.Utils.DTO
 {
     public class GeoCoordinates
     {
-        public double[] Coordinates { get; set; } = [];
-        public double[] Bbox { get; set; } = [];
+        //  X
+        public double Latitude { get; set; }
+        //  Y
+        public double Longitude { get; set; }
     }
 }

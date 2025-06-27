@@ -276,7 +276,7 @@ namespace TourPlanner.UI.ViewModels
         {
             if (!string.IsNullOrEmpty(From) && From.Length >= _minQueryLength && From.Length % _minQueryLength == 0)
             {
-                FromLocationSuggestions = await _openRouteService.GetLocationsSuggestionsAsync(From);
+                FromLocationSuggestions = await _openRouteService.GetLocationSuggestionsAsync(From);
                 OnPropertyChanged(nameof(FromLocationSuggestions));
             }
         }
@@ -285,7 +285,7 @@ namespace TourPlanner.UI.ViewModels
         {
             if (!string.IsNullOrEmpty(To) && To.Length >= _minQueryLength && To.Length % _minQueryLength == 0)
             {
-                ToLocationSuggestions = await _openRouteService.GetLocationsSuggestionsAsync(To);
+                ToLocationSuggestions = await _openRouteService.GetLocationSuggestionsAsync(To);
                 OnPropertyChanged(nameof(ToLocationSuggestions));
             }
         }
