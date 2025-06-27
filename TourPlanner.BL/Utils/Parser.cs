@@ -49,16 +49,16 @@ namespace TourPlanner.BL.Utils
 
             //  Dynamic JSON object
             JObject jsonObject = JObject.Parse(jsonString);
-            if (jsonObject != null)
+            if (jsonObject == null)
             {
                 return geoCoordinates;
             }
 
-            geoCoordinates.Coordinates = jsonObject["geocoding"]["query"]["lang"]["geometry"]["coordinates"].ToObject<double[]>();
-            geoCoordinates.Bbox = jsonObject["geocoding"]["query"]["lang"]["bbox"].ToObject<double[]>();
+            geoCoordinates.Coordinates = jsonObject["features"][0]["geometry"]["coordinates"].ToObject<double[]>();
+            geoCoordinates.Bbox = jsonObject["bbox"].ToObject<double[]>();
 
-            Debug.WriteLine(geoCoordinates.Coordinates);
-            Debug.WriteLine(geoCoordinates.Bbox);
+            Debug.WriteLine(geoCoordinates.Coordinates[0]);
+            Debug.WriteLine(geoCoordinates.Coordinates[1]);
 
             return geoCoordinates;
         }
@@ -67,10 +67,16 @@ namespace TourPlanner.BL.Utils
         {
             if (jsonString == null)
             {
-                return 0.0;
+                return 0;
             }
 
             JObject jsonObject = JObject.Parse(jsonString);
+            if (jsonObject == null)
+            {
+                return 0;
+            }
+
+            Debug.WriteLine(jsonObject.ToString(Newtonsoft.Json.Formatting.Indented));
             return jsonObject["features"][0]["properties"]["summary"]["distance"].ToObject<double>();
         }
 
@@ -82,8 +88,12 @@ namespace TourPlanner.BL.Utils
             }
 
             JObject jsonObject = JObject.Parse(jsonString);
-            double duration = jsonObject["features"][0]["properties"]["summary"]["duration"].ToObject<double>();
+            if(jsonObject == null)
+            {
+                return TimeSpan.Zero;
+            }
 
+            double duration = jsonObject["features"][0]["properties"]["summary"]["duration"].ToObject<double>();
             return TimeSpan.FromSeconds(duration);
         }
 
@@ -97,7 +107,7 @@ namespace TourPlanner.BL.Utils
 
             //  Dynamic JSON object
             JObject jsonObject = JObject.Parse(jsonString);
-            if (jsonObject != null)
+            if (jsonObject == null)
             {
                 return wayPoints;
             }

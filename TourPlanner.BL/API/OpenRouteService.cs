@@ -15,10 +15,10 @@ namespace TourPlanner.BL.API
     //  TODO: work on errors & logging!!
     public class OpenRouteService
     {
-        private string _openRouteKey;
-        private HttpClient _client;
-        private Parser _parser;
-        private static int _maxResults = 5;
+        private readonly string _openRouteKey;
+        private readonly HttpClient _client;
+        private readonly Parser _parser;
+        private readonly static int _maxResults = 5;
         private static double _focusPointLat;
         private static double _focusPointLon;
 
@@ -37,6 +37,7 @@ namespace TourPlanner.BL.API
             _focusPointLon = focusPointLon;
         }
 
+        //  Method that sends API request to OpenRoute to retrieve location suggestions, up to maxResults amount
         //  TODO: return Result with data instead!
         public async Task<List<string>> GetLocationsSuggestionsAsync(string query)
         {
@@ -67,9 +68,7 @@ namespace TourPlanner.BL.API
                     locations = _parser.ParseLocationSuggestions(await response.Content.ReadAsStringAsync());
                 }
                 else
-                {
                     Debug.WriteLine($"Request failed with status: {response.StatusCode}, {response.Content}");
-                }
             }
             catch (Exception ex)
             {
@@ -79,6 +78,7 @@ namespace TourPlanner.BL.API
             return locations;
         }
 
+        //  Method that sends an API request to OpenRoute to retrieve Information about a Tours distance & time
         public async Task<Tour> GetTourInformationAsync(Tour tour)
         {
             GeoCoordinates startGeoCoordinates = await GetGeoCoordinatesAsync(tour.From);
@@ -86,10 +86,17 @@ namespace TourPlanner.BL.API
 
             if (startGeoCoordinates != null && endGeoCoordinates != null && startGeoCoordinates.Coordinates.Length == 2 && endGeoCoordinates.Coordinates.Length == 2)
             {
-                string url = ($"v2/directions/driving-car?" +
-                                $"api_key={_openRouteKey}" +
-                                $"&start={startGeoCoordinates.Coordinates[0]},{startGeoCoordinates.Coordinates[1]}" +
-                                $"&end={endGeoCoordinates.Coordinates[0]},{endGeoCoordinates.Coordinates[1]}");
+                Debug.WriteLine($"Retrieved Geo coordinates for start and end");
+
+                string startX = startGeoCoordinates.Coordinates[0].ToString(CultureInfo.InvariantCulture);
+                string startY = startGeoCoordinates.Coordinates[1].ToString(CultureInfo.InvariantCulture);
+                string endX = endGeoCoordinates.Coordinates[0].ToString(CultureInfo.InvariantCulture);
+                string endY = endGeoCoordinates.Coordinates[1].ToString(CultureInfo.InvariantCulture);
+
+                string url = ($"v2/directions/driving-car" +
+                              $"?api_key={_openRouteKey}" +
+                              $"&start={startX},{startY}" +
+                              $"&end={endX},{endY}");
 
                 HttpResponseMessage response = await _client.GetAsync(url);
                 if (response.IsSuccessStatusCode)
@@ -109,6 +116,7 @@ namespace TourPlanner.BL.API
             return tour;
         }
 
+        //  Method that sends an API request to OpenRoute to retrieve Geo Coordinates for a specific location
         //  TODO: return Result with data instead!
         public async Task<GeoCoordinates> GetGeoCoordinatesAsync(string location)
         {
