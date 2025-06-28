@@ -26,7 +26,7 @@ namespace TourPlanner.UI.ViewModels
         private readonly OpenRouteService _openRouteService;
         private readonly ILogger<TourManagementViewModel> _logger;
 
-        private CreateTourViewModel _createTourViewModel;
+        private readonly CreateTourViewModel _createTourViewModel;
         public TourListViewModel TourListViewModel { get; }
         public SearchBarViewModel SearchBarViewModel { get; }
 
@@ -85,6 +85,7 @@ namespace TourPlanner.UI.ViewModels
             ImportToursCommand = new RelayCommand(execute => ImportTours());
             ExportToursCommand = new RelayCommand(execute => ExportTours());
 
+            //  Reload the tours on initialization
             TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
         }
 

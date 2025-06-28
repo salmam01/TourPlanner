@@ -15,6 +15,7 @@ using TourPlanner.UI.ViewModels;
 using TourPlanner.UI.Views;
 using TourPlanner.BL.API;
 using TourPlanner.BL.Utils;
+using TourPlanner.UI.Leaflet;
 
 namespace TourPlanner.UI;
 
@@ -36,7 +37,7 @@ public partial class App : Application
 
         //  Bind configuration to the model classes
         DatabaseConfig databaseConfig = config.GetSection("Database").Get<DatabaseConfig>();
-        PathsConfig basePath = config.GetSection("Paths").Get<PathsConfig>();
+        PathsConfig pathsConfig = config.GetSection("Paths").Get<PathsConfig>();
         ApiConfig apiConfig = config.GetSection("Api").Get<ApiConfig>();
 
         //  Configure Serilog globally
@@ -102,7 +103,11 @@ public partial class App : Application
                 apiConfig.FocusPointLon
             )
         );
-        services.AddSingleton<LeafletService>();
+
+        //  Leaflet
+        services.AddSingleton(lh =>
+            new LeafletHelper(pathsConfig.BaseDirectory)
+        );
 
         services.AddSingleton(s => new MainWindow
         {

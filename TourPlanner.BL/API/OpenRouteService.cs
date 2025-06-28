@@ -9,6 +9,7 @@ using TourPlanner.BL.Utils;
 using TourPlanner.BL.Utils.DTO;
 using System.Globalization;
 using TourPlanner.Models.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace TourPlanner.BL.API
 {
@@ -18,8 +19,8 @@ namespace TourPlanner.BL.API
         private readonly string _openRouteKey;
         private readonly HttpClient _client;
         private readonly Parser _parser;
-        private readonly static int _maxResults = 5;
         private readonly GeoCoordinates _focusPoint;
+        private readonly static int _maxResults = 5;
 
         public OpenRouteService(
             string openRouteKey, 
@@ -90,7 +91,7 @@ namespace TourPlanner.BL.API
 
                 if (!string.IsNullOrEmpty(response) || !string.IsNullOrWhiteSpace(response))
                 {
-                    MapGeometry mapGeometry = _parser.ParseRouteInformation(response);
+                    MapGeometry mapGeometry = _parser.ParseMapGeometry(response);
 
                     tour.Distance = mapGeometry.Distance;
                     tour.EstimatedTime = mapGeometry.Duration;

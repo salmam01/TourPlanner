@@ -14,7 +14,7 @@
                         Background="#F5ECD5"
                         BorderThickness="3"
                         CornerRadius="10">
-                    <views:Map/>
+                    <views:Map DataContext="{Binding MapViewModel}"/>
                 </Border>
             </TabItem>
             <TabItem Header="Details">

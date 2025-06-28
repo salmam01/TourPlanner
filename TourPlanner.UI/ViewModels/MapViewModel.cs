@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,19 +27,26 @@ namespace TourPlanner.UI.ViewModels
 
         private void OnTourSelected(Tour tour)
         {
-            _ = GetRouteMap(tour);
+            Debug.WriteLine("hi. me here");
+            if (_selectedTour != tour)
+            {
+                _selectedTour = tour;
+                _ = GetRouteMap();
+            }
         }
 
-        private async Task GetRouteMap(Tour tour)
+        private async Task GetRouteMap()
         {
-            //  Get the GeoCoordinates of the start and destination
-            //GeoCoordinates startGeoCoordinates = await _openRouteService.GetGeoCoordinatesAsync(tour.From);
-            //GeoCoordinates destinationGeoCoordinates = await _openRouteService.GetGeoCoordinatesAsync(tour.To);
+            //  Get the map geometry needed for the map image
+            MapGeometry mapGeometry = await _openRouteService.GetMapGeometry(_selectedTour);
 
-            //  Get a list of way points between the start and destination
-            //List<double[]> wayPoints = await _openRouteService.GetWayPointsAsync(startGeoCoordinates.Coordinates, destinationGeoCoordinates.Coordinates);
+            Debug.WriteLine($"Way points: {mapGeometry.WayPoints.Count}");
+            Debug.WriteLine($"First WayPoint: {mapGeometry.WayPoints.First().Latitude}, {mapGeometry.WayPoints.First().Longitude}");
+            Debug.WriteLine($"Last WayPoint: {mapGeometry.WayPoints.Last().Latitude}, {mapGeometry.WayPoints.Last().Longitude}");
+            Debug.WriteLine($"Bbox: {mapGeometry.Bbox}");
 
             //  Draw the map using Leaflet: bbox and waypoints ??
+
         }
     }
 }

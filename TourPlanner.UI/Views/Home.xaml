@@ -41,7 +41,8 @@
                     
                 </Grid.RowDefinitions>
 
-                <views:TourNavbar Grid.Row="0"/>
+                <views:TourNavbar Grid.Row="0" 
+                                  DataContext="{Binding TourNavbarViewModel}"/>
 
                 <views:TourLogsManagement Grid.Row="1"
                                           DataContext="{Binding TourLogsManagementViewModel}"/>

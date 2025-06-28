@@ -8,9 +8,11 @@ namespace TourPlanner.UI.ViewModels
 {
     public class TourNavbarViewModel : BaseViewModel
     {
-        public TourNavbarViewModel()
+        public MapViewModel MapViewModel { get; }
+
+        public TourNavbarViewModel(MapViewModel mapViewModel)
         {
-            
+            MapViewModel = mapViewModel;
         }
     }
 }

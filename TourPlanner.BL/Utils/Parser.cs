@@ -15,7 +15,7 @@ namespace TourPlanner.BL.Utils
         public List<string> ParseLocationSuggestions(string jsonString)
         {
             List<string> locations = [];
-            if (jsonString == null || string.IsNullOrEmpty(jsonString))
+            if (string.IsNullOrWhiteSpace(jsonString))
             {
                 return locations;
             }
@@ -42,7 +42,7 @@ namespace TourPlanner.BL.Utils
         public GeoCoordinates ParseGeoCoordinates(string jsonString)
         {
             GeoCoordinates geoCoordinates = new();
-            if (jsonString == null || string.IsNullOrEmpty(jsonString))
+            if (string.IsNullOrWhiteSpace(jsonString))
             {
                 return geoCoordinates;
             }
@@ -54,8 +54,8 @@ namespace TourPlanner.BL.Utils
                 return geoCoordinates;
             }
 
-            geoCoordinates.Latitude = jsonObject["features"][0]["geometry"]["coordinates"].ToObject<double>();
-            geoCoordinates.Longitude = jsonObject["features"][0]["geometry"]["coordinates"].ToObject<double>();
+            geoCoordinates.Latitude = jsonObject["features"][0]["geometry"]["coordinates"][0].ToObject<double>();
+            geoCoordinates.Longitude = jsonObject["features"][0]["geometry"]["coordinates"][1].ToObject<double>();
 
             return geoCoordinates;
         }
@@ -63,7 +63,7 @@ namespace TourPlanner.BL.Utils
         public MapGeometry ParseMapGeometry(string jsonString)
         {
             MapGeometry mapGeometry = new();
-            if (jsonString == null || string.IsNullOrEmpty(jsonString))
+            if (string.IsNullOrWhiteSpace(jsonString))
             {
                 return mapGeometry;
             }
@@ -81,8 +81,8 @@ namespace TourPlanner.BL.Utils
                 for (int i = 0; i < wayPointsLength; i++)
                 {
                     GeoCoordinates wayPointCoordinates = new();
-                    wayPointCoordinates.Latitude = jsonObject["features"][0]["geometry"]["coordinates"][i][0].ToObject<double>();
-                    wayPointCoordinates.Longitude = jsonObject["features"][0]["geometry"]["coordinates"][i][1].ToObject<double>();
+                    wayPointCoordinates.Longitude = jsonObject["features"][0]["geometry"]["coordinates"][i][0].ToObject<double>();
+                    wayPointCoordinates.Latitude = jsonObject["features"][0]["geometry"]["coordinates"][i][1].ToObject<double>();
                     mapGeometry.WayPoints.Add(wayPointCoordinates);
                 }
             }
@@ -94,25 +94,6 @@ namespace TourPlanner.BL.Utils
                 MaxLongitude = jsonObject["bbox"][2].ToObject<double>(),
                 MaxLatitude = jsonObject["bbox"][3].ToObject<double>()
             };
-
-            return mapGeometry;
-        }
-
-        public MapGeometry ParseRouteInformation(string jsonString)
-        {
-            MapGeometry mapGeometry = new();
-            if (jsonString == null)
-            {
-                return mapGeometry;
-            }
-
-            JObject jsonObject = JObject.Parse(jsonString);
-            if (jsonObject == null)
-            {
-                return mapGeometry;
-            }
-
-            Debug.WriteLine(jsonObject.ToString(Newtonsoft.Json.Formatting.Indented));
 
             double duration = jsonObject["features"][0]["properties"]["summary"]["duration"].ToObject<double>();
             mapGeometry.Distance = jsonObject["features"][0]["properties"]["summary"]["distance"].ToObject<double>();
