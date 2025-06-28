@@ -12,28 +12,31 @@ using TourPlanner.UI.Leaflet;
 
 namespace TourPlanner.UI.ViewModels
 {
-    public class MapViewModel: BaseViewModel
+    public class MapViewModel : BaseViewModel
     {
         private readonly EventAggregator _eventAggregator;
         private readonly OpenRouteService _openRouteService;
         private readonly LeafletHelper _leafletHelper;
         private Tour _selectedTour;
 
+        public string BaseDirectory { get; }
+
         public MapViewModel(
             EventAggregator eventAggregator, 
             OpenRouteService openRouteService,
-            LeafletHelper leafletHelper
+            LeafletHelper leafletHelper,
+            string baseDirectory
         ) {
             _eventAggregator = eventAggregator;
             _openRouteService = openRouteService;
             _leafletHelper = leafletHelper;
+            BaseDirectory = baseDirectory;
 
             _eventAggregator.Subscribe<Tour>(OnTourSelected);
         }
 
         private void OnTourSelected(Tour tour)
         {
-            Debug.WriteLine("hi. me here");
             if (_selectedTour != tour)
             {
                 _selectedTour = tour;
@@ -46,13 +49,8 @@ namespace TourPlanner.UI.ViewModels
             //  Get the map geometry needed for the map image
             MapGeometry mapGeometry = await _openRouteService.GetMapGeometry(_selectedTour);
 
-            Debug.WriteLine($"Way points: {mapGeometry.WayPoints.Count}");
-            Debug.WriteLine($"First WayPoint: {mapGeometry.WayPoints.First().Latitude}, {mapGeometry.WayPoints.First().Longitude}");
-            Debug.WriteLine($"Last WayPoint: {mapGeometry.WayPoints.Last().Latitude}, {mapGeometry.WayPoints.Last().Longitude}");
-            Debug.WriteLine($"Bbox: {mapGeometry.Bbox}");
-
             //  Draw the map using Leaflet
-            _leafletHelper.SaveMapGeometryToJsFile(mapGeometry);
+            _leafletHelper.SaveMapGeometryAsJson(mapGeometry, BaseDirectory);
         }
     }
 }

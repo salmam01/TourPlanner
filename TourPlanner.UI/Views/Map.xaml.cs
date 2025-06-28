@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TourPlanner.UI.ViewModels;
 
 namespace TourPlanner.UI.Views
 {
@@ -29,9 +31,15 @@ namespace TourPlanner.UI.Views
         private async void IntializeAsync()
         {
             await webView.EnsureCoreWebView2Async(null);
-            string appDir = AppDomain.CurrentDomain.BaseDirectory;
-            string filePath = System.IO.Path.Combine(appDir, "Resources", "leaflet.html");
-            webView.CoreWebView2.Navigate(filePath);
+
+            if (this.DataContext is MapViewModel viewModel)
+            {
+                string baseDir = viewModel.BaseDirectory;
+                string filePath = System.IO.Path.Combine(baseDir, "TourPlanner.UI", "Leaflet", "map.html");
+                Debug.WriteLine($"File path: {filePath}");
+
+                webView.CoreWebView2.Navigate(filePath);
+            }
         }
     }
 }

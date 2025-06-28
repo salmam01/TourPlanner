@@ -74,7 +74,14 @@ public partial class App : Application
 
         //  Navigation bar
         services.AddSingleton<TourNavbarViewModel>();
-        services.AddSingleton<MapViewModel>();
+        services.AddSingleton(mvm =>
+            new MapViewModel(
+                mvm.GetRequiredService<EventAggregator>(),
+                mvm.GetRequiredService<OpenRouteService>(),
+                mvm.GetRequiredService<LeafletHelper>(),
+                pathsConfig.BaseDirectory
+            )
+        );
 
         //  Database
         services.AddDbContext<TourPlannerDbContext>(options =>
@@ -105,9 +112,7 @@ public partial class App : Application
         );
 
         //  Leaflet
-        services.AddSingleton(lh =>
-            new LeafletHelper(pathsConfig.BaseDirectory)
-        );
+        services.AddSingleton<LeafletHelper>();
 
         services.AddSingleton(s => new MainWindow
         {
