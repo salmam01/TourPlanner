@@ -85,11 +85,13 @@ namespace TourPlanner.BL.API
             GeoCoordinates start = await GetGeoCoordinatesAsync(tour.From);
             GeoCoordinates end = await GetGeoCoordinatesAsync(tour.To);
 
-            if (start != null && end != null && start.Latitude > 0 && end.Longitude > 0)
-            {
+            if (start != null && end != null 
+                && start.Longitude > 0 && start.Latitude > 0 
+                && end.Longitude > 0 && end.Latitude > 0
+            ) {
                 string response = await GetDirectionsAsync(start, end);
 
-                if (!string.IsNullOrEmpty(response) || !string.IsNullOrWhiteSpace(response))
+                if (!string.IsNullOrWhiteSpace(response))
                 {
                     MapGeometry mapGeometry = _parser.ParseMapGeometry(response);
 
@@ -98,9 +100,7 @@ namespace TourPlanner.BL.API
                 }
             }
             else
-            {
                 Debug.WriteLine("Failed to get valid coordinates for start or end location.");
-            }
 
             return tour;
         }
@@ -113,10 +113,8 @@ namespace TourPlanner.BL.API
 
             // directions
             string responseJson = await GetDirectionsAsync(start, end);
-            if (!string.IsNullOrEmpty(responseJson) || !string.IsNullOrWhiteSpace(responseJson))
-            {
+            if (!string.IsNullOrWhiteSpace(responseJson))
                 mapGeometry = _parser.ParseMapGeometry(responseJson);
-            }
 
             return mapGeometry;
         }
@@ -143,10 +141,10 @@ namespace TourPlanner.BL.API
             string result = "";
             if (start != null && end != null)
             {
-                string startX = start.Latitude.ToString(CultureInfo.InvariantCulture);
-                string startY = start.Longitude.ToString(CultureInfo.InvariantCulture);
-                string endX = end.Latitude.ToString(CultureInfo.InvariantCulture);
-                string endY = end.Longitude.ToString(CultureInfo.InvariantCulture);
+                string startX = start.Longitude.ToString(CultureInfo.InvariantCulture);
+                string startY = start.Latitude.ToString(CultureInfo.InvariantCulture);
+                string endX = end.Longitude.ToString(CultureInfo.InvariantCulture);
+                string endY = end.Latitude.ToString(CultureInfo.InvariantCulture);
 
                 //  driving-car?
                 string url = ($"v2/directions/driving-car" +
@@ -156,9 +154,7 @@ namespace TourPlanner.BL.API
 
                 HttpResponseMessage response = await _client.GetAsync(url);
                 if (response.IsSuccessStatusCode)
-                {
                     result = await response.Content.ReadAsStringAsync();
-                }
                 else
                     Debug.WriteLine($"Request failed with status: {response.StatusCode}, {response.Content}");
             }

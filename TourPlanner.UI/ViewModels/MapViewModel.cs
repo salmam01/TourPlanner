@@ -8,6 +8,7 @@ using TourPlanner.BL.API;
 using TourPlanner.BL.Utils.DTO;
 using TourPlanner.Models.Entities;
 using TourPlanner.UI.Events;
+using TourPlanner.UI.Leaflet;
 
 namespace TourPlanner.UI.ViewModels
 {
@@ -15,12 +16,17 @@ namespace TourPlanner.UI.ViewModels
     {
         private readonly EventAggregator _eventAggregator;
         private readonly OpenRouteService _openRouteService;
+        private readonly LeafletHelper _leafletHelper;
         private Tour _selectedTour;
 
-        public MapViewModel(EventAggregator eventAggregator, OpenRouteService openRouteService)
-        {
+        public MapViewModel(
+            EventAggregator eventAggregator, 
+            OpenRouteService openRouteService,
+            LeafletHelper leafletHelper
+        ) {
             _eventAggregator = eventAggregator;
             _openRouteService = openRouteService;
+            _leafletHelper = leafletHelper;
 
             _eventAggregator.Subscribe<Tour>(OnTourSelected);
         }
@@ -45,8 +51,8 @@ namespace TourPlanner.UI.ViewModels
             Debug.WriteLine($"Last WayPoint: {mapGeometry.WayPoints.Last().Latitude}, {mapGeometry.WayPoints.Last().Longitude}");
             Debug.WriteLine($"Bbox: {mapGeometry.Bbox}");
 
-            //  Draw the map using Leaflet: bbox and waypoints ??
-
+            //  Draw the map using Leaflet
+            _leafletHelper.SaveMapGeometryToJsFile(mapGeometry);
         }
     }
 }

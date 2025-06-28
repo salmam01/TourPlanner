@@ -23,6 +23,15 @@ namespace TourPlanner.UI.Views
         public Map()
         {
             InitializeComponent();
+            IntializeAsync();
+        }
+
+        private async void IntializeAsync()
+        {
+            await webView.EnsureCoreWebView2Async(null);
+            string appDir = AppDomain.CurrentDomain.BaseDirectory;
+            string filePath = System.IO.Path.Combine(appDir, "Resources", "leaflet.html");
+            webView.CoreWebView2.Navigate(filePath);
         }
     }
 }
