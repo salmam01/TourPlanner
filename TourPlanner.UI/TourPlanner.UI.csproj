@@ -25,6 +25,7 @@
     <Resource Include="Resources\Fonts\Montserrat-Regular.ttf" />
   </ItemGroup>
   <ItemGroup>
+	<PackageReference Include="MaterialDesignThemes" Version="5.2.1" />
 	<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="9.0.5" />
 	<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
 	<PackageReference Include="ClosedXML" Version="0.105.0" />

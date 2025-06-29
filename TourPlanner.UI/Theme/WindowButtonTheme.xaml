@@ -2,31 +2,41 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style x:Key="WindowButtonStyle"
            TargetType="Button">
-        <Setter Property="Foreground" Value="Black"/>
-        <Setter Property="Background" Value="#F0BB78"/>
+        <Setter Property="Foreground" Value="#F5ECD5"/>
+        <Setter Property="Background" Value="Transparent"/>
         <Setter Property="FontSize" Value="15"/>
-        <Setter Property="FontFamily" Value="/Resources/Fonts/#Montserrat"/>
-        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Padding" Value="15,0"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border Width="30" Height="30"
+                    <Border Background="{TemplateBinding Background}"
                             CornerRadius="10"
-                            BorderThickness="2"
-                            BorderBrush="#d49c5d"
-                            Background="{TemplateBinding Background}">
-                        <ContentPresenter VerticalAlignment="Center"
-                                          HorizontalAlignment="Center"/>
+                            SnapsToDevicePixels="True">
+                        <Border Padding="{TemplateBinding Padding}">
+                            <ContentPresenter VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"
+                                              RecognizesAccessKey="True"/>
+                        </Border>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#f7b2b2"/>
+                <Setter Property="Background" Value="#445232"/>
             </Trigger>
         </Style.Triggers>
     </Style>
-
+    <Style x:Key="WindowCloseButtonStyle"
+           BasedOn="{StaticResource WindowButtonStyle}"
+           TargetType="Button">
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#B00020"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 </ResourceDictionary>

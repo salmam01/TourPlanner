@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:views="clr-namespace:TourPlanner.UI.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:packIcon="http://materialdesigninxaml.net/winfx/xaml/controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="300">
 
@@ -14,16 +16,16 @@
         
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/> <!-- Header -->
-                <RowDefinition Height="Auto"/> <!-- Searchbar -->
-                <RowDefinition Height="*"/>   <!-- List -->
-                <RowDefinition Height="Auto"/> <!-- Report Buttons -->
+                <RowDefinition Height="Auto"/>
+                <!-- Header -->
+                <RowDefinition Height="Auto"/>
+                <!-- Searchbar -->
+                <RowDefinition Height="*"/>
+                <!-- List -->
+                <RowDefinition Height="Auto"/>
+                <!-- Report Buttons -->
             </Grid.RowDefinitions>
 
-            <!-- Search Bar -->
-            <views:SearchBar Grid.Row="1"
-                             DataContext="{Binding SearchBarViewModel}"/>
-            
             <!-- Header with Title and Buttons -->
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
@@ -33,9 +35,9 @@
                 
                 <TextBlock Text="Tours"
                            Grid.Column="0"
-                           Margin="14"
+                           Margin="10"
                            Foreground="Black"
-                           FontSize="18"
+                           FontSize="16"
                            FontFamily="/Resources/Fonts/#Montserrat"
                            FontWeight="Medium"
                            VerticalAlignment="Center"/>
@@ -43,46 +45,41 @@
                             Orientation="Horizontal"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Center"
-                            Margin="7">
+                            Margin="5">
 
                     <!-- Buttons for Tour management -->
-                    <Button Content="+"
-                            Margin="2"
+                    <Button Content="{materialDesign:PackIcon Kind=Add}"
                             Style="{StaticResource ActionButtonStyle}"
                             ToolTip="Create Tour"
                             Command="{Binding CreateTourCommand}"/>
-                    <Button Content="-"
-                            Margin="2"
-                            Style="{StaticResource ActionButtonStyle}"
-                            ToolTip="Delete Tour"
-                            Command="{Binding DeleteTourCommand}"/>
-                    <Button Content=" .. "
-                            Margin="2"
+                    <Button Content="{materialDesign:PackIcon Kind=Edit}"
                             Style="{StaticResource ActionButtonStyle}"
                             ToolTip="Edit Tour"
                             Command="{Binding EditTourCommand}"/>
+                    <Button Content="{materialDesign:PackIcon Kind=Delete}"
+                            Style="{StaticResource ActionButtonStyle}"
+                            ToolTip="Delete Tour"
+                            Command="{Binding DeleteTourCommand}"/>
+                    
                     <!-- Import Button -->
-                    <Button Margin="2"
+                    <Button Content="{materialDesign:PackIcon Kind=Import}"
+                            Margin="2"
                             Style="{StaticResource ActionButtonStyle}"
                             ToolTip="Import Tour"
-                            Command="{Binding ImportToursCommand}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE898;" FontSize="16" VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Button>
+                            Command="{Binding ImportToursCommand}"/>
 
                     <!-- Export Button -->
-                    <Button Margin="1"
+                    <Button Content="{materialDesign:PackIcon Kind=Export}"
+                            Margin="1"
                             Style="{StaticResource ActionButtonStyle}"
                             ToolTip="Export Tour"
-                            Command="{Binding ExportToursCommand}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8B8;" FontSize="16" VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Button>
+                            Command="{Binding ExportToursCommand}"/>
                 </StackPanel>
+                
             </Grid>
-
+            <!-- Search Bar -->
+            <views:SearchBar Grid.Row="1"
+                             DataContext="{Binding SearchBarViewModel}"/>
             <!-- Tour List -->
             <views:TourList x:Name="TourListView"
                             Grid.Row="2"
@@ -95,24 +92,16 @@
                         HorizontalAlignment="Left" 
                         Margin="10,5">
                 <!-- Generate Tour Report-->
-                <Button Command="{Binding GenerateTourReportCommand}"
+                <Button Content="{materialDesign:PackIcon Kind=FileExport}"
+                        Command="{Binding GenerateTourReportCommand}"
                         Style="{StaticResource ActionButtonStyle}"
                         ToolTip="Generate Tour Report"
-                        Margin="0,0,5,0">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8A5;" FontSize="16" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                        <TextBlock Text="Tour Report" VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Button>
+                        Margin="0,0,5,0"/>
                 <!-- Generate Summary Report-->
-                <Button Command="{Binding GenerateSummaryReportCommand}"
+                <Button Content="{materialDesign:PackIcon Kind=ChartBar}"
+                        Command="{Binding GenerateSummaryReportCommand}"
                         Style="{StaticResource ActionButtonStyle}"
-                        ToolTip="Generate Summary Report">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE9D9;" FontSize="16" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                        <TextBlock Text="Summary Report" VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Button>
+                        ToolTip="Generate Summary Report"/>
             </StackPanel>
         </Grid>
     </Border>
