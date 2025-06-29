@@ -157,10 +157,11 @@ namespace TourPlanner.UI.ViewModels
             _eventAggregator.Publish("ShowHome");
         }
 
-        public void OnTourUpdated(object sender, Tour tour)
+        public async void OnTourUpdated(object sender, Tour tour)
         {
             if (tour == null) return;
 
+            tour = await _openRouteService.GetTourInformationAsync(tour);
             Result result = _tourService.UpdateTour(tour);
 
             if (result.Code == Result.ResultCode.Success)
@@ -176,7 +177,7 @@ namespace TourPlanner.UI.ViewModels
         public void OnPerformSearch(object sender, string searchText)
         {
             //  If the search bar is empty, show all tours again
-            if(string.IsNullOrEmpty(searchText)) 
+            if (string.IsNullOrEmpty(searchText)) 
                 TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
             else
                 TourListViewModel.ReloadTours(

@@ -18,7 +18,6 @@ namespace TourPlanner.UI.ViewModels
 {
     public class CreateTourViewModel : BaseFormViewModel {
         private OpenRouteService _openRouteService;
-        private readonly static int _minQueryLength = 3;
 
         private string _name;
         private DateTime _date;
@@ -126,6 +125,7 @@ namespace TourPlanner.UI.ViewModels
             get => _selectedFromSuggestion;
             set
             {
+                if (_selectedFromSuggestion == value) return;
                 _selectedFromSuggestion = value;
                 From = value;
                 OnPropertyChanged();
@@ -153,6 +153,7 @@ namespace TourPlanner.UI.ViewModels
             get => _selectedToSuggestion;
             set
             {
+                if (_selectedToSuggestion == value) return;
                 _selectedToSuggestion = value;
                 To = value;
                 OnPropertyChanged();
@@ -163,9 +164,12 @@ namespace TourPlanner.UI.ViewModels
 
         public List<string> TransportTypeOptions { get; } = new List<string>
         {
-            "Plane",
-            "Bus",
-            "Train",
+            "Walking",
+            "Hiking (Trails)",
+            "Bicycle",
+            "Road Bike",
+            "Mountain Bike",
+            "E-Bike",
             "Car"
         };
 
@@ -192,6 +196,9 @@ namespace TourPlanner.UI.ViewModels
             ClearErrors(nameof(From));
             ClearErrors(nameof(To));
             ClearErrors(nameof(Date));
+
+            FromLocationSuggestions = [];
+            ToLocationSuggestions = [];
 
             OnPropertyChanged(nameof(Name));
             OnPropertyChanged(nameof(Description));
@@ -274,7 +281,7 @@ namespace TourPlanner.UI.ViewModels
 
         private async Task OnFromParamsChanged()
         {
-            if (!string.IsNullOrEmpty(From) && From.Length >= _minQueryLength && From.Length % _minQueryLength == 0)
+            if (!string.IsNullOrEmpty(From) && From.Length > 0)
             {
                 FromLocationSuggestions = await _openRouteService.GetLocationSuggestionsAsync(From);
                 OnPropertyChanged(nameof(FromLocationSuggestions));
@@ -283,7 +290,7 @@ namespace TourPlanner.UI.ViewModels
 
         private async Task OnToParamsChanged()
         {
-            if (!string.IsNullOrEmpty(To) && To.Length >= _minQueryLength && To.Length % _minQueryLength == 0)
+            if (!string.IsNullOrEmpty(To) && To.Length > 0)
             {
                 ToLocationSuggestions = await _openRouteService.GetLocationSuggestionsAsync(To);
                 OnPropertyChanged(nameof(ToLocationSuggestions));
@@ -293,7 +300,7 @@ namespace TourPlanner.UI.ViewModels
         private void ValidateName()
         {
             string error = TourValidator.ValidateName(Name);
-            if (!string.IsNullOrEmpty(error))
+            if (!string.IsNullOrWhiteSpace(error))
                 SetError(nameof(Name), error);
             else
                 ClearErrors(nameof(Name));
@@ -301,7 +308,7 @@ namespace TourPlanner.UI.ViewModels
         private void ValidateDescription()
         {
             string error = TourValidator.ValidateDescription(Description);
-            if (!string.IsNullOrEmpty(error))
+            if (!string.IsNullOrWhiteSpace(error))
                 SetError(nameof(Description), error);
             else
                 ClearErrors(nameof(Description));
@@ -309,7 +316,7 @@ namespace TourPlanner.UI.ViewModels
         private void ValidateTransportType()
         {
             string error = TourValidator.ValidateTransportType(TransportType);
-            if (!string.IsNullOrEmpty(error))
+            if (!string.IsNullOrWhiteSpace(error))
                 SetError(nameof(TransportType), error);
             else
                 ClearErrors(nameof(TransportType));
@@ -317,7 +324,7 @@ namespace TourPlanner.UI.ViewModels
         private void ValidateFrom()
         {
             string error = TourValidator.ValidateFrom(From);
-            if (!string.IsNullOrEmpty(error))
+            if (!string.IsNullOrWhiteSpace(error))
                 SetError(nameof(From), error);
             else
                 ClearErrors(nameof(From));
@@ -325,7 +332,7 @@ namespace TourPlanner.UI.ViewModels
         private void ValidateTo()
         {
             string error = TourValidator.ValidateTo(To);
-            if (!string.IsNullOrEmpty(error))
+            if (!string.IsNullOrWhiteSpace(error))
                 SetError(nameof(To), error);
             else
                 ClearErrors(nameof(To));
@@ -333,7 +340,7 @@ namespace TourPlanner.UI.ViewModels
         private void ValidateDate()
         {
             string error = TourValidator.ValidateDate(Date);
-            if (!string.IsNullOrEmpty(error))
+            if (!string.IsNullOrWhiteSpace(error))
                 SetError(nameof(Date), error);
             else
                 ClearErrors(nameof(Date));

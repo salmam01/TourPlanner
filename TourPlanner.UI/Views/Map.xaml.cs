@@ -13,7 +13,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TourPlanner.UI.Events;
 using TourPlanner.UI.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
+
 
 namespace TourPlanner.UI.Views
 {
@@ -22,10 +25,17 @@ namespace TourPlanner.UI.Views
     /// </summary>
     public partial class Map : UserControl
     {
+        private EventAggregator _eventAggregator;
         public Map()
         {
             InitializeComponent();
             IntializeAsync();
+
+            if (_eventAggregator == null)
+            {
+                _eventAggregator = ((App)Application.Current).ServiceProvider.GetService<EventAggregator>();
+                _eventAggregator.Subscribe<MapUpdatedEvent>(OnMapUpdated);
+            }
         }
 
         private async void IntializeAsync()
@@ -36,10 +46,13 @@ namespace TourPlanner.UI.Views
             {
                 string baseDir = viewModel.BaseDirectory;
                 string filePath = System.IO.Path.Combine(baseDir, "TourPlanner.UI", "Leaflet", "map.html");
-                Debug.WriteLine($"File path: {filePath}");
-
                 webView.CoreWebView2.Navigate(filePath);
             }
+        }
+
+        private void OnMapUpdated(MapUpdatedEvent mapUpdatedEvent)
+        {
+            webView.CoreWebView2.Reload();
         }
     }
 }

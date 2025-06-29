@@ -100,32 +100,24 @@
                                   Margin="5,0,5,5"
                                   ItemsSource="{Binding TransportTypeOptions}"
                                   SelectedItem="{Binding TransportType, 
-                                                    UpdateSourceTrigger=PropertyChanged, 
-                                                    ValidatesOnDataErrors=True, 
-                                                    NotifyOnValidationError=True}"/>
+                                                         UpdateSourceTrigger=PropertyChanged, 
+                                                         ValidatesOnDataErrors=True, 
+                                                         NotifyOnValidationError=True}"/>
                         <TextBlock Text="{Binding TransportTypeError}" Foreground="Red" FontSize="12" />
                         
                         <!-- Tour Starting Point -->
                         <TextBlock Text="From"
-                               Style="{StaticResource FormTextBoxStyle}"/>
+                                   Style="{StaticResource FormTextBoxStyle}"/>
                         
-                        <!--
-                        <TextBox x:Name="from"
-                                 Text="{Binding From, 
-                                        UpdateSourceTrigger=PropertyChanged, 
-                                        ValidatesOnDataErrors=True, 
-                                        NotifyOnValidationError=True}"
-                                 Style="{StaticResource FormFieldStyle}"/>-->
-
                         <!-- Style missing-->
                         <ComboBox x:Name="fromComboBox"
                                   IsEditable="True"
                                   IsTextSearchEnabled="False"
                                   StaysOpenOnEdit="True"
                                   Text="{Binding From,
-                                         UpdateSourceTrigger=PropertyChanged,
-                                         ValidatesOnDataErrors=True,
-                                         NotifyOnValidationError=True}"
+                                                 UpdateSourceTrigger=PropertyChanged,
+                                                 ValidatesOnDataErrors=True,
+                                                 NotifyOnValidationError=True}"
                                   ItemsSource="{Binding FromLocationSuggestions}"
                                   SelectedItem="{Binding SelectedFromSuggestion}"
                                   PreviewTextInput="ComboBox_PreviewTextInput"/>
@@ -135,14 +127,6 @@
                         <!-- Tour Destination -->
                         <TextBlock Text="To"
                                    Style="{StaticResource FormTextBoxStyle}"/>
-
-                        <!--
-                        <TextBox x:Name="to"
-                                 Text="{Binding To, 
-                                        UpdateSourceTrigger=PropertyChanged, 
-                                        ValidatesOnDataErrors=True, 
-                                        NotifyOnValidationError=True}"
-                             Style="{StaticResource FormFieldStyle}"/>-->
 
                         <ComboBox x:Name="toComboBox"
                                   IsEditable="True"

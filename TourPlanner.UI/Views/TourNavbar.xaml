@@ -17,6 +17,14 @@
                     <views:Map DataContext="{Binding MapViewModel}"/>
                 </Border>
             </TabItem>
+            <TabItem Header="Tour Logs">
+                <Border BorderBrush="#A4B465"
+                        Background="#F5ECD5"
+                        BorderThickness="3"
+                        CornerRadius="10">
+                    <views:TourDetails/>
+                </Border>
+            </TabItem>
             <TabItem Header="Details">
                 <Border BorderBrush="#A4B465"
                         Background="#F5ECD5"

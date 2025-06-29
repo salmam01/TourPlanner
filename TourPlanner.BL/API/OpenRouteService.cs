@@ -89,7 +89,7 @@ namespace TourPlanner.BL.API
                 && start.Longitude > 0 && start.Latitude > 0 
                 && end.Longitude > 0 && end.Latitude > 0
             ) {
-                string response = await GetDirectionsAsync(start, end);
+                string response = await GetDirectionsAsync(start, end, GetProfile(tour.TransportType));
 
                 if (!string.IsNullOrWhiteSpace(response))
                 {
@@ -112,7 +112,7 @@ namespace TourPlanner.BL.API
             GeoCoordinates end = await GetGeoCoordinatesAsync(tour.To);
 
             // directions
-            string responseJson = await GetDirectionsAsync(start, end);
+            string responseJson = await GetDirectionsAsync(start, end, GetProfile(tour.TransportType));
             if (!string.IsNullOrWhiteSpace(responseJson))
                 mapGeometry = _parser.ParseMapGeometry(responseJson);
 
@@ -136,7 +136,7 @@ namespace TourPlanner.BL.API
         }
 
         //  Helper-Method
-        public async Task<string> GetDirectionsAsync(GeoCoordinates start, GeoCoordinates end)
+        public async Task<string> GetDirectionsAsync(GeoCoordinates start, GeoCoordinates end, string profile)
         {
             string result = "";
             if (start != null && end != null)
@@ -147,7 +147,7 @@ namespace TourPlanner.BL.API
                 string endY = end.Latitude.ToString(CultureInfo.InvariantCulture);
 
                 //  driving-car?
-                string url = ($"v2/directions/driving-car" +
+                string url = ($"v2/directions/{profile}" +
                               $"?api_key={_openRouteKey}" +
                               $"&start={startX},{startY}" +
                               $"&end={endX},{endY}");
@@ -160,6 +160,27 @@ namespace TourPlanner.BL.API
             }
 
             return result;
+        }
+
+        
+        private string GetProfile(string profile)
+        {
+            switch(profile)
+            {
+                case "Walking":
+                    return "foot-walking";
+                case "Hiking (Trails)":
+                    return "foot-hiking";
+                case "Bicycle":
+                    return "cycling-regular";
+                case "Road Bike":
+                    return "cycling-road";
+                case "Mountain Bike":
+                    return "cycling-mountain";
+                case "E-Bike":
+                    return "cycling-electric";
+                default: return "driving-car";
+            }
         }
 
     }

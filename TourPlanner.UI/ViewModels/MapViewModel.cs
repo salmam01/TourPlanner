@@ -35,22 +35,23 @@ namespace TourPlanner.UI.ViewModels
             _eventAggregator.Subscribe<Tour>(OnTourSelected);
         }
 
-        private void OnTourSelected(Tour tour)
+        private async void OnTourSelected(Tour tour)
         {
-            if (_selectedTour != tour)
+            if (_selectedTour != tour && tour != null)
             {
                 _selectedTour = tour;
-                _ = GetRouteMap();
+                Debug.WriteLine("In GetRouteMap [MapViewModel] !!");
+
+                //  Get the map geometry needed for the map image
+                MapGeometry mapGeometry = await _openRouteService.GetMapGeometry(_selectedTour);
+
+                if (mapGeometry != null && mapGeometry.WayPoints.Count > 0 && mapGeometry.Bbox != null)
+                {
+                    //  Draw the map using Leaflet
+                    _leafletHelper.SaveMapGeometryAsJson(mapGeometry, BaseDirectory);
+                    _eventAggregator.Publish(new MapUpdatedEvent());
+                }
             }
-        }
-
-        private async Task GetRouteMap()
-        {
-            //  Get the map geometry needed for the map image
-            MapGeometry mapGeometry = await _openRouteService.GetMapGeometry(_selectedTour);
-
-            //  Draw the map using Leaflet
-            _leafletHelper.SaveMapGeometryAsJson(mapGeometry, BaseDirectory);
         }
     }
 }

@@ -18,12 +18,10 @@ namespace TourPlanner.UI.Leaflet
             WriteIndented = true
         };
 
-        public LeafletHelper()
-        {
-        }
-
         public void SaveMapGeometryAsJson(MapGeometry mapGeometry, string baseDirectory)
         {
+            Debug.WriteLine("In SaveMapGeometryAsJson [LeafletHelper] !!");
+
             var directionsObject = new
             {
                 type = "Feature",
@@ -37,6 +35,7 @@ namespace TourPlanner.UI.Leaflet
             };
 
             string directionsJson = $"var directions = {JsonSerializer.Serialize(directionsObject, _jsonOptions)};";
+            Debug.WriteLine(directionsJson);
             string outputPath = Path.Combine(baseDirectory, "TourPlanner.UI", "Leaflet", "directions.js");
 
             File.WriteAllText(outputPath, directionsJson);
