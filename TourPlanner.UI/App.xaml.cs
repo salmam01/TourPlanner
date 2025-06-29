@@ -65,12 +65,8 @@ public partial class App : Application
         services.AddSingleton<TourManagementViewModel>();
         services.AddSingleton<CreateTourViewModel>();
         services.AddSingleton<TourListViewModel>();
+        services.AddSingleton<TourDetailsViewModel>();
         services.AddTransient<SearchBarViewModel>();
-
-        //  Tour logs
-        services.AddSingleton<TourLogsManagementViewModel>();
-        services.AddSingleton<CreateTourLogViewModel>();
-        services.AddSingleton<TourLogListViewModel>();
 
         //  Navigation bar
         services.AddSingleton<TourNavbarViewModel>();
@@ -82,6 +78,11 @@ public partial class App : Application
                 pathsConfig.BaseDirectory
             )
         );
+
+        //  Tour logs
+        services.AddSingleton<TourLogsManagementViewModel>();
+        services.AddSingleton<CreateTourLogViewModel>();
+        services.AddSingleton<TourLogListViewModel>();
 
         //  Database
         services.AddDbContext<TourPlannerDbContext>(options =>

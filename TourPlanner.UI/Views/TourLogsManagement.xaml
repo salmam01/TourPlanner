@@ -9,56 +9,41 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-    <Border CornerRadius="10" 
-            BorderBrush="#A4B465"
-            Background="#A4B465"
-            BorderThickness="3">
+    <Grid Background="#A4B465">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+        <!-- Header with Title and Buttons -->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
 
-            <!-- Header with Title and Buttons -->
-            <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-
-                <TextBlock Text="Tour Logs"
-                           Margin="10"
-                           Foreground="Black"
-                           FontSize="16"
-                           FontFamily="/Resources/Fonts/#Montserrat"
-                           FontWeight="Medium"
-                           VerticalAlignment="Center"/>
-
-                <StackPanel Grid.Column="2"
-                            Orientation="Horizontal"
-                            HorizontalAlignment="Right"
-                            Margin="5">
+            <StackPanel Grid.Column="1"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        Margin="5">
                     
-                    <Button Content="{materialDesign:PackIcon Kind=Add}"
-                            Style="{StaticResource ActionButtonStyle}"
-                            Command="{Binding CreateTourLogCommand}"/>
+                <Button Content="{materialDesign:PackIcon Kind=Add}"
+                        Style="{StaticResource ActionButtonStyle}"
+                        Command="{Binding CreateTourLogCommand}"/>
                     
-                    <Button Content="{materialDesign:PackIcon Kind=Edit}"
-                            Style="{StaticResource ActionButtonStyle}"
-                            Command="{Binding EditTourLogCommand}"
-                            CommandParameter="{Binding SelectedTourLog, Mode=OneWay}"/>
+                <Button Content="{materialDesign:PackIcon Kind=Edit}"
+                        Style="{StaticResource ActionButtonStyle}"
+                        Command="{Binding EditTourLogCommand}"
+                        CommandParameter="{Binding SelectedTourLog, Mode=OneWay}"/>
                     
-                    <Button Content="{materialDesign:PackIcon Kind=Delete}"
-                            Style="{StaticResource ActionButtonStyle}"
-                            Command="{Binding DeleteTourLogCommand}"/>
-                </StackPanel>
-            </Grid>
-            
-            <!--- Tour Logs Table -->
-            <views:TourLogList Grid.Row="1"
-                               DataContext="{Binding TourLogListViewModel}"/>
+                <Button Content="{materialDesign:PackIcon Kind=Delete}"
+                        Style="{StaticResource ActionButtonStyle}"
+                        Command="{Binding DeleteTourLogCommand}"/>
+            </StackPanel>
         </Grid>
-    </Border>
+            
+        <!--- Tour Logs Table -->
+        <views:TourLogList Grid.Row="1"
+                           DataContext="{Binding TourLogListViewModel}"/>
+    </Grid>
 </UserControl>

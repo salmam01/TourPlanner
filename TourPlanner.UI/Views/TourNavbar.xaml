@@ -8,29 +8,23 @@
              d:DesignHeight="450" d:DesignWidth="800">
 
     <Grid>
-        <TabControl>
-            <TabItem Header="Route">
-                <Border BorderBrush="#A4B465"
-                        Background="#F5ECD5"
-                        BorderThickness="3"
-                        CornerRadius="10">
+        <TabControl SelectionChanged="TabControl_SelectionChanged">
+            <TabItem Header="Route"
+                     Style="{StaticResource TabItemStyle}">
+                <Border Background="#F5ECD5">
                     <views:Map DataContext="{Binding MapViewModel}"/>
                 </Border>
             </TabItem>
-            <TabItem Header="Tour Logs">
-                <Border BorderBrush="#A4B465"
-                        Background="#F5ECD5"
-                        BorderThickness="3"
-                        CornerRadius="10">
-                    <views:TourDetails/>
+            <TabItem Header="Tour Logs"
+                     Style="{StaticResource TabItemStyle}">
+                <Border Background="#F5ECD5">
+                    <views:TourLogsManagement DataContext="{Binding TourLogsManagementViewModel}"/>
                 </Border>
             </TabItem>
-            <TabItem Header="Details">
-                <Border BorderBrush="#A4B465"
-                        Background="#F5ECD5"
-                        BorderThickness="3"
-                        CornerRadius="10">
-                    <views:TourDetails/>
+            <TabItem Header="Details"
+                     Style="{StaticResource TabItemStyle}">
+                <Border Background="#F5ECD5">
+                    <views:TourDetails DataContext="{Binding TourDetailsViewModel}"/>
                 </Border>
             </TabItem>
         </TabControl>

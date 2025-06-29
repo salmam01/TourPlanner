@@ -9,10 +9,17 @@ namespace TourPlanner.UI.ViewModels
     public class TourNavbarViewModel : BaseViewModel
     {
         public MapViewModel MapViewModel { get; }
+        public TourLogsManagementViewModel TourLogsManagementViewModel { get; }
+        public TourDetailsViewModel TourDetailsViewModel { get; }
 
-        public TourNavbarViewModel(MapViewModel mapViewModel)
-        {
+        public TourNavbarViewModel(
+            MapViewModel mapViewModel,
+            TourLogsManagementViewModel tourLogsManagementViewModel,
+            TourDetailsViewModel tourDetailsViewModel
+        ) {
             MapViewModel = mapViewModel;
+            TourLogsManagementViewModel = tourLogsManagementViewModel;
+            TourDetailsViewModel = tourDetailsViewModel;
         }
     }
 }

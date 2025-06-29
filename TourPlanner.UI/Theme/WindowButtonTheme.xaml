@@ -35,7 +35,7 @@
            TargetType="Button">
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#B00020"/>
+                <Setter Property="Background" Value="#C74767"/>
             </Trigger>
         </Style.Triggers>
     </Style>

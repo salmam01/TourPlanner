@@ -29,12 +29,16 @@ namespace TourPlanner.UI.Views
         public Map()
         {
             InitializeComponent();
-            IntializeAsync();
 
-            if (_eventAggregator == null)
+            if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
             {
-                _eventAggregator = ((App)Application.Current).ServiceProvider.GetService<EventAggregator>();
-                _eventAggregator.Subscribe<MapUpdatedEvent>(OnMapUpdated);
+                IntializeAsync();
+
+                if (_eventAggregator == null)
+                {
+                    _eventAggregator = ((App)Application.Current).ServiceProvider.GetService<EventAggregator>();
+                    _eventAggregator.Subscribe<MapUpdatedEvent>(OnMapUpdated);
+                }
             }
         }
 

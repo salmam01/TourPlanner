@@ -14,6 +14,7 @@
     <None Remove="Resources\Fonts\Montserrat-Bold.ttf" />
     <None Remove="Resources\Fonts\Montserrat-Medium.ttf" />
     <None Remove="Resources\Fonts\Montserrat-Regular.ttf" />
+    <None Remove="Resources\Icons\TourPlannerIcon.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +24,9 @@
     <Resource Include="Resources\Fonts\Montserrat-Bold.ttf" />
     <Resource Include="Resources\Fonts\Montserrat-Medium.ttf" />
     <Resource Include="Resources\Fonts\Montserrat-Regular.ttf" />
+    <Resource Include="Resources\Icons\TourPlannerIcon.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
 	<PackageReference Include="MaterialDesignThemes" Version="5.2.1" />
@@ -49,9 +53,6 @@
     <ProjectReference Include="..\TourPlanner.BL\TourPlanner.BL.csproj" />
     <ProjectReference Include="..\TourPlanner.DAL\TourPlanner.DAL.csproj" />
     <ProjectReference Include="..\TourPlanner.Models\TourPlanner.Models.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\Icons\" />
   </ItemGroup>
 
 </Project>

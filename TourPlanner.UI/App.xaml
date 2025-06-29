@@ -15,6 +15,7 @@
                 <ResourceDictionary Source="/Theme/FormTextBoxTheme.xaml"/>
                 <ResourceDictionary Source="/Theme/FormSliderFieldTheme.xaml"/>
                 <ResourceDictionary Source="/Theme/FormDatePickerTheme.xaml"/>
+                <ResourceDictionary Source="/Theme/TabItemTheme.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         </ResourceDictionary>

@@ -50,7 +50,7 @@
         </ListView>
 
         <TextBlock Text="No results found."
-                   Foreground="Red"
+                   Foreground="#C74767"
                    FontSize="14"
                    FontFamily="/Resources/Fonts/#Montserrat"
                    HorizontalAlignment="Center"
