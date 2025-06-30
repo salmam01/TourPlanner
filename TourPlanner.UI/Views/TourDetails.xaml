@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TourPlanner.UI.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:packIcon="http://materialdesigninxaml.net/winfx/xaml/controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     
@@ -20,6 +22,8 @@
 
         <Grid>
             <Grid.RowDefinitions>
+                <!-- Tour name, edit, delete -->
+                <RowDefinition Height="Auto"/>
                 <!-- General info & attributes -->
                 <RowDefinition Height="Auto"/>
                 <!-- Tour from, to, transporttype, distance, estimated time -->
@@ -27,7 +31,9 @@
             </Grid.RowDefinitions>
 
             <Border BorderBrush="#535e3c"
-                    BorderThickness="0,0,0,1">
+                    BorderThickness="0,0,0,1"
+                    Grid.Row="0"
+                    Margin="20,0">
                 <Border.Effect>
                     <DropShadowEffect Color="Black"
                                       BlurRadius="6"
@@ -35,9 +41,57 @@
                                       Direction="270"
                                       ShadowDepth="2"/>
                 </Border.Effect>
-                <Grid Grid.Row="0">
+                
+                <Grid>
                     <Grid.ColumnDefinitions>
-                        <!-- Tour name, date, description -->
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="{Binding Name}"
+                               FontSize="22"
+                               FontFamily="/Resources/Fonts/#Montserrat"
+                               FontWeight="Bold"
+                               Foreground="#f28484"
+                               Padding="10"/>
+                    
+                    <StackPanel Grid.Column="1"
+                                Orientation="Horizontal"
+                                Margin="10">
+                        
+                        <Button Content="{materialDesign:PackIcon Kind=Edit}"
+                                Style="{StaticResource ActionButtonStyle}"
+                                ToolTip="Edit Tour"
+                                Command="{Binding EditTourCommand}"/>
+                        
+                        <Button Content="{materialDesign:PackIcon Kind=Export}"
+                            Style="{StaticResource ActionButtonStyle}"
+                            ToolTip="Export Tour"
+                            Command="{Binding ExportToursCommand}"/>
+                        
+                        <Button Content="{materialDesign:PackIcon Kind=Delete}"
+                                Style="{StaticResource ActionButtonStyle}"
+                                ToolTip="Delete Tour"
+                                Command="{Binding DeleteTourCommand}"/>
+                        
+                    </StackPanel>
+                </Grid>
+
+            </Border>
+
+            <Border BorderBrush="#535e3c"
+                    BorderThickness="0,0,0,1"
+                    Grid.Row="1">
+                <Border.Effect>
+                    <DropShadowEffect Color="Black"
+                                      BlurRadius="6"
+                                      Opacity="0.2"
+                                      Direction="270"
+                                      ShadowDepth="2"/>
+                </Border.Effect>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <!-- Tour date, description -->
                         <ColumnDefinition Width="*"/>
                         <!-- Tour popularity, child friendliness -->
                         <ColumnDefinition Width="Auto"/>
@@ -50,13 +104,6 @@
                             VerticalAlignment="Center">
 
                         <StackPanel>
-                            <TextBlock Text="{Binding Name}"
-                                       FontSize="22"
-                                       FontFamily="/Resources/Fonts/#Montserrat"
-                                       FontWeight="Bold"
-                                       Foreground="#f28484"
-                                       Padding="10"/>
-
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Date"
                                            Style="{StaticResource TextBlockDescriptorStyle}"/>
@@ -74,7 +121,7 @@
                         </StackPanel>
                     </Border>
 
-                    <Border Grid.Column="1"
+                    <Border Grid.Column="2"
                             CornerRadius="12"
                             Padding="20"
                             Margin="20"
@@ -100,7 +147,7 @@
             </Border>
 
 
-            <Border Grid.Row="1"
+            <Border Grid.Row="2"
                     Padding="10"
                     Margin="10"
                     HorizontalAlignment="Stretch"

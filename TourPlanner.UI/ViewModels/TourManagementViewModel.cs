@@ -24,7 +24,6 @@ namespace TourPlanner.UI.ViewModels
         private readonly TourImportExportService _importExportService;
         private readonly ReportGenerationService _reportGenerationService;
         private readonly OpenRouteService _openRouteService;
-        private readonly ILogger<TourManagementViewModel> _logger;
 
         private readonly CreateTourViewModel _createTourViewModel;
         public TourListViewModel TourListViewModel { get; }
@@ -37,17 +36,15 @@ namespace TourPlanner.UI.ViewModels
             execute => CreateTour()
         );
 
-        public ICommand EditTourCommand => new RelayCommand(
-            execute => UpdateTour()
+        public ICommand ImportToursCommand => new RelayCommand(
+            execute => ImportTours()
         );
-
-        public ICommand DeleteTourCommand => new RelayCommand(
-            execute => DeleteTour()
+        public ICommand GenerateTourReportCommand => new RelayCommand(
+            _ => GenerateTourReport()
         );
-        public ICommand ImportToursCommand { get; }
-        public ICommand ExportToursCommand { get; }
-        public ICommand GenerateTourReportCommand => new RelayCommand(_ => GenerateTourReport());
-        public ICommand GenerateSummaryReportCommand => new RelayCommand(_ => GenerateSummaryReport());
+        public ICommand GenerateSummaryReportCommand => new RelayCommand(
+            _ => GenerateSummaryReport()
+        );
 
         public TourManagementViewModel(
             CreateTourViewModel createTourViewModel,
@@ -58,10 +55,8 @@ namespace TourPlanner.UI.ViewModels
             TourLogService tourLogService,
             TourImportExportService tourImportExportService,
             ReportGenerationService reportGenerationService,
-            OpenRouteService openRouteService,
-            ILogger<TourManagementViewModel> logger
-        )
-        {
+            OpenRouteService openRouteService
+        ) {
             //  Dependencies
             _createTourViewModel = createTourViewModel;
             TourListViewModel = tourListViewModel;
@@ -72,18 +67,17 @@ namespace TourPlanner.UI.ViewModels
             _importExportService = tourImportExportService;
             _reportGenerationService = reportGenerationService;
             _openRouteService = openRouteService;
-            _logger = logger;
 
             //  Events
             _createTourViewModel.TourCreated += OnTourCreated;
             _createTourViewModel.TourUpdated += OnTourUpdated;
             SearchBarViewModel.SearchParamsChanged += OnPerformSearch;
             _createTourViewModel.Cancelled += OnCancel;
-            _eventAggregator.Subscribe<Tour>(OnTourSelected);
 
-            //  Commands
-            ImportToursCommand = new RelayCommand(execute => ImportTours());
-            ExportToursCommand = new RelayCommand(execute => ExportTours());
+            _eventAggregator.Subscribe<Tour>(OnTourSelected);
+            _eventAggregator.Subscribe<UpdateTourEvent>(OnUpdateTour);
+            _eventAggregator.Subscribe<DeleteTourEvent>(OnDeleteTour);
+            _eventAggregator.Subscribe<ExportTourEvent>(OnExportTours);
 
             //  Reload the tours on initialization
             TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
@@ -101,7 +95,7 @@ namespace TourPlanner.UI.ViewModels
             _eventAggregator.Publish("ShowCreateTour");
         }
 
-        public void UpdateTour()
+        public void OnUpdateTour(UpdateTourEvent updateTourEvent)
         {
             if (_selectedTour == null)
             {
@@ -113,7 +107,7 @@ namespace TourPlanner.UI.ViewModels
             _eventAggregator.Publish("ShowCreateTour");
         }
 
-        public void DeleteTour()
+        public void OnDeleteTour(DeleteTourEvent updateTourEvent)
         {
             if (_selectedTour == null)
             {
@@ -230,7 +224,7 @@ namespace TourPlanner.UI.ViewModels
             }
         }
 
-        private async void ExportTours()
+        private async void OnExportTours(ExportTourEvent exportTourEvent)
         {
             try
             {
@@ -260,7 +254,7 @@ namespace TourPlanner.UI.ViewModels
             if (_selectedTour == null)
             {
                 MessageBox.Show("Please select a tour first.", "No Tour Selected", MessageBoxButton.OK, MessageBoxImage.Warning);
-                _logger.LogWarning("Attempted to generate tour report without selecting a tour");
+                //_logger.LogWarning("Attempted to generate tour report without selecting a tour");
                 return;
             }
 
@@ -276,14 +270,14 @@ namespace TourPlanner.UI.ViewModels
                 if (saveFileDialog.ShowDialog() == true)
                 {
                     _reportGenerationService.GenerateTourReport(_selectedTour, saveFileDialog.FileName);
-                    _logger.LogInformation("Tour report generated successfully: {FilePath}", saveFileDialog.FileName);
+                    //_logger.LogInformation("Tour report generated successfully: {FilePath}", saveFileDialog.FileName);
                     MessageBox.Show("Tour report generated successfully.", "Export Result", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to generate tour report");
+                //_logger.LogError(ex, "Failed to generate tour report");
                 MessageBox.Show($"Failed to generate tour report.\nDetails: {ex.Message}", "Report Generation Error", MessageBoxButton.OK, MessageBoxImage.Error);
 
             }
@@ -304,14 +298,14 @@ namespace TourPlanner.UI.ViewModels
                 {
                     var tours = _tourService.GetAllTours();
                     _reportGenerationService.GenerateSummaryReport(tours, saveFileDialog.FileName);
-                    _logger.LogInformation("Summary report generated successfully: {FilePath}", saveFileDialog.FileName);
+                    //_logger.LogInformation("Summary report generated successfully: {FilePath}", saveFileDialog.FileName);
                     MessageBox.Show("Summary report generated successfully.", "Export Result", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to generate summary report");
+                //_logger.LogError(ex, "Failed to generate summary report");
                 MessageBox.Show($"Failed to generate summary report.\nDetails: {ex.Message}", "Export Error", MessageBoxButton.OK, MessageBoxImage.Error);
 
             }

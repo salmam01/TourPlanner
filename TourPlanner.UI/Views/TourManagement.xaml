@@ -12,7 +12,9 @@
     <Border BorderBrush="#535e3c"
             BorderThickness="0,0,1,0"
             CornerRadius="0,0,0,12"
-            Padding="10">
+            Padding="10"
+            HorizontalAlignment="Stretch"
+            MinWidth="250">
         <Border.Effect>
             <DropShadowEffect Color="Black"
                                       BlurRadius="6"
@@ -36,12 +38,12 @@
             <!-- Header with Title and Buttons -->
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                
-                <TextBlock Text="Tours"
-                           Grid.Column="0"
+
+                <TextBlock Grid.Column="0"
+                           Text="Tours"
                            Foreground="#F5ECD5"
                            FontSize="16"
                            FontFamily="/Resources/Fonts/#Montserrat"
@@ -51,7 +53,6 @@
                            Padding="5"/>
                 <StackPanel Grid.Column="1"
                             Orientation="Horizontal"
-                            HorizontalAlignment="Right"
                             VerticalAlignment="Center"
                             Margin="5">
 
@@ -60,26 +61,12 @@
                             Style="{StaticResource ActionButtonStyle}"
                             ToolTip="Create Tour"
                             Command="{Binding CreateTourCommand}"/>
-                    <Button Content="{materialDesign:PackIcon Kind=Edit}"
-                            Style="{StaticResource ActionButtonStyle}"
-                            ToolTip="Edit Tour"
-                            Command="{Binding EditTourCommand}"/>
-                    <Button Content="{materialDesign:PackIcon Kind=Delete}"
-                            Style="{StaticResource ActionButtonStyle}"
-                            ToolTip="Delete Tour"
-                            Command="{Binding DeleteTourCommand}"/>
                     
                     <!-- Import Button -->
                     <Button Content="{materialDesign:PackIcon Kind=Import}"
                             Style="{StaticResource ActionButtonStyle}"
                             ToolTip="Import Tour"
                             Command="{Binding ImportToursCommand}"/>
-
-                    <!-- Export Button -->
-                    <Button Content="{materialDesign:PackIcon Kind=Export}"
-                            Style="{StaticResource ActionButtonStyle}"
-                            ToolTip="Export Tour"
-                            Command="{Binding ExportToursCommand}"/>
                 </StackPanel>
                 
             </Grid>

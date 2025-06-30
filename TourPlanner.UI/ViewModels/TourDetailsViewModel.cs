@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using TourPlanner.Models.Entities;
+using TourPlanner.UI.Commands;
 using TourPlanner.UI.Events;
 
 namespace TourPlanner.UI.ViewModels
@@ -12,6 +14,18 @@ namespace TourPlanner.UI.ViewModels
     {
         private readonly EventAggregator _eventAggregator;
         private Tour _selectedTour;
+
+        public ICommand EditTourCommand => new RelayCommand(
+            execute => OnUpdateTour()
+        );
+
+        public ICommand ExportToursCommand => new RelayCommand(
+            execute => OnExportTour()
+        );
+
+        public ICommand DeleteTourCommand => new RelayCommand(
+            execute => OnDeleteTour()
+        );
 
         private string _name;
         public string Name
@@ -125,6 +139,7 @@ namespace TourPlanner.UI.ViewModels
         {
             _eventAggregator = eventAggregator;
             SetDefaultValues();
+
             _eventAggregator.Subscribe<Tour>(ShowTourDetails);
         }
 
@@ -162,7 +177,21 @@ namespace TourPlanner.UI.ViewModels
 
             Popularity = tour.TourAttributes.Popularity;
             ChildFriendly = tour.TourAttributes.ChildFriendliness ? "Yes" : "No";
+        }
 
+        public void OnUpdateTour()
+        {
+            _eventAggregator.Publish(new UpdateTourEvent());
+        }
+
+        public void OnExportTour()
+        {
+            _eventAggregator.Publish(new ExportTourEvent());
+        }
+
+        public void OnDeleteTour()
+        {
+            _eventAggregator.Publish(new DeleteTourEvent());
         }
     }
 }
