@@ -37,8 +37,8 @@ namespace TourPlanner.UI.ViewModels
             }
         }
 
-        private DateTime _date;
-        public DateTime Date
+        private string _date;
+        public string Date
         {
             get => _date;
             set
@@ -47,6 +47,7 @@ namespace TourPlanner.UI.ViewModels
                 OnPropertyChanged(nameof(Date));
             }
         }
+
         private string _description;
         public string Description
         {
@@ -91,8 +92,8 @@ namespace TourPlanner.UI.ViewModels
             }
         }
 
-        private double _distance;
-        public double Distance
+        private string _distance;
+        public string Distance
         {
             get => _distance;
             set
@@ -102,8 +103,8 @@ namespace TourPlanner.UI.ViewModels
             }
         }
 
-        private TimeSpan _estimatedTime;
-        public TimeSpan EstimatedTime
+        private string _estimatedTime;
+        public string EstimatedTime
         {
             get => _estimatedTime;
             set
@@ -146,14 +147,15 @@ namespace TourPlanner.UI.ViewModels
         public void SetDefaultValues()
         {
             Name = "Select a Tour";
-            Date = DateTime.Now;
+
+            Date = DateTime.Now.ToString("dd-MM-yyyy");
             Description = "";
 
             From = "";
             To = "";
             TransportType = "";
-            Distance = 0;
-            EstimatedTime = TimeSpan.Zero;
+            Distance = "0 km";
+            EstimatedTime = TimeSpan.Zero.ToString(@"hh\:mm");
 
             Popularity = 0;
             ChildFriendly = "No";
@@ -166,14 +168,16 @@ namespace TourPlanner.UI.ViewModels
             _selectedTour = tour;
 
             Name = tour.Name;
-            Date = tour.Date;
+            Date = tour.Date.ToString("dd-MM-yyyy");
             Description = tour.Description;
 
             From = tour.From;
             To = tour.To;
             TransportType = tour.TransportType;
-            Distance = tour.Distance;
-            EstimatedTime = tour.EstimatedTime;
+
+            double distanceInKm = tour.Distance / 1000;
+            Distance = $"{distanceInKm.ToString("F2")} km";
+            EstimatedTime = tour.EstimatedTime.ToString(@"hh\:mm");
 
             Popularity = tour.TourAttributes.Popularity;
             ChildFriendly = tour.TourAttributes.ChildFriendliness ? "Yes" : "No";

@@ -45,7 +45,7 @@
                 <TextBlock Grid.Column="0"
                            Text="Tours"
                            Foreground="#F5ECD5"
-                           FontSize="16"
+                           FontSize="18"
                            FontFamily="/Resources/Fonts/#Montserrat"
                            FontWeight="Medium"
                            VerticalAlignment="Center"
@@ -67,6 +67,18 @@
                             Style="{StaticResource ActionButtonStyle}"
                             ToolTip="Import Tour"
                             Command="{Binding ImportToursCommand}"/>
+                    
+                    <!-- Generate Tour Report-->
+                    <Button Content="{materialDesign:PackIcon Kind=FileExport}"
+                            Command="{Binding GenerateTourReportCommand}"
+                            Style="{StaticResource ActionButtonStyle}"
+                            ToolTip="Generate Tour Report"/>
+                    
+                    <!-- Generate Summary Report-->
+                    <Button Content="{materialDesign:PackIcon Kind=ChartBar}"
+                            Command="{Binding GenerateSummaryReportCommand}"
+                            Style="{StaticResource ActionButtonStyle}"
+                            ToolTip="Generate Summary Report"/>
                 </StackPanel>
                 
             </Grid>
@@ -79,24 +91,6 @@
                             Grid.Row="2"
                             Margin="5"
                             DataContext="{Binding TourListViewModel}"/>
-
-            <!-- Report Buttons at bottom -->
-            <StackPanel Grid.Row="3" 
-                        Orientation="Horizontal" 
-                        HorizontalAlignment="Left" 
-                        Margin="10,5">
-                <!-- Generate Tour Report-->
-                <Button Content="{materialDesign:PackIcon Kind=FileExport}"
-                        Command="{Binding GenerateTourReportCommand}"
-                        Style="{StaticResource ActionButtonStyle}"
-                        ToolTip="Generate Tour Report"
-                        Margin="0,0,5,0"/>
-                <!-- Generate Summary Report-->
-                <Button Content="{materialDesign:PackIcon Kind=ChartBar}"
-                        Command="{Binding GenerateSummaryReportCommand}"
-                        Style="{StaticResource ActionButtonStyle}"
-                        ToolTip="Generate Summary Report"/>
-            </StackPanel>
         </Grid>
     </Border>
 </UserControl>

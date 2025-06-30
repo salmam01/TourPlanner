@@ -65,9 +65,9 @@
                                 Command="{Binding EditTourCommand}"/>
                         
                         <Button Content="{materialDesign:PackIcon Kind=Export}"
-                            Style="{StaticResource ActionButtonStyle}"
-                            ToolTip="Export Tour"
-                            Command="{Binding ExportToursCommand}"/>
+                                Style="{StaticResource ActionButtonStyle}"
+                                ToolTip="Export Tour"
+                                Command="{Binding ExportToursCommand}"/>
                         
                         <Button Content="{materialDesign:PackIcon Kind=Delete}"
                                 Style="{StaticResource ActionButtonStyle}"
@@ -113,9 +113,9 @@
 
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Description"
-                                       Style="{StaticResource TextBlockDescriptorStyle}"/>
+                                           Style="{StaticResource TextBlockDescriptorStyle}"/>
                                 <TextBlock Text="{Binding Description}"
-                                       Style="{StaticResource TextBlockStyle}"/>
+                                           Style="{StaticResource TextBlockStyle}"/>
                             </StackPanel>
 
                         </StackPanel>
@@ -123,8 +123,8 @@
 
                     <Border Grid.Column="2"
                             CornerRadius="12"
-                            Padding="20"
-                            Margin="20"
+                            Padding="10"
+                            Margin="30,10"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Center"
                             Background="#445232">
