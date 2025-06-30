@@ -64,7 +64,12 @@ namespace TourPlanner.UI.ViewModels
                 canExecute => _selectedTour != null
             );
             
-            _eventAggregator.Subscribe<Tour>(OnTourSelected);
+            _eventAggregator.Subscribe<TourEvent>(e =>
+            {
+                if (e.Type == TourEvent.EventType.Select)
+                    OnTourSelected(e.Tour);
+            });
+
             TourLogListViewModel.TourLogSelected += OnTourLogSelected;
             _createTourLogViewModel.TourLogCreated += OnTourLogCreated;
             _createTourLogViewModel.TourLogUpdated += OnTourLogUpdated;

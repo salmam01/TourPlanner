@@ -32,7 +32,11 @@ namespace TourPlanner.UI.ViewModels
             _leafletHelper = leafletHelper;
             BaseDirectory = baseDirectory;
 
-            _eventAggregator.Subscribe<Tour>(OnTourSelected);
+            _eventAggregator.Subscribe<TourEvent>(e =>
+            {
+                if (e.Type == TourEvent.EventType.Select)
+                    OnTourSelected(e.Tour);
+            });
         }
 
         private async void OnTourSelected(Tour tour)

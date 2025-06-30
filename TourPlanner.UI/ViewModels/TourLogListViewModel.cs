@@ -13,6 +13,9 @@ namespace TourPlanner.UI.ViewModels
 {
     public class TourLogListViewModel : BaseViewModel
     {
+        private readonly TourLogService _tourLogService;
+        public event EventHandler<TourLog> TourLogSelected;
+
         private string _searchQuery;
         public string SearchQuery
         {
@@ -23,8 +26,6 @@ namespace TourPlanner.UI.ViewModels
             }
         }
 
-        private readonly TourLogService _tourLogService;
-        public event EventHandler<TourLog> TourLogSelected;
         private Guid _currentTourId;
         public Guid CurrentTourId
         {
@@ -49,48 +50,23 @@ namespace TourPlanner.UI.ViewModels
             }
         }
 
-        private void LoadTourLogsForTour(Guid tourId)
-        {
-            Tour tour = new Tour { Id = tourId };
-            List<TourLog> logs = _tourLogService.GetAllTourLogs(tour).ToList();
-            ReloadTourLogs(logs);
-        }
-
         private ObservableCollection<TourLog> _tourLogs;
-        private readonly EventAggregator _eventAggregator;
         public ObservableCollection<TourLog> TourLogs
         {
             get => _tourLogs;
-            set {
+            set
+            {
                 _tourLogs = value;
                 OnPropertyChanged(nameof(TourLogs));
             }
-        }
-        
-        public TourLogListViewModel(
-            TourLogService tourLogService, 
-            EventAggregator eventAggregator
-        ) {
-            _tourLogService = tourLogService;
-            _eventAggregator = eventAggregator;
-            _tourLogs = new ObservableCollection<TourLog>();
-        }
-
-        public void ReloadTourLogs(IEnumerable<TourLog> tourLogs)
-        {
-            _tourLogs.Clear();
-            foreach (TourLog tourLog in tourLogs) {
-                _tourLogs.Add(tourLog);
-            }
-            OnPropertyChanged(nameof(TourLogs));
-            HasNoResults = _tourLogs.Count == 0;
         }
 
         private TourLog _selectedTourLog;
         public TourLog SelectedTourLog
         {
             get => _selectedTourLog;
-            set {
+            set
+            {
                 if (_selectedTourLog == value) return;
                 _selectedTourLog = value;
                 OnPropertyChanged(nameof(SelectedTourLog));
@@ -109,6 +85,29 @@ namespace TourPlanner.UI.ViewModels
             execute => DeleteTourLog(),
             canExecute => SelectedTourLog != null
         );
+        
+        public TourLogListViewModel(
+            TourLogService tourLogService
+        ) {
+            _tourLogService = tourLogService;
+            _tourLogs = new ObservableCollection<TourLog>();
+        }
+        private void LoadTourLogsForTour(Guid tourId)
+        {
+            Tour tour = new Tour { Id = tourId };
+            List<TourLog> logs = _tourLogService.GetAllTourLogs(tour).ToList();
+            ReloadTourLogs(logs);
+        }
+
+        public void ReloadTourLogs(IEnumerable<TourLog> tourLogs)
+        {
+            _tourLogs.Clear();
+            foreach (TourLog tourLog in tourLogs) {
+                _tourLogs.Add(tourLog);
+            }
+            OnPropertyChanged(nameof(TourLogs));
+            HasNoResults = _tourLogs.Count == 0;
+        }
 
         private void EditTourLog()
         {

@@ -16,7 +16,7 @@ namespace TourPlanner.UI.ViewModels
         private Tour _selectedTour;
 
         public ICommand EditTourCommand => new RelayCommand(
-            execute => OnUpdateTour()
+            execute => OnEditTour()
         );
 
         public ICommand ExportToursCommand => new RelayCommand(
@@ -141,7 +141,11 @@ namespace TourPlanner.UI.ViewModels
             _eventAggregator = eventAggregator;
             SetDefaultValues();
 
-            _eventAggregator.Subscribe<Tour>(ShowTourDetails);
+            _eventAggregator.Subscribe<TourEvent>(e =>
+            {
+                if (e.Type == TourEvent.EventType.Select)
+                    ShowTourDetails(e.Tour);
+            });
         }
 
         public void SetDefaultValues()
@@ -164,7 +168,6 @@ namespace TourPlanner.UI.ViewModels
         public void ShowTourDetails(Tour tour)
         {
             if (tour == null) return;
-            if (tour == _selectedTour) return;
             _selectedTour = tour;
 
             Name = tour.Name;
@@ -183,19 +186,19 @@ namespace TourPlanner.UI.ViewModels
             ChildFriendly = tour.TourAttributes.ChildFriendliness ? "Yes" : "No";
         }
 
-        public void OnUpdateTour()
+        public void OnEditTour()
         {
-            _eventAggregator.Publish(new UpdateTourEvent());
+            _eventAggregator.Publish(new TourEvent(TourEvent.EventType.Edit));
         }
 
         public void OnExportTour()
         {
-            _eventAggregator.Publish(new ExportTourEvent());
+            _eventAggregator.Publish(new TourEvent(TourEvent.EventType.Export));
         }
 
         public void OnDeleteTour()
         {
-            _eventAggregator.Publish(new DeleteTourEvent());
+            _eventAggregator.Publish(new TourEvent(TourEvent.EventType.Delete));
         }
     }
 }

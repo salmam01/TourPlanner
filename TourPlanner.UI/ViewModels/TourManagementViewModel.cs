@@ -76,10 +76,24 @@ namespace TourPlanner.UI.ViewModels
             SearchBarViewModel.SearchParamsChanged += OnPerformSearch;
             _createTourViewModel.Cancelled += OnCancel;
 
-            _eventAggregator.Subscribe<Tour>(OnTourSelected);
-            _eventAggregator.Subscribe<UpdateTourEvent>(OnUpdateTour);
-            _eventAggregator.Subscribe<DeleteTourEvent>(OnDeleteTour);
-            _eventAggregator.Subscribe<ExportTourEvent>(OnExportTours);
+            _eventAggregator.Subscribe<TourEvent>(e =>
+            {
+                switch (e.Type)
+                {
+                    case TourEvent.EventType.Select:
+                        OnTourSelected(e.Tour);
+                        break;
+                    case TourEvent.EventType.Edit:
+                        OnUpdateTour();
+                        break;
+                    case TourEvent.EventType.Delete:
+                        OnDeleteTour();
+                        break;
+                    case TourEvent.EventType.Export:
+                        OnExportTours();
+                        break;
+                }
+            });
 
             //  Reload the tours on initialization
             TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
@@ -97,7 +111,7 @@ namespace TourPlanner.UI.ViewModels
             _eventAggregator.Publish("ShowCreateTour");
         }
 
-        public void OnUpdateTour(UpdateTourEvent updateTourEvent)
+        public void OnUpdateTour()
         {
             if (_selectedTour == null)
             {
@@ -109,7 +123,7 @@ namespace TourPlanner.UI.ViewModels
             _eventAggregator.Publish("ShowCreateTour");
         }
 
-        public void OnDeleteTour(DeleteTourEvent updateTourEvent)
+        public void OnDeleteTour()
         {
             if (_selectedTour == null)
             {
@@ -245,7 +259,7 @@ namespace TourPlanner.UI.ViewModels
             }
         }
 
-        private async void OnExportTours(ExportTourEvent exportTourEvent)
+        private async void OnExportTours()
         {
             try
             {
