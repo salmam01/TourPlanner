@@ -9,11 +9,18 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="300">
 
-    <Border CornerRadius="10" 
-            BorderBrush="#A4B465"
-            Background="#A4B465"
-            BorderThickness="3">
-        
+    <Border BorderBrush="#535e3c"
+            BorderThickness="0,0,1,0"
+            CornerRadius="0,0,0,12"
+            Padding="10">
+        <Border.Effect>
+            <DropShadowEffect Color="Black"
+                                      BlurRadius="6"
+                                      Opacity="0.2"
+                                      Direction="0"
+                                      ShadowDepth="2"/>
+        </Border.Effect>
+
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -35,12 +42,13 @@
                 
                 <TextBlock Text="Tours"
                            Grid.Column="0"
-                           Margin="10"
-                           Foreground="Black"
+                           Foreground="#F5ECD5"
                            FontSize="16"
                            FontFamily="/Resources/Fonts/#Montserrat"
                            FontWeight="Medium"
-                           VerticalAlignment="Center"/>
+                           VerticalAlignment="Center"
+                           Margin="5"
+                           Padding="5"/>
                 <StackPanel Grid.Column="1"
                             Orientation="Horizontal"
                             HorizontalAlignment="Right"
@@ -63,14 +71,12 @@
                     
                     <!-- Import Button -->
                     <Button Content="{materialDesign:PackIcon Kind=Import}"
-                            Margin="2"
                             Style="{StaticResource ActionButtonStyle}"
                             ToolTip="Import Tour"
                             Command="{Binding ImportToursCommand}"/>
 
                     <!-- Export Button -->
                     <Button Content="{materialDesign:PackIcon Kind=Export}"
-                            Margin="1"
                             Style="{StaticResource ActionButtonStyle}"
                             ToolTip="Export Tour"
                             Command="{Binding ExportToursCommand}"/>
@@ -79,11 +85,12 @@
             </Grid>
             <!-- Search Bar -->
             <views:SearchBar Grid.Row="1"
+                             Margin="5,10"
                              DataContext="{Binding SearchBarViewModel}"/>
             <!-- Tour List -->
             <views:TourList x:Name="TourListView"
                             Grid.Row="2"
-                            Background="#F5ECD5"
+                            Margin="5"
                             DataContext="{Binding TourListViewModel}"/>
 
             <!-- Report Buttons at bottom -->

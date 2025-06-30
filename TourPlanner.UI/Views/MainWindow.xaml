@@ -61,31 +61,41 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+            <Border CornerRadius="12,12,0,0"
+                    BorderBrush="#535e3c"
+                    BorderThickness="0,0,0,1">
+                <Border.Effect>
+                    <DropShadowEffect Color="Black"
+                                      BlurRadius="6"
+                                      Opacity="0.2"
+                                      Direction="270"
+                                      ShadowDepth="2"/>
+                </Border.Effect>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-                <StackPanel Grid.Column="0"
-                            Orientation="Horizontal"
-                            Margin="10,0">
-                    <Image Source="/Resources/Icons/TourPlannerIcon.png"
+                    <StackPanel Grid.Column="0"
+                                Orientation="Horizontal"
+                                Margin="10,0">
+                        <Image Source="/Resources/Icons/TourPlannerIcon.png"
                            Width="40"
                            Height="40"/>
-                    <TextBlock Grid.Column="0" 
+                        <TextBlock Grid.Column="0" 
                                 Text="TourPlanner"
                                 Foreground="#F5ECD5"
                                 FontSize="20"
                                 VerticalAlignment="Center"
                                 FontFamily="/Resources/Fonts/#Montserrat"
                                 FontWeight="Bold"
-                                Margin="15,0,0,0"/>
-                </StackPanel>
+                                Margin="10,0,0,0"/>
+                    </StackPanel>
 
 
-                <Button Grid.Column="1"
+                    <Button Grid.Column="1"
                         x:Name="buttonShowLogs"
                         Style="{StaticResource LogButtonStyle}"
                         Content="Show Logs"
@@ -96,39 +106,40 @@
                         Foreground="#F5ECD5"
                         BorderThickness="0"
                         Padding="10,5">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border Background="{TemplateBinding Background}"
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}"
                                     BorderBrush="{TemplateBinding BorderBrush}"
                                     BorderThickness="{TemplateBinding BorderThickness}"
                                     CornerRadius="5">
-                                <ContentPresenter HorizontalAlignment="Center" 
+                                    <ContentPresenter HorizontalAlignment="Center" 
                                                 VerticalAlignment="Center"/>
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
 
-                <StackPanel Grid.Column="2"
+                    <StackPanel Grid.Column="2"
                             Orientation="Horizontal"
                             Margin="10,0,0,0">
-                    <Button x:Name="buttonMinimize"
+                        <Button x:Name="buttonMinimize"
                             Content="{materialDesign:PackIcon Kind=WindowMinimize}"
                             Click="buttonMinimize_Click"
                             Style="{StaticResource WindowButtonStyle}"/>
 
-                    <Button x:Name="buttonSize"
+                        <Button x:Name="buttonSize"
                             Content="{materialDesign:PackIcon Kind=WindowMaximize}"
                             Click="buttonSize_Click"
                             Style="{StaticResource WindowButtonStyle}"/>
 
-                    <Button x:Name="buttonClose"
+                        <Button x:Name="buttonClose"
                             Content="{materialDesign:PackIcon Kind=WindowClose}"
                             Click="buttonClose_Click"
                             Style="{StaticResource WindowCloseButtonStyle}"/>
-                </StackPanel>
+                    </StackPanel>
 
-            </Grid>
+                </Grid>
+            </Border>
 
             <Grid Grid.Row="1">
                 <ContentControl Content="{Binding CurrentView}"/>

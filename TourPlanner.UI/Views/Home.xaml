@@ -7,10 +7,7 @@
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
 
-    <Border BorderBrush="#F5ECD5"
-            BorderThickness="0"
-            CornerRadius="12"
-            Margin="10">
+    <Border BorderThickness="0">
 
         <Grid>
             <Grid.ColumnDefinitions>
@@ -20,11 +17,9 @@
 
             <!-- Left side: Tour Management, Searchbar and Tour List -->
             <views:TourManagement Grid.Column="0"
-                                  Margin="0,0,5,0"
                                   DataContext="{Binding TourManagementViewModel}"/>
 
             <views:TourNavbar Grid.Column="1" 
-                              Margin="5,0,0,0"
                               DataContext="{Binding TourNavbarViewModel}"/>
 
         </Grid>

@@ -3,22 +3,23 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:packIcon="http://materialdesigninxaml.net/winfx/xaml/controls"
              mc:Ignorable="d"
              d:DesignHeight="100" d:DesignWidth="250">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
+    
 
+    <Grid>
         <TextBox x:Name="SearchTextBox"
-                 Grid.Column="0"
-                 FontSize="16"
-                 FontFamily="/Resources/Fonts/#Montserrat"
-                 Padding="5"
-                 Background="#E7E7E7"
-                 VerticalContentAlignment="Center"
-                 HorizontalAlignment="Stretch"
-                 Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+                 Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                 Style="{StaticResource SearchbarStyle}"/>
+        
+        <materialDesign:PackIcon Kind="Magnify"
+                                 HorizontalAlignment="Left"
+                                 Margin="5"
+                                 VerticalAlignment="Stretch"
+                                 Foreground="DarkSlateGray"
+                                 IsHitTestVisible="False"/>
     </Grid>
+
 </UserControl>

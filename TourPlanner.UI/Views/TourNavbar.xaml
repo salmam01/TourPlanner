@@ -7,26 +7,31 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-    <Grid>
-        <TabControl SelectionChanged="TabControl_SelectionChanged">
-            <TabItem Header="Route"
-                     Style="{StaticResource TabItemStyle}">
-                <Border Background="#F5ECD5">
-                    <views:Map DataContext="{Binding MapViewModel}"/>
-                </Border>
-            </TabItem>
-            <TabItem Header="Tour Logs"
-                     Style="{StaticResource TabItemStyle}">
-                <Border Background="#F5ECD5">
-                    <views:TourLogsManagement DataContext="{Binding TourLogsManagementViewModel}"/>
-                </Border>
-            </TabItem>
-            <TabItem Header="Details"
-                     Style="{StaticResource TabItemStyle}">
-                <Border Background="#F5ECD5">
-                    <views:TourDetails DataContext="{Binding TourDetailsViewModel}"/>
-                </Border>
-            </TabItem>
-        </TabControl>
-    </Grid>
+
+    <Border BorderBrush="#535e3c"
+            BorderThickness="0,0,1,0"
+            CornerRadius="0,0,12,0">
+        <Grid>
+            <TabControl SelectionChanged="TabControl_SelectionChanged">
+                <TabItem Header="Route"
+                             Style="{StaticResource TabItemStyle}">
+                    <Border Background="#F5ECD5">
+                        <views:Map DataContext="{Binding MapViewModel}"/>
+                    </Border>
+                </TabItem>
+                <TabItem Header="Tour Logs"
+                             Style="{StaticResource TabItemStyle}">
+                    <Border Background="#F5ECD5">
+                        <views:TourLogsManagement DataContext="{Binding TourLogsManagementViewModel}"/>
+                    </Border>
+                </TabItem>
+                <TabItem Header="Details"
+                             Style="{StaticResource TabItemStyle}">
+                    <Border Background="#F5ECD5">
+                        <views:TourDetails DataContext="{Binding TourDetailsViewModel}"/>
+                    </Border>
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </Border>
 </UserControl>
