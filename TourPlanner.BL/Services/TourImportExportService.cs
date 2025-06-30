@@ -97,7 +97,6 @@ namespace TourPlanner.BL.Services
                         toursSheet.Cell(tourRow, 7).Value = tour.TransportType ?? "";
                         toursSheet.Cell(tourRow, 8).Value = tour.Distance;
                         toursSheet.Cell(tourRow, 9).Value = tour.EstimatedTime.ToString();
-                        toursSheet.Cell(tourRow, 10).Value = tour.RouteInformation ?? "";
                         toursSheet.Cell(tourRow, 11).Value = tour.TourLogs?.Count ?? 0;
                         tourRow++;
                     }
@@ -196,7 +195,6 @@ namespace TourPlanner.BL.Services
                             TransportType = row.Cell(7).GetString(),
                             Distance = double.TryParse(row.Cell(8).GetString(), out var dist) ? dist : 0,
                             EstimatedTime = TimeSpan.TryParse(row.Cell(9).GetString(), out var time) ? time : TimeSpan.Zero,
-                            RouteInformation = row.Cell(10).GetString(),
                             TourLogs = new List<TourLog>()
                         };
 

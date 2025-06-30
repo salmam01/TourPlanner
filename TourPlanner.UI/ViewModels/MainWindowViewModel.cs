@@ -39,14 +39,7 @@ public class MainWindowViewModel : BaseViewModel {
             DataContext = TourManagementViewModel
         };
 
-        _eventAggregator.Subscribe<string>(searchText =>
-        {
-            if (_tourLogListViewModel != null) {
-                _tourLogListViewModel.SearchQuery = searchText;
-            }
-        });
-
-        _eventAggregator.Subscribe<string>(NavigationHandler);
+        _eventAggregator.Subscribe<NavigationEvent>(NavigationHandler);
         ShowHomeView();
     }
 
@@ -75,20 +68,17 @@ public class MainWindowViewModel : BaseViewModel {
         }
     }
 
-    private void NavigationHandler(string message) {
-        switch (message) {
-            case "ShowHome":
+    private void NavigationHandler(NavigationEvent navigationEvent) {
+        switch (navigationEvent.Destin) {
+            case NavigationEvent.Destination.Home:
                 ShowHomeView();
                 break;
-            case "ShowCreateTour":
+            case NavigationEvent.Destination.CreateTour:
                 ShowCreateTour();
                 break;
-            case "ShowCreateTourLog":
+            case NavigationEvent.Destination.CreateTourLog:
                 ShowCreateTourLog();
                 break;
-            default:
-                //"No such view found"
-                return;
         }
     }
 

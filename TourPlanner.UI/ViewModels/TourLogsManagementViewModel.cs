@@ -102,7 +102,7 @@ namespace TourPlanner.UI.ViewModels
             else
                 ShowErrorMessage(result);
 
-            _eventAggregator.Publish("ShowHome");
+            _eventAggregator.Publish(new NavigationEvent(NavigationEvent.Destination.Home));
         }
 
         public void OnTourLogUpdated(object sender, TourLog tourLog)
@@ -119,25 +119,25 @@ namespace TourPlanner.UI.ViewModels
             else
                 ShowErrorMessage(result);
 
-            _eventAggregator.Publish("ShowHome");
+            _eventAggregator.Publish(new NavigationEvent(NavigationEvent.Destination.Home));
         }
 
         public void OnCancel(object sender, EventArgs e)
         {
-            _eventAggregator.Publish("ShowHome");
+            _eventAggregator.Publish(new NavigationEvent(NavigationEvent.Destination.Home));
         }
 
         private void CreateTourLog() 
         {
             if (_selectedTour == null) return;
-            _eventAggregator.Publish("ShowCreateTourLog");
+            _eventAggregator.Publish(new NavigationEvent(NavigationEvent.Destination.CreateTourLog));
         }
 
         private void UpdateTourLog(TourLog tourLogToEdit)
         {
             if (tourLogToEdit == null || _selectedTour == null) return;
             _createTourLogViewModel.LoadTourLog(tourLogToEdit);
-            _eventAggregator.Publish("ShowCreateTourLog");
+            _eventAggregator.Publish(new NavigationEvent(NavigationEvent.Destination.CreateTourLog));
         }
 
         private void DeleteTourLog() 

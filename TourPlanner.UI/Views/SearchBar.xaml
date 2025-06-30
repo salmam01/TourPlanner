@@ -19,7 +19,9 @@
                                  Margin="10,5"
                                  VerticalAlignment="Stretch"
                                  Foreground="#f28484"
-                                 IsHitTestVisible="False"/>
+                                 IsHitTestVisible="False"
+                                 MinHeight="20"
+                                 MinWidth="20"/>
     </Grid>
 
 </UserControl>

@@ -13,8 +13,8 @@ using TourPlanner.DAL.Data;
 namespace TourPlanner.DAL.Migrations
 {
     [DbContext(typeof(TourPlannerDbContext))]
-    [Migration("20250617114056_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20250630162956_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,10 +50,6 @@ namespace TourPlanner.DAL.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("RouteInformation")
                         .IsRequired()
                         .HasColumnType("text");
 

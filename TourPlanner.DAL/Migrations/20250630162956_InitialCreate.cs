@@ -7,7 +7,7 @@ using NpgsqlTypes;
 namespace TourPlanner.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -25,7 +25,6 @@ namespace TourPlanner.DAL.Migrations
                     TransportType = table.Column<string>(type: "text", nullable: false),
                     Distance = table.Column<double>(type: "double precision", nullable: false),
                     EstimatedTime = table.Column<TimeSpan>(type: "interval", nullable: false),
-                    RouteInformation = table.Column<string>(type: "text", nullable: false),
                     SearchVector = table.Column<NpgsqlTsVector>(type: "tsvector", nullable: true, computedColumnSql: "to_tsvector('simple', coalesce(\"Name\", '') || ' ' || coalesce(\"Description\", '') || ' ' || coalesce(\"From\", '') || ' ' || coalesce(\"To\", '') || ' ' || coalesce(\"TransportType\", '') || ' ' || coalesce(\"Distance\"::text, ''))", stored: true)
                 },
                 constraints: table =>

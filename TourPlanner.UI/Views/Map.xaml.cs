@@ -37,7 +37,11 @@ namespace TourPlanner.UI.Views
                 if (_eventAggregator == null)
                 {
                     _eventAggregator = ((App)Application.Current).ServiceProvider.GetService<EventAggregator>();
-                    _eventAggregator.Subscribe<MapUpdatedEvent>(OnMapUpdated);
+                    _eventAggregator.Subscribe<TourEvent>(e =>
+                    {
+                        if (e.Type == TourEvent.EventType.MapUpdated)
+                            OnMapUpdated();
+                    });
                 }
             }
         }
@@ -54,7 +58,7 @@ namespace TourPlanner.UI.Views
             }
         }
 
-        private void OnMapUpdated(MapUpdatedEvent mapUpdatedEvent)
+        private void OnMapUpdated()
         {
             webView.CoreWebView2.Reload();
         }

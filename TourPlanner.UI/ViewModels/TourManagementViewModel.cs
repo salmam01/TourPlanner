@@ -108,7 +108,7 @@ namespace TourPlanner.UI.ViewModels
 
         public void CreateTour()
         {
-            _eventAggregator.Publish("ShowCreateTour");
+            _eventAggregator.Publish(new NavigationEvent(NavigationEvent.Destination.CreateTour));
         }
 
         public void OnUpdateTour()
@@ -120,7 +120,7 @@ namespace TourPlanner.UI.ViewModels
             }
 
             _createTourViewModel.LoadTour(_selectedTour);
-            _eventAggregator.Publish("ShowCreateTour");
+            _eventAggregator.Publish(new NavigationEvent(NavigationEvent.Destination.CreateTour));
         }
 
         public void OnDeleteTour()
@@ -162,7 +162,7 @@ namespace TourPlanner.UI.ViewModels
             else
                 ShowErrorMessage(result);
 
-            _eventAggregator.Publish("ShowHome");
+            _eventAggregator.Publish(new NavigationEvent(NavigationEvent.Destination.Home));
         }
 
         public async void OnTourUpdated(object sender, Tour tour)
@@ -179,7 +179,7 @@ namespace TourPlanner.UI.ViewModels
 
             _selectedTour = tour;
             TourListViewModel.SelectedTour = tour;
-            _eventAggregator.Publish("ShowHome");
+            _eventAggregator.Publish(new NavigationEvent(NavigationEvent.Destination.Home));
         }
 
         public void DeleteAllTours()
@@ -217,7 +217,7 @@ namespace TourPlanner.UI.ViewModels
         //  dont use magic strings, save as constants
         public void OnCancel(object sender, EventArgs e)
         {
-            _eventAggregator.Publish("ShowHome");
+            _eventAggregator.Publish(new NavigationEvent(NavigationEvent.Destination.Home));
         }
 
         private async void ImportTours()

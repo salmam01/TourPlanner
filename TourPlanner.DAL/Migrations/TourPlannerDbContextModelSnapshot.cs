@@ -50,10 +50,6 @@ namespace TourPlanner.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("RouteInformation")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<NpgsqlTsVector>("SearchVector")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("tsvector")

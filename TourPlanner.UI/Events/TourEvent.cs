@@ -15,10 +15,11 @@ namespace TourPlanner.UI.Events
             Create,
             Edit,
             Export,
-            Delete
+            Delete,
+            MapUpdated
         }
-
         public EventType Type { get; }
+
         public Tour Tour { get; }
 
         public TourEvent(EventType eventType, Tour tour = null)

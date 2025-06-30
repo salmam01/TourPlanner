@@ -16,16 +16,6 @@ namespace TourPlanner.UI.ViewModels
         private readonly TourLogService _tourLogService;
         public event EventHandler<TourLog> TourLogSelected;
 
-        private string _searchQuery;
-        public string SearchQuery
-        {
-            get => _searchQuery;
-            set {
-                _searchQuery = value;
-                OnPropertyChanged(nameof(SearchQuery));
-            }
-        }
-
         private Guid _currentTourId;
         public Guid CurrentTourId
         {

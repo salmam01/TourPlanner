@@ -57,7 +57,6 @@ public class TourRepository : ITourRepository {
         tourToUpdate.To = tour.To;
         tourToUpdate.Distance = tour.Distance;
         tourToUpdate.EstimatedTime = tour.EstimatedTime;
-        tourToUpdate.RouteInformation = tour.RouteInformation;
 
         Save();
     }

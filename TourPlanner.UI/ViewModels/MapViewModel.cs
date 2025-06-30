@@ -53,7 +53,7 @@ namespace TourPlanner.UI.ViewModels
                 {
                     //  Draw the map using Leaflet
                     _leafletHelper.SaveMapGeometryAsJson(mapGeometry, BaseDirectory);
-                    _eventAggregator.Publish(new MapUpdatedEvent());
+                    _eventAggregator.Publish(new TourEvent(TourEvent.EventType.MapUpdated));
                 }
             }
         }
