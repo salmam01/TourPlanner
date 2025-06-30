@@ -16,9 +16,9 @@
         
         <materialDesign:PackIcon Kind="Magnify"
                                  HorizontalAlignment="Left"
-                                 Margin="5"
+                                 Margin="10,5"
                                  VerticalAlignment="Stretch"
-                                 Foreground="DarkSlateGray"
+                                 Foreground="#f28484"
                                  IsHitTestVisible="False"/>
     </Grid>
 

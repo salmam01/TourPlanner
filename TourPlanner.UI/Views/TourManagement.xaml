@@ -61,7 +61,13 @@
                             Style="{StaticResource ActionButtonStyle}"
                             ToolTip="Create Tour"
                             Command="{Binding CreateTourCommand}"/>
-                    
+
+                    <!-- Buttons for Tour management -->
+                    <Button Content="{materialDesign:PackIcon Kind=DeleteAlert}"
+                            Style="{StaticResource ActionButtonStyle}"
+                            ToolTip="Delete all Tours"
+                            Command="{Binding DeleteAllToursCommand}"/>
+
                     <!-- Import Button -->
                     <Button Content="{materialDesign:PackIcon Kind=Import}"
                             Style="{StaticResource ActionButtonStyle}"

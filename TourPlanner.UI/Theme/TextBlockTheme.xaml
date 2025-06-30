@@ -16,7 +16,7 @@
     <Style x:Key="TextBlockDescriptorStyle"
            BasedOn="{StaticResource TextBlockStyle}"
            TargetType="TextBlock">
-        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="Foreground" Value="#f7b2b2"/>
     </Style>
 </ResourceDictionary>

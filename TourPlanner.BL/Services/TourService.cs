@@ -149,7 +149,8 @@ public class TourService {
         }
     }
 
-    public Result DeleteTour(Tour tour) {
+    public Result DeleteTour(Tour tour) 
+    {
         if (tour == null) 
         {
             _logger.LogWarning("Trying to delete Tour with NULL Tour.");
@@ -176,6 +177,31 @@ public class TourService {
         catch (Exception ex)
         {
             _logger.LogError(ex, "Exception occurred while deleting Tour => {TourName}", tour.Name);
+            return new Result(Result.ResultCode.UnknownError);
+        }
+    }
+
+    public Result DeleteAllTours()
+    {
+        try
+        {
+            _tourRepository.DeleteAllTours();
+            _logger.LogInformation("All tours have been deleted");
+            return new Result(Result.ResultCode.Success);
+        } 
+        catch (PostgresException pgEx)
+        {
+            _logger.LogError(
+                pgEx,
+                "Postgres Exception occurred while deleting all Tours: {ErrorCode} -> {Message}",
+                pgEx.SqlState,
+                pgEx.MessageText
+            );
+            return new Result(Result.ResultCode.DatabaseError);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Exception occurred while deleting all Tours");
             return new Result(Result.ResultCode.UnknownError);
         }
     }

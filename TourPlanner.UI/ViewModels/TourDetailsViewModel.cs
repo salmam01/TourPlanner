@@ -155,7 +155,7 @@ namespace TourPlanner.UI.ViewModels
             To = "";
             TransportType = "";
             Distance = "0 km";
-            EstimatedTime = TimeSpan.Zero.ToString(@"hh\:mm");
+            EstimatedTime = $"{TimeSpan.Zero.ToString(@"hh\:mm")} h";
 
             Popularity = 0;
             ChildFriendly = "No";
@@ -177,7 +177,7 @@ namespace TourPlanner.UI.ViewModels
 
             double distanceInKm = tour.Distance / 1000;
             Distance = $"{distanceInKm.ToString("F2")} km";
-            EstimatedTime = tour.EstimatedTime.ToString(@"hh\:mm");
+            EstimatedTime = $"{tour.EstimatedTime.ToString(@"hh\:mm")} h";
 
             Popularity = tour.TourAttributes.Popularity;
             ChildFriendly = tour.TourAttributes.ChildFriendliness ? "Yes" : "No";

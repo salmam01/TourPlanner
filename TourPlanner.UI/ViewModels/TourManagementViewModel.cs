@@ -35,7 +35,9 @@ namespace TourPlanner.UI.ViewModels
         public ICommand CreateTourCommand => new RelayCommand(
             execute => CreateTour()
         );
-
+        public ICommand DeleteAllToursCommand => new RelayCommand(
+            execute => DeleteAllTours()
+        );
         public ICommand ImportToursCommand => new RelayCommand(
             execute => ImportTours()
         );
@@ -116,7 +118,7 @@ namespace TourPlanner.UI.ViewModels
             }
 
             MessageBoxResult warning = MessageBox.Show(
-                "Are you sure you would like to delete this tour log?",
+                "Are you sure you would like to delete this Tour?",
                 $"Delete Tour {_selectedTour.Name}",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Warning
@@ -132,8 +134,6 @@ namespace TourPlanner.UI.ViewModels
             }
             else
                 ShowErrorMessage(result);
-
-            _selectedTour = null;
         }
 
         public async void OnTourCreated(object sender, Tour tour)
@@ -166,6 +166,27 @@ namespace TourPlanner.UI.ViewModels
             _selectedTour = tour;
             TourListViewModel.SelectedTour = tour;
             _eventAggregator.Publish("ShowHome");
+        }
+
+        public void DeleteAllTours()
+        {
+            MessageBoxResult warning = MessageBox.Show(
+                "Are you sure you would like to delete ALL tours?",
+                $"Delete all Tours",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning
+            );
+            if (warning != MessageBoxResult.Yes) return;
+
+            Result result = _tourService.DeleteAllTours();
+
+            if (result.Code == Result.ResultCode.Success)
+            {
+                TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
+                _selectedTour = null;
+            }
+            else
+                ShowErrorMessage(result);
         }
 
         public void OnPerformSearch(object sender, string searchText)

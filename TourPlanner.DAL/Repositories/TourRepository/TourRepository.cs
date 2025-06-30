@@ -68,6 +68,11 @@ public class TourRepository : ITourRepository {
         Save();
     }
 
+    public void DeleteAllTours()
+    {
+        _context.Tours.ExecuteDelete();
+    }
+
     public void Save() {
         try {
             _context.SaveChanges();
