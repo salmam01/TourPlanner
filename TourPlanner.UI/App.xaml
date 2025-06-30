@@ -17,6 +17,7 @@
                 <ResourceDictionary Source="/Theme/FormDatePickerTheme.xaml"/>
                 <ResourceDictionary Source="/Theme/TabItemTheme.xaml"/>
                 <ResourceDictionary Source="/Theme/SearchbarTheme.xaml"/>
+                <ResourceDictionary Source="/Theme/TextBlockTheme.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         </ResourceDictionary>

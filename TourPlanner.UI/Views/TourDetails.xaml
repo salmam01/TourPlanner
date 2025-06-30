@@ -6,8 +6,153 @@
              xmlns:local="clr-namespace:TourPlanner.UI.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Border CornerRadius="0,0,12,0">
+    
+    <Border CornerRadius="0,0,12,0"
+            BorderThickness="0,0,0,1"
+            BorderBrush="#535e3c">
+        <Border.Effect>
+            <DropShadowEffect Color="Black"
+                              BlurRadius="6"
+                              Opacity="0.2"
+                              Direction="270"
+                              ShadowDepth="2"/>
+        </Border.Effect>
+
         <Grid>
+            <Grid.RowDefinitions>
+                <!-- General info & attributes -->
+                <RowDefinition Height="Auto"/>
+                <!-- Tour from, to, transporttype, distance, estimated time -->
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Border BorderBrush="#535e3c"
+                    BorderThickness="0,0,0,1">
+                <Border.Effect>
+                    <DropShadowEffect Color="Black"
+                                      BlurRadius="6"
+                                      Opacity="0.2"
+                                      Direction="270"
+                                      ShadowDepth="2"/>
+                </Border.Effect>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <!-- Tour name, date, description -->
+                        <ColumnDefinition Width="*"/>
+                        <!-- Tour popularity, child friendliness -->
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border Grid.Column="0"
+                            Padding="10"
+                            Margin="10"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center">
+
+                        <StackPanel>
+                            <TextBlock Text="{Binding Name}"
+                                       FontSize="22"
+                                       FontFamily="/Resources/Fonts/#Montserrat"
+                                       FontWeight="Bold"
+                                       Foreground="#f28484"
+                                       Padding="10"/>
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Date"
+                                           Style="{StaticResource TextBlockDescriptorStyle}"/>
+                                <TextBlock Text="{Binding Date}"
+                                           Style="{StaticResource TextBlockStyle}"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Description"
+                                       Style="{StaticResource TextBlockDescriptorStyle}"/>
+                                <TextBlock Text="{Binding Description}"
+                                       Style="{StaticResource TextBlockStyle}"/>
+                            </StackPanel>
+
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Column="1"
+                            CornerRadius="12"
+                            Padding="20"
+                            Margin="20"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center"
+                            Background="#445232">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Popularity"
+                                           Style="{StaticResource TextBlockDescriptorStyle}"/>
+                                <TextBlock Text="{Binding Popularity}"
+                                           Style="{StaticResource TextBlockStyle}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Child Friendly"
+                                           Style="{StaticResource TextBlockDescriptorStyle}"/>
+                                <TextBlock Text="{Binding ChildFriendly}"
+                                           Style="{StaticResource TextBlockStyle}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
+
+
+            <Border Grid.Row="1"
+                    Padding="10"
+                    Margin="10"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Top">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border BorderThickness="0,0,1,0"
+                            BorderBrush="#f7b2b2">
+                        <StackPanel Grid.Column="0"
+                                HorizontalAlignment="Stretch">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="From"
+                                           Style="{StaticResource TextBlockDescriptorStyle}"/>
+                                <TextBlock Text="{Binding From}"
+                                           Style="{StaticResource TextBlockStyle}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="To"
+                                           Style="{StaticResource TextBlockDescriptorStyle}"/>
+                                <TextBlock Text="{Binding To}"
+                                           Style="{StaticResource TextBlockStyle}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Transportation"
+                                           Style="{StaticResource TextBlockDescriptorStyle}"/>
+                                <TextBlock Text="{Binding TransportType}"
+                                           Style="{StaticResource TextBlockStyle}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <StackPanel Grid.Column="1"
+                                HorizontalAlignment="Stretch">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Distance"
+                                       Style="{StaticResource TextBlockDescriptorStyle}"/>
+                            <TextBlock Text="{Binding Distance}"
+                                       Style="{StaticResource TextBlockStyle}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Estimated Time"
+                                       Style="{StaticResource TextBlockDescriptorStyle}"/>
+                            <TextBlock Text="{Binding EstimatedTime}"
+                                       Style="{StaticResource TextBlockStyle}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Border>
             
         </Grid>
     </Border>

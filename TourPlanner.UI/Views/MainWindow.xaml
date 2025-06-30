@@ -85,27 +85,28 @@
                            Width="40"
                            Height="40"/>
                         <TextBlock Grid.Column="0" 
-                                Text="TourPlanner"
-                                Foreground="#F5ECD5"
-                                FontSize="20"
-                                VerticalAlignment="Center"
-                                FontFamily="/Resources/Fonts/#Montserrat"
-                                FontWeight="Bold"
-                                Margin="10,0,0,0"/>
+                                    Text="TourPlanner"
+                                    Foreground="#F5ECD5"
+                                    FontSize="20"
+                                    VerticalAlignment="Center"
+                                    FontFamily="/Resources/Fonts/#Montserrat"
+                                    FontWeight="Bold"
+                                    Margin="10,0,0,0"/>
                     </StackPanel>
 
 
                     <Button Grid.Column="1"
-                        x:Name="buttonShowLogs"
-                        Style="{StaticResource LogButtonStyle}"
-                        Content="Show Logs"
-                        HorizontalAlignment="Right"
-                        Margin="0,0,30,0"
-                        Click="buttonShowLogs_Click"
-                        Background="Transparent"
-                        Foreground="#F5ECD5"
-                        BorderThickness="0"
-                        Padding="10,5">
+                            x:Name="buttonShowLogs"
+                            FontSize="13"
+                            Style="{StaticResource LogButtonStyle}"
+                            Content="Show Application Logs"
+                            HorizontalAlignment="Right"
+                            Margin="0,0,30,0"
+                            Click="buttonShowLogs_Click"
+                            Background="Transparent"
+                            Foreground="#F5ECD5"
+                            BorderThickness="0"
+                            Padding="10,5">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Border Background="{TemplateBinding Background}"

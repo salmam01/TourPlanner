@@ -8,14 +8,13 @@
 
     <Grid>
         <!-- Tour Logs Table -->
-        <ListView
-            ItemsSource="{Binding TourLogs}"
-            SelectedItem="{Binding SelectedTourLog, Mode=TwoWay}"
-            Background="#F5ECD5"
-            BorderThickness="0"
-            Margin="0"
-            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-            AlternationCount="2">
+        <ListView ItemsSource="{Binding TourLogs}"
+                  SelectedItem="{Binding SelectedTourLog, Mode=TwoWay}"
+                  Background="#F5ECD5"
+                  BorderThickness="0"
+                  Margin="0"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  AlternationCount="2">
             <ListView.Resources>
                 <Style TargetType="GridViewColumnHeader">
                     <Setter Property="Background" Value="#F0BB78" />
