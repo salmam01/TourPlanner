@@ -9,6 +9,64 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="300">
 
+    <UserControl.Resources>
+        <!-- ContextMenu-Style -->
+        <Style x:Key="FancyContextMenuStyle" TargetType="ContextMenu">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ContextMenu">
+                        <Border Background="#F5ECD5"
+                                CornerRadius="10"
+                                BorderBrush="#A4B465"
+                                BorderThickness="1"
+                                Padding="8"
+                                Effect="{DynamicResource DropShadowEffect}">
+                            <StackPanel IsItemsHost="True"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <DropShadowEffect x:Key="DropShadowEffect" BlurRadius="10" ShadowDepth="2" Opacity="0.2"/>
+        <!-- MenuItem-Style -->
+        <Style x:Key="FancyMenuItemStyle" TargetType="MenuItem">
+            <Setter Property="FontFamily" Value="/Resources/Fonts/#Montserrat"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Padding" Value="20,12"/>
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#000000"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="MenuItem">
+                        <Grid HorizontalAlignment="Stretch">
+                            <Border x:Name="Border" Background="{TemplateBinding Background}" CornerRadius="8" HorizontalAlignment="Stretch" MinWidth="160">
+                                <Grid HorizontalAlignment="Stretch">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <ContentPresenter Grid.Column="0" ContentSource="Icon" Margin="0,0,16,0" VerticalAlignment="Center"/>
+                                    <ContentPresenter Grid.Column="1" ContentSource="Header" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                                </Grid>
+                            </Border>
+                            <!-- Invisible element that enforces full width -->
+                            <Rectangle Fill="Transparent" HorizontalAlignment="Stretch" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsHighlighted" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#f28484"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
     <Border BorderBrush="#535e3c"
             BorderThickness="0,0,1,0"
             CornerRadius="0,0,0,12"
@@ -68,23 +126,30 @@
                             ToolTip="Delete all Tours"
                             Command="{Binding DeleteAllToursCommand}"/>
 
-                    <!-- Import Button -->
-                    <Button Content="{materialDesign:PackIcon Kind=Import}"
-                            Style="{StaticResource ActionButtonStyle}"
-                            ToolTip="Import Tour"
-                            Command="{Binding ImportToursCommand}"/>
-                    
-                    <!-- Generate Tour Report-->
-                    <Button Content="{materialDesign:PackIcon Kind=FileExport}"
-                            Command="{Binding GenerateTourReportCommand}"
-                            Style="{StaticResource ActionButtonStyle}"
-                            ToolTip="Generate Tour Report"/>
-                    
-                    <!-- Generate Summary Report-->
-                    <Button Content="{materialDesign:PackIcon Kind=ChartBar}"
-                            Command="{Binding GenerateSummaryReportCommand}"
-                            Style="{StaticResource ActionButtonStyle}"
-                            ToolTip="Generate Summary Report"/>
+                    <!-- Import, Report, Summary: with ContextMenu -->
+                    <Button Style="{StaticResource ActionButtonStyle}"
+                            ToolTip="More Actions"
+                            Click="MoreActionsButton_Click">
+                        <Button.Content>
+                            <materialDesign:PackIcon Kind="DotsVertical"/>
+                        </Button.Content>
+                        <Button.ContextMenu>
+                            <ContextMenu Style="{StaticResource FancyContextMenuStyle}">
+                                <MenuItem Header="Import Tour"
+                                          Icon="{materialDesign:PackIcon Kind=Import}"
+                                          Command="{Binding ImportToursCommand}"
+                                          Style="{StaticResource FancyMenuItemStyle}"/>
+                                <MenuItem Header="Generate Tour Report"
+                                          Icon="{materialDesign:PackIcon Kind=FileExport}"
+                                          Command="{Binding GenerateTourReportCommand}"
+                                          Style="{StaticResource FancyMenuItemStyle}"/>
+                                <MenuItem Header="Generate Summary Report"
+                                          Icon="{materialDesign:PackIcon Kind=ChartBar}"
+                                          Command="{Binding GenerateSummaryReportCommand}"
+                                          Style="{StaticResource FancyMenuItemStyle}"/>
+                            </ContextMenu>
+                        </Button.ContextMenu>
+                    </Button>
                 </StackPanel>
                 
             </Grid>

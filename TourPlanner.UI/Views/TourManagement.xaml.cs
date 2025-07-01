@@ -13,5 +13,16 @@ namespace TourPlanner.UI.Views
         {
             InitializeComponent();
         }
+
+        public void MoreActionsButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            var button = sender as System.Windows.Controls.Button;
+            if (button?.ContextMenu != null)
+            {
+                button.ContextMenu.PlacementTarget = button;
+                button.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+                button.ContextMenu.IsOpen = true;
+            }
+        }
     }
 }
