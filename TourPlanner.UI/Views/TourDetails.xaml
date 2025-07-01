@@ -108,14 +108,14 @@
                                 <TextBlock Text="Date"
                                            Style="{StaticResource TextBlockDescriptorStyle}"/>
                                 <TextBlock Text="{Binding Date}"
-                                           Style="{StaticResource TextBlockStyle}"/>
+                                           Style="{StaticResource DetailsTextBlockStyle}"/>
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Description"
                                            Style="{StaticResource TextBlockDescriptorStyle}"/>
                                 <TextBlock Text="{Binding Description}"
-                                           Style="{StaticResource TextBlockStyle}"/>
+                                           Style="{StaticResource DetailsTextBlockStyle}"/>
                             </StackPanel>
 
                         </StackPanel>
@@ -133,13 +133,13 @@
                                 <TextBlock Text="Popularity"
                                            Style="{StaticResource TextBlockDescriptorStyle}"/>
                                 <TextBlock Text="{Binding Popularity}"
-                                           Style="{StaticResource TextBlockStyle}"/>
+                                           Style="{StaticResource DetailsTextBlockStyle}"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Child Friendly"
                                            Style="{StaticResource TextBlockDescriptorStyle}"/>
                                 <TextBlock Text="{Binding ChildFriendly}"
-                                           Style="{StaticResource TextBlockStyle}"/>
+                                           Style="{StaticResource DetailsTextBlockStyle}"/>
                             </StackPanel>
                         </StackPanel>
                     </Border>
@@ -166,19 +166,19 @@
                                 <TextBlock Text="From"
                                            Style="{StaticResource TextBlockDescriptorStyle}"/>
                                 <TextBlock Text="{Binding From}"
-                                           Style="{StaticResource TextBlockStyle}"/>
+                                           Style="{StaticResource DetailsTextBlockStyle}"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="To"
                                            Style="{StaticResource TextBlockDescriptorStyle}"/>
                                 <TextBlock Text="{Binding To}"
-                                           Style="{StaticResource TextBlockStyle}"/>
+                                           Style="{StaticResource DetailsTextBlockStyle}"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Transportation"
                                            Style="{StaticResource TextBlockDescriptorStyle}"/>
                                 <TextBlock Text="{Binding TransportType}"
-                                           Style="{StaticResource TextBlockStyle}"/>
+                                           Style="{StaticResource DetailsTextBlockStyle}"/>
                             </StackPanel>
                         </StackPanel>
                     </Border>
@@ -189,13 +189,13 @@
                             <TextBlock Text="Distance"
                                        Style="{StaticResource TextBlockDescriptorStyle}"/>
                             <TextBlock Text="{Binding Distance}"
-                                       Style="{StaticResource TextBlockStyle}"/>
+                                       Style="{StaticResource DetailsTextBlockStyle}"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Estimated Time"
                                        Style="{StaticResource TextBlockDescriptorStyle}"/>
                             <TextBlock Text="{Binding EstimatedTime}"
-                                       Style="{StaticResource TextBlockStyle}"/>
+                                       Style="{StaticResource DetailsTextBlockStyle}"/>
                         </StackPanel>
                     </StackPanel>
                 </Grid>

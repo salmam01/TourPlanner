@@ -1,13 +1,31 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Style x:Key="FormFieldStyle"
+    <Style x:Key="FormFieldTextBox"
            TargetType="TextBox">
         <Setter Property="Foreground" Value="Black"/>
         <Setter Property="FontFamily" Value="/Resources/Fonts/#Montserrat"/>
         <Setter Property="FontSize" Value="16"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Margin" Value="5,0,5,5"/>
-        <Setter Property="Padding" Value="5"/>
+        <Setter Property="Padding" Value="10"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="#f7b2b2"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <Border x:Name="border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="12"
+                            SnapsToDevicePixels="True">
+                        <ScrollViewer x:Name="PART_ContentHost"
+                                      Margin="0"
+                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
         <Style.Triggers>
             <Trigger Property="Validation.HasError" Value="True">
                 <Setter Property="BorderBrush" Value="Red"/>
@@ -15,6 +33,49 @@
                 <Setter Property="ToolTip"
                         Value="{Binding Path=(Validation.Errors)[0].ErrorContent,
                                         RelativeSource={RelativeSource Self}}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="FormComboBoxStyle"
+           TargetType="ComboBox">
+        <Setter Property="FontFamily" Value="/Resources/Fonts/#Montserrat"/>
+        <Setter Property="Padding" Value="10"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="5,0,5,5"/>
+    </Style>
+
+    <Style x:Key="FormSliderFieldStyle"
+           TargetType="Slider">
+        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="Margin" Value="5,0,5,5" />
+        <Setter Property="Background" Value="#FFF"/>
+        <Style.Triggers>
+            <Trigger Property="Validation.HasError" Value="True">
+                <Setter Property="BorderBrush" Value="Red" />
+                <Setter Property="BorderThickness" Value="2" />
+                <Setter Property="ToolTip"
+                        Value="{Binding Path=(Validation.Errors)[0].ErrorContent,
+                                        RelativeSource={RelativeSource Self}}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="FormDatePickerFieldStyle"
+           TargetType="DatePicker">
+        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="FontFamily" Value="/UI/Resources/Fonts/#Montserrat" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="Margin" Value="5,0,5,5" />
+        <Setter Property="Padding" Value="10"/>
+        <Style.Triggers>
+            <Trigger Property="Validation.HasError" Value="True">
+                <Setter Property="BorderBrush" Value="Red" />
+                <Setter Property="BorderThickness" Value="2" />
+                <Setter Property="ToolTip"
+                        Value="{Binding Path=(Validation.Errors)[0].ErrorContent,
+                                        RelativeSource={RelativeSource Self}}" />
             </Trigger>
         </Style.Triggers>
     </Style>

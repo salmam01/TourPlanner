@@ -8,13 +8,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Theme/WindowButtonTheme.xaml"/>
                 <ResourceDictionary Source="/Theme/ActionButtonTheme.xaml"/>
-                <ResourceDictionary Source="/Theme/NavbarButtonTheme.xaml"/>
-                <ResourceDictionary Source="/Theme/CancelButtonTheme.xaml"/>
-                <ResourceDictionary Source="/Theme/SubmitButtonTheme.xaml"/>
                 <ResourceDictionary Source="/Theme/FormFieldTheme.xaml"/>
-                <ResourceDictionary Source="/Theme/FormTextBoxTheme.xaml"/>
-                <ResourceDictionary Source="/Theme/FormSliderFieldTheme.xaml"/>
-                <ResourceDictionary Source="/Theme/FormDatePickerTheme.xaml"/>
                 <ResourceDictionary Source="/Theme/TabItemTheme.xaml"/>
                 <ResourceDictionary Source="/Theme/SearchbarTheme.xaml"/>
                 <ResourceDictionary Source="/Theme/TextBlockTheme.xaml"/>

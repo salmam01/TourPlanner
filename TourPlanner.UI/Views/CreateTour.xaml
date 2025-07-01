@@ -7,28 +7,25 @@
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="800">
 
-    <Border BorderBrush="#F0BB78"
-            Background="#F5ECD5"
-            BorderThickness="3"
-            CornerRadius="12"
-            Margin="15">
+    <Border Background="Transparent"
+            CornerRadius="0,0,12,12">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="75"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Border Background="#A4B465"
-                    CornerRadius="10,10,0,0">
+            <Border Background="#f28484"
+                    Padding="10">
                 <!-- Title -->
                 <TextBlock Text="Create a new Tour"
-                       Foreground="Black"
-                       FontSize="22"
-                       FontFamily="/Resources/Fonts/#Montserrat"
-                       FontWeight="Bold"
-                       HorizontalAlignment="Left"
-                       VerticalAlignment="Center"
-                       Margin="50,5"/>
+                           Foreground="#F5ECD5"
+                           FontSize="22"
+                           FontFamily="/Resources/Fonts/#Montserrat"
+                           FontWeight="Bold"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           Margin="50,5"/>
             </Border>
 
             <Grid Grid.Row="1">
@@ -38,22 +35,22 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0"
-                            Width="350"
+                            MinWidth="350"
                             Orientation="Vertical"
                             HorizontalAlignment="Center">
 
                     <!-- Tour Name -->
                     <TextBlock Text="Tour Name"
-                               Style="{StaticResource FormTextBoxStyle}"/>
-
+                               Style="{StaticResource FormTextBlockDescriptorStyle}"
+                               Margin="0,15,0,0"/>
                     <TextBox x:Name="name"
-                             Style="{StaticResource FormFieldStyle}"
+                             Style="{StaticResource FormFieldTextBox}"
                              Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
                     <TextBlock Text="{Binding NameError}" Foreground="Red" FontSize="12" />
                     
                     <!-- Tour Date -->
                     <TextBlock Text="Date"
-                               Style="{StaticResource FormTextBoxStyle}"/>
+                               Style="{StaticResource FormTextBlockDescriptorStyle}"/>
 
                     <DatePicker x:Name="date"
                                 Style="{StaticResource FormDatePickerFieldStyle}"
@@ -62,14 +59,14 @@
                     
                     <!-- Tour Description -->
                     <TextBlock Text="Description"
-                               Style="{StaticResource FormTextBoxStyle}"/>
+                               Style="{StaticResource FormTextBlockDescriptorStyle}"/>
 
                     <TextBox x:Name="Description"
                              Text="{Binding Description, 
                                     UpdateSourceTrigger=PropertyChanged, 
                                     ValidatesOnDataErrors=True, 
                                     NotifyOnValidationError=True}" 
-                             Style="{StaticResource FormFieldStyle}"
+                             Style="{StaticResource FormFieldTextBox}"
                              AcceptsReturn="True"
                              TextWrapping="Wrap"
                              VerticalScrollBarVisibility="Auto"
@@ -90,24 +87,21 @@
 
                         <!-- Tour Transport Type -->
                         <TextBlock Text="Transport Type"
-                                   Style="{StaticResource FormTextBoxStyle}"/>
+                                   Style="{StaticResource FormTextBlockDescriptorStyle}"
+                                   Margin="0,15,0,0"/>
 
                         <ComboBox x:Name="transporttype"
-                                  FontFamily="/Resources/Fonts/#Montserrat"
-                                  FontSize="16"
-                                  Height="30"
-                                  VerticalContentAlignment="Center"
-                                  Margin="5,0,5,5"
                                   ItemsSource="{Binding TransportTypeOptions}"
                                   SelectedItem="{Binding TransportType, 
                                                          UpdateSourceTrigger=PropertyChanged, 
                                                          ValidatesOnDataErrors=True, 
-                                                         NotifyOnValidationError=True}"/>
+                                                         NotifyOnValidationError=True}"
+                                  Style="{StaticResource FormComboBoxStyle}"/>
                         <TextBlock Text="{Binding TransportTypeError}" Foreground="Red" FontSize="12" />
                         
                         <!-- Tour Starting Point -->
                         <TextBlock Text="From"
-                                   Style="{StaticResource FormTextBoxStyle}"/>
+                                   Style="{StaticResource FormTextBlockDescriptorStyle}"/>
                         
                         <!-- Style missing-->
                         <ComboBox x:Name="fromComboBox"
@@ -120,13 +114,14 @@
                                                  NotifyOnValidationError=True}"
                                   ItemsSource="{Binding FromLocationSuggestions}"
                                   SelectedItem="{Binding SelectedFromSuggestion}"
-                                  PreviewTextInput="ComboBox_PreviewTextInput"/>
+                                  PreviewTextInput="ComboBox_PreviewTextInput"
+                                  Style="{StaticResource FormComboBoxStyle}"/>
 
                         <TextBlock Text="{Binding FromError}" Foreground="Red" FontSize="12" />
                         
                         <!-- Tour Destination -->
                         <TextBlock Text="To"
-                                   Style="{StaticResource FormTextBoxStyle}"/>
+                                   Style="{StaticResource FormTextBlockDescriptorStyle}"/>
 
                         <ComboBox x:Name="toComboBox"
                                   IsEditable="True"
@@ -138,7 +133,8 @@
                                          NotifyOnValidationError=True}"
                                   ItemsSource="{Binding ToLocationSuggestions}"
                                   SelectedItem="{Binding SelectedToSuggestion}"
-                                  PreviewTextInput="ComboBox_PreviewTextInput"/>
+                                  PreviewTextInput="ComboBox_PreviewTextInput"
+                                  Style="{StaticResource FormComboBoxStyle}"/>
                         
                         <TextBlock Text="{Binding ToError}" Foreground="Red" FontSize="12" />
                     </StackPanel>
@@ -159,7 +155,6 @@
                                 Content="{Binding SubmitButtonText}"
                                 Command="{Binding CreateTourCommand}"
                                 Style="{StaticResource SubmitButtonStyle}"/>
-
                     </StackPanel>
                 </Grid>
             </Grid>
