@@ -93,5 +93,15 @@
                 </Style>
             </ListView.ItemContainerStyle>
         </ListView>
+
+        <TextBlock Text="Click +-Button to create a Tour Log!"
+                   Foreground="#C74767"
+                   FontSize="14"
+                   FontFamily="/Resources/Fonts/#Montserrat"
+                   FontWeight="Medium"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Visibility="{Binding HasNoResults, 
+                                Converter={StaticResource BooleanToVisibilityConverter}}"/>
     </Grid>
 </UserControl>

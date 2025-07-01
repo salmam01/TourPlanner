@@ -80,7 +80,8 @@ namespace TourPlanner.UI.ViewModels
         {
             if (tour == null) return;
             _selectedTour = tour;
-            TourLogListViewModel.ReloadTourLogs(tour.TourLogs);
+            var tourLogs = _tourLogService.GetAllTourLogs(tour).ToList();
+            TourLogListViewModel.ReloadTourLogs(tourLogs);
         }
 
         public void OnTourLogSelected(object sender, TourLog tourLog)
@@ -97,7 +98,8 @@ namespace TourPlanner.UI.ViewModels
             if (result.Code == Result.ResultCode.Success)
             {
                 _tourService.RecalculateTourAttributes(_selectedTour);
-                TourLogListViewModel.ReloadTourLogs(_selectedTour.TourLogs);
+                var tourLogs = _tourLogService.GetAllTourLogs(_selectedTour).ToList();
+                TourLogListViewModel.ReloadTourLogs(tourLogs);
             }
             else
                 ShowErrorMessage(result);
@@ -114,7 +116,8 @@ namespace TourPlanner.UI.ViewModels
             if (result.Code == Result.ResultCode.Success)
             {
                 _tourService.RecalculateTourAttributes(_selectedTour);
-                TourLogListViewModel.ReloadTourLogs(_selectedTour.TourLogs);
+                var tourLogs = _tourLogService.GetAllTourLogs(_selectedTour).ToList();
+                TourLogListViewModel.ReloadTourLogs(tourLogs);
             }
             else
                 ShowErrorMessage(result);
@@ -156,7 +159,8 @@ namespace TourPlanner.UI.ViewModels
             if (deleteResult.Code == Result.ResultCode.Success)
             {
                 _tourService.RecalculateTourAttributes(_selectedTour);
-                TourLogListViewModel.ReloadTourLogs(_selectedTour.TourLogs);
+                var tourLogs = _tourLogService.GetAllTourLogs(_selectedTour).ToList();
+                TourLogListViewModel.ReloadTourLogs(tourLogs);
                 _selectedTourLog = null;
             }
             else
