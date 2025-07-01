@@ -1,5 +1,4 @@
-﻿using Serilog;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
@@ -136,7 +135,7 @@ namespace TourPlanner.UI.ViewModels
                 OnPropertyChanged(nameof(TotalTimeError));
             }
         }
-        // Zeigt TotalTime-bezogenen Fehler für beide Zeiteingaben an (Hours & Minutes)
+        // Shows TotalTime-related errors for both time inputs (Hours & Minutes)
         public string TotalTimeError => GetFirstError(nameof(Hours)) ?? GetFirstError(nameof(Minutes));
 
         public CreateTourLogViewModel() {
@@ -161,8 +160,6 @@ namespace TourPlanner.UI.ViewModels
             ClearErrors(nameof(TotalDistance));
             ClearErrors(nameof(Hours));
             ClearErrors(nameof(Minutes));
-            OnPropertyChanged(nameof(SubmitButtonText));
-
             OnPropertyChanged(nameof(SubmitButtonText));
         }
 
@@ -194,7 +191,6 @@ namespace TourPlanner.UI.ViewModels
             }
             else {
                 TourLogCreated?.Invoke(this, tourLog);
-                Log.Information("Tour Log created => {@_tourLog}", tourLog);
             }
             ResetForm();
         }

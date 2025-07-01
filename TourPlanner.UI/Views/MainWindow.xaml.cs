@@ -15,7 +15,6 @@ using System.Windows.Shapes;
 using TourPlanner.UI.Views;
 using TourPlanner.UI.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
-using Serilog;
 
 namespace TourPlanner.UI.Views
 {
@@ -33,11 +32,9 @@ namespace TourPlanner.UI.Views
             {
                 _logViewerViewModel = ((App)Application.Current).ServiceProvider.GetRequiredService<LogViewerViewModel>();
                 LogViewerOverlay.DataContext = _logViewerViewModel;
-                Log.Information("LogViewer initialized successfully");
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Error initializing LogViewer");
                 MessageBox.Show($"Error initializing LogViewer: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -75,16 +72,13 @@ namespace TourPlanner.UI.Views
         {
             try
             {
-                Log.Information("Show Logs button clicked");
                 LogViewerOverlay.Visibility = Visibility.Visible;
                 var fadeIn = FindResource("FadeIn") as System.Windows.Media.Animation.Storyboard;
                 fadeIn?.Begin(LogViewerOverlay);
                 _logViewerViewModel.RefreshLogs();
-                Log.Information("Log viewer shown successfully");
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Error showing log viewer");
                 MessageBox.Show($"Error showing log viewer: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }

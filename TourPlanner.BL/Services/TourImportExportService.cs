@@ -102,7 +102,7 @@ namespace TourPlanner.BL.Services
                     }
 
                     // Set column widths
-                    toursSheet.Column(1).Width = 36; // Id (ID-Spalten sind 36 Zeichen breit (für GUIDs))
+                    toursSheet.Column(1).Width = 36; // Id (Id columns are 36 characters wide (for GUIDs))
                     toursSheet.Column(2).Width = 20; // Name
                     toursSheet.Column(3).Width = 15; // Date
                     toursSheet.Column(4).Width = 30; // Description

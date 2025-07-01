@@ -289,7 +289,6 @@ namespace TourPlanner.UI.ViewModels
             if (_selectedTour == null)
             {
                 MessageBox.Show("Please select a tour first.", "No Tour Selected", MessageBoxButton.OK, MessageBoxImage.Warning);
-                //_logger.LogWarning("Attempted to generate tour report without selecting a tour");
                 return;
             }
 
@@ -305,14 +304,12 @@ namespace TourPlanner.UI.ViewModels
                 if (saveFileDialog.ShowDialog() == true)
                 {
                     _reportGenerationService.GenerateTourReport(_selectedTour, saveFileDialog.FileName);
-                    //_logger.LogInformation("Tour report generated successfully: {FilePath}", saveFileDialog.FileName);
                     MessageBox.Show("Tour report generated successfully.", "Export Result", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 }
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex, "Failed to generate tour report");
                 MessageBox.Show($"Failed to generate tour report.\nDetails: {ex.Message}", "Report Generation Error", MessageBoxButton.OK, MessageBoxImage.Error);
 
             }
@@ -333,14 +330,12 @@ namespace TourPlanner.UI.ViewModels
                 {
                     var tours = _tourService.GetAllTours();
                     _reportGenerationService.GenerateSummaryReport(tours, saveFileDialog.FileName);
-                    //_logger.LogInformation("Summary report generated successfully: {FilePath}", saveFileDialog.FileName);
                     MessageBox.Show("Summary report generated successfully.", "Export Result", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 }
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex, "Failed to generate summary report");
                 MessageBox.Show($"Failed to generate summary report.\nDetails: {ex.Message}", "Export Error", MessageBoxButton.OK, MessageBoxImage.Error);
 
             }
