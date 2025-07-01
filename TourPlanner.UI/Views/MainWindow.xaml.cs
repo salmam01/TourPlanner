@@ -72,6 +72,8 @@ namespace TourPlanner.UI.Views
         {
             try
             {
+                if (DataContext is MainWindowViewModel mainVM && mainVM.HomeViewModel?.TourNavbarViewModel?.MapViewModel != null)
+                    mainVM.HomeViewModel.TourNavbarViewModel.MapViewModel.IsMapVisible = false;
                 LogViewerOverlay.Visibility = Visibility.Visible;
                 var fadeIn = FindResource("FadeIn") as System.Windows.Media.Animation.Storyboard;
                 fadeIn?.Begin(LogViewerOverlay);
@@ -85,6 +87,8 @@ namespace TourPlanner.UI.Views
 
         private void buttonCloseLogs_Click(object sender, RoutedEventArgs e)
         {
+            if (DataContext is MainWindowViewModel mainVM && mainVM.HomeViewModel?.TourNavbarViewModel?.MapViewModel != null)
+                mainVM.HomeViewModel.TourNavbarViewModel.MapViewModel.IsMapVisible = true;
             var fadeOut = FindResource("FadeOut") as System.Windows.Media.Animation.Storyboard;
             if (fadeOut != null)
             {

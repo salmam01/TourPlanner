@@ -18,8 +18,22 @@ namespace TourPlanner.UI.ViewModels
         private readonly OpenRouteService _openRouteService;
         private readonly LeafletHelper _leafletHelper;
         private Tour _selectedTour;
+        private bool _isMapVisible = true;
 
         public string BaseDirectory { get; }
+
+        public bool IsMapVisible
+        {
+            get => _isMapVisible;
+            set
+            {
+                if (_isMapVisible != value)
+                {
+                    _isMapVisible = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public MapViewModel(
             EventAggregator eventAggregator, 
