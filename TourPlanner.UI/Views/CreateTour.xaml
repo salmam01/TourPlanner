@@ -23,9 +23,9 @@
                            FontSize="22"
                            FontFamily="/Resources/Fonts/#Montserrat"
                            FontWeight="Bold"
-                           HorizontalAlignment="Left"
+                           HorizontalAlignment="Center"
                            VerticalAlignment="Center"
-                           Margin="50,5"/>
+                           Margin="5"/>
             </Border>
 
             <Grid Grid.Row="1">
@@ -70,7 +70,9 @@
                              AcceptsReturn="True"
                              TextWrapping="Wrap"
                              VerticalScrollBarVisibility="Auto"
-                             MinHeight="100"/>
+                             MinHeight="75"
+                             MaxWidth="337"/>
+                    
                     <TextBlock Text="{Binding DescriptionError}" Foreground="Red" FontSize="12" />
                 </StackPanel>
 
