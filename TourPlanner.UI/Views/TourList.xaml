@@ -52,7 +52,7 @@
                 </ListView.ItemContainerStyle>
             </ListView>
 
-            <TextBlock Text="No results found."
+            <TextBlock Text="Click +-Button to create a Tour!"
                        Foreground="#C74767"
                        FontSize="14"
                        FontFamily="/Resources/Fonts/#Montserrat"
