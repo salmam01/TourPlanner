@@ -22,8 +22,8 @@
                             CornerRadius="7"
                             SnapsToDevicePixels="True">
                         <ScrollViewer x:Name="PART_ContentHost"
-                                  Margin="0"
-                                  VerticalAlignment="Center"/>
+                                      Margin="0"
+                                      VerticalAlignment="Center"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

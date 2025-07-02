@@ -9,7 +9,14 @@ namespace TourPlanner.DAL.Data
         public DbSet<Tour> Tours { get; set; }
         public DbSet<TourAttributes> TourAttributes { get; set; }
         public DbSet<TourLog> TourLogs { get; set; }
+        
+        //  Parameterless constructor with no connection string for creating migrations
+        public TourPlannerDbContext()
+            : base(new DbContextOptionsBuilder<TourPlannerDbContext>()
+                  .UseNpgsql()
+                  .Options) { }
 
+        //  Constructor using connection string for creating & updating the database
         public TourPlannerDbContext(DbContextOptions<TourPlannerDbContext> options)
             : base(options) { }
 
