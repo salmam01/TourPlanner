@@ -30,7 +30,7 @@ namespace TourPlanner.UI.ViewModels
                 if (_isMapVisible != value)
                 {
                     _isMapVisible = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(IsMapVisible));
                 }
             }
         }
@@ -66,7 +66,7 @@ namespace TourPlanner.UI.ViewModels
                 if (mapGeometry != null && mapGeometry.WayPoints.Count > 0 && mapGeometry.Bbox != null)
                 {
                     //  Draw the map using Leaflet
-                    _leafletHelper.SaveMapGeometryAsJson(mapGeometry, BaseDirectory);
+                    _leafletHelper.SaveMapGeometryAsJson(mapGeometry, BaseDirectory, _selectedTour.From, _selectedTour.To);
                     _eventAggregator.Publish(new TourEvent(TourEvent.EventType.MapUpdated));
                 }
             }

@@ -13,11 +13,15 @@
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     </UserControl.Resources>
 
-    <Border CornerRadius="0,0,12,0">
+    <Border CornerRadius="24"
+            BorderBrush="#A4B465"
+            BorderThickness="1"
+            Margin="16"
+            Background="Transparent">
         <Grid>
             <wpf:WebView2 x:Name="webView"
+                         DefaultBackgroundColor="#FF626F47"
                          Visibility="{Binding IsMapVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
         </Grid>
-
     </Border>
 </UserControl>
