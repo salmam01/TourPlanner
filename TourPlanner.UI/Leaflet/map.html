@@ -16,9 +16,163 @@
         <!-- Route Data -->
         <script src="directions.js"></script>
 
+        <style>
+            html, body {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                background: #626F47 !important;
+            }
+            #map-container {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100vh;
+                width: 100vw;
+            }
+            #map {
+                height: 100%;
+                width: 100%;
+                overflow: hidden;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+                border-radius: 24px;
+            }
+            .leaflet-control {
+                border-radius: 8px !important;
+            }
+            @keyframes fadeInOverlay {
+              from { opacity: 0; transform: translateY(-20px); }
+              to { opacity: 1; transform: translateY(0); }
+            }
+            .leaflet-popup-content-wrapper {
+              animation: popupFadeIn 0.4s ease-out;
+              border-radius: 12px;
+              box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            }
+            .leaflet-popup-content {
+              font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+              font-size: 1.1em;
+              color: #333;
+              padding: 8px 0;
+            }
+            @keyframes popupFadeIn {
+              from { opacity: 0; transform: scale(0.8) translateY(-10px); }
+              to { opacity: 1; transform: scale(1) translateY(0); }
+            }
+            /* Zoom Controls */
+            .leaflet-control-zoom {
+              border-radius: 16px !important;
+              box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
+              background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(240,245,255,0.9) 100%) !important;
+              backdrop-filter: blur(10px);
+              border: 1px solid rgba(255,255,255,0.3) !important;
+              overflow: hidden;
+              display: flex !important;
+              flex-direction: column !important;
+            }
+            .leaflet-control-zoom a {
+              width: 36px !important;
+              height: 36px !important;
+              line-height: 36px !important;
+              font-size: 16px !important;
+              font-weight: 600 !important;
+              color: #333 !important;
+              background: transparent !important;
+              border: none !important;
+              border-radius: 0 !important;
+              transition: all 0.3s ease !important;
+              text-decoration: none !important;
+              position: relative;
+            }
+            .leaflet-control-zoom a:hover {
+              background: linear-gradient(135deg, rgba(236,72,153,0.1) 0%, rgba(236,72,153,0.2) 100%) !important;
+              color: #EC4899 !important;
+              transform: scale(1.05);
+            }
+            .leaflet-control-zoom a:active {
+              transform: scale(0.95);
+            }
+            .leaflet-control-zoom a:first-child {
+              border-bottom: 1px solid rgba(0,0,0,0.1) !important;
+            }
+            .leaflet-control-zoom a:before {
+              content: '';
+              position: absolute;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+              pointer-events: none;
+            }
+            .map-controls-container {
+              position: absolute;
+              bottom: 20px;
+              right: 20px;
+              display: flex;
+              flex-direction: column;
+              align-items: flex-end;
+              z-index: 1000;
+            }
+            .reset-view-btn {
+              width: 36px;
+              height: 36px;
+              border-radius: 16px;
+              background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(240,245,255,0.9) 100%);
+              backdrop-filter: blur(10px);
+              border: 1px solid rgba(255,255,255,0.3);
+              box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              cursor: pointer;
+              transition: all 0.3s ease;
+              font-size: 16px;
+              color: #333;
+              text-decoration: none;
+              margin-bottom: 8px;
+            }
+            .leaflet-control-attribution {
+                display: none !important;
+            }
+        </style>
+
     </head>
     <body>
-        <div id="map" style="height: 100vh; width: 100vw"></div>
+        <div id="address-overlay" style="
+          position: absolute;
+          top: 15px;
+          right: 20px;
+          left: auto;
+          background: rgba(255,255,255,0.75);
+          border-radius: 14px;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+          padding: 6px 12px;
+          background: linear-gradient(135deg, rgba(255,255,255,0.85) 0%, rgba(240,245,255,0.75) 100%);
+          opacity: 0;
+          animation: fadeInOverlay 0.7s ease 0.2s forwards;
+          z-index: 1000;
+          font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+          font-size: 0.9em;
+          color: #222;
+          min-width: 160px;
+          max-width: 250px;
+          backdrop-filter: blur(8px);
+        ">
+          <div style="display: flex; align-items: center; margin-bottom: 3px; line-height: 1.2;">
+            <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="Start" style="width:14px;height:14px;margin-right:5px;flex-shrink:0;">
+            <div style="flex:1;overflow:hidden;"><b>Start:</b> <span id="fromAddress" style="word-wrap:break-word;"></span></div>
+          </div>
+          <div style="display: flex; align-items: center; line-height: 1.2;">
+            <img src="https://cdn-icons-png.flaticon.com/512/149/149059.png" alt="Destination" style="width:14px;height:14px;margin-right:5px;flex-shrink:0;">
+            <div style="flex:1;overflow:hidden;"><b>Destination:</b> <span id="toAddress" style="word-wrap:break-word;"></span></div>
+          </div>
+        </div>
+        <div id="map"></div>
+        <div class="map-controls-container">
+          <div class="reset-view-btn" id="resetViewBtn" title="Back to Main View">🏠</div>
+        </div>
         
         <script>
             var map = L.map('map');
@@ -27,16 +181,93 @@
             map.fitBounds([
                 [bbox[1], bbox[0]],
                 [bbox[3], bbox[2]]
-            ]);
+            ], {padding: [60, 60]});
 
-            L.tileLayer(
-                'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            //  Tile Layer (Stamen Watercolor) (OSM Standard)
+            var watercolor = L.tileLayer(
+                'https://stamen-tiles.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.jpg',
                 {
-                    attributions: '2025 © FH Technikum Wien'
+                    attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, ' +
+                        '<a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; ' +
+                        'Map data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                    subdomains: 'abcd',
+                    maxZoom: 18
                 }
-            ).addTo(map);
+            );
+            watercolor.on('tileerror', function() {
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                    maxZoom: 19
+                }).addTo(map);
+            });
+            watercolor.addTo(map);
+            
+            L.geoJSON(directions, {
+                style: {
+                    color: '#0074D9', 
+                    weight: 5,
+                    opacity: 0.95
+                }
+            }).addTo(map);
 
-            L.geoJSON(directions).addTo(map);
+            // Overlay: show address
+            document.getElementById('fromAddress').textContent = directions.fromAddress;
+            document.getElementById('toAddress').textContent = directions.toAddress;
+
+            // Marker-Icons
+            var startIcon = L.icon({
+                iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png', 
+                iconSize: [28, 28],
+                iconAnchor: [14, 28],
+                popupAnchor: [0, -28]
+            });
+            var endIcon = L.icon({
+                iconUrl: 'https://cdn-icons-png.flaticon.com/512/149/149059.png', // red pin
+                iconSize: [28, 28],
+                iconAnchor: [14, 28],
+                popupAnchor: [0, -28]
+            });
+
+            // Start-Marker
+            var startCoords = directions.geometry.coordinates[0];
+            var startMarker = L.marker([startCoords[1], startCoords[0]], {icon: startIcon, title: "Start"}).addTo(map);
+            startMarker.bindPopup("<div style='text-align: center;'><b>🚀 Start</b><br>" + directions.fromAddress + "</div>", {
+                closeButton: true,
+                autoClose: false
+            });
+            startMarker.on('click', function() {
+                this.openPopup();
+            });
+
+            // destination-Marker
+            var endCoords = directions.geometry.coordinates[directions.geometry.coordinates.length - 1];
+            var endMarker = L.marker([endCoords[1], endCoords[0]], {icon: endIcon, title: "Destination"}).addTo(map);
+            endMarker.bindPopup("<div style='text-align: center;'><b>🎯 Destination</b><br>" + directions.toAddress + "</div>", {
+                closeButton: true,
+                autoClose: false
+            });
+            endMarker.on('click', function() {
+                this.openPopup();
+            });
+
+            // Zoom-Buttons & Reset-Button
+            map.zoomControl.setPosition('bottomright');
+            setTimeout(function() {
+                var zoomControl = document.querySelector('.leaflet-control-zoom');
+                var controlsContainer = document.querySelector('.map-controls-container');
+                if (zoomControl && controlsContainer) {
+                    controlsContainer.appendChild(zoomControl);
+                    zoomControl.style.position = 'static';
+                    zoomControl.style.margin = '0';
+                }
+            }, 0);
+            // Reset-Button (Back to Main View)
+            document.getElementById('resetViewBtn').onclick = function() {
+                map.fitBounds([
+                    [bbox[1], bbox[0]],
+                    [bbox[3], bbox[2]]
+                ], {padding: [60, 60]});
+            };
         </script>
 
     </body>

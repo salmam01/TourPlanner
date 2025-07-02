@@ -18,7 +18,7 @@ namespace TourPlanner.UI.Leaflet
             WriteIndented = true
         };
 
-        public void SaveMapGeometryAsJson(MapGeometry mapGeometry, string baseDirectory)
+        public void SaveMapGeometryAsJson(MapGeometry mapGeometry, string baseDirectory, string fromAddress, string toAddress)
         {
             Debug.WriteLine("In SaveMapGeometryAsJson [LeafletHelper] !!");
 
@@ -31,7 +31,9 @@ namespace TourPlanner.UI.Leaflet
                     coordinates = mapGeometry.WayPoints.Select(wp =>
                         new[] { wp.Longitude, wp.Latitude }).ToArray()
                 },
-                bbox = new[] { mapGeometry.Bbox.MinLongitude, mapGeometry.Bbox.MinLatitude, mapGeometry.Bbox.MaxLongitude, mapGeometry.Bbox.MaxLatitude }
+                bbox = new[] { mapGeometry.Bbox.MinLongitude, mapGeometry.Bbox.MinLatitude, mapGeometry.Bbox.MaxLongitude, mapGeometry.Bbox.MaxLatitude },
+                fromAddress = fromAddress,
+                toAddress = toAddress
             };
 
             string directionsJson = $"var directions = {JsonSerializer.Serialize(directionsObject, _jsonOptions)};";
