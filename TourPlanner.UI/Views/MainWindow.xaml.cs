@@ -69,7 +69,7 @@ namespace TourPlanner.UI.Views
         }
 
         private void buttonShowLogs_Click(object sender, RoutedEventArgs e)
-        {
+        {   
             try
             {
                 if (DataContext is MainWindowViewModel mainVM && mainVM.HomeViewModel?.TourNavbarViewModel?.MapViewModel != null)

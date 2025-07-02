@@ -94,7 +94,7 @@
             </ListView.ItemContainerStyle>
         </ListView>
 
-        <TextBlock Text="Click +-Button to create a Tour Log!"
+        <TextBlock Text="Click + Button to create a Tour Log!"
                    Foreground="#C74767"
                    FontSize="14"
                    FontFamily="/Resources/Fonts/#Montserrat"
