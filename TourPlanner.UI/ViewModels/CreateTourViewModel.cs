@@ -127,7 +127,7 @@ namespace TourPlanner.UI.ViewModels
             {
                 if (_selectedFromSuggestion == value) return;
                 _selectedFromSuggestion = value;
-                From = value;
+                _from = value;
                 OnPropertyChanged();
             }
         }
@@ -155,10 +155,12 @@ namespace TourPlanner.UI.ViewModels
             {
                 if (_selectedToSuggestion == value) return;
                 _selectedToSuggestion = value;
-                To = value;
+                _to = value;
                 OnPropertyChanged();
             }
         }
+        public List<string> FromLocationSuggestions { get; set; } = new List<string>();
+        public List<string> ToLocationSuggestions { get; set; } = new List<string>();
 
         public string ToError => GetFirstError(nameof(To));
 
@@ -172,9 +174,6 @@ namespace TourPlanner.UI.ViewModels
             "E-Bike",
             "Car"
         };
-
-        public List<string> FromLocationSuggestions { get; set; } = [];
-        public List<string> ToLocationSuggestions { get; set; } = [];
 
         public CreateTourViewModel(OpenRouteService openRouteService) {
             _openRouteService = openRouteService;
@@ -281,8 +280,9 @@ namespace TourPlanner.UI.ViewModels
 
         private async Task OnFromParamsChanged()
         {
-            if (!string.IsNullOrEmpty(From) && From.Length > 0)
+            if (!string.IsNullOrEmpty(From))
             {
+                Debug.WriteLine("GETTING FROM SUGGESTION");
                 FromLocationSuggestions = await _openRouteService.GetLocationSuggestionsAsync(From);
                 OnPropertyChanged(nameof(FromLocationSuggestions));
             }
@@ -290,7 +290,7 @@ namespace TourPlanner.UI.ViewModels
 
         private async Task OnToParamsChanged()
         {
-            if (!string.IsNullOrEmpty(To) && To.Length > 0)
+            if (!string.IsNullOrEmpty(To))
             {
                 ToLocationSuggestions = await _openRouteService.GetLocationSuggestionsAsync(To);
                 OnPropertyChanged(nameof(ToLocationSuggestions));

@@ -145,10 +145,14 @@ namespace TourPlanner.UI.ViewModels
             {
                 if (e.Type == TourEvent.EventType.Select)
                     ShowTourDetails(e.Tour);
+                else if (e.Type == TourEvent.EventType.Edited)
+                    ShowTourDetails(e.Tour);
+                else if (e.Type == TourEvent.EventType.Deleted)
+                    SetDefaultValues();
             });
         }
 
-        public void SetDefaultValues()
+        private void SetDefaultValues()
         {
             Name = "Select a Tour";
 
@@ -165,7 +169,7 @@ namespace TourPlanner.UI.ViewModels
             ChildFriendly = "No";
         }
 
-        public void ShowTourDetails(Tour tour)
+        private void ShowTourDetails(Tour tour)
         {
             if (tour == null) return;
             _selectedTour = tour;
@@ -186,17 +190,17 @@ namespace TourPlanner.UI.ViewModels
             ChildFriendly = tour.TourAttributes.ChildFriendliness ? "Yes" : "No";
         }
 
-        public void OnEditTour()
+        private void OnEditTour()
         {
             _eventAggregator.Publish(new TourEvent(TourEvent.EventType.Edit));
         }
 
-        public void OnExportTour()
+        private void OnExportTour()
         {
             _eventAggregator.Publish(new TourEvent(TourEvent.EventType.Export));
         }
 
-        public void OnDeleteTour()
+        private void OnDeleteTour()
         {
             _eventAggregator.Publish(new TourEvent(TourEvent.EventType.Delete));
         }

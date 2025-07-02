@@ -143,6 +143,7 @@ namespace TourPlanner.UI.ViewModels
 
             if (result.Code == Result.ResultCode.Success)
             {
+                _eventAggregator.Publish(new TourEvent(TourEvent.EventType.Deleted));
                 TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
                 _selectedTour = null;
             }
@@ -180,6 +181,7 @@ namespace TourPlanner.UI.ViewModels
             _selectedTour = tour;
             TourListViewModel.SelectedTour = tour;
             _eventAggregator.Publish(new NavigationEvent(NavigationEvent.Destination.Home));
+            _eventAggregator.Publish(new TourEvent(TourEvent.EventType.Edited));
         }
 
         public void DeleteAllTours()

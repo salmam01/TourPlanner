@@ -162,7 +162,7 @@ namespace TourPlanner.BL.API
             return result;
         }
 
-        
+        //  Helper method that returns the OpenRoute API profile equivalent
         private string GetProfile(string profile)
         {
             switch(profile)
