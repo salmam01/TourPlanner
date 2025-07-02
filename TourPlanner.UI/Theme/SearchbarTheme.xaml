@@ -11,7 +11,7 @@
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="Padding" Value="35,10,10,10"/>
         <Setter Property="Background" Value="#F5ECD5"/>
-        <Setter Property="BorderBrush" Value="LightGray"/>
+        <Setter Property="BorderBrush" Value="#f7b2b2"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Template">
             <Setter.Value>
