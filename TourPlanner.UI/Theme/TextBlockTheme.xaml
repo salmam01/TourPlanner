@@ -41,4 +41,8 @@
         <Setter Property="Padding" Value="10"/>
     </Style>
     
+    <Style x:Key="TextBlockStyle" BasedOn="{StaticResource BaseTextBlockStyle}" TargetType="TextBlock">
+        <!-- add (if needed): setter -->
+    </Style>
+    
 </ResourceDictionary>
