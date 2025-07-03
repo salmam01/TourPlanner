@@ -3,7 +3,7 @@
     <Style x:Key="TextBlockStyle"
            TargetType="TextBlock">
         <Setter Property="FontFamily" Value="/Resources/Fonts/#Montserrat"/>
-        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontSize" Value="13"/>
         <Setter Property="Foreground" Value="#F5ECD5"/>
         <Setter Property="Margin" Value="5"/>
         <Setter Property="Padding" Value="10"/>
@@ -17,6 +17,6 @@
            BasedOn="{StaticResource TextBlockStyle}"
            TargetType="TextBlock">
         <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="Foreground" Value="#f7b2b2"/>
+        <Setter Property="Foreground" Value="#d16a7a"/>
     </Style>
 </ResourceDictionary>

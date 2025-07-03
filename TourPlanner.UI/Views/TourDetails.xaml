@@ -11,15 +11,8 @@
     
     <Border CornerRadius="0,0,12,0"
             BorderThickness="0,0,0,1"
-            BorderBrush="#535e3c">
-        <Border.Effect>
-            <DropShadowEffect Color="Black"
-                              BlurRadius="6"
-                              Opacity="0.2"
-                              Direction="270"
-                              ShadowDepth="2"/>
-        </Border.Effect>
-
+            BorderBrush="#535e3c"
+            Padding="0,32,0,0">
         <Grid>
             <Grid.RowDefinitions>
                 <!-- Tour name, edit, delete -->
@@ -34,14 +27,6 @@
                     BorderThickness="0,0,0,1"
                     Grid.Row="0"
                     Margin="20,0">
-                <Border.Effect>
-                    <DropShadowEffect Color="Black"
-                                      BlurRadius="6"
-                                      Opacity="0.2"
-                                      Direction="270"
-                                      ShadowDepth="2"/>
-                </Border.Effect>
-                
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -51,9 +36,9 @@
                     <TextBlock Grid.Column="0" Text="{Binding Name}"
                                FontSize="22"
                                FontFamily="/Resources/Fonts/#Montserrat"
-                               FontWeight="Bold"
+                               FontWeight="ExtraBold"
                                Foreground="#f28484"
-                               Padding="10"/>
+                               Padding="12"/>
                     
                     <StackPanel Grid.Column="1"
                                 Orientation="Horizontal"
@@ -82,13 +67,6 @@
             <Border BorderBrush="#535e3c"
                     BorderThickness="0,0,0,1"
                     Grid.Row="1">
-                <Border.Effect>
-                    <DropShadowEffect Color="Black"
-                                      BlurRadius="6"
-                                      Opacity="0.2"
-                                      Direction="270"
-                                      ShadowDepth="2"/>
-                </Border.Effect>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <!-- Tour date, description -->
@@ -102,45 +80,76 @@
                             Margin="10"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Center">
-
-                        <StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Date"
-                                           Style="{StaticResource TextBlockDescriptorStyle}"/>
-                                <TextBlock Text="{Binding Date}"
-                                           Style="{StaticResource TextBlockStyle}"/>
-                            </StackPanel>
-
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Description"
-                                           Style="{StaticResource TextBlockDescriptorStyle}"/>
-                                <TextBlock Text="{Binding Description}"
-                                           Style="{StaticResource TextBlockStyle}"/>
-                            </StackPanel>
-
-                        </StackPanel>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Date" Style="{StaticResource TextBlockDescriptorStyle}" Margin="16,0,8,0"/>
+                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Date}" Style="{StaticResource TextBlockStyle}" Margin="0"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Description" Style="{StaticResource TextBlockDescriptorStyle}" Margin="16,0,8,0"/>
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Description}" Style="{StaticResource TextBlockStyle}" Margin="0"/>
+                        </Grid>
                     </Border>
 
                     <Border Grid.Column="2"
-                            CornerRadius="12"
-                            Padding="10"
-                            Margin="30,10"
-                            HorizontalAlignment="Stretch"
+                            CornerRadius="10"
+                            Padding="6,4"
+                            Margin="40,10,64,10"
+                            HorizontalAlignment="Right"
                             VerticalAlignment="Center"
-                            Background="#445232">
-                        <StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Popularity"
-                                           Style="{StaticResource TextBlockDescriptorStyle}"/>
-                                <TextBlock Text="{Binding Popularity}"
-                                           Style="{StaticResource TextBlockStyle}"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Child Friendly"
-                                           Style="{StaticResource TextBlockDescriptorStyle}"/>
-                                <TextBlock Text="{Binding ChildFriendly}"
-                                           Style="{StaticResource TextBlockStyle}"/>
-                            </StackPanel>
+                            Background="#6b7847"
+                            BorderThickness="2">
+                        <Border.BorderBrush>
+                            <LinearGradientBrush x:Name="AnimatedGradient" StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#4CAF50" Offset="0.0"/>
+                                <GradientStop Color="#f28484" Offset="1.0"/>
+                            </LinearGradientBrush>
+                        </Border.BorderBrush>
+                        <Border.Triggers>
+                            <EventTrigger RoutedEvent="Loaded">
+                                <BeginStoryboard>
+                                    <Storyboard RepeatBehavior="Forever" AutoReverse="True">
+                                        <ColorAnimation Storyboard.TargetName="AnimatedGradient"
+                                                       Storyboard.TargetProperty="GradientStops[0].Color"
+                                                       To="#f28484" Duration="0:0:2"/>
+                                        <ColorAnimation Storyboard.TargetName="AnimatedGradient"
+                                                       Storyboard.TargetProperty="GradientStops[1].Color"
+                                                       To="#4CAF50" Duration="0:0:2"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Border.Triggers>
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <TextBlock Text="Popularity"
+                                       Style="{StaticResource TextBlockDescriptorStyle}"
+                                       FontSize="12"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,0"/>
+                            <TextBlock Text="{Binding Popularity}"
+                                       Style="{StaticResource TextBlockStyle}"
+                                       FontSize="12"
+                                       FontWeight="SemiBold"
+                                       Foreground="#F5ECD5"
+                                       HorizontalAlignment="Center"
+                                       Margin="3,-4,2,0"/>
+                            <TextBlock Text="Child Friendly"
+                                       Style="{StaticResource TextBlockDescriptorStyle}"
+                                       FontSize="12"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,0"
+                                       TextWrapping="NoWrap"/>
+                            <TextBlock Text="{Binding ChildFriendly}"
+                                       Style="{StaticResource TextBlockStyle}"
+                                       FontSize="12"
+                                       FontWeight="SemiBold"
+                                       Foreground="#F5ECD5"
+                                       HorizontalAlignment="Center"
+                                       Margin="2,3,-3,4"/>
                         </StackPanel>
                     </Border>
                 </Grid>
@@ -148,59 +157,39 @@
 
 
             <Border Grid.Row="2"
-                    Padding="10"
-                    Margin="10"
+                    Padding="20"
+                    Margin="24,24,24,0"
+                    CornerRadius="16"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Top">
                 <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-
-                    <Border BorderThickness="0,0,1,0"
-                            BorderBrush="#f7b2b2">
-                        <StackPanel Grid.Column="0"
-                                HorizontalAlignment="Stretch">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="From"
-                                           Style="{StaticResource TextBlockDescriptorStyle}"/>
-                                <TextBlock Text="{Binding From}"
-                                           Style="{StaticResource TextBlockStyle}"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="To"
-                                           Style="{StaticResource TextBlockDescriptorStyle}"/>
-                                <TextBlock Text="{Binding To}"
-                                           Style="{StaticResource TextBlockStyle}"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Transportation"
-                                           Style="{StaticResource TextBlockDescriptorStyle}"/>
-                                <TextBlock Text="{Binding TransportType}"
-                                           Style="{StaticResource TextBlockStyle}"/>
-                            </StackPanel>
-                        </StackPanel>
-                    </Border>
-
-                    <StackPanel Grid.Column="1"
-                                HorizontalAlignment="Stretch">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Distance"
-                                       Style="{StaticResource TextBlockDescriptorStyle}"/>
-                            <TextBlock Text="{Binding Distance}"
-                                       Style="{StaticResource TextBlockStyle}"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Estimated Time"
-                                       Style="{StaticResource TextBlockDescriptorStyle}"/>
-                            <TextBlock Text="{Binding EstimatedTime}"
-                                       Style="{StaticResource TextBlockStyle}"/>
-                        </StackPanel>
-                    </StackPanel>
+                    <!-- Left column -->
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="From" Style="{StaticResource TextBlockDescriptorStyle}" Margin="0,0,8,0"/>
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding From}" Style="{StaticResource TextBlockStyle}" Margin="0,0,16,0"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="To" Style="{StaticResource TextBlockDescriptorStyle}" Margin="0,0,8,0"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding To}" Style="{StaticResource TextBlockStyle}" Margin="0,0,16,0"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Transportation" Style="{StaticResource TextBlockDescriptorStyle}" Margin="0,0,8,0"/>
+                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding TransportType}" Style="{StaticResource TextBlockStyle}" Margin="0,0,16,0"/>
+                    <!-- Right column -->
+                    <TextBlock Grid.Row="0" Grid.Column="2" Text="Distance" Style="{StaticResource TextBlockDescriptorStyle}" Margin="0,0,8,0"/>
+                    <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding Distance}" Style="{StaticResource TextBlockStyle}" Margin="0,0,0,0"/>
+                    <TextBlock Grid.Row="1" Grid.Column="2" Text="Estimated Time" Style="{StaticResource TextBlockDescriptorStyle}" Margin="0,0,8,0"/>
+                    <TextBlock Grid.Row="1" Grid.Column="3" Text="{Binding EstimatedTime}" Style="{StaticResource TextBlockStyle}" Margin="0,0,0,0"/>
                 </Grid>
             </Border>
-            
         </Grid>
     </Border>
 </UserControl>
