@@ -8,6 +8,6 @@ namespace TourPlanner.Models.Configuration
 {
     public class DatabaseConfig
     {
-        public required string ConnectionString { get; set; }
+        public required string ConnectionString { get; set; } = string.Empty;
     }
 }

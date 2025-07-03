@@ -14,14 +14,22 @@ namespace TourPlanner.DAL.Data
                 .AddJsonFile("appsettings.json", false, false)
                 .Build();
 
-            //  one connection string
             DatabaseConfig databaseConfig = config.GetSection("Database").Get<DatabaseConfig>();
+            
+            if (databaseConfig == null)
+            {
+                throw new InvalidOperationException("Connection string is missing or empty in [appsettings.json].");
+            }
 
             string connectionString = databaseConfig.ConnectionString;
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                throw new InvalidOperationException("Connection string is missing or empty in [appsettings.json].");
+            }
 
-            var options = new DbContextOptionsBuilder<TourPlannerDbContext>()
-                .UseNpgsql(connectionString)
-                .Options;
+            DbContextOptions<TourPlannerDbContext> options = new DbContextOptionsBuilder<TourPlannerDbContext>()
+                    .UseNpgsql(connectionString)
+                    .Options;
 
             return new TourPlannerDbContext(options);
         }

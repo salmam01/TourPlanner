@@ -16,6 +16,8 @@ namespace TourPlanner.UI.Events
             Edit,
             Export,
             Delete,
+            Edited,
+            Deleted,
             MapUpdated
         }
         public EventType Type { get; }

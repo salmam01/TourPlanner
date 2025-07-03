@@ -84,11 +84,12 @@ public partial class App : Application
         services.AddSingleton<CreateTourLogViewModel>();
         services.AddSingleton<TourLogListViewModel>();
 
-        //  Database
+        //  Add DbContext
         services.AddDbContext<TourPlannerDbContext>(options =>
         {
             options.UseNpgsql(databaseConfig.ConnectionString);
         });
+
         services.AddScoped<ITourRepository, TourRepository>();
         services.AddScoped<ITourLogRepository, TourLogRepository>();
         services.AddScoped<ITourAttributesRepository, TourAttributesRepository>();
@@ -124,6 +125,12 @@ public partial class App : Application
 
     protected override void OnStartup(StartupEventArgs e)
     {
+        //  Create the Database based on Migrations
+        using (IServiceScope scope = _serviceProvider.CreateScope())
+        {
+            scope.ServiceProvider.GetRequiredService<TourPlannerDbContext>().Database.Migrate();
+        }
+
         MainWindow = _serviceProvider.GetRequiredService<MainWindow>();
         MainWindow.Show();
         base.OnStartup(e);
