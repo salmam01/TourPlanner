@@ -178,9 +178,9 @@
                     </Grid.ColumnDefinitions>
                     <!-- Left column -->
                     <TextBlock Grid.Row="0" Grid.Column="0" Text="From" Style="{StaticResource TextBlockDescriptorStyle}" Margin="0,0,8,0"/>
-                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding From}" Style="{StaticResource TextBlockStyle}" Margin="0,0,16,0"/>
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding From}" Style="{StaticResource TextBlockStyle}" Margin="0,0,16,0" TextWrapping="Wrap" MaxWidth="400"/>
                     <TextBlock Grid.Row="1" Grid.Column="0" Text="To" Style="{StaticResource TextBlockDescriptorStyle}" Margin="0,0,8,0"/>
-                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding To}" Style="{StaticResource TextBlockStyle}" Margin="0,0,16,0"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding To}" Style="{StaticResource TextBlockStyle}" Margin="0,0,16,0" TextWrapping="Wrap" MaxWidth="400"/>
                     <TextBlock Grid.Row="2" Grid.Column="0" Text="Transportation" Style="{StaticResource TextBlockDescriptorStyle}" Margin="0,0,8,0"/>
                     <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding TransportType}" Style="{StaticResource TextBlockStyle}" Margin="0,0,16,0"/>
                     <!-- Right column -->
