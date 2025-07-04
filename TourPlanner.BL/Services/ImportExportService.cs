@@ -51,40 +51,43 @@ namespace TourPlanner.BL.Services
         {
             try
             {
+                List<Tour> tourList = tours.ToList();
+                int titleRow = 1;
+                int dataRow = 2;
+
                 using (XLWorkbook workbook = new XLWorkbook())
                 {
                     // Tours sheet
                     IXLWorksheet toursSheet = workbook.Worksheets.Add("Tours");
-                    toursSheet.Cell(1, 1).Value = "Id";
-                    toursSheet.Cell(1, 2).Value = "Name";
-                    toursSheet.Cell(1, 3).Value = "Date";
-                    toursSheet.Cell(1, 4).Value = "Description";
-                    toursSheet.Cell(1, 5).Value = "From";
-                    toursSheet.Cell(1, 6).Value = "To";
-                    toursSheet.Cell(1, 7).Value = "Transport Type";
-                    toursSheet.Cell(1, 8).Value = "Distance";
-                    toursSheet.Cell(1, 9).Value = "Estimated Time";
-                    toursSheet.Cell(1, 10).Value = "Logs Count";
-                    int tourRow = 2;
+                    toursSheet.Cell(titleRow, 1).Value = "ID";
+                    toursSheet.Cell(titleRow, 2).Value = "Name";
+                    toursSheet.Cell(titleRow, 3).Value = "Date";
+                    toursSheet.Cell(titleRow, 4).Value = "Description";
+                    toursSheet.Cell(titleRow, 5).Value = "From";
+                    toursSheet.Cell(titleRow, 6).Value = "To";
+                    toursSheet.Cell(titleRow, 7).Value = "Transport Type";
+                    toursSheet.Cell(titleRow, 8).Value = "Distance";
+                    toursSheet.Cell(titleRow, 9).Value = "Estimated Time";
+                    toursSheet.Cell(titleRow, 10).Value = "Logs Count";
 
-                    List<Tour> tourList = tours.ToList();
                     foreach (Tour tour in tourList)
                     {
-                        toursSheet.Cell(tourRow, 1).Value = tour.Id.ToString();
-                        toursSheet.Cell(tourRow, 2).Value = tour.Name ?? "";
-                        var dateCell = toursSheet.Cell(tourRow, 3);
+                        toursSheet.Cell(dataRow, 1).Value = tour.Id.ToString();
+                        toursSheet.Cell(dataRow, 2).Value = tour.Name ?? "";
+                        var dateCell = toursSheet.Cell(dataRow, 3);
                         dateCell.Value = tour.Date;
                         dateCell.Style.NumberFormat.Format = "DD.MM.YYYY";
                         dateCell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
-                        toursSheet.Cell(tourRow, 4).Value = tour.Description ?? "";
-                        toursSheet.Cell(tourRow, 5).Value = tour.From ?? "";
-                        toursSheet.Cell(tourRow, 6).Value = tour.To ?? "";
-                        toursSheet.Cell(tourRow, 7).Value = tour.TransportType ?? "";
-                        toursSheet.Cell(tourRow, 8).Value = tour.Distance;
-                        toursSheet.Cell(tourRow, 9).Value = tour.EstimatedTime.ToString();
-                        toursSheet.Cell(tourRow, 10).Value = tour.TourLogs?.Count ?? 0;
-                        tourRow++;
+                        toursSheet.Cell(dataRow, 4).Value = tour.Description ?? "";
+                        toursSheet.Cell(dataRow, 5).Value = tour.From ?? "";
+                        toursSheet.Cell(dataRow, 6).Value = tour.To ?? "";
+                        toursSheet.Cell(dataRow, 7).Value = tour.TransportType ?? "";
+                        toursSheet.Cell(dataRow, 8).Value = tour.Distance;
+                        toursSheet.Cell(dataRow, 9).Value = tour.EstimatedTime.ToString();
+                        toursSheet.Cell(dataRow, 10).Value = tour.TourLogs?.Count ?? 0;
+                        dataRow++;
                     }
+                    dataRow = 2;
 
                     // Set column widths
                     toursSheet.Column(1).Width = 36; // Id (Id columns are 36 characters wide (for GUIDs))
@@ -100,37 +103,40 @@ namespace TourPlanner.BL.Services
 
                     //  Attributes Sheet
                     IXLWorksheet attributesSheet = workbook.Worksheets.Add("Attributes");
-                    attributesSheet.Cell(1, 1).Value = "Tour Id";
-                    attributesSheet.Cell(1, 2).Value = "Popularity";
-                    attributesSheet.Cell(1, 3).Value = "Child Friendly";
+                    attributesSheet.Cell(titleRow, 1).Value = "Tour ID";
+                    attributesSheet.Cell(titleRow, 2).Value = "Popularity";
+                    attributesSheet.Cell(titleRow, 3).Value = "Child Friendly";
+                    attributesSheet.Cell(titleRow, 4).Value = "Search Ranking";
 
-                    int attributesRow = 2;
                     foreach (Tour tour in tourList)
                     {
                         if (tour.TourAttributes == null)
                             continue;
 
-                        attributesSheet.Cell(attributesRow, 1).Value = tour.TourAttributes.Id.ToString();
-                        attributesSheet.Cell(attributesRow, 2).Value = tour.TourAttributes.Popularity.ToString();
-                        attributesSheet.Cell(attributesRow, 3).Value = tour.TourAttributes.ChildFriendliness ? "Yes" : "No";
+                        attributesSheet.Cell(dataRow, 1).Value = tour.TourAttributes.Id.ToString();
+                        attributesSheet.Cell(dataRow, 2).Value = tour.TourAttributes.Popularity.ToString();
+                        attributesSheet.Cell(dataRow, 3).Value = tour.TourAttributes.ChildFriendliness ? "Yes" : "No";
+                        attributesSheet.Cell(dataRow, 4).Value = tour.TourAttributes.SearchAlgorithmRanking.ToString();
+                        dataRow++;
                     }
+                    dataRow = 2;
 
                     //  Set column widths for Attributes Sheet
                     attributesSheet.Column(1).Width = 36;
                     attributesSheet.Column(2).Width = 12;
                     attributesSheet.Column(3).Width = 20;
+                    attributesSheet.Column(4).Width = 12;
 
                     //  TourLogs Sheet
                     IXLWorksheet logsSheet = workbook.Worksheets.Add("Logs");
-                    logsSheet.Cell(1, 1).Value = "Id";
-                    logsSheet.Cell(1, 2).Value = "Tour Id";
-                    logsSheet.Cell(1, 3).Value = "Date";
-                    logsSheet.Cell(1, 4).Value = "Difficulty";
-                    logsSheet.Cell(1, 5).Value = "Rating";
-                    logsSheet.Cell(1, 6).Value = "Comment";
-                    logsSheet.Cell(1, 7).Value = "Total Distance";
-                    logsSheet.Cell(1, 8).Value = "Total Time";
-                    int logRow = 2;
+                    logsSheet.Cell(titleRow, 1).Value = "ID";
+                    logsSheet.Cell(titleRow, 2).Value = "Tour ID";
+                    logsSheet.Cell(titleRow, 3).Value = "Date";
+                    logsSheet.Cell(titleRow, 4).Value = "Difficulty";
+                    logsSheet.Cell(titleRow, 5).Value = "Rating";
+                    logsSheet.Cell(titleRow, 6).Value = "Comment";
+                    logsSheet.Cell(titleRow, 7).Value = "Total Distance";
+                    logsSheet.Cell(titleRow, 8).Value = "Total Time";
 
                     int totalLogs = 0;
                     foreach (Tour tour in tourList)
@@ -140,18 +146,18 @@ namespace TourPlanner.BL.Services
 
                         foreach (TourLog log in tour.TourLogs)
                         {
-                            logsSheet.Cell(logRow, 1).Value = log.Id.ToString();
-                            logsSheet.Cell(logRow, 2).Value = tour.Id.ToString();
-                            var dateCell = logsSheet.Cell(logRow, 3);
+                            logsSheet.Cell(dataRow, 1).Value = log.Id.ToString();
+                            logsSheet.Cell(dataRow, 2).Value = tour.Id.ToString();
+                            var dateCell = logsSheet.Cell(dataRow, 3);
                             dateCell.Value = log.Date;
                             dateCell.Style.NumberFormat.Format = "DD.MM.YYYY";
                             dateCell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
-                            logsSheet.Cell(logRow, 4).Value = log.Difficulty;
-                            logsSheet.Cell(logRow, 5).Value = log.Rating;
-                            logsSheet.Cell(logRow, 6).Value = log.Comment ?? "";
-                            logsSheet.Cell(logRow, 7).Value = log.TotalDistance;
-                            logsSheet.Cell(logRow, 8).Value = log.TotalTime.ToString();
-                            logRow++;
+                            logsSheet.Cell(dataRow, 4).Value = log.Difficulty;
+                            logsSheet.Cell(dataRow, 5).Value = log.Rating;
+                            logsSheet.Cell(dataRow, 6).Value = log.Comment ?? "";
+                            logsSheet.Cell(dataRow, 7).Value = log.TotalDistance;
+                            logsSheet.Cell(dataRow, 8).Value = log.TotalTime.ToString();
+                            dataRow++;
                             totalLogs++;
                         }
                     }
@@ -223,97 +229,101 @@ namespace TourPlanner.BL.Services
         {
             try {
                 List<Tour> tours = new List<Tour>();
-                Dictionary<Guid, Tour> tourMap = new Dictionary<Guid, Tour>();
 
                 using (XLWorkbook workbook = new XLWorkbook(filePath))
                 {
                     // Read Tours sheet
-                    IXLWorksheet? toursSheet = workbook.Worksheet("Tours");
-                    // skip header
-                    foreach (var row in toursSheet.RowsUsed().Skip(1))
+                    if (!workbook.Worksheets.Contains("Tours") || !workbook.Worksheets.Contains("Attributes") || !workbook.Worksheets.Contains("Logs")) 
                     {
-                        Guid tourId = Guid.NewGuid();
-                        Guid.TryParse(row.Cell(1).GetString(), out tourId);
+                        _logger.LogWarning("Excel file is missing required sheet.");
+                        return new List<Tour>();
+                    }
+
+                    IXLWorksheet toursSheet = workbook.Worksheet("Tours");
+                    if (toursSheet.RowCount() <= 0)
+                    {
+                        _logger.LogWarning("No tour data found in 'Tours' sheet.");
+                        return new List<Tour>();
+                    }
+
+                    foreach (IXLRow row in toursSheet.RowsUsed().Skip(1))
+                    {
+                        Guid oldTourId = Guid.TryParse(row.Cell(1).GetString(), out Guid tempTourId) 
+                            ? tempTourId 
+                            : Guid.NewGuid();
+
                         Tour tour = new Tour
                         {
-                            Id = tourId,
+                            Id = Guid.NewGuid(),
                             Name = row.Cell(2).GetString(),
-                            Date = DateTime.TryParse(row.Cell(3).GetString(), out var date) ? DateTime.SpecifyKind(date, DateTimeKind.Utc) : DateTime.UtcNow,
+                            Date = DateTime.TryParse(row.Cell(3).GetString(), out DateTime date) 
+                                ? DateTime.SpecifyKind(date, DateTimeKind.Utc) 
+                                : DateTime.UtcNow,
                             Description = row.Cell(4).GetString(),
                             From = row.Cell(5).GetString(),
                             To = row.Cell(6).GetString(),
                             TransportType = row.Cell(7).GetString(),
-                            Distance = double.TryParse(row.Cell(8).GetString(), out var dist) ? dist : 0,
-                            EstimatedTime = TimeSpan.TryParse(row.Cell(9).GetString(), out var time) ? time : TimeSpan.Zero,
+                            Distance = row.Cell(8).GetValue<double>(),
+                            EstimatedTime = TimeSpan.TryParse(row.Cell(9).GetString(), out TimeSpan time) ? time : TimeSpan.Zero,
                             TourLogs = new List<TourLog>()
                         };
 
-                        // Initialize TourAttributes
-                        tour.TourAttributes = new TourAttributes
+                        IXLWorksheet attributesSheet = workbook.Worksheet("Attributes");
+                        foreach (IXLRow attributesRow in attributesSheet.RowsUsed().Skip(1))
                         {
-                            Id = tour.Id,
-                            Popularity = 0,
-                            ChildFriendliness = false,
-                            SearchAlgorithmRanking = 0
-                        };
+                            Guid attributesTourId = Guid.TryParse(attributesRow.Cell(1).GetString(), out Guid tempAttributesId) 
+                                ? tempAttributesId 
+                                : Guid.NewGuid();
+                            if (attributesTourId == oldTourId)
+                            {
+                                tour.TourAttributes = new TourAttributes
+                                {
+                                    Id = tour.Id,
+                                    Popularity = attributesRow.Cell(2).GetValue<int>(),
+                                    ChildFriendliness = attributesRow.Cell(3).GetString().Contains("Yes") ? true : false,
+                                    SearchAlgorithmRanking = attributesRow.Cell(4).GetValue<double>(),
+                                };
+                                break;
+                            }
+                        }
 
+                        // Read TourLogs sheet
+                        int totalTourLogs = row.Cell(10).GetValue<int>();
+                        IXLWorksheet logsSheet = workbook.Worksheet("Logs");
+                        if (totalTourLogs > 0)
+                        {
+                            // skip header
+                            foreach (IXLRow logRow in logsSheet.RowsUsed().Skip(1))
+                            {
+                                Guid logsTourId = Guid.TryParse(logRow.Cell(2).GetString(), out Guid tempLogsId)
+                                    ? tempLogsId
+                                    : Guid.NewGuid();
+
+                                if (logsTourId == oldTourId)
+                                {
+                                    TourLog log = new TourLog
+                                    {
+                                        Id = Guid.NewGuid(),
+                                        TourId = tour.Id,
+                                        Date = DateTime.TryParse(logRow.Cell(3).GetString(), out DateTime logDate)
+                                            ? DateTime.SpecifyKind(logDate, DateTimeKind.Utc)
+                                            : DateTime.UtcNow,
+                                        Difficulty = logRow.Cell(4).GetValue<int>(),
+                                        Rating = logRow.Cell(5).GetValue<double>(),
+                                        Comment = logRow.Cell(6).GetString(),
+                                        TotalDistance = logRow.Cell(7).GetValue<double>(),
+                                        TotalTime = logRow.Cell(8).GetValue<TimeSpan>(),
+                                        Tour = tour
+                                    };
+
+                                    tour.TourLogs.Add(log);
+                                }
+                            }
+                        }
                         tours.Add(tour);
-                        tourMap[tour.Id] = tour;
                     }
-
-                    // Read TourLogs sheet
-                    int totalLogs = 0;
-                    if (workbook.Worksheets.Contains("TourLogs"))
-                    {
-                        IXLWorksheet? logsSheet = workbook.Worksheet("TourLogs");
-                        // skip header
-                        foreach (var row in logsSheet.RowsUsed().Skip(1))
-                        {
-                            Guid logId = Guid.NewGuid();
-                            Guid.TryParse(row.Cell(1).GetString(), out logId);
-                            Guid parentTourId = Guid.NewGuid();
-                            Guid.TryParse(row.Cell(2).GetString(), out parentTourId);
-
-                            var log = new TourLog
-                            {
-                                Id = logId,
-                                TourId = parentTourId,
-                                Date = DateTime.TryParse(row.Cell(3).GetString(), out var date) ? DateTime.SpecifyKind(date, DateTimeKind.Utc) : DateTime.UtcNow,
-                                Difficulty = int.TryParse(row.Cell(4).GetString(), out var diff) ? diff : 1,
-                                Rating = double.TryParse(row.Cell(5).GetString(), out var rating) ? rating : 1.0,
-                                Comment = row.Cell(6).GetString(),
-                                TotalDistance = double.TryParse(row.Cell(7).GetString(), out var dist) ? dist : 0,
-                                TotalTime = TimeSpan.TryParse(row.Cell(8).GetString(), out var ttime) ? ttime : TimeSpan.Zero
-                            };
-
-                            if (tourMap.TryGetValue(parentTourId, out var parentTour))
-                            {
-                                parentTour.TourLogs.Add(log);
-                                totalLogs++;
-                            }
-                            else
-                            {
-                                _logger.LogWarning("TourLog {LogId} references non-existent Tour {TourId}", logId, parentTourId);
-                            }
-                        }
-                    }
-
-                    // Recalculate TourAttributes for all tours
-                    foreach (var tour in tours)
-                    {
-                        if (tour.TourLogs.Any())
-                        {
-                            tour.TourAttributes.Popularity = tour.TourLogs.Count;
-                            tour.TourAttributes.ChildFriendliness = tour.TourLogs.All(log => log.Difficulty <= 2);
-                            tour.TourAttributes.SearchAlgorithmRanking = tour.TourAttributes.Popularity / 100.0;
-                            if (tour.TourAttributes.ChildFriendliness)
-                                tour.TourAttributes.SearchAlgorithmRanking *= 1.5;
-                            tour.TourAttributes.SearchAlgorithmRanking = Math.Min(tour.TourAttributes.SearchAlgorithmRanking, 1.0);
-                        }
-                    }
-
-                    _logger.LogInformation("Imported {TourCount} tours and {LogCount} logs from Excel: {FilePath}", tours.Count, totalLogs, filePath);
                 }
+                _logger.LogInformation("Imported {TourCount} tours from Excel: {FilePath}", tours.Count, filePath);
                 return tours;
             }
             catch (Exception ex) {
