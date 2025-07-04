@@ -286,7 +286,7 @@ namespace TourPlanner.UI.ViewModels
             }
         }
 
-        private void GenerateTourReport()
+        private async void GenerateTourReport()
         {
             if (_selectedTour == null)
             {
@@ -305,15 +305,16 @@ namespace TourPlanner.UI.ViewModels
 
                 if (saveFileDialog.ShowDialog() == true)
                 {
-                    _reportGenerationService.GenerateTourReport(_selectedTour, saveFileDialog.FileName);
-                    MessageBox.Show("Tour report generated successfully.", "Export Result", MessageBoxButton.OK, MessageBoxImage.Information);
-
+                    var result = await _reportGenerationService.GenerateTourReport(_selectedTour, saveFileDialog.FileName);
+                    if (result.Code == Result.ResultCode.Success)
+                        MessageBox.Show("Tour report generated successfully.", "Export Result", MessageBoxButton.OK, MessageBoxImage.Information);
+                    else
+                        MessageBox.Show($"Failed to generate tour report: {result.Code}", "Report Generation Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Failed to generate tour report.\nDetails: {ex.Message}", "Report Generation Error", MessageBoxButton.OK, MessageBoxImage.Error);
-
             }
         }
 

@@ -10,6 +10,12 @@ using iText.Layout.Properties;
 using Microsoft.Extensions.Logging;
 using TourPlanner.BL.Utils;
 using TourPlanner.Models.Entities;
+using System.IO;
+using System.Threading.Tasks;
+using TourPlanner.BL.API;
+using TourPlanner.BL.Utils.DTO;
+using Microsoft.Playwright; 
+using iText.IO.Image;
 
 namespace TourPlanner.BL.Services
 {
@@ -17,16 +23,19 @@ namespace TourPlanner.BL.Services
     {
         private readonly ILogger<ReportGenerationService> _logger;
         private readonly TourAttributesService _tourAttributesService;
+        private readonly OpenRouteService _openRouteService;
 
         public ReportGenerationService(
             ILogger<ReportGenerationService> logger,
-            TourAttributesService tourAttributesService)
+            TourAttributesService tourAttributesService,
+            OpenRouteService openRouteService)
         {
             _logger = logger;
             _tourAttributesService = tourAttributesService;
+            _openRouteService = openRouteService;
         }
 
-        public Result GenerateTourReport(Tour tour, string filePath)
+        public async Task<Result> GenerateTourReport(Tour tour, string filePath)
         {
             try
             {
@@ -59,6 +68,42 @@ namespace TourPlanner.BL.Services
 
                 document.Add(tourDetails);
                 document.Add(new Paragraph("\n"));
+
+                // Add map image
+                try
+                {
+                    var mapImagePath = await GenerateMapImage(tour);
+                    _logger.LogInformation($"Map image path: {mapImagePath}");
+                    if (File.Exists(mapImagePath))
+                    {
+                        Paragraph mapTitle = new Paragraph("Route Map")
+                            .SetTextAlignment(TextAlignment.CENTER)
+                            .SetFontSize(16)
+                            .SetFont(PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA_BOLD));
+                        document.Add(mapTitle);
+                        document.Add(new Paragraph("\n"));
+
+                        ImageData imageData = ImageDataFactory.Create(mapImagePath);
+                        Image image = new Image(imageData)
+                            .SetWidth(UnitValue.CreatePercentValue(80))
+                            .SetHorizontalAlignment(HorizontalAlignment.CENTER);
+                        document.Add(image);
+                        document.Add(new Paragraph("\n"));
+
+                        // Clean up temporary image file
+                        File.Delete(mapImagePath);
+                    }
+                    else
+                    {
+                        _logger.LogWarning($"Map image file does not exist: {mapImagePath}");
+                        document.Add(new Paragraph($"Error: Image : {mapImagePath}"));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    document.Add(new Paragraph($"Error: Image-Paste: {ex.Message}"));
+                    _logger.LogWarning(ex, "Failed to add map image to report for tour {TourId}", tour.Id);
+                }
 
                 // Add tour logs
                 if (tour.TourLogs != null && tour.TourLogs.Any())
@@ -201,6 +246,69 @@ namespace TourPlanner.BL.Services
             foreach (var value in values)
             {
                 table.AddCell(new Cell().Add(new Paragraph(value)));
+            }
+        }
+
+        private string FindLeafletDirectory()
+        {
+            var dir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
+            while (dir != null)
+            {
+                var leaflet = Path.Combine(dir.FullName, "TourPlanner.UI", "Leaflet");
+                if (Directory.Exists(leaflet) && File.Exists(Path.Combine(leaflet, "map.html")))
+                    return leaflet;
+                leaflet = Path.Combine(dir.FullName, "Leaflet");
+                if (Directory.Exists(leaflet) && File.Exists(Path.Combine(leaflet, "map.html")))
+                    return leaflet;
+                dir = dir.Parent;
+            }
+            throw new DirectoryNotFoundException("Leaflet directory with map.html not found.");
+        }
+
+        private async Task<string> GenerateMapImage(Tour tour)
+        {
+            try
+            {
+                // 1. fetch MapGeometry 
+                MapGeometry mapGeometry = await _openRouteService.GetMapGeometry(tour);
+                if (mapGeometry == null || mapGeometry.WayPoints == null || !mapGeometry.WayPoints.Any())
+                    throw new InvalidOperationException("No map geometry available for tour");
+
+                // 2. create directions.js  (like LeafletHelper)
+                string leafletDir = FindLeafletDirectory();
+                string directionsPath = Path.Combine(leafletDir, "directions.js");
+                string mapHtmlPath = Path.Combine(leafletDir, "map.html");
+                var directionsObject = new {
+                    type = "Feature",
+                    geometry = new {
+                        type = "LineString",
+                        coordinates = mapGeometry.WayPoints.Select(wp => new[] { wp.Longitude, wp.Latitude }).ToArray()
+                    },
+                    bbox = new[] { mapGeometry.Bbox.MinLongitude, mapGeometry.Bbox.MinLatitude, mapGeometry.Bbox.MaxLongitude, mapGeometry.Bbox.MaxLatitude },
+                    fromAddress = tour.From,
+                    toAddress = tour.To
+                };
+                string directionsJson = $"var directions = {System.Text.Json.JsonSerializer.Serialize(directionsObject)};";
+                File.WriteAllText(directionsPath, directionsJson);
+
+                // 3. HTML
+                string tempPngPath = Path.GetTempFileName() + ".png";
+
+                // 4. Playwright Screenshot
+                using var playwright = await Microsoft.Playwright.Playwright.CreateAsync();
+                var browser = await playwright.Chromium.LaunchAsync(new Microsoft.Playwright.BrowserTypeLaunchOptions { Headless = true });
+                var page = await browser.NewPageAsync(new Microsoft.Playwright.BrowserNewPageOptions { ViewportSize = new Microsoft.Playwright.ViewportSize { Width = 800, Height = 600 } });
+                await page.GotoAsync($"file:///{mapHtmlPath.Replace("\\", "/")}");
+                await page.WaitForTimeoutAsync(2000); // Image loading: wait 2 seconds; 
+                await page.ScreenshotAsync(new Microsoft.Playwright.PageScreenshotOptions { Path = tempPngPath });
+                await browser.CloseAsync();
+
+                return tempPngPath;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to generate map image for tour {TourId}", tour.Id);
+                throw;
             }
         }
     }
