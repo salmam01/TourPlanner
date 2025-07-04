@@ -11,13 +11,16 @@ namespace TourPlanner.UI.Events
     {
         public enum EventType
         {
-            Select,
-            Create,
-            Edit,
-            Export,
-            Delete,
-            Edited,
-            Deleted,
+            SelectTour,
+            CreateTour,
+            EditTour,
+            ExportTour,
+            DeleteTour,
+            TourEdited,
+            TourDeleted,
+            AllToursDeleted,
+            LogCreated,
+            LogDeleted,
             MapUpdated
         }
         public EventType Type { get; }

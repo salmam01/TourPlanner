@@ -21,7 +21,7 @@ namespace TourPlanner.UI.ViewModels
     {
         private readonly TourService _tourService;
         private readonly TourLogService _tourLogService; 
-        private readonly TourImportExportService _importExportService;
+        private readonly ImportExportService _importExportService;
         private readonly ReportGenerationService _reportGenerationService;
         private readonly OpenRouteService _openRouteService;
 
@@ -35,11 +35,17 @@ namespace TourPlanner.UI.ViewModels
         public ICommand CreateTourCommand => new RelayCommand(
             execute => CreateTour()
         );
+        public ICommand ReloadCommand => new RelayCommand(
+            execute => ReloadList()
+        );
         public ICommand DeleteAllToursCommand => new RelayCommand(
             execute => DeleteAllTours()
         );
         public ICommand ImportToursCommand => new RelayCommand(
             execute => ImportTours()
+        );
+        public ICommand ExportAllToursCommand => new RelayCommand(
+            execute => ExportAllTours()
         );
         public ICommand GenerateTourReportCommand => new RelayCommand(
             _ => GenerateTourReport()
@@ -48,6 +54,7 @@ namespace TourPlanner.UI.ViewModels
             _ => GenerateSummaryReport()
         );
 
+       
         public TourManagementViewModel(
             CreateTourViewModel createTourViewModel,
             TourListViewModel tourListViewModel,
@@ -55,7 +62,7 @@ namespace TourPlanner.UI.ViewModels
             EventAggregator eventAggregator,
             TourService tourService,
             TourLogService tourLogService,
-            TourImportExportService tourImportExportService,
+            ImportExportService tourImportExportService,
             ReportGenerationService reportGenerationService,
             OpenRouteService openRouteService
         ) {
@@ -72,31 +79,36 @@ namespace TourPlanner.UI.ViewModels
 
             //  Events
             _createTourViewModel.TourCreated += OnTourCreated;
-            _createTourViewModel.TourUpdated += OnTourUpdated;
+            _createTourViewModel.TourUpdated += OnTourEdited;
             SearchBarViewModel.SearchParamsChanged += OnPerformSearch;
             _createTourViewModel.Cancelled += OnCancel;
 
             _eventAggregator.Subscribe<TourEvent>(e =>
             {
-                switch (e.Type)
-                {
-                    case TourEvent.EventType.Select:
-                        OnTourSelected(e.Tour);
-                        break;
-                    case TourEvent.EventType.Edit:
-                        OnUpdateTour();
-                        break;
-                    case TourEvent.EventType.Delete:
-                        OnDeleteTour();
-                        break;
-                    case TourEvent.EventType.Export:
-                        OnExportTours();
-                        break;
-                }
+                EventHandler(e);
             });
 
             //  Reload the tours on initialization
             TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
+        }
+
+        private void EventHandler(TourEvent tourEvent)
+        {
+            switch (tourEvent.Type)
+            {
+                case TourEvent.EventType.SelectTour:
+                    OnTourSelected(tourEvent.Tour);
+                    break;
+                case TourEvent.EventType.EditTour:
+                    OnEditTour();
+                    break;
+                case TourEvent.EventType.DeleteTour:
+                    OnDeleteTour();
+                    break;
+                case TourEvent.EventType.ExportTour:
+                    OnExportTour();
+                    break;
+            }
         }
 
         public void OnTourSelected(Tour tour)
@@ -106,12 +118,18 @@ namespace TourPlanner.UI.ViewModels
             TourListViewModel.SelectedTour = tour;
         }
 
+        public void ReloadList()
+        {
+            TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
+            _selectedTour = null;
+        }
+
         public void CreateTour()
         {
             _eventAggregator.Publish(new NavigationEvent(NavigationEvent.Destination.CreateTour));
         }
 
-        public void OnUpdateTour()
+        public void OnEditTour()
         {
             if (_selectedTour == null)
             {
@@ -143,8 +161,8 @@ namespace TourPlanner.UI.ViewModels
 
             if (result.Code == Result.ResultCode.Success)
             {
-                _eventAggregator.Publish(new TourEvent(TourEvent.EventType.Deleted));
-                TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
+                _eventAggregator.Publish(new TourEvent(TourEvent.EventType.TourDeleted));
+                ReloadList();
                 _selectedTour = null;
             }
             else
@@ -159,14 +177,14 @@ namespace TourPlanner.UI.ViewModels
             Result result = _tourService.CreateTour(tour);
 
             if (result.Code == Result.ResultCode.Success)
-                TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
+                ReloadList();
             else
                 ShowErrorMessage(result);
 
             _eventAggregator.Publish(new NavigationEvent(NavigationEvent.Destination.Home));
         }
 
-        public async void OnTourUpdated(object sender, Tour tour)
+        public async void OnTourEdited(object sender, Tour tour)
         {
             if (tour == null) return;
 
@@ -174,14 +192,14 @@ namespace TourPlanner.UI.ViewModels
             Result result = _tourService.UpdateTour(tour);
 
             if (result.Code == Result.ResultCode.Success)
-                TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
+                ReloadList();
             else
                 ShowErrorMessage(result);
 
             _selectedTour = tour;
             TourListViewModel.SelectedTour = tour;
             _eventAggregator.Publish(new NavigationEvent(NavigationEvent.Destination.Home));
-            _eventAggregator.Publish(new TourEvent(TourEvent.EventType.Edited));
+            _eventAggregator.Publish(new TourEvent(TourEvent.EventType.TourEdited));
         }
 
         public void DeleteAllTours()
@@ -198,7 +216,8 @@ namespace TourPlanner.UI.ViewModels
 
             if (result.Code == Result.ResultCode.Success)
             {
-                TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
+                _eventAggregator.Publish(new TourEvent(TourEvent.EventType.AllToursDeleted));
+                ReloadList();
                 _selectedTour = null;
             }
             else
@@ -208,15 +227,14 @@ namespace TourPlanner.UI.ViewModels
         public void OnPerformSearch(object sender, string searchText)
         {
             //  If the search bar is empty, show all tours again
-            if (string.IsNullOrEmpty(searchText)) 
-                TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
+            if (string.IsNullOrEmpty(searchText))
+                ReloadList();
             else
                 TourListViewModel.ReloadTours(
                     _tourService.SearchToursAndLogs(searchText, _tourLogService.SearchTourLogs(searchText))
                 );
         }
 
-        //  dont use magic strings, save as constants
         public void OnCancel(object sender, EventArgs e)
         {
             _eventAggregator.Publish(new NavigationEvent(NavigationEvent.Destination.Home));
@@ -224,79 +242,109 @@ namespace TourPlanner.UI.ViewModels
 
         private async void ImportTours()
         {
-            try
+            Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog
             {
-                var openFileDialog = new Microsoft.Win32.OpenFileDialog
+                Filter = "JSON files (*.json)|*.json|Excel files (*.xlsx)|*.xlsx",
+                Title = "Import Tour Data"
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                List<Tour> importedTours = new List<Tour>();
+                if (openFileDialog.FileName.EndsWith(".json"))
+                    importedTours = await _importExportService.ImportToursFromJsonAsync(openFileDialog.FileName);
+                if (openFileDialog.FileName.EndsWith(".xlsx"))
+                    importedTours = _importExportService.ImportTourFromExcel(openFileDialog.FileName);
+
+                if (importedTours.Count == 0)
                 {
-                    Filter = "JSON files (*.json)|*.json|Excel files (*.xlsx)|*.xlsx",
-                    Title = "Import Tour Data"
-                };
-
-                if (openFileDialog.ShowDialog() == true)
-                {
-                    List<Tour> importedTours = new List<Tour>();
-                    if (openFileDialog.FileName.EndsWith(".json"))
-                        importedTours = await _importExportService.ImportToursFromJsonAsync(openFileDialog.FileName);
-                    if (openFileDialog.FileName.EndsWith(".xlsx"))
-                        importedTours = _importExportService.ImportToursFromExcel(openFileDialog.FileName);
-
-                    if (importedTours.Count == 0)
-                    {
-                        MessageBox.Show("No tours found in the selected file.", "Import Result", MessageBoxButton.OK, MessageBoxImage.Warning);
-                        return;
-                    }
-
-                    foreach (var tour in importedTours)
-                    {
-                        _tourService.CreateTour(tour);
-                    }
-
-                    TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
-                    MessageBox.Show("Tours imported successfully.", "Import Result", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("No tours found in the selected file.", "Import Result", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
                 }
+
+                foreach (Tour tour in importedTours)
+                {
+                    _tourService.CreateTour(tour);
+                }
+
+                MessageBox.Show("Tours imported successfully.", "Import Result", MessageBoxButton.OK, MessageBoxImage.Information);
+                ReloadList();
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Failed to import tours.\nDetails: {ex.Message}", "Import Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            
+            //MessageBox.Show($"Failed to import tours.\nDetails: {ex.Message}", "Import Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        private async void OnExportTours()
+        private async void ExportAllTours()
         {
-            try
+            if (TourListViewModel.Tours == null || TourListViewModel.Tours.Count <= 0)
             {
-                var saveFileDialog = new Microsoft.Win32.SaveFileDialog
-                {
-                    Filter = "JSON files (*.json)|*.json|Excel files (*.xlsx)|*.xlsx",
-                    Title = "Export Tour Data",
-                    FileName = "TourExport"
-                };
-                if (saveFileDialog.ShowDialog() != true) return;
-                var tours = _tourService.GetAllTours();
-                if (saveFileDialog.FileName.EndsWith(".json"))
-                    await _importExportService.ExportToursToJsonAsync(tours, saveFileDialog.FileName);
-                if (saveFileDialog.FileName.EndsWith(".xlsx"))
-                    _importExportService.ExportToursToExcel(tours, saveFileDialog.FileName);
+                MessageBox.Show("There are no tours to export!");
+                return;
+            }
 
-                MessageBox.Show("Tours exported successfully.", "Export Result", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            catch (Exception ex)
+            Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog
             {
-                MessageBox.Show($"Failed to export tours.\nDetails: {ex.Message}", "Export Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Filter = "JSON files (*.json)|*.json|Excel files (*.xlsx)|*.xlsx",
+                Title = "Export All Tours",
+                FileName = "AllTours"
+            };
+            if (saveFileDialog.ShowDialog() != true) return;
+
+            Result result = new Result(Result.ResultCode.UnknownError);
+
+            List<Tour> tours = _tourService.GetAllTours().ToList();
+            if (saveFileDialog.FileName.EndsWith(".json"))
+                result = await _importExportService.ExportToursToJsonAsync(tours, saveFileDialog.FileName);
+            if (saveFileDialog.FileName.EndsWith(".xlsx"))
+                result = _importExportService.ExportToursToExcel(tours, saveFileDialog.FileName);
+
+            if (result.Code == Result.ResultCode.Success)
+                MessageBox.Show("Tours exported successfully.", "Export Result", MessageBoxButton.OK, MessageBoxImage.Information);
+            else
+                MessageBox.Show($"Failed to export tours.", "Export Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        private async void OnExportTour()
+        {
+            if (_selectedTour == null) 
+            {
+                MessageBox.Show("Please select a tour to export.");
+                return;
             }
+            
+            Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog
+            {
+                Filter = "JSON files (*.json)|*.json|Excel files (*.xlsx)|*.xlsx",
+                Title = "Export Tour Data",
+                FileName = $"{_selectedTour.Name}"
+            };
+            if (saveFileDialog.ShowDialog() != true) return;
+
+            Result result = new Result(Result.ResultCode.UnknownError);
+
+            if (saveFileDialog.FileName.EndsWith(".json"))
+                result = await _importExportService.ExportToursToJsonAsync(new List<Tour> { _selectedTour }, saveFileDialog.FileName);
+            else if (saveFileDialog.FileName.EndsWith(".xlsx"))
+                result = _importExportService.ExportToursToExcel(new List<Tour> { _selectedTour }, saveFileDialog.FileName);
+            
+            if (result.Code == Result.ResultCode.Success) 
+                MessageBox.Show("Tour exported successfully.", "Export Result", MessageBoxButton.OK, MessageBoxImage.Information);
+            else
+                MessageBox.Show($"Failed to export tour.", "Export Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            
         }
 
         private async void GenerateTourReport()
         {
-            if (_selectedTour == null)
-            {
-                MessageBox.Show("Please select a tour first.", "No Tour Selected", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
             try
             {
-                var saveFileDialog = new Microsoft.Win32.SaveFileDialog
+                if (_selectedTour == null)
+                {
+                    MessageBox.Show("Please select a tour first.", "No Tour Selected", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog
                 {
                     Filter = "PDF files (*.pdf)|*.pdf",
                     Title = "Save Tour Report",
@@ -305,7 +353,7 @@ namespace TourPlanner.UI.ViewModels
 
                 if (saveFileDialog.ShowDialog() == true)
                 {
-                    var result = await _reportGenerationService.GenerateTourReport(_selectedTour, saveFileDialog.FileName);
+                    Result result = await _reportGenerationService.GenerateTourReport(_selectedTour, saveFileDialog.FileName);
                     if (result.Code == Result.ResultCode.Success)
                         MessageBox.Show("Tour report generated successfully.", "Export Result", MessageBoxButton.OK, MessageBoxImage.Information);
                     else
@@ -322,7 +370,13 @@ namespace TourPlanner.UI.ViewModels
         {
             try
             {
-                var saveFileDialog = new Microsoft.Win32.SaveFileDialog
+                if (TourListViewModel.Tours == null || TourListViewModel.Tours.Count <= 0)
+                {
+                    MessageBox.Show("There are no tours to create a report for!");
+                    return;
+                }
+
+                Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog
                 {
                     Filter = "PDF files (*.pdf)|*.pdf",
                     Title = "Save Summary Report",
@@ -331,16 +385,13 @@ namespace TourPlanner.UI.ViewModels
 
                 if (saveFileDialog.ShowDialog() == true)
                 {
-                    var tours = _tourService.GetAllTours();
-                    _reportGenerationService.GenerateSummaryReport(tours, saveFileDialog.FileName);
+                    _reportGenerationService.GenerateSummaryReport(_tourService.GetAllTours(), saveFileDialog.FileName);
                     MessageBox.Show("Summary report generated successfully.", "Export Result", MessageBoxButton.OK, MessageBoxImage.Information);
-
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Failed to generate summary report.\nDetails: {ex.Message}", "Export Error", MessageBoxButton.OK, MessageBoxImage.Error);
-
             }
         }
 

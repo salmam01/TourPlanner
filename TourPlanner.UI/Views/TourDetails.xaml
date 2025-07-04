@@ -52,7 +52,7 @@
                         <Button Content="{materialDesign:PackIcon Kind=Export}"
                                 Style="{StaticResource ActionButtonStyle}"
                                 ToolTip="Export Tour"
-                                Command="{Binding ExportToursCommand}"/>
+                                Command="{Binding ExportTourCommand}"/>
                         
                         <Button Content="{materialDesign:PackIcon Kind=Delete}"
                                 Style="{StaticResource ActionButtonStyle}"

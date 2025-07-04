@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace TourPlanner.Models.Entities
 
@@ -22,6 +23,7 @@ namespace TourPlanner.Models.Entities
         public double TotalDistance { get; set; }
         public TimeSpan TotalTime { get; set; }
         public Guid TourId { get; set; }
+        [JsonIgnore]
         public Tour Tour { get; set; }
 
 

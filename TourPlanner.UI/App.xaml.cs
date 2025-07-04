@@ -98,7 +98,7 @@ public partial class App : Application
         services.AddSingleton<TourService>();
         services.AddSingleton<TourLogService>();
         services.AddSingleton<TourAttributesService>();
-        services.AddSingleton<TourImportExportService>();
+        services.AddSingleton<ImportExportService>();
         services.AddSingleton<ReportGenerationService>();
 
         //  API Services
