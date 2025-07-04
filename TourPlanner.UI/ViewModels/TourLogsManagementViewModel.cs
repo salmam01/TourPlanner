@@ -66,7 +66,7 @@ namespace TourPlanner.UI.ViewModels
             
             _eventAggregator.Subscribe<TourEvent>(e =>
             {
-                if (e.Type == TourEvent.EventType.Select)
+                if (e.Type == TourEvent.EventType.SelectTour)
                     OnTourSelected(e.Tour);
             });
 
@@ -80,8 +80,7 @@ namespace TourPlanner.UI.ViewModels
         {
             if (tour == null) return;
             _selectedTour = tour;
-            var tourLogs = _tourLogService.GetAllTourLogs(tour).ToList();
-            TourLogListViewModel.ReloadTourLogs(tourLogs);
+            TourLogListViewModel.ReloadTourLogs(_tourLogService.GetAllTourLogs(tour).ToList());
         }
 
         public void OnTourLogSelected(object sender, TourLog tourLog)
@@ -98,8 +97,8 @@ namespace TourPlanner.UI.ViewModels
             if (result.Code == Result.ResultCode.Success)
             {
                 _tourService.RecalculateTourAttributes(_selectedTour);
-                var tourLogs = _tourLogService.GetAllTourLogs(_selectedTour).ToList();
-                TourLogListViewModel.ReloadTourLogs(tourLogs);
+                _eventAggregator.Publish(new TourEvent(TourEvent.EventType.LogCreated, _selectedTour));
+                TourLogListViewModel.ReloadTourLogs(_tourLogService.GetAllTourLogs(_selectedTour).ToList());
             }
             else
                 ShowErrorMessage(result);
@@ -116,8 +115,7 @@ namespace TourPlanner.UI.ViewModels
             if (result.Code == Result.ResultCode.Success)
             {
                 _tourService.RecalculateTourAttributes(_selectedTour);
-                var tourLogs = _tourLogService.GetAllTourLogs(_selectedTour).ToList();
-                TourLogListViewModel.ReloadTourLogs(tourLogs);
+                TourLogListViewModel.ReloadTourLogs(_tourLogService.GetAllTourLogs(_selectedTour).ToList());
             }
             else
                 ShowErrorMessage(result);
@@ -159,7 +157,7 @@ namespace TourPlanner.UI.ViewModels
             if (deleteResult.Code == Result.ResultCode.Success)
             {
                 _tourService.RecalculateTourAttributes(_selectedTour);
-                var tourLogs = _tourLogService.GetAllTourLogs(_selectedTour).ToList();
+                List<TourLog> tourLogs = _tourLogService.GetAllTourLogs(_selectedTour).ToList();
                 TourLogListViewModel.ReloadTourLogs(tourLogs);
                 _selectedTourLog = null;
             }

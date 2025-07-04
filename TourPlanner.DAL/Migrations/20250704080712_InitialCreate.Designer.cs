@@ -13,7 +13,7 @@ using TourPlanner.DAL.Data;
 namespace TourPlanner.DAL.Migrations
 {
     [DbContext(typeof(TourPlannerDbContext))]
-    [Migration("20250702170444_InitialCreate")]
+    [Migration("20250704080712_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

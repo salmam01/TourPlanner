@@ -7,7 +7,8 @@ using TourPlanner.DAL.Data;
 
 namespace TourPlanner.DAL.Repositories.TourRepository;
 
-public class TourRepository : ITourRepository {
+public class TourRepository : ITourRepository 
+{
     private readonly TourPlannerDbContext _context;
 
     public TourRepository(TourPlannerDbContext context) {

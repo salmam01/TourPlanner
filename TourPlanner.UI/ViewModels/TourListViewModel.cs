@@ -19,7 +19,7 @@ public class TourListViewModel : BaseViewModel {
             if (_selectedTour == value) return;
             _selectedTour = value;
             OnPropertyChanged();
-            _eventAggregator.Publish(new TourEvent(TourEvent.EventType.Select, _selectedTour));
+            _eventAggregator.Publish(new TourEvent(TourEvent.EventType.SelectTour, _selectedTour));
         }
     }
 

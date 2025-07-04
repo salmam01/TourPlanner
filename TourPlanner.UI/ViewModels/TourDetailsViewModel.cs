@@ -19,7 +19,7 @@ namespace TourPlanner.UI.ViewModels
             execute => OnEditTour()
         );
 
-        public ICommand ExportToursCommand => new RelayCommand(
+        public ICommand ExportTourCommand => new RelayCommand(
             execute => OnExportTour()
         );
 
@@ -143,12 +143,7 @@ namespace TourPlanner.UI.ViewModels
 
             _eventAggregator.Subscribe<TourEvent>(e =>
             {
-                if (e.Type == TourEvent.EventType.Select)
-                    ShowTourDetails(e.Tour);
-                else if (e.Type == TourEvent.EventType.Edited)
-                    ShowTourDetails(e.Tour);
-                else if (e.Type == TourEvent.EventType.Deleted)
-                    SetDefaultValues();
+                EventHandler(e);
             });
         }
 
@@ -163,7 +158,7 @@ namespace TourPlanner.UI.ViewModels
             To = "";
             TransportType = "";
             Distance = "0 km";
-            EstimatedTime = $"{TimeSpan.Zero.ToString(@"hh\:mm")} h";
+            EstimatedTime = $"{TimeSpan.Zero.ToString(@"hh\:mm\:ss")} h";
 
             Popularity = 0;
             ChildFriendly = "No";
@@ -184,25 +179,47 @@ namespace TourPlanner.UI.ViewModels
 
             double distanceInKm = tour.Distance / 1000;
             Distance = $"{distanceInKm.ToString("F2")} km";
-            EstimatedTime = $"{tour.EstimatedTime.ToString(@"hh\:mm")} h";
+            EstimatedTime = $"{tour.EstimatedTime.ToString(@"hh\:mm\:ss")} h";
 
             Popularity = tour.TourAttributes.Popularity;
             ChildFriendly = tour.TourAttributes.ChildFriendliness ? "Yes" : "No";
         }
 
+        private void EventHandler(TourEvent tourEvent)
+        {
+            switch (tourEvent.Type)
+            {
+                case TourEvent.EventType.SelectTour:
+                    ShowTourDetails(tourEvent.Tour);
+                    break;
+                case TourEvent.EventType.TourEdited:
+                    ShowTourDetails(tourEvent.Tour);
+                    break;
+                case TourEvent.EventType.LogCreated:
+                    ShowTourDetails(tourEvent.Tour);
+                    break;
+                case TourEvent.EventType.DeleteTour:
+                    SetDefaultValues();
+                    break;
+                case TourEvent.EventType.AllToursDeleted:
+                    SetDefaultValues();
+                    break;
+            }
+        }
+
         private void OnEditTour()
         {
-            _eventAggregator.Publish(new TourEvent(TourEvent.EventType.Edit));
+            _eventAggregator.Publish(new TourEvent(TourEvent.EventType.EditTour));
         }
 
         private void OnExportTour()
         {
-            _eventAggregator.Publish(new TourEvent(TourEvent.EventType.Export));
+            _eventAggregator.Publish(new TourEvent(TourEvent.EventType.ExportTour));
         }
 
         private void OnDeleteTour()
         {
-            _eventAggregator.Publish(new TourEvent(TourEvent.EventType.Delete));
+            _eventAggregator.Publish(new TourEvent(TourEvent.EventType.DeleteTour));
         }
     }
 }

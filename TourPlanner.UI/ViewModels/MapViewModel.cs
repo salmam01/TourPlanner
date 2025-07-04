@@ -48,7 +48,7 @@ namespace TourPlanner.UI.ViewModels
 
             _eventAggregator.Subscribe<TourEvent>(e =>
             {
-                if (e.Type == TourEvent.EventType.Select)
+                if (e.Type == TourEvent.EventType.SelectTour)
                     OnTourSelected(e.Tour);
             });
         }

@@ -1,7 +1,10 @@
 ﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Bibliography;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using TourPlanner.BL.Utils;
 using TourPlanner.Models.Entities;
 
 /// <summary>
@@ -10,61 +13,44 @@ using TourPlanner.Models.Entities;
 
 namespace TourPlanner.BL.Services
 {
-    public class TourImportExportService
+    public class ImportExportService
     {
-        private readonly ILogger<TourImportExportService> _logger;
+        private readonly ILogger<ImportExportService> _logger;
+        private readonly JsonSerializerOptions _options = new JsonSerializerOptions
+        {
+            WriteIndented = true,
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            ReferenceHandler = ReferenceHandler.IgnoreCycles
+        };
 
-        public TourImportExportService(ILogger<TourImportExportService> logger)
+        public ImportExportService(ILogger<ImportExportService> logger)
         {
             _logger = logger;
         }
 
-        public async Task ExportToursToJsonAsync(IEnumerable<Tour> tours, string filePath)
+        public async Task<Result> ExportToursToJsonAsync(IEnumerable<Tour> tours, string filePath)
         {
-            try {
-                _logger.LogInformation("Exporting {Count} tours to JSON file: {FilePath}", tours?.Count() ?? 0, filePath);
-                JsonSerializerOptions options = new JsonSerializerOptions 
-                { 
-                    WriteIndented = true,
-                    ReferenceHandler = ReferenceHandler.Preserve
-                };
+            try
+            {
                 using (FileStream fs = File.Create(filePath))
                 {
-                    await JsonSerializer.SerializeAsync(fs, tours, options);
+                    await JsonSerializer.SerializeAsync(fs, tours, _options);
                 }
-                _logger.LogInformation("Tour export to JSON successful: {FilePath}", filePath);
+                _logger.LogInformation("Tour(s) export to JSON successful: {FilePath}", filePath);
+                return new Result(Result.ResultCode.Success);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 _logger.LogError(ex, "!Error exporting tours to JSON: {FilePath}", filePath);
-                throw;
+                return new Result(Result.ResultCode.UnknownError);
             }
         }
 
-        public async Task<List<Tour>> ImportToursFromJsonAsync(string filePath)
+        public Result ExportToursToExcel(IEnumerable<Tour> tours, string filePath)
         {
-            try {
-                _logger.LogInformation("Importing tours from JSON file: {FilePath}", filePath);
-                JsonSerializerOptions options = new JsonSerializerOptions 
-                { 
-                    ReferenceHandler = ReferenceHandler.Preserve
-                };
-                using (FileStream fs = File.OpenRead(filePath))
-                {
-                    List<Tour>? tours = await JsonSerializer.DeserializeAsync<List<Tour>>(fs, options);
-                    _logger.LogInformation("Imported {Count} tours from JSON: {FilePath}", tours?.Count ?? 0, filePath);
-                    return tours ?? new List<Tour>();
-                }
-            }
-            catch (Exception ex) {
-                _logger.LogError(ex, "Error importing tours from JSON: {FilePath}", filePath);
-                throw;
-            }
-        }
-
-        public void ExportToursToExcel(IEnumerable<Tour> tours, string filePath)
-        {
-            try {
-                _logger.LogInformation("Exporting {Count} tours to Excel file: {FilePath}", tours?.Count() ?? 0, filePath);
+            try
+            {
                 using (XLWorkbook workbook = new XLWorkbook())
                 {
                     // Tours sheet
@@ -75,14 +61,13 @@ namespace TourPlanner.BL.Services
                     toursSheet.Cell(1, 4).Value = "Description";
                     toursSheet.Cell(1, 5).Value = "From";
                     toursSheet.Cell(1, 6).Value = "To";
-                    toursSheet.Cell(1, 7).Value = "TransportType";
+                    toursSheet.Cell(1, 7).Value = "Transport Type";
                     toursSheet.Cell(1, 8).Value = "Distance";
-                    toursSheet.Cell(1, 9).Value = "EstimatedTime";
-                    toursSheet.Cell(1, 10).Value = "RouteInformation";
-                    toursSheet.Cell(1, 11).Value = "TourLogsCount";
+                    toursSheet.Cell(1, 9).Value = "Estimated Time";
+                    toursSheet.Cell(1, 10).Value = "Logs Count";
                     int tourRow = 2;
 
-                    var tourList = tours.ToList();
+                    List<Tour> tourList = tours.ToList();
                     foreach (Tour tour in tourList)
                     {
                         toursSheet.Cell(tourRow, 1).Value = tour.Id.ToString();
@@ -97,7 +82,7 @@ namespace TourPlanner.BL.Services
                         toursSheet.Cell(tourRow, 7).Value = tour.TransportType ?? "";
                         toursSheet.Cell(tourRow, 8).Value = tour.Distance;
                         toursSheet.Cell(tourRow, 9).Value = tour.EstimatedTime.ToString();
-                        toursSheet.Cell(tourRow, 11).Value = tour.TourLogs?.Count ?? 0;
+                        toursSheet.Cell(tourRow, 10).Value = tour.TourLogs?.Count ?? 0;
                         tourRow++;
                     }
 
@@ -105,25 +90,46 @@ namespace TourPlanner.BL.Services
                     toursSheet.Column(1).Width = 36; // Id (Id columns are 36 characters wide (for GUIDs))
                     toursSheet.Column(2).Width = 20; // Name
                     toursSheet.Column(3).Width = 15; // Date
-                    toursSheet.Column(4).Width = 30; // Description
-                    toursSheet.Column(5).Width = 20; // From
-                    toursSheet.Column(6).Width = 20; // To
+                    toursSheet.Column(4).Width = 50; // Description
+                    toursSheet.Column(5).Width = 40; // From
+                    toursSheet.Column(6).Width = 40; // To
                     toursSheet.Column(7).Width = 15; // TransportType
                     toursSheet.Column(8).Width = 12; // Distance
-                    toursSheet.Column(9).Width = 15; // EstimatedTime
-                    toursSheet.Column(10).Width = 30; // RouteInformation
-                    toursSheet.Column(11).Width = 12; // TourLogsCount
+                    toursSheet.Column(9).Width = 20; // EstimatedTime
+                    toursSheet.Column(10).Width = 12; // TourLogsCount
 
-                    // TourLogs sheet
-                    IXLWorksheet logsSheet = workbook.Worksheets.Add("TourLogs");
+                    //  Attributes Sheet
+                    IXLWorksheet attributesSheet = workbook.Worksheets.Add("Attributes");
+                    attributesSheet.Cell(1, 1).Value = "Tour Id";
+                    attributesSheet.Cell(1, 2).Value = "Popularity";
+                    attributesSheet.Cell(1, 3).Value = "Child Friendly";
+
+                    int attributesRow = 2;
+                    foreach (Tour tour in tourList)
+                    {
+                        if (tour.TourAttributes == null)
+                            continue;
+
+                        attributesSheet.Cell(attributesRow, 1).Value = tour.TourAttributes.Id.ToString();
+                        attributesSheet.Cell(attributesRow, 2).Value = tour.TourAttributes.Popularity.ToString();
+                        attributesSheet.Cell(attributesRow, 3).Value = tour.TourAttributes.ChildFriendliness ? "Yes" : "No";
+                    }
+
+                    //  Set column widths for Attributes Sheet
+                    attributesSheet.Column(1).Width = 36;
+                    attributesSheet.Column(2).Width = 12;
+                    attributesSheet.Column(3).Width = 20;
+
+                    //  TourLogs Sheet
+                    IXLWorksheet logsSheet = workbook.Worksheets.Add("Logs");
                     logsSheet.Cell(1, 1).Value = "Id";
-                    logsSheet.Cell(1, 2).Value = "TourId";
+                    logsSheet.Cell(1, 2).Value = "Tour Id";
                     logsSheet.Cell(1, 3).Value = "Date";
                     logsSheet.Cell(1, 4).Value = "Difficulty";
                     logsSheet.Cell(1, 5).Value = "Rating";
                     logsSheet.Cell(1, 6).Value = "Comment";
-                    logsSheet.Cell(1, 7).Value = "TotalDistance";
-                    logsSheet.Cell(1, 8).Value = "TotalTime";
+                    logsSheet.Cell(1, 7).Value = "Total Distance";
+                    logsSheet.Cell(1, 8).Value = "Total Time";
                     int logRow = 2;
 
                     int totalLogs = 0;
@@ -156,35 +162,79 @@ namespace TourPlanner.BL.Services
                     logsSheet.Column(3).Width = 15; // Date
                     logsSheet.Column(4).Width = 12; // Difficulty
                     logsSheet.Column(5).Width = 12; // Rating
-                    logsSheet.Column(6).Width = 30; // Comment
+                    logsSheet.Column(6).Width = 50; // Comment
                     logsSheet.Column(7).Width = 12; // TotalDistance
                     logsSheet.Column(8).Width = 15; // TotalTime
 
                     workbook.SaveAs(filePath);
                     _logger.LogInformation("Tour export to Excel successful: {FilePath}. Tours: {TourCount}, Logs: {LogCount}", filePath, tourList.Count, totalLogs);
+                    return new Result(Result.ResultCode.Success);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error exporting tours to Excel: {FilePath}", filePath);
+                return new Result(Result.ResultCode.UnknownError);
+            }
+        }
+
+        //  Return result instead
+        public async Task<List<Tour>> ImportToursFromJsonAsync(string filePath)
+        {
+            try {
+                using (FileStream fs = File.OpenRead(filePath))
+                {
+                    List<Tour>? tours = await JsonSerializer.DeserializeAsync<List<Tour>>(fs, _options);
+
+                    if (tours != null && tours.Count > 0)
+                    {
+                        foreach (Tour tour in tours)
+                        {
+                            tour.Id = Guid.NewGuid();
+                            
+                            if (tour.TourAttributes != null)
+                            {
+                                tour.TourAttributes.Id = tour.Id;
+                            }
+
+                            if (tour.TourLogs != null && tour.TourLogs.Count > 0)
+                            {
+                                foreach (TourLog log in tour.TourLogs)
+                                {
+                                    log.Id = Guid.NewGuid();
+                                    log.TourId = tour.Id;
+                                    log.Tour = tour;
+                                }
+                            }
+                        }
+                    }
+
+                    _logger.LogInformation("Imported {Count} tours from JSON: {FilePath}", tours?.Count ?? 0, filePath);
+                    return tours ?? new List<Tour>();
                 }
             }
             catch (Exception ex) {
-                _logger.LogError(ex, "Error exporting tours to Excel: {FilePath}", filePath);
+                _logger.LogError(ex, "Error importing tours from JSON: {FilePath}", filePath);
                 throw;
             }
         }
 
-        public List<Tour> ImportToursFromExcel(string filePath)
+        public List<Tour> ImportTourFromExcel(string filePath)
         {
             try {
-                _logger.LogInformation("Importing tours from Excel file: {FilePath}", filePath);
                 List<Tour> tours = new List<Tour>();
                 Dictionary<Guid, Tour> tourMap = new Dictionary<Guid, Tour>();
+
                 using (XLWorkbook workbook = new XLWorkbook(filePath))
                 {
                     // Read Tours sheet
                     IXLWorksheet? toursSheet = workbook.Worksheet("Tours");
-                    foreach (var row in toursSheet.RowsUsed().Skip(1)) // skip header
+                    // skip header
+                    foreach (var row in toursSheet.RowsUsed().Skip(1))
                     {
                         Guid tourId = Guid.NewGuid();
                         Guid.TryParse(row.Cell(1).GetString(), out tourId);
-                        var tour = new Tour
+                        Tour tour = new Tour
                         {
                             Id = tourId,
                             Name = row.Cell(2).GetString(),
@@ -216,7 +266,8 @@ namespace TourPlanner.BL.Services
                     if (workbook.Worksheets.Contains("TourLogs"))
                     {
                         IXLWorksheet? logsSheet = workbook.Worksheet("TourLogs");
-                        foreach (var row in logsSheet.RowsUsed().Skip(1)) // skip header
+                        // skip header
+                        foreach (var row in logsSheet.RowsUsed().Skip(1))
                         {
                             Guid logId = Guid.NewGuid();
                             Guid.TryParse(row.Cell(1).GetString(), out logId);

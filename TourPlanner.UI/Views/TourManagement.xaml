@@ -121,6 +121,12 @@
                             Command="{Binding CreateTourCommand}"/>
 
                     <!-- Buttons for Tour management -->
+                    <Button Content="{materialDesign:PackIcon Kind=Refresh}"
+                            Style="{StaticResource ActionButtonStyle}"
+                            ToolTip="Refresh List"
+                            Command="{Binding ReloadCommand}"/>
+
+                    <!-- Buttons for Tour management -->
                     <Button Content="{materialDesign:PackIcon Kind=DeleteAlert}"
                             Style="{StaticResource ActionButtonStyle}"
                             ToolTip="Delete all Tours"
@@ -135,9 +141,13 @@
                         </Button.Content>
                         <Button.ContextMenu>
                             <ContextMenu Style="{StaticResource FancyContextMenuStyle}">
-                                <MenuItem Header="Import Tour"
+                                <MenuItem Header="Import Tour(s)"
                                           Icon="{materialDesign:PackIcon Kind=Import}"
                                           Command="{Binding ImportToursCommand}"
+                                          Style="{StaticResource FancyMenuItemStyle}"/>
+                                <MenuItem Header="Export All Tours"
+                                          Icon="{materialDesign:PackIcon Kind=Import}"
+                                          Command="{Binding ExportAllToursCommand}"
                                           Style="{StaticResource FancyMenuItemStyle}"/>
                                 <MenuItem Header="Generate Tour Report"
                                           Icon="{materialDesign:PackIcon Kind=FileExport}"
