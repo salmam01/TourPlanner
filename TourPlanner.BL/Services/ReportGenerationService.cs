@@ -39,8 +39,17 @@ namespace TourPlanner.BL.Services
         {
             try
             {
-                _logger.LogInformation("Generating tour report for tour {TourId} to {FilePath}", tour.Id, filePath);
-                
+                if (tour == null)
+                {
+                    _logger.LogWarning("Trying to generate Tour Report with NULL tour.");
+                    return new Result(Result.ResultCode.NullError);
+                }
+                if (string.IsNullOrEmpty(filePath))
+                {
+                    _logger.LogWarning("Trying to generate Tour Report with invalid file path.");
+                    return new Result(Result.ResultCode.FileAccessError);
+                }
+
                 using PdfWriter writer = new PdfWriter(filePath);
                 using PdfDocument pdf = new PdfDocument(writer);
                 using Document document = new Document(pdf);
@@ -63,7 +72,7 @@ namespace TourPlanner.BL.Services
                 AddTableRow(tourDetails, "To", tour.To);
                 AddTableRow(tourDetails, "Transport Type", tour.TransportType);
                 AddTableRow(tourDetails, "Distance", tour.Distance.ToString("F2") + " km");
-                AddTableRow(tourDetails, "Estimated Time", tour.EstimatedTime.ToString());
+                AddTableRow(tourDetails, "Estimated Time", tour.EstimatedTime.ToString(@"hh\:mm\:ss"));
                 AddTableRow(tourDetails, "Date", tour.Date.ToString("dd.MM.yyyy"));
 
                 document.Add(tourDetails);
@@ -106,7 +115,7 @@ namespace TourPlanner.BL.Services
                 }
 
                 // Add tour logs
-                if (tour.TourLogs != null && tour.TourLogs.Any())
+                if (tour.TourLogs != null && tour.TourLogs.Count != 0)
                 {
                     Paragraph? logsTitle = new Paragraph("Tour Logs")
                         .SetTextAlignment(TextAlignment.CENTER)
@@ -129,7 +138,7 @@ namespace TourPlanner.BL.Services
                             log.Rating.ToString(),
                             log.Comment ?? "",
                             log.TotalDistance.ToString("F2") + " km",
-                            log.TotalTime.ToString());
+                            log.TotalTime.ToString(@"hh\:mm\:ss"));
                     }
                     
                     document.Add(logsTable);
@@ -164,8 +173,17 @@ namespace TourPlanner.BL.Services
         {
             try
             {
-                _logger.LogInformation("Generating summary report to {FilePath}", filePath);
-                
+                if (tours == null || tours.Count == 0)
+                {
+                    _logger.LogWarning("Trying to generate summary report with no tours.");
+                    return new Result(Result.ResultCode.NullError);
+                }
+                if (string.IsNullOrEmpty(filePath))
+                {
+                    _logger.LogWarning("Trying to generate summary report with invalid file path.");
+                    return new Result(Result.ResultCode.FileAccessError);
+                }
+
                 using PdfWriter writer = new PdfWriter(filePath);
                 using PdfDocument pdf = new PdfDocument(writer);
                 using Document document = new Document(pdf);
@@ -188,23 +206,29 @@ namespace TourPlanner.BL.Services
 
                 foreach (Tour tour in tours)
                 {
-                    if (tour.TourLogs == null || !tour.TourLogs.Any())
-                        continue;
+                    int tourLogsCount = 0;
+                    double avgDistance = tour.Distance;
+                    double avgTime = tour.EstimatedTime.TotalMinutes;
+                    double avgRating = 0;
+                    int popularity = tour.TourAttributes.Popularity;
+                    bool childFriendliness = tour.TourAttributes.ChildFriendliness;
 
-                    double avgDistance = tour.TourLogs.Average(l => l.TotalDistance);
-                    double avgTime = tour.TourLogs.Average(l => l.TotalTime.TotalMinutes);
-                    double avgRating = tour.TourLogs.Average(l => l.Rating);
-                    int popularity = _tourAttributesService.ComputePopularity(tour.TourLogs);
-                    bool childFriendliness = _tourAttributesService.ComputeChildFriendliness(tour.TourLogs);
+                    if (tour.TourLogs != null && tour.TourLogs.Count != 0)
+                    {
+                        tourLogsCount = tour.TourLogs.Count;
+                        avgDistance = tour.TourLogs.Average(l => l.TotalDistance);
+                        avgTime = tour.TourLogs.Average(l => l.TotalTime.TotalMinutes);
+                        avgRating = tour.TourLogs.Average(l => l.Rating);
+                    }
 
                     AddTableRow(summaryTable,
-                        tour.Name,
-                        tour.TourLogs.Count.ToString(),
-                        avgDistance.ToString("F2") + " km",
-                        avgTime.ToString("F2") + " min",
-                        avgRating.ToString("F1"),
-                        popularity.ToString(),
-                        childFriendliness ? "Yes" : "No");
+                                tour.Name,
+                                tourLogsCount.ToString(),
+                                avgDistance.ToString("F2") + " km",
+                                avgTime.ToString("F2") + " min",
+                                avgRating.ToString("F1"),
+                                popularity.ToString(),
+                                childFriendliness ? "Yes" : "No");
                 }
 
                 document.Add(summaryTable);
@@ -249,28 +273,18 @@ namespace TourPlanner.BL.Services
             }
         }
 
-        private string FindLeafletDirectory()
-        {
-            var dir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
-            while (dir != null)
-            {
-                var leaflet = Path.Combine(dir.FullName, "TourPlanner.UI", "Leaflet");
-                if (Directory.Exists(leaflet) && File.Exists(Path.Combine(leaflet, "map.html")))
-                    return leaflet;
-                leaflet = Path.Combine(dir.FullName, "Leaflet");
-                if (Directory.Exists(leaflet) && File.Exists(Path.Combine(leaflet, "map.html")))
-                    return leaflet;
-                dir = dir.Parent;
-            }
-            throw new DirectoryNotFoundException("Leaflet directory with map.html not found.");
-        }
-
         private async Task<string> GenerateMapImage(Tour tour)
         {
             try
             {
                 // 1. fetch MapGeometry 
                 Result result = await _openRouteService.GetMapGeometry(tour);
+                if (result.Code != Result.ResultCode.Success)
+                {
+                    _logger.LogError("Failed to retrieve map geometry for the tour {TourName}", tour.Name);
+                    throw new InvalidOperationException("Failed to retrieve map geometry for the tour");
+                }
+
                 MapGeometry mapGeometry = (MapGeometry)result.Data;
                 if (mapGeometry == null || mapGeometry.WayPoints == null || !mapGeometry.WayPoints.Any())
                     throw new InvalidOperationException("No map geometry available for tour");
@@ -312,5 +326,22 @@ namespace TourPlanner.BL.Services
                 throw;
             }
         }
+
+        private string FindLeafletDirectory()
+        {
+            var dir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
+            while (dir != null)
+            {
+                var leaflet = Path.Combine(dir.FullName, "TourPlanner.UI", "Leaflet");
+                if (Directory.Exists(leaflet) && File.Exists(Path.Combine(leaflet, "map.html")))
+                    return leaflet;
+                leaflet = Path.Combine(dir.FullName, "Leaflet");
+                if (Directory.Exists(leaflet) && File.Exists(Path.Combine(leaflet, "map.html")))
+                    return leaflet;
+                dir = dir.Parent;
+            }
+            throw new DirectoryNotFoundException("Leaflet directory with map.html not found.");
+        }
+
     }
 } 
