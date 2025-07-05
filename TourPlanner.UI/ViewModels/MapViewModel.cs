@@ -9,7 +9,6 @@ using TourPlanner.BL.Utils.DTO;
 using TourPlanner.BL.Utils.Helpers;
 using TourPlanner.Models.Entities;
 using TourPlanner.UI.Events;
-using TourPlanner.UI.Leaflet;
 
 namespace TourPlanner.UI.ViewModels
 {
@@ -59,7 +58,6 @@ namespace TourPlanner.UI.ViewModels
             if (_selectedTour != tour && tour != null)
             {
                 _selectedTour = tour;
-                Debug.WriteLine("In GetRouteMap [MapViewModel] !!");
 
                 //  Get the map geometry needed for the map image
                 Result result = await _openRouteService.GetMapGeometry(_selectedTour);

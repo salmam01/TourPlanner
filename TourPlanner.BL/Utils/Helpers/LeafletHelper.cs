@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using TourPlanner.BL.Utils.DTO;
 using System.Text.Json;
 
-namespace TourPlanner.UI.Leaflet
+namespace TourPlanner.BL.Utils.Helpers
 {
     public class LeafletHelper
     {
@@ -30,8 +30,8 @@ namespace TourPlanner.UI.Leaflet
                         new[] { wp.Longitude, wp.Latitude }).ToArray()
                 },
                 bbox = new[] { mapGeometry.Bbox.MinLongitude, mapGeometry.Bbox.MinLatitude, mapGeometry.Bbox.MaxLongitude, mapGeometry.Bbox.MaxLatitude },
-                fromAddress = fromAddress,
-                toAddress = toAddress
+                fromAddress,
+                toAddress
             };
 
             string directionsJson = $"var directions = {JsonSerializer.Serialize(directionsObject, _jsonOptions)};";

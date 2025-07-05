@@ -90,7 +90,7 @@ namespace TourPlanner.UI.ViewModels
             });
 
             //  Reload the tours on initialization
-            TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
+            ReloadList();
         }
 
         private void EventHandler(TourEvent tourEvent)
@@ -121,7 +121,19 @@ namespace TourPlanner.UI.ViewModels
 
         public void ReloadList()
         {
-            TourListViewModel.ReloadTours(_tourService.GetAllTours().ToList());
+            Result result = _tourService.GetAllTours();
+
+            if (result.Code != Result.ResultCode.Success)
+            {
+                ShowErrorMessage(result, "Reload Error");
+                return;
+            }
+            if (result.Data is not List<Tour> tours)
+            {
+                ShowErrorMessage(new Result(Result.ResultCode.UnknownError), "Reload Error");
+                return;
+            }
+            TourListViewModel.ReloadTours(tours);
             _selectedTour = null;
         }
 
@@ -247,9 +259,20 @@ namespace TourPlanner.UI.ViewModels
             if (string.IsNullOrEmpty(searchText))
                 ReloadList();
             else
-                TourListViewModel.ReloadTours(
-                    _tourService.SearchToursAndLogs(searchText, _tourLogService.SearchTourLogs(searchText))
-                );
+            {
+                Result result = _tourService.SearchToursAndLogs(searchText, _tourLogService.SearchTourLogs(searchText));
+                if (result.Code != Result.ResultCode.Success)
+                {
+                    ShowErrorMessage(result, "Search Error");
+                    return;
+                }
+                if (result.Data is not List<Tour> tours)
+                {
+                    ShowErrorMessage(result, "Search Error");
+                    return;
+                }
+                TourListViewModel.ReloadTours(tours);
+            }
         }
 
         public void OnCancel(object sender, EventArgs e)
@@ -324,9 +347,18 @@ namespace TourPlanner.UI.ViewModels
             };
             if (saveFileDialog.ShowDialog() != true) return;
 
-            Result result = new Result(Result.ResultCode.UnknownError);
+            Result result = _tourService.GetAllTours();
+            if (result.Code != Result.ResultCode.Success)
+            {
+                ShowErrorMessage(result, "Export Error");
+                return;
+            }
+            if (result.Data is not List<Tour> tours)
+            {
+                ShowErrorMessage(new Result(Result.ResultCode.UnknownError), "Export Error");
+                return;
+            }
 
-            List<Tour> tours = _tourService.GetAllTours().ToList();
             if (saveFileDialog.FileName.EndsWith(".json"))
                 result = await _importExportService.ExportToursToJsonAsync(tours, saveFileDialog.FileName);
             if (saveFileDialog.FileName.EndsWith(".xlsx"))
@@ -417,7 +449,19 @@ namespace TourPlanner.UI.ViewModels
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                _reportGenerationService.GenerateSummaryReport(_tourService.GetAllTours(), saveFileDialog.FileName);
+                Result result = _tourService.GetAllTours();
+                if (result.Code != Result.ResultCode.Success)
+                {
+                    ShowErrorMessage(result, "Summary Error");
+                    return;
+                }
+                if (result.Data is not List<Tour> tours)
+                {
+                    ShowErrorMessage(result, "Summary Error");
+                    return;
+                }
+
+                _reportGenerationService.GenerateSummaryReport(tours, saveFileDialog.FileName);
                 MessageBox.Show("Summary report generated successfully.", "Export Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
 

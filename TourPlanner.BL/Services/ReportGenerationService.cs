@@ -160,7 +160,7 @@ namespace TourPlanner.BL.Services
             }
         }
 
-        public Result GenerateSummaryReport(IEnumerable<Tour> tours, string filePath)
+        public Result GenerateSummaryReport(List<Tour> tours, string filePath)
         {
             try
             {
@@ -186,7 +186,7 @@ namespace TourPlanner.BL.Services
                 // headers
                 AddTableHeader(summaryTable, "Tour Name", "Total Logs", "Avg. Distance", "Avg. Time", "Avg. Rating", "Popularity", "Child-Friendliness");
 
-                foreach (var tour in tours)
+                foreach (Tour tour in tours)
                 {
                     if (tour.TourLogs == null || !tour.TourLogs.Any())
                         continue;

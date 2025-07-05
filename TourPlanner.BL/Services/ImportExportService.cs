@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using ClosedXML.Excel.Exceptions;
 using DocumentFormat.OpenXml.Bibliography;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
@@ -37,12 +38,28 @@ namespace TourPlanner.BL.Services
                 {
                     await JsonSerializer.SerializeAsync(fs, tours, _options);
                 }
+
                 _logger.LogInformation("Tour(s) export to JSON successful: {FilePath}", filePath);
                 return new Result(Result.ResultCode.Success);
             }
+            catch (UnauthorizedAccessException ex)
+            {
+                _logger.LogError(ex, "Error {FilePath}", filePath);
+                return new Result(Result.ResultCode.FileAccessError);
+            }
+            catch (IOException ex)
+            {
+                _logger.LogError(ex, "Error {FilePath}", filePath);
+                return new Result(Result.ResultCode.FileAccessError);
+            }
+            catch (JsonException ex)
+            {
+                _logger.LogError(ex, "Error {FilePath}", filePath);
+                return new Result(Result.ResultCode.FileAccessError);
+            }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "!Error exporting tours to JSON: {FilePath}", filePath);
+                _logger.LogCritical(ex, "Error exporting tours to JSON: {FilePath}", filePath);
                 return new Result(Result.ResultCode.UnknownError);
             }
         }
@@ -177,9 +194,24 @@ namespace TourPlanner.BL.Services
                     return new Result(Result.ResultCode.Success);
                 }
             }
+            catch (UnauthorizedAccessException ex)
+            {
+                _logger.LogError(ex, "Error {FilePath}", filePath);
+                return new Result(Result.ResultCode.FileAccessError);
+            }
+            catch (IOException ex)
+            {
+                _logger.LogError(ex, "Error {FilePath}", filePath);
+                return new Result(Result.ResultCode.FileAccessError);
+            }
+            catch (ClosedXMLException ex)
+            {
+                _logger.LogError(ex, "Error {FilePath}", filePath);
+                return new Result(Result.ResultCode.FileAccessError);
+            }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error exporting tours to Excel: {FilePath}", filePath);
+                _logger.LogCritical(ex, "Error exporting tours to Excel: {FilePath}", filePath);
                 return new Result(Result.ResultCode.UnknownError);
             }
         }
@@ -220,6 +252,21 @@ namespace TourPlanner.BL.Services
                     _logger.LogInformation("Imported {Count} tours from JSON: {FilePath}", tours?.Count ?? 0, filePath);
                     return new Result(Result.ResultCode.Success, tours);
                 }
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                _logger.LogError(ex, "Error {FilePath}", filePath);
+                return new Result(Result.ResultCode.FileAccessError);
+            }
+            catch (IOException ex)
+            {
+                _logger.LogError(ex, "Error {FilePath}", filePath);
+                return new Result(Result.ResultCode.FileAccessError);
+            }
+            catch (JsonException ex)
+            {
+                _logger.LogError(ex, "Error {FilePath}", filePath);
+                return new Result(Result.ResultCode.FileAccessError);
             }
             catch (Exception ex) {
                 _logger.LogError(ex, "Error importing tours from JSON: {FilePath}", filePath);
@@ -327,6 +374,21 @@ namespace TourPlanner.BL.Services
                 }
                 _logger.LogInformation("Imported {TourCount} tours from Excel: {FilePath}", tours.Count, filePath);
                 return new Result(Result.ResultCode.Success, tours);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                _logger.LogError(ex, "Error {FilePath}", filePath);
+                return new Result(Result.ResultCode.FileAccessError);
+            }
+            catch (IOException ex)
+            {
+                _logger.LogError(ex, "Error {FilePath}", filePath);
+                return new Result(Result.ResultCode.FileAccessError);
+            }
+            catch (ClosedXMLException ex)
+            {
+                _logger.LogError(ex, "Error {FilePath}", filePath);
+                return new Result(Result.ResultCode.FileAccessError);
             }
             catch (Exception ex) {
                 _logger.LogError(ex, "Error importing tours from Excel: {FilePath}", filePath);

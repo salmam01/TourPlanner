@@ -13,10 +13,10 @@ namespace TourPlanner.BL.Utils.Helpers
             Success,
             NullError,
             DatabaseError,
+            ApiError,
             FileAccessError,
             PdfGenerationError,
             ParseError,
-            ApiError,
             UnknownError
         }
         public ResultCode Code { get; }

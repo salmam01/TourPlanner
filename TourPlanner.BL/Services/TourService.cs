@@ -22,37 +22,73 @@ public class TourService {
         _logger = logger;
     }
 
-    public IEnumerable<Tour> GetAllTours() {
-        return _tourRepository.GetTours();
+    public Result GetAllTours() {
+        try
+        {
+            return new Result(Result.ResultCode.Success, _tourRepository.GetTours().ToList());
+        }
+        catch (PostgresException pgEx)
+        {
+            _logger.LogError(
+                pgEx,
+                "Postgres Exception occurred while retrieving a list of all Tours: {ErrorCode} => {Message}",
+                pgEx.SqlState,
+                pgEx.MessageText
+            );
+            return new Result(Result.ResultCode.DatabaseError);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Exception occurred while retrieving a list of all Tours Tours.");
+            return new Result(Result.ResultCode.UnknownError);
+        }
     }
 
-    public List<Tour> SearchToursAndLogs(string query, IEnumerable<TourLog> tourLogsResult)
+    public Result SearchToursAndLogs(string query, IEnumerable<TourLog> tourLogsResult)
     {
-        //  Query tours
-        List<Tour> tours = _tourRepository.SearchTours(query).ToList();
-
-        //  Extract tour Ids from the tour log list
-        List<Guid> tourIds = [];
-        foreach (TourLog log in tourLogsResult)
+        try
         {
-            if(!tourIds.Contains(log.TourId))
-            {
-                tourIds.Add(log.TourId);
-            }
-        }
+            //  Query tours
+            List<Tour> tours = _tourRepository.SearchTours(query).ToList();
 
-        //  Get the tours from the database & combine the list
-        foreach (Guid tourId in tourIds)
+            //  Extract tour Ids from the tour log list
+            List<Guid> tourIds = [];
+            foreach (TourLog log in tourLogsResult)
+            {
+                if (!tourIds.Contains(log.TourId))
+                {
+                    tourIds.Add(log.TourId);
+                }
+            }
+
+            //  Get the tours from the database & combine the list
+            foreach (Guid tourId in tourIds)
+            {
+                Tour? tour = _tourRepository.GetTourById(tourId);
+                if (tour != null && !tours.Contains(tour))
+                {
+                    tours.Add(tour);
+                }
+            }
+
+            //  Sort the list by algorithm & display combined list
+            return new Result(Result.ResultCode.Success, tours.OrderByDescending(t => t.TourAttributes.SearchAlgorithmRanking).ToList());
+        }
+        catch (PostgresException pgEx)
         {
-            Tour? tour = _tourRepository.GetTourById(tourId);
-            if (tour != null && !tours.Contains(tour))
-            {
-                tours.Add(tour);
-            }
+            _logger.LogError(
+                pgEx,
+                "Postgres Exception occurred while searching Tours: {ErrorCode} => {Message}",
+                pgEx.SqlState,
+                pgEx.MessageText
+            );
+            return new Result(Result.ResultCode.DatabaseError);
         }
-
-        //  Sort the list by algorithm & display combined list
-        return tours.OrderByDescending(t => t.TourAttributes.SearchAlgorithmRanking).ToList();
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Exception occurred while searching Tours.");
+            return new Result(Result.ResultCode.UnknownError);
+        }
     }
 
     public Result CreateTour(Tour tour) {
