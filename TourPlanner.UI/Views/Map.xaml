@@ -20,7 +20,7 @@
             Background="Transparent">
         <Grid>
             <wpf:WebView2 x:Name="webView"
-                         DefaultBackgroundColor="#FF626F47"
+                         DefaultBackgroundColor="#4E5A38"
                          Visibility="{Binding IsMapVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
         </Grid>
     </Border>

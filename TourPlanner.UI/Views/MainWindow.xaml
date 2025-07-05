@@ -19,7 +19,7 @@
     <Window.Resources>
         <Style x:Key="LogButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#F5ECD5"/>
+            <Setter Property="Foreground" Value="#ECF0F1"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Padding" Value="10,5"/>
             <Setter Property="FontFamily" Value="/Resources/Fonts/#Montserrat"/>
@@ -38,7 +38,7 @@
             </Setter>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#4A5A36"/>
+                    <Setter Property="Background" Value="#34495E"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -53,7 +53,7 @@
     </Window.Resources>
 
     <Border CornerRadius="12"
-            Background="#626F47">
+            Background="#4E5A38">
 
         <Grid>
             <Grid.RowDefinitions>
@@ -165,7 +165,7 @@
 
                             <!-- Header -->
                             <Border Grid.Row="0" 
-                                    Background="#626F47"
+                                    Background="#4E5A38"
                                     CornerRadius="12,12,0,0"
                                     Height="60">
                                 <Grid>
@@ -189,7 +189,7 @@
                                                 Style="{StaticResource LogButtonStyle}"
                                                 Margin="20,0,0,0"
                                                 Padding="20,8"
-                                                Background="#4A5A36"
+                                                Background="#8FA055"
                                                 Foreground="#F5ECD5"
                                                 FontFamily="/Resources/Fonts/#Montserrat"
                                                 FontSize="14">
@@ -210,7 +210,7 @@
                                                 <Style TargetType="Border">
                                                     <Style.Triggers>
                                                         <Trigger Property="IsMouseOver" Value="True">
-                                                            <Setter Property="Background" Value="#5A6A46"/>
+                                                            <Setter Property="Background" Value="#7A8A45"/>
                                                         </Trigger>
                                                     </Style.Triggers>
                                                 </Style>
@@ -225,19 +225,19 @@
                                                      VerticalAlignment="Center"
                                                      Margin="0,0,10,0"/>
                                             <TextBlock Text="Error" 
-                                                     Foreground="#FF6B6B"
+                                                     Foreground="#c44a4a"
                                                      VerticalAlignment="Center"
                                                      Margin="5,0"/>
                                             <TextBlock Text="Warning" 
-                                                     Foreground="#FFB86C"
+                                                     Foreground="#e8a0a0"
                                                      VerticalAlignment="Center"
                                                      Margin="5,0"/>
                                             <TextBlock Text="Info" 
-                                                     Foreground="#8BE9FD"
+                                                     Foreground="#d65a5a"
                                                      VerticalAlignment="Center"
                                                      Margin="5,0"/>
                                             <TextBlock Text="Success" 
-                                                     Foreground="#50FA7B"
+                                                     Foreground="#8FA055"
                                                      VerticalAlignment="Center"
                                                      Margin="5,0"/>
                                         </StackPanel>

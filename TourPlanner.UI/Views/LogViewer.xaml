@@ -14,7 +14,7 @@
         </Grid.RowDefinitions>
         
         <Border Grid.Row="0" 
-                Background="#626F47" 
+                Background="#4E5A38" 
                 Padding="10">
             <StackPanel Orientation="Horizontal">
                 <Button Content="Refresh Logs" 

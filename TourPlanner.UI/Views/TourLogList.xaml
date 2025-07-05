@@ -17,13 +17,13 @@
                   AlternationCount="2">
             <ListView.Resources>
                 <Style TargetType="GridViewColumnHeader">
-                    <Setter Property="Background" Value="#F0BB78" />
-                    <Setter Property="Foreground" Value="Black" />
+                    <Setter Property="Background" Value="#f28484" />
+                    <Setter Property="Foreground" Value="White" />
                     <Setter Property="FontFamily" Value="/Resources/Fonts/#Montserrat" />
                     <Setter Property="FontSize" Value="14" />
                     <Setter Property="Padding" Value="7" />
                     <Setter Property="BorderThickness" Value="0,0,1,0" />
-                    <Setter Property="BorderBrush" Value="#F0BB78" />
+                    <Setter Property="BorderBrush" Value="#F5ECD5" />
                 </Style>
             </ListView.Resources>
 
@@ -35,7 +35,9 @@
                             <DataTemplate>
                                 <TextBlock Text="{Binding Date, StringFormat=dd.MM.yyyy}"
                                            Margin="10,5"
-                                           VerticalAlignment="Center" />
+                                           VerticalAlignment="Center"
+                                           Foreground="Black"
+                                           FontSize="12" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -44,7 +46,7 @@
                     <GridViewColumn Header="Duration" Width="150">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Margin="10,5" VerticalAlignment="Center">
+                                <TextBlock Margin="10,5" VerticalAlignment="Center" Foreground="Black" FontSize="12">
                                     <Run Text="{Binding TotalTime, StringFormat=hh}" />
                                     <Run Text=" : " />
                                     <Run Text="{Binding TotalTime, StringFormat=mm}" />
@@ -57,7 +59,7 @@
                     <GridViewColumn Header="Distance" Width="150">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Margin="10,5" VerticalAlignment="Center">
+                                <TextBlock Margin="10,5" VerticalAlignment="Center" Foreground="Black" FontSize="12">
                                     <Run Text="{Binding TotalDistance, StringFormat=F1}" />
                                     <Run Text=" km" />
                                 </TextBlock>
@@ -77,10 +79,10 @@
                     <Setter Property="FontFamily" Value="/Resources/Fonts/#Montserrat"/>
                     <Style.Triggers>
                         <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                            <Setter Property="Background" Value="#E8E8E8" />
+                            <Setter Property="Background" Value="#f7b2b2" />
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="#CCE8FF" />
+                            <Setter Property="Background" Value="#f28484" />
                         </Trigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
