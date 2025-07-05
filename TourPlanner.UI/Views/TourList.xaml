@@ -4,17 +4,21 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             Background="Transparent">
 
-    <Border CornerRadius="0,0,12,12"
+    <Border CornerRadius="48,48,48,48"
             BorderThickness="0"
-            Background="#F5ECD5"
+            Background="#f7b2b2"
             ClipToBounds="True">
         <Grid>
             <!-- List containing all Tours -->
             <ListView ItemsSource="{Binding Tours}"
                       SelectedItem="{Binding SelectedTour, Mode=TwoWay}" 
                       Background="Transparent">
+                <ListView.Resources>
+                    <Style TargetType="ScrollBar" BasedOn="{StaticResource ModernScrollBarStyle}" />
+                </ListView.Resources>
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Name}"
@@ -52,7 +56,7 @@
                 </ListView.ItemContainerStyle>
             </ListView>
 
-            <TextBlock Text="Click + Button to create a Tour!"
+            <TextBlock Text="Click + Button to create a Tour! "
                        Foreground="#C74767"
                        FontSize="14"
                        FontFamily="/Resources/Fonts/#Montserrat"

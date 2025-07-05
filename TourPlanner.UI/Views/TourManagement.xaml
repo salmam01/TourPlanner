@@ -67,19 +67,10 @@
         </Style>
     </UserControl.Resources>
 
-    <Border BorderBrush="#535e3c"
-            BorderThickness="0,0,1,0"
-            CornerRadius="0,0,0,12"
+    <Border CornerRadius="0,0,0,12"
             Padding="10"
             HorizontalAlignment="Stretch"
             MinWidth="250">
-        <Border.Effect>
-            <DropShadowEffect Color="Black"
-                                      BlurRadius="6"
-                                      Opacity="0.2"
-                                      Direction="0"
-                                      ShadowDepth="2"/>
-        </Border.Effect>
 
         <Grid>
             <Grid.RowDefinitions>
