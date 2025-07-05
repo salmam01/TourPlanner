@@ -30,7 +30,7 @@ namespace TourPlanner.UI.ViewModels
         );
 
         public event EventHandler<TourLog> TourLogCreated;
-        public event EventHandler<TourLog> TourLogUpdated;
+        public event EventHandler<TourLog> TourLogEdited;
         public event EventHandler Cancelled;
 
         public DateTime? Date
@@ -187,7 +187,7 @@ namespace TourPlanner.UI.ViewModels
             };
 
             if (_isEditing) {
-                TourLogUpdated?.Invoke(this, tourLog);
+                TourLogEdited?.Invoke(this, tourLog);
             }
             else {
                 TourLogCreated?.Invoke(this, tourLog);

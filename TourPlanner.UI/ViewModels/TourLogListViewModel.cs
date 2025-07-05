@@ -13,7 +13,6 @@ namespace TourPlanner.UI.ViewModels
 {
     public class TourLogListViewModel : BaseViewModel
     {
-        private readonly TourLogService _tourLogService;
         public event EventHandler<TourLog> TourLogSelected;
 
         private Guid _currentTourId;
@@ -24,7 +23,6 @@ namespace TourPlanner.UI.ViewModels
                 if (_currentTourId == value) return;
                 _currentTourId = value;
                 OnPropertyChanged(nameof(CurrentTourId));
-                LoadTourLogsForTour(_currentTourId);
             }
         }
 
@@ -64,29 +62,8 @@ namespace TourPlanner.UI.ViewModels
             }
         }
 
-        private RelayCommand _editTourLogCommand;
-        public RelayCommand EditTourLogCommand => _editTourLogCommand ??= new RelayCommand(
-            execute => EditTourLog(),
-            canExecute => SelectedTourLog != null
-        );
-
-        private RelayCommand _deleteTourLogCommand;
-        public RelayCommand DeleteTourLogCommand => _deleteTourLogCommand ??= new RelayCommand(
-            execute => DeleteTourLog(),
-            canExecute => SelectedTourLog != null
-        );
-        
-        public TourLogListViewModel(
-            TourLogService tourLogService
-        ) {
-            _tourLogService = tourLogService;
+        public TourLogListViewModel() {
             _tourLogs = new ObservableCollection<TourLog>();
-        }
-        private void LoadTourLogsForTour(Guid tourId)
-        {
-            Tour tour = new Tour { Id = tourId };
-            List<TourLog> logs = _tourLogService.GetAllTourLogs(tour).ToList();
-            ReloadTourLogs(logs);
         }
 
         public void ReloadTourLogs(IEnumerable<TourLog> tourLogs)
@@ -97,21 +74,6 @@ namespace TourPlanner.UI.ViewModels
             }
             OnPropertyChanged(nameof(TourLogs));
             HasNoResults = _tourLogs.Count == 0;
-        }
-
-        private void EditTourLog()
-        {
-            if (SelectedTourLog == null) return;
-            _tourLogService.UpdateTourLog(SelectedTourLog);
-            LoadTourLogsForTour(_currentTourId);
-        }
-
-        private void DeleteTourLog()
-        {
-            if (SelectedTourLog == null) return;
-            _tourLogService.DeleteTourLog(SelectedTourLog);
-            _tourLogs.Remove(SelectedTourLog);
-            OnPropertyChanged(nameof(TourLogs));
         }
     }
 }

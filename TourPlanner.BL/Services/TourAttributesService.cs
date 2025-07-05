@@ -18,7 +18,6 @@ namespace TourPlanner.BL.Services
             _logger = logger;
         }
 
-
         /// <summary>
         /// Computes popularity based on the number of logs.
         /// </summary>

@@ -19,8 +19,26 @@ public class TourLogService {
         _logger = logger;
     }
     
-    public IEnumerable<TourLog> GetAllTourLogs(Tour tour) {
-        return _tourLogRepository.GetTourLogs(tour.Id);
+    public Result GetAllTourLogs(Tour tour) {
+        try
+        {
+            return new Result(Result.ResultCode.Success, _tourLogRepository.GetTourLogs(tour.Id).ToList());
+        }
+        catch (PostgresException pgEx)
+        {
+            _logger.LogError(
+                pgEx,
+                "Postgres Exception occurred while retrieving a list of all Tour Logs: {ErrorCode} => {Message}",
+                pgEx.SqlState,
+                pgEx.MessageText
+            );
+            return new Result(Result.ResultCode.DatabaseError);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Exception occurred while retrieving a list of all Tour Logs.");
+            return new Result(Result.ResultCode.UnknownError);
+        }
     }
 
     public IEnumerable<TourLog> SearchTourLogs(string query)
@@ -29,19 +47,19 @@ public class TourLogService {
     }
 
     public Result CreateTourLog(Guid tourId, TourLog tourLog) {
-        if (tourId == Guid.Empty)
-        {
-            _logger.LogWarning("Trying to create TourLog with empty Tour ID.");
-            return new Result(Result.ResultCode.NullError);
-        }
-        if (tourLog == null)
-        {
-            _logger.LogWarning("Trying to create TourLog with NULL TourLog.");
-            return new Result(Result.ResultCode.NullError);
-        }
-
         try
         {
+            if (tourId == Guid.Empty)
+            {
+                _logger.LogWarning("Trying to create TourLog with empty Tour ID.");
+                return new Result(Result.ResultCode.NullError);
+            }
+            if (tourLog == null)
+            {
+                _logger.LogWarning("Trying to create TourLog with NULL TourLog.");
+                return new Result(Result.ResultCode.NullError);
+            }
+
             tourLog.TourId = tourId;
             _tourLogRepository.InsertTourLog(tourLog);
             _logger.LogInformation("TourLog created => {@TourLog}", tourLog);
@@ -66,14 +84,14 @@ public class TourLogService {
     }
 
     public Result UpdateTourLog(TourLog tourLog) {
-        if (tourLog == null)
-        {
-            _logger.LogWarning("Trying to update TourLog with NULL TourLog.");
-            return new Result(Result.ResultCode.NullError);
-        }
-
         try
         {
+            if (tourLog == null)
+            {
+                _logger.LogWarning("Trying to update TourLog with NULL TourLog.");
+                return new Result(Result.ResultCode.NullError);
+            }
+
             _tourLogRepository.UpdateTourLog(tourLog);
             _logger.LogInformation("TourLog updated => {@TourLog}", tourLog);
             return new Result(Result.ResultCode.Success);
@@ -97,14 +115,14 @@ public class TourLogService {
     }
 
     public Result DeleteTourLog(TourLog tourLog) {
-        if(tourLog == null)
-        {
-            _logger.LogWarning("Trying to delete TourLog with NULL TourLog.");
-            return new Result(Result.ResultCode.NullError);
-        }
-
         try
         {
+            if (tourLog == null)
+            {
+                _logger.LogWarning("Trying to delete TourLog with NULL TourLog.");
+                return new Result(Result.ResultCode.NullError);
+            }
+
             _tourLogRepository.DeleteTourLog(tourLog.Id);
             _logger.LogInformation("TourLog deleted => {@TourLogID}", tourLog.Id);
             return new Result(Result.ResultCode.Success);

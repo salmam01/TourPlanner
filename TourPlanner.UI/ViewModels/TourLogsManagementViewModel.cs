@@ -1,5 +1,6 @@
 ﻿using Serilog;
 using System.Windows;
+using System.Windows.Input;
 using TourPlanner.BL.Services;
 using TourPlanner.BL.Utils.Helpers;
 using TourPlanner.Models.Entities;
@@ -29,13 +30,17 @@ namespace TourPlanner.UI.ViewModels
             }
         }
 
-        private readonly RelayCommand _createTourLogCommand;
-        private readonly RelayCommand _deleteTourLogCommand;
-        private readonly RelayCommand _editTourLogCommand;
-        
-        public RelayCommand CreateTourLogCommand => _createTourLogCommand;
-        public RelayCommand DeleteTourLogCommand => _deleteTourLogCommand;
-        public RelayCommand EditTourLogCommand => _editTourLogCommand;
+        public ICommand CreateTourLogCommand => new RelayCommand(
+            execute => CreateTourLog()
+        );
+        public RelayCommand DeleteTourLogCommand => new RelayCommand(
+                execute => DeleteTourLog(),
+                canExecute => _selectedTourLog != null
+        );
+        public RelayCommand EditTourLogCommand => new RelayCommand(
+                execute => UpdateTourLog(execute as TourPlanner.Models.Entities.TourLog),
+                canExecute => _selectedTour != null
+        );
 
         public TourLogsManagementViewModel(
             CreateTourLogViewModel createTourLogViewModel,
@@ -52,18 +57,6 @@ namespace TourPlanner.UI.ViewModels
             _tourLogService = tourLogService;
             SearchBarViewModel = searchBarViewModel;
 
-            _createTourLogCommand = new RelayCommand(
-                execute => CreateTourLog()
-            );
-            _deleteTourLogCommand = new RelayCommand(
-                execute => DeleteTourLog(),
-                canExecute => _selectedTourLog != null
-            );
-            _editTourLogCommand = new RelayCommand(
-                execute => UpdateTourLog(execute as TourPlanner.Models.Entities.TourLog),
-                canExecute => _selectedTour != null
-            );
-            
             _eventAggregator.Subscribe<TourEvent>(e =>
             {
                 if (e.Type == TourEvent.EventType.SelectTour)
@@ -72,15 +65,31 @@ namespace TourPlanner.UI.ViewModels
 
             TourLogListViewModel.TourLogSelected += OnTourLogSelected;
             _createTourLogViewModel.TourLogCreated += OnTourLogCreated;
-            _createTourLogViewModel.TourLogUpdated += OnTourLogUpdated;
+            _createTourLogViewModel.TourLogEdited += OnTourLogEdited;
             _createTourLogViewModel.Cancelled += OnCancel;
+        }
+
+        public void ReloadLogList(Tour tour)
+        {
+            Result result = _tourLogService.GetAllTourLogs(tour);
+            if (result.Code != Result.ResultCode.Success)
+            {
+                return;
+            }
+            if (result.Data is not List<TourLog> logs)
+            {
+                return;
+            }
+
+            TourLogListViewModel.ReloadTourLogs(logs);
+            _selectedTourLog = null;
         }
 
         public void OnTourSelected(Tour tour)
         {
             if (tour == null) return;
             _selectedTour = tour;
-            TourLogListViewModel.ReloadTourLogs(_tourLogService.GetAllTourLogs(tour).ToList());
+            ReloadLogList(tour);
         }
 
         public void OnTourLogSelected(object sender, TourLog tourLog)
@@ -98,7 +107,7 @@ namespace TourPlanner.UI.ViewModels
             {
                 _tourService.RecalculateTourAttributes(_selectedTour);
                 _eventAggregator.Publish(new TourEvent(TourEvent.EventType.LogCreated, _selectedTour));
-                TourLogListViewModel.ReloadTourLogs(_tourLogService.GetAllTourLogs(_selectedTour).ToList());
+                ReloadLogList(_selectedTour);
             }
             else
                 ShowErrorMessage(result);
@@ -106,7 +115,7 @@ namespace TourPlanner.UI.ViewModels
             _eventAggregator.Publish(new NavigationEvent(NavigationEvent.Destination.Home));
         }
 
-        public void OnTourLogUpdated(object sender, TourLog tourLog)
+        public void OnTourLogEdited(object sender, TourLog tourLog)
         {
             if(tourLog == null) return;
 
@@ -115,7 +124,7 @@ namespace TourPlanner.UI.ViewModels
             if (result.Code == Result.ResultCode.Success)
             {
                 _tourService.RecalculateTourAttributes(_selectedTour);
-                TourLogListViewModel.ReloadTourLogs(_tourLogService.GetAllTourLogs(_selectedTour).ToList());
+                ReloadLogList(_selectedTour);
             }
             else
                 ShowErrorMessage(result);
@@ -157,9 +166,7 @@ namespace TourPlanner.UI.ViewModels
             if (deleteResult.Code == Result.ResultCode.Success)
             {
                 _tourService.RecalculateTourAttributes(_selectedTour);
-                List<TourLog> tourLogs = _tourLogService.GetAllTourLogs(_selectedTour).ToList();
-                TourLogListViewModel.ReloadTourLogs(tourLogs);
-                _selectedTourLog = null;
+                ReloadLogList(_selectedTour);
             }
             else
                 ShowErrorMessage(deleteResult);

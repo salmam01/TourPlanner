@@ -279,15 +279,12 @@ namespace TourPlanner.BL.Services
             {
                 // 1. fetch MapGeometry 
                 Result result = await _openRouteService.GetMapGeometry(tour);
-                if (result.Code != Result.ResultCode.Success)
+                if (result.Code != Result.ResultCode.Success ||
+                    result.Data is not MapGeometry mapGeometry ||
+                    mapGeometry == null || mapGeometry.WayPoints == null || mapGeometry.WayPoints.Count == 0)
                 {
-                    _logger.LogError("Failed to retrieve map geometry for the tour {TourName}", tour.Name);
                     throw new InvalidOperationException("Failed to retrieve map geometry for the tour");
                 }
-
-                MapGeometry mapGeometry = (MapGeometry)result.Data;
-                if (mapGeometry == null || mapGeometry.WayPoints == null || !mapGeometry.WayPoints.Any())
-                    throw new InvalidOperationException("No map geometry available for tour");
 
                 // 2. create directions.js  (like LeafletHelper)
                 string leafletDir = FindLeafletDirectory();
@@ -322,7 +319,6 @@ namespace TourPlanner.BL.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to generate map image for tour {TourId}", tour.Id);
                 throw;
             }
         }

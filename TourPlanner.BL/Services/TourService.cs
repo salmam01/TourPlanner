@@ -39,7 +39,7 @@ public class TourService {
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Exception occurred while retrieving a list of all Tours Tours.");
+            _logger.LogError(ex, "Exception occurred while retrieving a list of all Tours.");
             return new Result(Result.ResultCode.UnknownError);
         }
     }
@@ -92,14 +92,14 @@ public class TourService {
     }
 
     public Result CreateTour(Tour tour) {
-        if (tour == null)
-        {
-            _logger.LogWarning("Trying to create Tour with NULL Tour.");
-            return new Result(Result.ResultCode.NullError);
-        }
-
         try
         {
+            if (tour == null)
+            {
+                _logger.LogWarning("Trying to create Tour with NULL Tour.");
+                return new Result(Result.ResultCode.NullError);
+            }
+
             _tourRepository.InsertTour(tour);
             _logger.LogInformation("Tour created => {@Tour}", tour);
             return new Result(Result.ResultCode.Success);
@@ -123,14 +123,14 @@ public class TourService {
     }
     
     public Result UpdateTour(Tour tour) {
-        if (tour == null)
-        {
-            _logger.LogWarning("Trying to update Tour with NULL Tour.");
-            return new Result(Result.ResultCode.NullError);
-        }
-
         try
         {
+            if (tour == null)
+            {
+                _logger.LogWarning("Trying to update Tour with NULL Tour.");
+                return new Result(Result.ResultCode.NullError);
+            }
+        
             _tourRepository.UpdateTour(tour);
             _logger.LogInformation("Tour updated => {Tour}", tour);
             return new Result(Result.ResultCode.Success);
