@@ -11,8 +11,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using TourPlanner.BL.API;
 using TourPlanner.BL.Services;
-using TourPlanner.BL.Utils.Helpers;
 using TourPlanner.Models.Entities;
+using TourPlanner.Models.Utils.Helpers;
 using TourPlanner.UI.Commands;
 using TourPlanner.UI.Events;
 

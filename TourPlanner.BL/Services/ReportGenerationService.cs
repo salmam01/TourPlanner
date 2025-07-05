@@ -15,7 +15,7 @@ using TourPlanner.BL.API;
 using TourPlanner.BL.Utils.DTO;
 using Microsoft.Playwright;
 using iText.IO.Image;
-using TourPlanner.BL.Utils.Helpers;
+using TourPlanner.Models.Utils.Helpers;
 
 namespace TourPlanner.BL.Services
 {

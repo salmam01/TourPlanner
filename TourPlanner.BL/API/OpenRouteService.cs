@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using TourPlanner.BL.Utils.DTO;
 using TourPlanner.BL.Utils.Helpers;
 using TourPlanner.Models.Entities;
+using TourPlanner.Models.Utils.Helpers;
 
 namespace TourPlanner.BL.API
 {
@@ -94,7 +95,7 @@ namespace TourPlanner.BL.API
             }
             catch (Exception ex)
             {
-                _logger.LogCritical(ex, "Exception during locations suggestions request.");
+                _logger.LogError(ex, "Exception during Locations Suggestions request.");
                 return new Result(Result.ResultCode.UnknownError);
             }
         }
@@ -151,7 +152,7 @@ namespace TourPlanner.BL.API
             }
             catch (Exception ex)
             {
-                _logger.LogCritical(ex, "Exception during tour information request.");
+                _logger.LogError(ex, "Exception during tour information request.");
                 return new Result(Result.ResultCode.UnknownError);
             }
         }
@@ -197,12 +198,12 @@ namespace TourPlanner.BL.API
             }
             catch (JsonException ex)
             {
-                _logger.LogError(ex, "Failed to parse JSON from map geometry request.");
+                _logger.LogError(ex, "Failed to parse JSON for Map Geometry.");
                 return new Result(Result.ResultCode.ParseError);
             }
             catch (Exception ex)
             {
-                _logger.LogCritical(ex, "Exception during map geometry request.");
+                _logger.LogError(ex, "Exception during Map Geometry request.");
                 return new Result(Result.ResultCode.UnknownError);
             }
         }
@@ -210,42 +211,59 @@ namespace TourPlanner.BL.API
         //  Helper-Method that sends an API request to OpenRoute to retrieve Geo Coordinates for a specific location
         public async Task<GeoCoordinates> GetGeoCoordinatesAsync(string location)
         {
-            GeoCoordinates geoCoordinates = new();
-            string url = ($"geocode/search?api_key={_openRouteKey}&text={location}");
+            try
+            {
+                GeoCoordinates geoCoordinates = new();
+                string url = ($"geocode/search?api_key={_openRouteKey}&text={location}");
 
-            HttpResponseMessage response = await _client.GetAsync(url);
-            if (response.IsSuccessStatusCode)
-                geoCoordinates = _parser.ParseGeoCoordinates(await response.Content.ReadAsStringAsync());
-            else
-                _logger.LogError("Request failed with {Status}:", response.StatusCode);
+                HttpResponseMessage response = await _client.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                    geoCoordinates = _parser.ParseGeoCoordinates(await response.Content.ReadAsStringAsync());
+                else
+                    _logger.LogError("Request to retrieve Coordinates failed with {Status}:", response.StatusCode);
 
-            return geoCoordinates;
+                return geoCoordinates;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to get coordinates for {Location}.", location);
+                return new GeoCoordinates();
+            }
         }
 
         //  Helper-Method that sends an API request to OpenRoute to retrieve Route Information between two specific locations
         public async Task<string> GetDirectionsAsync(GeoCoordinates start, GeoCoordinates end, string profile)
         {
-            if (start == null || end == null)
+            try
             {
-                return string.Empty;
+                if (start == null || end == null)
+                {
+                    _logger.LogWarning("Trying to retrieve Route Information with NULL start and end Coordinates.");
+                    return string.Empty;
+                }
+
+                string startX = start.Longitude.ToString(CultureInfo.InvariantCulture);
+                string startY = start.Latitude.ToString(CultureInfo.InvariantCulture);
+                string endX = end.Longitude.ToString(CultureInfo.InvariantCulture);
+                string endY = end.Latitude.ToString(CultureInfo.InvariantCulture);
+
+                string url = ($"v2/directions/{profile}" +
+                              $"?api_key={_openRouteKey}" +
+                              $"&start={startX},{startY}" +
+                              $"&end={endX},{endY}");
+
+                HttpResponseMessage response = await _client.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsStringAsync();
+                else
+                {
+                    _logger.LogError("Request failed with {Status}:", response.StatusCode);
+                    return string.Empty;
+                }
             }
-
-            string startX = start.Longitude.ToString(CultureInfo.InvariantCulture);
-            string startY = start.Latitude.ToString(CultureInfo.InvariantCulture);
-            string endX = end.Longitude.ToString(CultureInfo.InvariantCulture);
-            string endY = end.Latitude.ToString(CultureInfo.InvariantCulture);
-
-            string url = ($"v2/directions/{profile}" +
-                          $"?api_key={_openRouteKey}" +
-                          $"&start={startX},{startY}" +
-                          $"&end={endX},{endY}");
-
-            HttpResponseMessage response = await _client.GetAsync(url);
-            if (response.IsSuccessStatusCode)
-                return await response.Content.ReadAsStringAsync();
-            else
+            catch (Exception ex)
             {
-                _logger.LogError("Request failed with {Status}:", response.StatusCode);
+                _logger.LogError(ex, "Request to get Route Information failed.");
                 return string.Empty;
             }
         }

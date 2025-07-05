@@ -5,8 +5,8 @@ using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using TourPlanner.BL.Utils.Helpers;
 using TourPlanner.Models.Entities;
+using TourPlanner.Models.Utils.Helpers;
 
 /// <summary>
 ///     Service to handle import/export of tours and logs in JSON and XLSX (Excel)
@@ -34,32 +34,38 @@ namespace TourPlanner.BL.Services
         {
             try
             {
+                if (tours == null || tours.Count() == 0)
+                {
+                    _logger.LogWarning("Trying to export empty tour list to JSON.");
+                    return new Result(Result.ResultCode.NullError);
+                }
+
                 using (FileStream fs = File.Create(filePath))
                 {
                     await JsonSerializer.SerializeAsync(fs, tours, _options);
                 }
 
-                _logger.LogInformation("Tour(s) export to JSON successful: {FilePath}", filePath);
+                _logger.LogInformation("Exported {TourCount} Tour(s) to JSON successfully: {FilePath}.", tours.Count(), filePath);
                 return new Result(Result.ResultCode.Success);
             }
             catch (UnauthorizedAccessException ex)
             {
-                _logger.LogError(ex, "Error {FilePath}", filePath);
+                _logger.LogError(ex, "Export to JSON failed due to missing write permissions for file {FilePath}.", filePath);
                 return new Result(Result.ResultCode.FileAccessError);
             }
             catch (IOException ex)
             {
-                _logger.LogError(ex, "Error {FilePath}", filePath);
+                _logger.LogError(ex, "Export to JSON failed due to IO error for file {FilePath}.", filePath);
                 return new Result(Result.ResultCode.FileAccessError);
             }
             catch (JsonException ex)
             {
-                _logger.LogError(ex, "Error {FilePath}", filePath);
-                return new Result(Result.ResultCode.FileAccessError);
+                _logger.LogError(ex, "Error parsing tours to JSON for {FilePath}.", filePath);
+                return new Result(Result.ResultCode.ParseError);
             }
             catch (Exception ex)
             {
-                _logger.LogCritical(ex, "Error exporting tours to JSON: {FilePath}", filePath);
+                _logger.LogError(ex, "Unknown Error occurred while writing to {FilePath}.", filePath);
                 return new Result(Result.ResultCode.UnknownError);
             }
         }
@@ -68,6 +74,12 @@ namespace TourPlanner.BL.Services
         {
             try
             {
+                if (tours == null || tours.Count() == 0)
+                {
+                    _logger.LogWarning("Trying to export empty tour list to Excel file.");
+                    return new Result(Result.ResultCode.NullError);
+                }
+
                 List<Tour> tourList = tours.ToList();
                 int titleRow = 1;
                 int dataRow = 2;
@@ -190,28 +202,28 @@ namespace TourPlanner.BL.Services
                     logsSheet.Column(8).Width = 15; // TotalTime
 
                     workbook.SaveAs(filePath);
-                    _logger.LogInformation("Tour export to Excel successful: {FilePath}. Tours: {TourCount}, Logs: {LogCount}", filePath, tourList.Count, totalLogs);
+                    _logger.LogInformation("Tour export to Excel successful: {FilePath}. Tours: {TourCount}, Logs: {LogCount}.", filePath, tourList.Count, totalLogs);
                     return new Result(Result.ResultCode.Success);
                 }
             }
             catch (UnauthorizedAccessException ex)
             {
-                _logger.LogError(ex, "Error {FilePath}", filePath);
+                _logger.LogError(ex, "Export to Excel failed due to missing write permissions for file {FilePath}.", filePath);
                 return new Result(Result.ResultCode.FileAccessError);
             }
             catch (IOException ex)
             {
-                _logger.LogError(ex, "Error {FilePath}", filePath);
+                _logger.LogError(ex, "Export to Excel failed due to IO error for file {FilePath}.", filePath);
                 return new Result(Result.ResultCode.FileAccessError);
             }
             catch (ClosedXMLException ex)
             {
-                _logger.LogError(ex, "Error {FilePath}", filePath);
-                return new Result(Result.ResultCode.FileAccessError);
+                _logger.LogError(ex, "Error parsing Tour(s) to Excel {FilePath}.", filePath);
+                return new Result(Result.ResultCode.ParseError);
             }
             catch (Exception ex)
             {
-                _logger.LogCritical(ex, "Error exporting tours to Excel: {FilePath}", filePath);
+                _logger.LogError(ex, "Error exporting tours to Excel: {FilePath}.", filePath);
                 return new Result(Result.ResultCode.UnknownError);
             }
         }
@@ -249,27 +261,27 @@ namespace TourPlanner.BL.Services
                         }
                     }
 
-                    _logger.LogInformation("Imported {Count} tours from JSON: {FilePath}", tours?.Count ?? 0, filePath);
+                    _logger.LogInformation("Imported {Count} tours from JSON: {FilePath}.", tours?.Count ?? 0, filePath);
                     return new Result(Result.ResultCode.Success, tours);
                 }
             }
             catch (UnauthorizedAccessException ex)
             {
-                _logger.LogError(ex, "Error {FilePath}", filePath);
+                _logger.LogError(ex, "Import from JSON file failed due to missing read permissions for {FilePath}.", filePath);
                 return new Result(Result.ResultCode.FileAccessError);
             }
             catch (IOException ex)
             {
-                _logger.LogError(ex, "Error {FilePath}", filePath);
+                _logger.LogError(ex, "Import from JSON failed due to IO error for file {FilePath}.", filePath);
                 return new Result(Result.ResultCode.FileAccessError);
             }
             catch (JsonException ex)
             {
-                _logger.LogError(ex, "Error {FilePath}", filePath);
-                return new Result(Result.ResultCode.FileAccessError);
+                _logger.LogError(ex, "Error parsing tours from JSON for {FilePath}.", filePath);
+                return new Result(Result.ResultCode.ParseError);
             }
             catch (Exception ex) {
-                _logger.LogError(ex, "Error importing tours from JSON: {FilePath}", filePath);
+                _logger.LogError(ex, "Error importing tours from JSON for {FilePath}.", filePath);
                 return new Result(Result.ResultCode.UnknownError);
             }
         }
@@ -318,6 +330,11 @@ namespace TourPlanner.BL.Services
                         };
 
                         IXLWorksheet attributesSheet = workbook.Worksheet("Attributes");
+                        if (attributesSheet.RowCount() <= 0)
+                        {
+                            _logger.LogWarning("No Tour Attributes data found in 'Attributes' sheet.");
+                            return new Result(Result.ResultCode.NullError);
+                        }
                         foreach (IXLRow attributesRow in attributesSheet.RowsUsed().Skip(1))
                         {
                             Guid attributesTourId = Guid.TryParse(attributesRow.Cell(1).GetString(), out Guid tempAttributesId) 
@@ -372,26 +389,26 @@ namespace TourPlanner.BL.Services
                         tours.Add(tour);
                     }
                 }
-                _logger.LogInformation("Imported {TourCount} tours from Excel: {FilePath}", tours.Count, filePath);
+                _logger.LogInformation("Imported {TourCount} tours from Excel file {FilePath}.", tours.Count, filePath);
                 return new Result(Result.ResultCode.Success, tours);
             }
             catch (UnauthorizedAccessException ex)
             {
-                _logger.LogError(ex, "Error {FilePath}", filePath);
+                _logger.LogError(ex, "Import from Excel file failed due to missing read permissions for {FilePath}.", filePath);
                 return new Result(Result.ResultCode.FileAccessError);
             }
             catch (IOException ex)
             {
-                _logger.LogError(ex, "Error {FilePath}", filePath);
+                _logger.LogError(ex, "Import from Excel file failed due to IO error for {FilePath}.", filePath);
                 return new Result(Result.ResultCode.FileAccessError);
             }
             catch (ClosedXMLException ex)
             {
-                _logger.LogError(ex, "Error {FilePath}", filePath);
-                return new Result(Result.ResultCode.FileAccessError);
+                _logger.LogError(ex, "Error parsing Tour(s) from Excel file {FilePath}.", filePath);
+                return new Result(Result.ResultCode.ParseError);
             }
             catch (Exception ex) {
-                _logger.LogError(ex, "Error importing tours from Excel: {FilePath}", filePath);
+                _logger.LogError(ex, "Error importing tours from Excel file {FilePath}", filePath);
                 return new Result(Result.ResultCode.UnknownError);
             }
         }

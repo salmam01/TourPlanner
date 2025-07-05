@@ -4,6 +4,8 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using TourPlanner.Models.Entities;
 using TourPlanner.DAL.Data;
+using TourPlanner.DAL.Exceptions;
+using Npgsql;
 
 namespace TourPlanner.DAL.Repositories.TourRepository;
 
@@ -11,44 +13,83 @@ public class TourRepository : ITourRepository
 {
     private readonly TourPlannerDbContext _context;
 
-    public TourRepository(TourPlannerDbContext context) {
+    public TourRepository(TourPlannerDbContext context) 
+    {
         _context = context;
     }
 
     public Tour? GetTourById(Guid id)
     {
-        return _context.Tours
-            .Include(t => t.TourAttributes)
-            .Include(t => t.TourLogs)
-            .SingleOrDefault(t => t.Id == id);
+        try
+        {
+            return _context.Tours
+                    .Include(t => t.TourAttributes)
+                    .Include(t => t.TourLogs)
+                    .SingleOrDefault(t => t.Id == id);
+        }
+        catch (Exception ex)
+        {
+            if (IsDatabaseException(ex))
+                throw new DatabaseException("Error while retrieving Tour by ID.", ex);
+
+            else
+                throw;
+        }
     }
 
-    public IEnumerable<Tour> GetTours() {
-        return _context.Tours
-            .Include(t => t.TourAttributes)
-            .Include(t => t.TourLogs);
+    public IEnumerable<Tour> GetTours() 
+    {
+        try
+        {
+            return _context.Tours
+                    .Include(t => t.TourAttributes)
+                    .Include(t => t.TourLogs)
+                    .ToList();
+        }
+        catch (Exception ex)
+        {
+            if (IsDatabaseException(ex))
+                throw new DatabaseException("Error while retrieving Tours List.", ex);
+
+            else
+                throw;
+        }
     }
 
-    public IEnumerable<Tour> SearchTours(string query) {
-        // Use PostgreSQL Full-Text Search on the "SearchVector" column
-        string ftsQuery = query.Trim().Replace(" ", " & ") + ":*";
-        var likeQuery = $"%{query.Trim()}%";
+    public IEnumerable<Tour> SearchTours(string query) 
+    {
+        try
+        {
+            // Use PostgreSQL Full-Text Search on the "SearchVector" column
+            string ftsQuery = query.Trim().Replace(" ", " & ") + ":*";
 
-        return _context.Tours.FromSqlRaw(
-            "SELECT * FROM \"Tours\" " +
-            "WHERE \"SearchVector\" @@ to_tsquery('english', {0})",
-            ftsQuery
-        ).ToList();
+            return _context.Tours.FromSqlRaw(
+                "SELECT * FROM \"Tours\" " +
+                "WHERE \"SearchVector\" @@ to_tsquery('english', {0})",
+                ftsQuery
+            ).ToList();
+        }
+        catch (Exception ex)
+        {
+            if (IsDatabaseException(ex))
+                throw new DatabaseException("Error while performing Full-Text Search on Tours.", ex);
+
+            else
+                throw;
+        }
     }
 
-    public void InsertTour(Tour tour) {
+    public void InsertTour(Tour tour) 
+    {
         _context.Tours.Add(tour);
         Save();
     }
 
-    public void UpdateTour(Tour tour) {
-        Tour tourToUpdate = _context.Tours.Find(tour.Id);
-        if (tourToUpdate == null) return;
+    public void UpdateTour(Tour tour) 
+    {
+        Tour? tourToUpdate = _context.Tours.Find(tour.Id);
+        if (tourToUpdate == null)
+            throw new DatabaseException($"Could not find Tour with ID {tour.Id} to update.");
         
         tourToUpdate.Name = tour.Name;
         tourToUpdate.Date = tour.Date;
@@ -62,24 +103,50 @@ public class TourRepository : ITourRepository
         Save();
     }
 
-    public void DeleteTour(Guid tourId) {
-        Tour tour = _context.Tours.Find(tourId);
+    public void DeleteTour(Guid tourId) 
+    {
+        Tour? tour = _context.Tours.Find(tourId);
+        if (tour == null) 
+            throw new DatabaseException($"Could not find Tour with ID {tourId} to delete.");
+
         _context.Tours.Remove(tour);
         Save();
     }
 
     public void DeleteAllTours()
     {
-        _context.Tours.ExecuteDelete();
+        try
+        {
+            _context.Tours.ExecuteDelete();
+        }
+        catch (Exception ex)
+        {
+            if (IsDatabaseException(ex))
+                throw new DatabaseException("Error while deleting Tour List from Database.", ex);
+
+            else
+                throw;
+        }
     }
 
-    public void Save() {
+    private void Save() 
+    {
         try {
             _context.SaveChanges();
         }
-        catch (DbUpdateException ex) {
-            Console.WriteLine("DB Update Failed: " + ex.InnerException?.Message);
-            throw;
+        catch (Exception ex) {
+            if (IsDatabaseException(ex))
+                throw new DatabaseException("Error while saving Tour Database changes.", ex);
+
+            else 
+                throw;
         }
+    }
+
+    private bool IsDatabaseException(Exception ex)
+    {
+        return (ex is DbUpdateException ||
+                ex is PostgresException ||
+                ex is InvalidOperationException);
     }
 }

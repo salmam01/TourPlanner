@@ -1,9 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
 using Npgsql;
 using System.Linq;
-using TourPlanner.BL.Utils.Helpers;
+using TourPlanner.DAL.Exceptions;
 using TourPlanner.DAL.Repositories.TourRepository;
 using TourPlanner.Models.Entities;
+using TourPlanner.Models.Utils.Helpers;
 
 namespace TourPlanner.BL.Services;
 
@@ -27,19 +28,18 @@ public class TourService {
         {
             return new Result(Result.ResultCode.Success, _tourRepository.GetTours().ToList());
         }
-        catch (PostgresException pgEx)
+        catch (DatabaseException dbEx)
         {
-            _logger.LogError(
-                pgEx,
-                "Postgres Exception occurred while retrieving a list of all Tours: {ErrorCode} => {Message}",
-                pgEx.SqlState,
-                pgEx.MessageText
+            _logger.LogCritical(
+                dbEx,
+                "\nDatabase Exception occurred while retrieving a list of all Tours.\nMessage: {Message}",
+                dbEx.Message
             );
             return new Result(Result.ResultCode.DatabaseError);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Exception occurred while retrieving a list of all Tours.");
+            _logger.LogError(ex, "\nException occurred while retrieving a list of all Tours.");
             return new Result(Result.ResultCode.UnknownError);
         }
     }
@@ -74,19 +74,18 @@ public class TourService {
             //  Sort the list by algorithm & display combined list
             return new Result(Result.ResultCode.Success, tours.OrderByDescending(t => t.TourAttributes.SearchAlgorithmRanking).ToList());
         }
-        catch (PostgresException pgEx)
+        catch (DatabaseException dbEx)
         {
-            _logger.LogError(
-                pgEx,
-                "Postgres Exception occurred while searching Tours: {ErrorCode} => {Message}",
-                pgEx.SqlState,
-                pgEx.MessageText
+            _logger.LogCritical(
+                dbEx,
+                "\nDatabase Exception occurred while searching Tours.\nMessage:{Message}",
+                dbEx.Message
             );
             return new Result(Result.ResultCode.DatabaseError);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Exception occurred while searching Tours.");
+            _logger.LogError(ex, "\nException occurred while searching Tours.");
             return new Result(Result.ResultCode.UnknownError);
         }
     }
@@ -104,20 +103,19 @@ public class TourService {
             _logger.LogInformation("Tour created => {@Tour}", tour);
             return new Result(Result.ResultCode.Success);
         }
-        catch (PostgresException pgEx)
+        catch (DatabaseException dbEx)
         {
-            _logger.LogError(
-                pgEx,
-                "Postgres Exception occurred while creating Tour => {TourName}: {ErrorCode} -> {Message}", 
+            _logger.LogCritical(
+                dbEx,
+                "\nDatabase Exception occurred while creating Tour => {TourName}.\nMessage: {Message}", 
                 tour.Name,
-                pgEx.SqlState,
-                pgEx.MessageText
+                dbEx.Message
             );
             return new Result(Result.ResultCode.DatabaseError);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Exception occurred while creating Tour => {TourName}", tour.Name);
+            _logger.LogError(ex, "\nException occurred while creating Tour => {TourName}", tour.Name);
             return new Result(Result.ResultCode.UnknownError);
         }
     }
@@ -135,14 +133,13 @@ public class TourService {
             _logger.LogInformation("Tour updated => {Tour}", tour);
             return new Result(Result.ResultCode.Success);
         }
-        catch (PostgresException pgEx)
+        catch (DatabaseException dbEx)
         {
-            _logger.LogError(
-                pgEx, 
-                "Postgres Exception occurred while updating Tour => {TourName}: {ErrorCode} -> {Message}", 
-                tour.Name, 
-                pgEx.SqlState, 
-                pgEx.MessageText
+            _logger.LogCritical(
+                dbEx,
+                "Database Exception occurred while updating Tour => {TourName}: {Message}", 
+                tour.Name,
+                dbEx.Message
             );
             return new Result(Result.ResultCode.DatabaseError);
         }
@@ -167,14 +164,13 @@ public class TourService {
             _logger.LogInformation("Tour Attributes recalculated => {TourName}: {@TourAttributes}", tour.Name, tour.TourAttributes);
             return new Result(Result.ResultCode.Success);
         }
-        catch (PostgresException pgEx)
+        catch (DatabaseException dbEx)
         {
-            _logger.LogError(
-                pgEx, 
-                "Postgres Exception occurred while recalculating Tour Attributes => {TourName}: {ErrorCode} -> {Message}", 
-                tour.Name, 
-                pgEx.SqlState, 
-                pgEx.MessageText
+            _logger.LogCritical(
+                dbEx,
+                "Database Exception occurred while recalculating Tour Attributes => {TourName}: {Message}",
+                tour.Name,
+                dbEx.Message
             );
             return new Result(Result.ResultCode.DatabaseError);
         }
@@ -187,26 +183,25 @@ public class TourService {
 
     public Result DeleteTour(Tour tour) 
     {
-        if (tour == null) 
-        {
-            _logger.LogWarning("Trying to delete Tour with NULL Tour.");
-            return new Result(Result.ResultCode.NullError);
-        }
-
         try
         {
+            if (tour == null)
+            {
+                _logger.LogWarning("Trying to delete Tour with NULL Tour.");
+                return new Result(Result.ResultCode.NullError);
+            }
+
             _tourRepository.DeleteTour(tour.Id);
             _logger.LogInformation("Tour deleted => {@TourName}", tour.Name);
             return new Result(Result.ResultCode.Success);
         }
-        catch (PostgresException pgEx)
+        catch (DatabaseException dbEx)
         {
-            _logger.LogError(
-                pgEx, 
-                "Postgres Exception occurred while deleting Tour => {TourName}: {ErrorCode} -> {Message}", 
-                tour.Name, 
-                pgEx.SqlState, 
-                pgEx.MessageText
+            _logger.LogCritical(
+                dbEx,
+                "Database Exception occurred while deleting Tour => {TourName}: {Message}", 
+                tour.Name,
+                dbEx.Message
             );
             return new Result(Result.ResultCode.DatabaseError);
         }
@@ -224,14 +219,13 @@ public class TourService {
             _tourRepository.DeleteAllTours();
             _logger.LogInformation("All tours have been deleted");
             return new Result(Result.ResultCode.Success);
-        } 
-        catch (PostgresException pgEx)
+        }
+        catch (DatabaseException dbEx)
         {
-            _logger.LogError(
-                pgEx,
-                "Postgres Exception occurred while deleting all Tours: {ErrorCode} -> {Message}",
-                pgEx.SqlState,
-                pgEx.MessageText
+            _logger.LogCritical(
+                dbEx,
+                "Database Exception occurred while deleting all Tours: {Message}",
+                dbEx.Message
             );
             return new Result(Result.ResultCode.DatabaseError);
         }
