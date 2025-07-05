@@ -3,7 +3,7 @@
     <Style x:Key="NavbarButtonStyle"
            TargetType="Button">
         <Setter Property="Foreground" Value="Black"/>
-        <Setter Property="Background" Value="#A4B465"/>
+        <Setter Property="Background" Value="#8FA055"/>
         <Setter Property="FontSize" Value="18"/>
         <Setter Property="FontFamily" Value="/Resources/Fonts/#Montserrat"/>
         <Setter Property="FontWeight" Value="Medium"/>
@@ -23,15 +23,15 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#A4B465"/>
+                <Setter Property="Background" Value="#7A8A45"/>
             </Trigger>
         </Style.Triggers>
     </Style>
 
     <!-- New style  for the Search tab button -->
     <Style x:Key="SearchTabButtonStyle" TargetType="Button" BasedOn="{StaticResource NavbarButtonStyle}">
-        <Setter Property="Foreground" Value="#F4B91F"/> 
-        <Setter Property="Background" Value="#608A26"/> 
+        <Setter Property="Foreground" Value="#F5ECD5"/> 
+        <Setter Property="Background" Value="#5A7A26"/> 
         <Setter Property="Padding" Value="10,10"/> 
         <Setter Property="Template">
             <Setter.Value>
@@ -46,7 +46,7 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#7B8A3E"/>
+                <Setter Property="Background" Value="#4A6A16"/>
             </Trigger>
         </Style.Triggers>
     </Style>

@@ -4,11 +4,14 @@
            TargetType="Button">
         <Setter Property="FontFamily" Value="/Resources/Fonts/#Montserrat"/>
         <Setter Property="Foreground" Value="#F5ECD5"/>
-        <Setter Property="Background" Value="#f28484"/>
+        <Setter Property="Background" Value="#d65a5a"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#ed5656"/>
+                <Setter Property="Background" Value="#c44a4a"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="#b23a3a"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -25,7 +28,7 @@
                     <Border Height="25" Width="25" 
                             CornerRadius="12"
                             BorderThickness="1"
-                            BorderBrush="#ed5656"
+                            BorderBrush="#c44a4a"
                             Background="{TemplateBinding Background}">
                         <ContentPresenter VerticalAlignment="Center"
                                           HorizontalAlignment="Center"/>
@@ -35,7 +38,7 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#ed5656"/>
+                <Setter Property="Background" Value="#c44a4a"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -65,7 +68,7 @@
            TargetType="Button">
         <Setter Property="FontSize" Value="20"/>
         <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="Foreground" Value="#f28484"/>
+        <Setter Property="Foreground" Value="#d65a5a"/>
         <Setter Property="Padding" Value="20,10"/>
         <Setter Property="Background" Value="#F5ECD5"/>
         <Setter Property="Template">
@@ -74,7 +77,7 @@
                     <Border Height="60"
                             CornerRadius="25"
                             BorderThickness="2"
-                            BorderBrush="#f28484"
+                            BorderBrush="#d65a5a"
                             Background="{TemplateBinding Background}"
                             Padding="{TemplateBinding Padding}">
                         <ContentPresenter VerticalAlignment="Center"
@@ -85,19 +88,19 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#ed5656"/>
+                <Setter Property="Background" Value="#d65a5a"/>
                 <Setter Property="Foreground" Value="#F5ECD5"/>
             </Trigger>
         </Style.Triggers>
     </Style>
     <!-- Modern ScrollBar Style -->
     <Style x:Key="ModernScrollBarStyle" TargetType="ScrollBar">
-        <Setter Property="Background" Value="#f7b2b2"/>
+        <Setter Property="Background" Value="#e8a0a0"/>
         <Setter Property="Width" Value="10"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ScrollBar">
-                    <Grid x:Name="Bg" Background="#f7b2b2">
+                    <Grid x:Name="Bg" Background="#e8a0a0">
                         <Border Background="#FFFFFF" CornerRadius="5" Margin="0">
                             <Track x:Name="PART_Track">
                                 <Track.DecreaseRepeatButton>
@@ -107,7 +110,7 @@
                                     <Thumb>
                                         <Thumb.Template>
                                             <ControlTemplate TargetType="Thumb">
-                                                <Border Background="#f28484" CornerRadius="5" Height="40"/>
+                                                <Border Background="#d65a5a" CornerRadius="5" Height="40"/>
                                             </ControlTemplate>
                                         </Thumb.Template>
                                     </Thumb>

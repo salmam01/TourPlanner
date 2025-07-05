@@ -11,8 +11,9 @@
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="Padding" Value="35,10,10,10"/>
         <Setter Property="Background" Value="#F5ECD5"/>
-        <Setter Property="BorderBrush" Value="#f7b2b2"/>
-        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="BorderBrush" Value="#e8a0a0"/>
+        <Setter Property="BorderThickness" Value="2"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TextBox">
@@ -28,5 +29,11 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsFocused" Value="True">
+                <Setter Property="BorderBrush" Value="#d65a5a"/>
+                <Setter Property="BorderThickness" Value="3"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 </ResourceDictionary>

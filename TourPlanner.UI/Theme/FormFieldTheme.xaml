@@ -3,13 +3,14 @@
     <Style x:Key="FormFieldTextBox"
            TargetType="TextBox">
         <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="Background" Value="#FFFFFF"/>
         <Setter Property="FontFamily" Value="/Resources/Fonts/#Montserrat"/>
         <Setter Property="FontSize" Value="16"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Margin" Value="5,0,5,5"/>
         <Setter Property="Padding" Value="10"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="BorderBrush" Value="#f7b2b2"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderBrush" Value="#e8a0a0"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TextBox">
@@ -27,9 +28,13 @@
             </Setter.Value>
         </Setter>
         <Style.Triggers>
+            <Trigger Property="IsFocused" Value="True">
+                <Setter Property="BorderBrush" Value="#d65a5a"/>
+                <Setter Property="BorderThickness" Value="3"/>
+            </Trigger>
             <Trigger Property="Validation.HasError" Value="True">
-                <Setter Property="BorderBrush" Value="Red"/>
-                <Setter Property="BorderThickness" Value="2"/>
+                <Setter Property="BorderBrush" Value="#c44a4a"/>
+                <Setter Property="BorderThickness" Value="3"/>
                 <Setter Property="ToolTip"
                         Value="{Binding Path=(Validation.Errors)[0].ErrorContent,
                                         RelativeSource={RelativeSource Self}}"/>
@@ -43,17 +48,20 @@
         <Setter Property="Padding" Value="10"/>
         <Setter Property="FontSize" Value="16"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Background" Value="#FFFFFF"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="BorderBrush" Value="#e8a0a0"/>
+        <Setter Property="BorderThickness" Value="2"/>
     </Style>
 
     <Style x:Key="FormSliderFieldStyle"
            TargetType="Slider">
-        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="Foreground" Value="#d65a5a" />
         <Setter Property="Margin" Value="5,0,5,5" />
-        <Setter Property="Background" Value="#FFF"/>
+        <Setter Property="Background" Value="#e8a0a0"/>
         <Style.Triggers>
             <Trigger Property="Validation.HasError" Value="True">
-                <Setter Property="BorderBrush" Value="Red" />
-                <Setter Property="BorderThickness" Value="2" />
+                <Setter Property="Foreground" Value="#c44a4a" />
                 <Setter Property="ToolTip"
                         Value="{Binding Path=(Validation.Errors)[0].ErrorContent,
                                         RelativeSource={RelativeSource Self}}" />
@@ -64,14 +72,17 @@
     <Style x:Key="FormDatePickerFieldStyle"
            TargetType="DatePicker">
         <Setter Property="Foreground" Value="Black" />
+        <Setter Property="Background" Value="#FFFFFF"/>
         <Setter Property="FontFamily" Value="/UI/Resources/Fonts/#Montserrat" />
         <Setter Property="FontSize" Value="16" />
         <Setter Property="Margin" Value="5,0,5,5" />
         <Setter Property="Padding" Value="10"/>
+        <Setter Property="BorderBrush" Value="#e8a0a0"/>
+        <Setter Property="BorderThickness" Value="2"/>
         <Style.Triggers>
             <Trigger Property="Validation.HasError" Value="True">
-                <Setter Property="BorderBrush" Value="Red" />
-                <Setter Property="BorderThickness" Value="2" />
+                <Setter Property="BorderBrush" Value="#c44a4a" />
+                <Setter Property="BorderThickness" Value="3" />
                 <Setter Property="ToolTip"
                         Value="{Binding Path=(Validation.Errors)[0].ErrorContent,
                                         RelativeSource={RelativeSource Self}}" />
