@@ -30,7 +30,7 @@
             <ListView.View>
                 <GridView>
                     <!-- Date Column -->
-                    <GridViewColumn Header="Date" Width="150">
+                    <GridViewColumn Header="Date" Width="140">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Date, StringFormat=dd.MM.yyyy}"
@@ -43,7 +43,7 @@
                     </GridViewColumn>
 
                     <!-- Duration Column -->
-                    <GridViewColumn Header="Duration" Width="150">
+                    <GridViewColumn Header="Duration" Width="140">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Margin="10,5" VerticalAlignment="Center" Foreground="Black" FontSize="12">
@@ -56,13 +56,39 @@
                     </GridViewColumn>
 
                     <!-- Distance Column -->
-                    <GridViewColumn Header="Distance" Width="150">
+                    <GridViewColumn Header="Distance" Width="140">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Margin="10,5" VerticalAlignment="Center" Foreground="Black" FontSize="12">
                                     <Run Text="{Binding TotalDistance, StringFormat=F1}" />
                                     <Run Text=" km" />
                                 </TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <!-- Difficulty Column -->
+                    <GridViewColumn Header="Difficulty" Width="140">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Difficulty}"
+                                           Margin="10,5"
+                                           VerticalAlignment="Center"
+                                           Foreground="Black"
+                                           FontSize="12" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <!-- Rating Column -->
+                    <GridViewColumn Header="Rating" Width="130">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Rating}"
+                                           Margin="10,5"
+                                           VerticalAlignment="Center"
+                                           Foreground="Black"
+                                           FontSize="12" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
