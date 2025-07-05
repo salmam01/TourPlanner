@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TourPlanner.BL.API;
 using TourPlanner.BL.Utils.DTO;
+using TourPlanner.BL.Utils.Helpers;
 using TourPlanner.Models.Entities;
 using TourPlanner.UI.Events;
 using TourPlanner.UI.Leaflet;
@@ -61,7 +62,8 @@ namespace TourPlanner.UI.ViewModels
                 Debug.WriteLine("In GetRouteMap [MapViewModel] !!");
 
                 //  Get the map geometry needed for the map image
-                MapGeometry mapGeometry = await _openRouteService.GetMapGeometry(_selectedTour);
+                Result result = await _openRouteService.GetMapGeometry(_selectedTour);
+                MapGeometry mapGeometry = (MapGeometry)result.Data;
 
                 if (mapGeometry != null && mapGeometry.WayPoints.Count > 0 && mapGeometry.Bbox != null)
                 {

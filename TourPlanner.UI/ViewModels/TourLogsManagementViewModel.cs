@@ -1,7 +1,7 @@
 ﻿using Serilog;
 using System.Windows;
 using TourPlanner.BL.Services;
-using TourPlanner.BL.Utils;
+using TourPlanner.BL.Utils.Helpers;
 using TourPlanner.Models.Entities;
 using TourPlanner.UI.Commands;
 using TourPlanner.UI.Events;

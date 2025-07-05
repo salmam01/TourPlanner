@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Npgsql;
 using System.Linq;
-using TourPlanner.BL.Utils;
+using TourPlanner.BL.Utils.Helpers;
 using TourPlanner.DAL.Repositories.TourRepository;
 using TourPlanner.Models.Entities;
 
@@ -71,10 +71,10 @@ public class TourService {
         catch (PostgresException pgEx)
         {
             _logger.LogError(
-                pgEx, 
+                pgEx,
                 "Postgres Exception occurred while creating Tour => {TourName}: {ErrorCode} -> {Message}", 
-                tour.Name, 
-                pgEx.SqlState, 
+                tour.Name,
+                pgEx.SqlState,
                 pgEx.MessageText
             );
             return new Result(Result.ResultCode.DatabaseError);

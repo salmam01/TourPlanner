@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using TourPlanner.BL.API;
+using TourPlanner.BL.Utils.Helpers;
 using TourPlanner.BL.Utils.Validators;
 using TourPlanner.Models.Entities;
 using TourPlanner.UI.Commands;
@@ -282,8 +283,8 @@ namespace TourPlanner.UI.ViewModels
         {
             if (!string.IsNullOrEmpty(From))
             {
-                Debug.WriteLine("GETTING FROM SUGGESTION");
-                FromLocationSuggestions = await _openRouteService.GetLocationSuggestionsAsync(From);
+                Result result = await _openRouteService.GetLocationSuggestionsAsync(From);
+                FromLocationSuggestions = (List<string>)result.Data;
                 OnPropertyChanged(nameof(FromLocationSuggestions));
             }
         }
@@ -292,7 +293,8 @@ namespace TourPlanner.UI.ViewModels
         {
             if (!string.IsNullOrEmpty(To))
             {
-                ToLocationSuggestions = await _openRouteService.GetLocationSuggestionsAsync(To);
+                Result result = await _openRouteService.GetLocationSuggestionsAsync(To);
+                ToLocationSuggestions = (List<string>)result.Data;
                 OnPropertyChanged(nameof(ToLocationSuggestions));
             }
         }

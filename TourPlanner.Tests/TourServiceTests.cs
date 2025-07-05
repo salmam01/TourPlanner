@@ -1,5 +1,3 @@
-using TourPlanner.BL.Utils;
-
 namespace TourPlanner.Tests
 {
     using Xunit;
@@ -12,7 +10,7 @@ namespace TourPlanner.Tests
     using System;
     using System.Collections.Generic;
     using Npgsql;
-    
+    using TourPlanner.BL.Utils.Helpers;
 
     public class TourServiceTests
     {

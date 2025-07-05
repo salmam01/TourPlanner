@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TourPlanner.BL.Utils.DTO;
 
-namespace TourPlanner.BL.Utils
+namespace TourPlanner.BL.Utils.Helpers
 {
     public class Parser
     {

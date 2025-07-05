@@ -1,4 +1,6 @@
-﻿using Serilog;
+﻿using iText.StyledXmlParser.Jsoup.Parser;
+using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,13 +9,12 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using TourPlanner.BL.API;
 using TourPlanner.BL.Services;
+using TourPlanner.BL.Utils.Helpers;
 using TourPlanner.Models.Entities;
 using TourPlanner.UI.Commands;
 using TourPlanner.UI.Events;
-using Microsoft.Extensions.Logging;
-using TourPlanner.BL.Utils;
-using TourPlanner.BL.API;
 
 namespace TourPlanner.UI.ViewModels
 {
@@ -166,20 +167,27 @@ namespace TourPlanner.UI.ViewModels
                 _selectedTour = null;
             }
             else
-                ShowErrorMessage(result);
+                ShowErrorMessage(result, "Delete Error");
         }
 
         public async void OnTourCreated(object sender, Tour tour)
         {
             if (tour == null) return;
 
-            tour = await _openRouteService.GetTourInformationAsync(tour);
-            Result result = _tourService.CreateTour(tour);
+            Result result = await _openRouteService.GetTourInformationAsync(tour);
+            if (result.Code != Result.ResultCode.Success)
+            {
+                ShowErrorMessage(result, "Create Error");
+                return;
+            }
+            tour = (Tour)result.Data;
+
+            result = _tourService.CreateTour(tour);
 
             if (result.Code == Result.ResultCode.Success)
                 ReloadList();
             else
-                ShowErrorMessage(result);
+                ShowErrorMessage(result, "Create Error");
 
             _eventAggregator.Publish(new NavigationEvent(NavigationEvent.Destination.Home));
         }
@@ -188,18 +196,27 @@ namespace TourPlanner.UI.ViewModels
         {
             if (tour == null) return;
 
-            tour = await _openRouteService.GetTourInformationAsync(tour);
-            Result result = _tourService.UpdateTour(tour);
+            Result result = await _openRouteService.GetTourInformationAsync(tour);
+            if(result.Code != Result.ResultCode.Success)
+            {
+                ShowErrorMessage(result, "Edit Error");
+                return;
+            }
+            tour = (Tour)result.Data;
+
+            result = _tourService.UpdateTour(tour);
 
             if (result.Code == Result.ResultCode.Success)
+            {
                 ReloadList();
+                _eventAggregator.Publish(new TourEvent(TourEvent.EventType.TourEdited));
+            }
             else
-                ShowErrorMessage(result);
-
+                ShowErrorMessage(result, "Edit Error");
+            
             _selectedTour = tour;
             TourListViewModel.SelectedTour = tour;
             _eventAggregator.Publish(new NavigationEvent(NavigationEvent.Destination.Home));
-            _eventAggregator.Publish(new TourEvent(TourEvent.EventType.TourEdited));
         }
 
         public void DeleteAllTours()
@@ -221,7 +238,7 @@ namespace TourPlanner.UI.ViewModels
                 _selectedTour = null;
             }
             else
-                ShowErrorMessage(result);
+                ShowErrorMessage(result, "Delete Error");
         }
 
         public void OnPerformSearch(object sender, string searchText)
@@ -245,18 +262,30 @@ namespace TourPlanner.UI.ViewModels
             Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog
             {
                 Filter = "JSON files (*.json)|*.json|Excel files (*.xlsx)|*.xlsx",
-                Title = "Import Tour Data"
+                Title = "Import Tour(s)"
             };
 
             if (openFileDialog.ShowDialog() == true)
             {
-                List<Tour> importedTours = new List<Tour>();
-                if (openFileDialog.FileName.EndsWith(".json"))
-                    importedTours = await _importExportService.ImportToursFromJsonAsync(openFileDialog.FileName);
-                if (openFileDialog.FileName.EndsWith(".xlsx"))
-                    importedTours = _importExportService.ImportTourFromExcel(openFileDialog.FileName);
+                Result result = new(Result.ResultCode.UnknownError);
+                List<Tour> importedTours = [];
 
-                if (importedTours.Count == 0)
+                if (openFileDialog.FileName.EndsWith(".json"))
+                    result = await _importExportService.ImportToursFromJsonAsync(openFileDialog.FileName);
+                else if (openFileDialog.FileName.EndsWith(".xlsx"))
+                    result = _importExportService.ImportTourFromExcel(openFileDialog.FileName);
+
+                if (result.Code == Result.ResultCode.Success)
+                {
+                    importedTours = (List<Tour>)result.Data;
+                }
+                else
+                {
+                    ShowErrorMessage(result, "Import Error");
+                    return;
+                }
+                    
+                if (importedTours.Count <= 0)
                 {
                     MessageBox.Show("No tours found in the selected file.", "Import Result", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
@@ -264,21 +293,26 @@ namespace TourPlanner.UI.ViewModels
 
                 foreach (Tour tour in importedTours)
                 {
-                    _tourService.CreateTour(tour);
+                    result = _tourService.CreateTour(tour);
+
+                    if (result.Code != Result.ResultCode.Success)
+                    {
+                        ShowErrorMessage(result, "Import Error");
+                        ReloadList();
+                        return;
+                    }
                 }
 
                 MessageBox.Show("Tours imported successfully.", "Import Result", MessageBoxButton.OK, MessageBoxImage.Information);
                 ReloadList();
             }
-            
-            //MessageBox.Show($"Failed to import tours.\nDetails: {ex.Message}", "Import Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         private async void ExportAllTours()
         {
             if (TourListViewModel.Tours == null || TourListViewModel.Tours.Count <= 0)
             {
-                MessageBox.Show("There are no tours to export!");
+                MessageBox.Show("There are no tours to export!", "Export Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -299,7 +333,7 @@ namespace TourPlanner.UI.ViewModels
                 result = _importExportService.ExportToursToExcel(tours, saveFileDialog.FileName);
 
             if (result.Code == Result.ResultCode.Success)
-                MessageBox.Show("Tours exported successfully.", "Export Result", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Tours exported successfully.", "Export Success", MessageBoxButton.OK, MessageBoxImage.Information);
             else
                 MessageBox.Show($"Failed to export tours.", "Export Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
@@ -308,7 +342,7 @@ namespace TourPlanner.UI.ViewModels
         {
             if (_selectedTour == null) 
             {
-                MessageBox.Show("Please select a tour to export.");
+                MessageBox.Show("Please select a tour to export.", "Export Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
             
@@ -328,7 +362,7 @@ namespace TourPlanner.UI.ViewModels
                 result = _importExportService.ExportToursToExcel(new List<Tour> { _selectedTour }, saveFileDialog.FileName);
             
             if (result.Code == Result.ResultCode.Success) 
-                MessageBox.Show("Tour exported successfully.", "Export Result", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Tour exported successfully.", "Export Success", MessageBoxButton.OK, MessageBoxImage.Information);
             else
                 MessageBox.Show($"Failed to export tour.", "Export Error", MessageBoxButton.OK, MessageBoxImage.Error);
             
@@ -355,7 +389,7 @@ namespace TourPlanner.UI.ViewModels
                 {
                     Result result = await _reportGenerationService.GenerateTourReport(_selectedTour, saveFileDialog.FileName);
                     if (result.Code == Result.ResultCode.Success)
-                        MessageBox.Show("Tour report generated successfully.", "Export Result", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show("Tour report generated successfully.", "Export Success", MessageBoxButton.OK, MessageBoxImage.Information);
                     else
                         MessageBox.Show($"Failed to generate tour report: {result.Code}", "Report Generation Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
@@ -368,34 +402,28 @@ namespace TourPlanner.UI.ViewModels
 
         private void GenerateSummaryReport()
         {
-            try
+            if (TourListViewModel.Tours == null || TourListViewModel.Tours.Count <= 0)
             {
-                if (TourListViewModel.Tours == null || TourListViewModel.Tours.Count <= 0)
-                {
-                    MessageBox.Show("There are no tours to create a report for!");
-                    return;
-                }
-
-                Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog
-                {
-                    Filter = "PDF files (*.pdf)|*.pdf",
-                    Title = "Save Summary Report",
-                    FileName = $"TourSummary_{DateTime.Now:yyyyMMdd}"
-                };
-
-                if (saveFileDialog.ShowDialog() == true)
-                {
-                    _reportGenerationService.GenerateSummaryReport(_tourService.GetAllTours(), saveFileDialog.FileName);
-                    MessageBox.Show("Summary report generated successfully.", "Export Result", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
+                MessageBox.Show("There are no tours to create a report for!", "Report Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
             }
-            catch (Exception ex)
+
+            Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog
             {
-                MessageBox.Show($"Failed to generate summary report.\nDetails: {ex.Message}", "Export Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Filter = "PDF files (*.pdf)|*.pdf",
+                Title = "Save Summary Report",
+                FileName = $"TourSummary_{DateTime.Now:yyyyMMdd}"
+            };
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                _reportGenerationService.GenerateSummaryReport(_tourService.GetAllTours(), saveFileDialog.FileName);
+                MessageBox.Show("Summary report generated successfully.", "Export Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
+
         }
 
-        private void ShowErrorMessage(Result result)
+        private void ShowErrorMessage(Result result, string errorType)
         {
             string message = string.Empty;
 
@@ -407,12 +435,24 @@ namespace TourPlanner.UI.ViewModels
                 case Result.ResultCode.DatabaseError:
                     message = "Database error occurred. Please try again later.";
                     break;
+                case Result.ResultCode.FileAccessError:
+                    message = "Unable to access the file. It might be open in another program, or you lack the necessary permissions.";
+                    break;
+                case Result.ResultCode.PdfGenerationError:
+                    message = "There was a problem generating the PDF file.";
+                    break;
+                case Result.ResultCode.ParseError:
+                    message = "Failed to process the route data. Please check the input data.";
+                    break;
+                case Result.ResultCode.ApiError:
+                    message = "A network error occurred while contacting the route service.";
+                    break;
                 case Result.ResultCode.UnknownError:
                     message = "An unknown error occurred.";
                     break;
             }
 
-            MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(message, errorType, MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }

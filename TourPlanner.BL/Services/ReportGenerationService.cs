@@ -8,14 +8,14 @@ using iText.Layout;
 using iText.Layout.Element;
 using iText.Layout.Properties;
 using Microsoft.Extensions.Logging;
-using TourPlanner.BL.Utils;
 using TourPlanner.Models.Entities;
 using System.IO;
 using System.Threading.Tasks;
 using TourPlanner.BL.API;
 using TourPlanner.BL.Utils.DTO;
-using Microsoft.Playwright; 
+using Microsoft.Playwright;
 using iText.IO.Image;
+using TourPlanner.BL.Utils.Helpers;
 
 namespace TourPlanner.BL.Services
 {
@@ -270,7 +270,8 @@ namespace TourPlanner.BL.Services
             try
             {
                 // 1. fetch MapGeometry 
-                MapGeometry mapGeometry = await _openRouteService.GetMapGeometry(tour);
+                Result result = await _openRouteService.GetMapGeometry(tour);
+                MapGeometry mapGeometry = (MapGeometry)result.Data;
                 if (mapGeometry == null || mapGeometry.WayPoints == null || !mapGeometry.WayPoints.Any())
                     throw new InvalidOperationException("No map geometry available for tour");
 

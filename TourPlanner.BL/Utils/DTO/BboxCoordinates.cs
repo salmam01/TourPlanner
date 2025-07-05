@@ -8,9 +8,9 @@ namespace TourPlanner.BL.Utils.DTO
 {
     public class BboxCoordinates
     {
-        public double MinLongitude { get; set; }
-        public double MaxLongitude { get; set; }
-        public double MinLatitude { get; set; }
-        public double MaxLatitude { get; set; }
+        public double MinLongitude { get; set; } = 0;
+        public double MaxLongitude { get; set; } = 0;
+        public double MinLatitude { get; set; } = 0;
+        public double MaxLatitude { get; set; } = 0;
     }
 }

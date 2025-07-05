@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using TourPlanner.BL.Utils;
+using TourPlanner.BL.Utils.Helpers;
 using TourPlanner.Models.Entities;
 
 /// <summary>
@@ -185,47 +185,49 @@ namespace TourPlanner.BL.Services
         }
 
         //  Return result instead
-        public async Task<List<Tour>> ImportToursFromJsonAsync(string filePath)
+        public async Task<Result> ImportToursFromJsonAsync(string filePath)
         {
             try {
                 using (FileStream fs = File.OpenRead(filePath))
                 {
                     List<Tour>? tours = await JsonSerializer.DeserializeAsync<List<Tour>>(fs, _options);
 
-                    if (tours != null && tours.Count > 0)
+                    if (tours == null || tours.Count <= 0)
                     {
-                        foreach (Tour tour in tours)
-                        {
-                            tour.Id = Guid.NewGuid();
-                            
-                            if (tour.TourAttributes != null)
-                            {
-                                tour.TourAttributes.Id = tour.Id;
-                            }
+                        return new Result(Result.ResultCode.NullError);
+                    }
 
-                            if (tour.TourLogs != null && tour.TourLogs.Count > 0)
+                    foreach (Tour tour in tours)
+                    {
+                        tour.Id = Guid.NewGuid();
+
+                        if (tour.TourAttributes != null)
+                        {
+                            tour.TourAttributes.Id = tour.Id;
+                        }
+
+                        if (tour.TourLogs != null && tour.TourLogs.Count > 0)
+                        {
+                            foreach (TourLog log in tour.TourLogs)
                             {
-                                foreach (TourLog log in tour.TourLogs)
-                                {
-                                    log.Id = Guid.NewGuid();
-                                    log.TourId = tour.Id;
-                                    log.Tour = tour;
-                                }
+                                log.Id = Guid.NewGuid();
+                                log.TourId = tour.Id;
+                                log.Tour = tour;
                             }
                         }
                     }
 
                     _logger.LogInformation("Imported {Count} tours from JSON: {FilePath}", tours?.Count ?? 0, filePath);
-                    return tours ?? new List<Tour>();
+                    return new Result(Result.ResultCode.Success, tours);
                 }
             }
             catch (Exception ex) {
                 _logger.LogError(ex, "Error importing tours from JSON: {FilePath}", filePath);
-                throw;
+                return new Result(Result.ResultCode.UnknownError);
             }
         }
 
-        public List<Tour> ImportTourFromExcel(string filePath)
+        public Result ImportTourFromExcel(string filePath)
         {
             try {
                 List<Tour> tours = new List<Tour>();
@@ -236,14 +238,14 @@ namespace TourPlanner.BL.Services
                     if (!workbook.Worksheets.Contains("Tours") || !workbook.Worksheets.Contains("Attributes") || !workbook.Worksheets.Contains("Logs")) 
                     {
                         _logger.LogWarning("Excel file is missing required sheet.");
-                        return new List<Tour>();
+                        return new Result(Result.ResultCode.UnknownError);
                     }
 
                     IXLWorksheet toursSheet = workbook.Worksheet("Tours");
                     if (toursSheet.RowCount() <= 0)
                     {
                         _logger.LogWarning("No tour data found in 'Tours' sheet.");
-                        return new List<Tour>();
+                        return new Result(Result.ResultCode.NullError);
                     }
 
                     foreach (IXLRow row in toursSheet.RowsUsed().Skip(1))
@@ -324,11 +326,11 @@ namespace TourPlanner.BL.Services
                     }
                 }
                 _logger.LogInformation("Imported {TourCount} tours from Excel: {FilePath}", tours.Count, filePath);
-                return tours;
+                return new Result(Result.ResultCode.Success, tours);
             }
             catch (Exception ex) {
                 _logger.LogError(ex, "Error importing tours from Excel: {FilePath}", filePath);
-                throw;
+                return new Result(Result.ResultCode.UnknownError);
             }
         }
     }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Npgsql;
-using TourPlanner.BL.Utils;
+using TourPlanner.BL.Utils.Helpers;
 using TourPlanner.DAL.Repositories.TourLogRepository;
 using TourPlanner.Models.Entities;
 

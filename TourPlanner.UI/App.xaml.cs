@@ -14,8 +14,8 @@ using TourPlanner.UI.Events;
 using TourPlanner.UI.ViewModels;
 using TourPlanner.UI.Views;
 using TourPlanner.BL.API;
-using TourPlanner.BL.Utils;
 using TourPlanner.UI.Leaflet;
+using TourPlanner.BL.Utils.Helpers;
 
 namespace TourPlanner.UI;
 
@@ -109,7 +109,8 @@ public partial class App : Application
                 s.GetRequiredService<Parser>(),
                 apiConfig.BaseUrl,
                 apiConfig.FocusPointLat,
-                apiConfig.FocusPointLon
+                apiConfig.FocusPointLon,
+                s.GetRequiredService<ILogger<OpenRouteService>>()
             )
         );
 
