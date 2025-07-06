@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using TourPlanner.Models.Configuration;
-using TourPlanner.BL.Services;
+using TourPlanner.UI.Services;
 using TourPlanner.DAL.Data;
 using TourPlanner.DAL.Repositories.TourAttributesRepository;
 using TourPlanner.DAL.Repositories.TourLogRepository;
@@ -13,8 +13,8 @@ using TourPlanner.DAL.Repositories.TourRepository;
 using TourPlanner.UI.Events;
 using TourPlanner.UI.ViewModels;
 using TourPlanner.UI.Views;
-using TourPlanner.BL.API;
-using TourPlanner.BL.Utils.Helpers;
+using TourPlanner.UI.API;
+using TourPlanner.UI.Utils.Helpers;
 
 namespace TourPlanner.UI;
 

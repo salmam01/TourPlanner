@@ -1,7 +1,7 @@
 namespace TourPlanner.Tests
 {
     using Xunit;
-    using TourPlanner.BL.Utils.Validators;
+    using TourPlanner.UI.Utils.Validators;
     using System;
 
     public class TourValidatorTests

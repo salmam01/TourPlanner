@@ -7,12 +7,12 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
-using TourPlanner.BL.Utils.DTO;
-using TourPlanner.BL.Utils.Helpers;
+using TourPlanner.UI.Utils.DTO;
+using TourPlanner.UI.Utils.Helpers;
 using TourPlanner.Models.Entities;
 using TourPlanner.Models.Utils.Helpers;
 
-namespace TourPlanner.BL.API
+namespace TourPlanner.UI.API
 {
     public class OpenRouteService
     {

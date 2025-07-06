@@ -8,12 +8,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using TourPlanner.BL.API;
-using TourPlanner.BL.Utils.Validators;
+using TourPlanner.UI.API;
 using TourPlanner.Models.Entities;
 using TourPlanner.Models.Utils.Helpers;
 using TourPlanner.UI.Commands;
 using TourPlanner.UI.Events;
+using TourPlanner.UI.Validators;
 
 namespace TourPlanner.UI.ViewModels
 {
@@ -196,8 +196,8 @@ namespace TourPlanner.UI.ViewModels
             ClearErrors(nameof(To));
             ClearErrors(nameof(Date));
 
-            FromLocationSuggestions = [];
-            ToLocationSuggestions = [];
+            FromLocationSuggestions = new List<string>();
+            ToLocationSuggestions = new List<string>();
 
             OnPropertyChanged(nameof(Name));
             OnPropertyChanged(nameof(Description));
@@ -327,6 +327,8 @@ namespace TourPlanner.UI.ViewModels
             string error = TourValidator.ValidateFrom(From);
             if (!string.IsNullOrWhiteSpace(error))
                 SetError(nameof(From), error);
+            else if (!FromLocationSuggestions.Contains(From))
+                SetError(nameof(From), "Please select a valid address from suggestions.");
             else
                 ClearErrors(nameof(From));
         }
@@ -335,6 +337,8 @@ namespace TourPlanner.UI.ViewModels
             string error = TourValidator.ValidateTo(To);
             if (!string.IsNullOrWhiteSpace(error))
                 SetError(nameof(To), error);
+            else if (!ToLocationSuggestions.Contains(To))
+                SetError(nameof(To), "Please select a valid address from suggestions.");
             else
                 ClearErrors(nameof(To));
         }

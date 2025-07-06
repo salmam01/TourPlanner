@@ -11,13 +11,13 @@ using Microsoft.Extensions.Logging;
 using TourPlanner.Models.Entities;
 using System.IO;
 using System.Threading.Tasks;
-using TourPlanner.BL.API;
-using TourPlanner.BL.Utils.DTO;
+using TourPlanner.UI.API;
+using TourPlanner.UI.Utils.DTO;
 using Microsoft.Playwright;
 using iText.IO.Image;
 using TourPlanner.Models.Utils.Helpers;
 
-namespace TourPlanner.BL.Services
+namespace TourPlanner.UI.Services
 {
     public class ReportGenerationService
     {
@@ -281,7 +281,10 @@ namespace TourPlanner.BL.Services
                 Result result = await _openRouteService.GetMapGeometry(tour);
                 if (result.Code != Result.ResultCode.Success ||
                     result.Data is not MapGeometry mapGeometry ||
-                    mapGeometry == null || mapGeometry.WayPoints == null || mapGeometry.WayPoints.Count == 0)
+                    mapGeometry == null || 
+                    mapGeometry.WayPoints == null || mapGeometry.WayPoints.Count == 0 ||
+                    mapGeometry.Bbox == null || 
+                    mapGeometry.Distance <= 0 || mapGeometry.Duration == TimeSpan.Zero)
                 {
                     throw new InvalidOperationException("Failed to retrieve map geometry for the tour");
                 }

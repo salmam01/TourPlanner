@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TourPlanner.BL.Utils.Validators
+namespace TourPlanner.UI.Validators
 {
     public static class TourValidator
     {

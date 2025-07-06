@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TourPlanner.Models.Entities;
-using TourPlanner.BL.Services;
+using TourPlanner.UI.Services;
 using TourPlanner.UI.Commands;
 using TourPlanner.UI.Events;
 

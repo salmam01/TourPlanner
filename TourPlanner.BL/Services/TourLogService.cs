@@ -5,7 +5,7 @@ using TourPlanner.DAL.Repositories.TourLogRepository;
 using TourPlanner.Models.Entities;
 using TourPlanner.Models.Utils.Helpers;
 
-namespace TourPlanner.BL.Services;
+namespace TourPlanner.UI.Services;
 
 public class TourLogService {
 

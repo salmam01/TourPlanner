@@ -3,7 +3,7 @@ using Npgsql;
 using TourPlanner.DAL.Repositories.TourAttributesRepository;
 using TourPlanner.Models.Entities;
 
-namespace TourPlanner.BL.Services
+namespace TourPlanner.UI.Services
 {
     public class TourAttributesService
     {

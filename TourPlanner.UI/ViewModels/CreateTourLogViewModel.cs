@@ -3,9 +3,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using TourPlanner.BL.Utils.Validators;
 using TourPlanner.Models.Entities;
 using TourPlanner.UI.Commands;
+using TourPlanner.UI.Validators;
 
 namespace TourPlanner.UI.ViewModels
 {
