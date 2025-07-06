@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Playwright;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -23,14 +24,15 @@ namespace TourPlanner.UI.API
         private readonly ILogger<OpenRouteService> _logger;
 
         public OpenRouteService(
-            string openRouteKey, 
-            Parser parser, 
+            string openRouteKey,
+            Parser parser,
             string endPoint,
             double focusPointLat,
             double focusPointLon,
             int maxResults,
             ILogger<OpenRouteService> logger
-        ) {
+        )
+        {
             _openRouteKey = openRouteKey;
             _client = new();
             _client.BaseAddress = new Uri(endPoint);
@@ -309,7 +311,7 @@ namespace TourPlanner.UI.API
         //  Helper method that returns the OpenRoute API profile equivalent
         private string GetProfile(string profile)
         {
-            switch(profile)
+            switch (profile)
             {
                 case "Walking":
                     return "foot-walking";

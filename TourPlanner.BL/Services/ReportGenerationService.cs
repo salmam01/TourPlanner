@@ -1,6 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using iText.Kernel.Exceptions;
+using iText.Kernel.Font;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
+using iText.Layout.Properties;
 using Microsoft.Extensions.Logging;
 using TourPlanner.Models.Entities;
 using System.IO;
@@ -9,12 +15,6 @@ using TourPlanner.UI.API;
 using TourPlanner.UI.Utils.DTO;
 using Microsoft.Playwright;
 using iText.IO.Image;
-using TourPlanner.BL.API;
-using TourPlanner.BL.Utils.DTO;
-using QuestPDF.Fluent;
-using QuestPDF.Helpers;
-using QuestPDF.Infrastructure;
-using System.Text.Json;
 using TourPlanner.Models.Utils.Helpers;
 
 namespace TourPlanner.UI.Services
@@ -50,27 +50,100 @@ namespace TourPlanner.UI.Services
                     return new Result(Result.ResultCode.FileAccessError);
                 }
 
-                // Generate the PDF using QuestPDF
-                var document = Document.Create(container =>
+                using PdfWriter writer = new PdfWriter(filePath);
+                using PdfDocument pdf = new PdfDocument(writer);
+                using Document document = new Document(pdf);
+
+                // Add title
+                Paragraph? title = new Paragraph($"Tour Report: {tour.Name}")
+                    .SetTextAlignment(TextAlignment.CENTER)
+                    .SetFontSize(20)
+                    .SetFont(PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA_BOLD));
+                document.Add(title);
+                document.Add(new Paragraph("\n"));
+
+                // Add tour details
+                Table? tourDetails = new Table(2)
+                    .SetWidth(UnitValue.CreatePercentValue(100));
+
+                AddTableRow(tourDetails, "Name", tour.Name);
+                AddTableRow(tourDetails, "Description", tour.Description);
+                AddTableRow(tourDetails, "From", tour.From);
+                AddTableRow(tourDetails, "To", tour.To);
+                AddTableRow(tourDetails, "Transport Type", tour.TransportType);
+                AddTableRow(tourDetails, "Distance", (tour.Distance / 1000).ToString("F2") + " km");
+                AddTableRow(tourDetails, "Estimated Time", tour.EstimatedTime.ToString(@"hh\:mm\:ss"));
+                AddTableRow(tourDetails, "Date", tour.Date.ToString("dd.MM.yyyy"));
+
+                document.Add(tourDetails);
+                document.Add(new Paragraph("\n"));
+
+                // Add map image
+                try
                 {
-                    container.Page(page =>
+                    var mapImagePath = await GenerateMapImage(tour);
+                    _logger.LogInformation($"Map image path: {mapImagePath}");
+                    if (File.Exists(mapImagePath))
                     {
-                        page.Size(PageSizes.A4);
-                        page.Margin(2, Unit.Centimetre);
-                        page.DefaultTextStyle(x => x.FontSize(10));
+                        Paragraph mapTitle = new Paragraph("Route Map")
+                            .SetTextAlignment(TextAlignment.CENTER)
+                            .SetFontSize(16)
+                            .SetFont(PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA_BOLD));
+                        document.Add(mapTitle);
+                        document.Add(new Paragraph("\n"));
 
-                        page.Header().Element(ComposeHeader);
-                        page.Content().Element(container => ComposeContent(container, tour));
-                        page.Footer().AlignCenter().Text(x =>
-                        {
-                            x.CurrentPageNumber();
-                            x.Span(" / ");
-                            x.TotalPages();
-                        });
-                    });
-                });
+                        ImageData imageData = ImageDataFactory.Create(mapImagePath);
+                        Image image = new Image(imageData)
+                            .SetWidth(UnitValue.CreatePercentValue(80))
+                            .SetHorizontalAlignment(HorizontalAlignment.CENTER);
+                        document.Add(image);
+                        document.Add(new Paragraph("\n"));
 
-                document.GeneratePdf(filePath);
+                        // Clean up temporary image file
+                        File.Delete(mapImagePath);
+                    }
+                    else
+                    {
+                        _logger.LogWarning($"Map image file does not exist: {mapImagePath}");
+                        document.Add(new Paragraph($"Error: Image : {mapImagePath}"));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    document.Add(new Paragraph($"Error: Image-Paste: {ex.Message}"));
+                    _logger.LogWarning(ex, "Failed to add map image to report for tour {TourId}", tour.Id);
+                }
+
+                // Add tour logs
+                if (tour.TourLogs != null && tour.TourLogs.Count != 0)
+                {
+                    Paragraph? logsTitle = new Paragraph("Tour Logs")
+                        .SetTextAlignment(TextAlignment.CENTER)
+                        .SetFontSize(16)
+                        .SetFont(PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA_BOLD));
+                    document.Add(logsTitle);
+                    document.Add(new Paragraph("\n"));
+
+                    Table? logsTable = new Table(6)
+                        .SetWidth(UnitValue.CreatePercentValue(100));
+
+                    // Add headers
+                    AddTableHeader(logsTable, "Date", "Difficulty", "Rating", "Comment", "Total Distance", "Total Time");
+
+                    foreach (TourLog log in tour.TourLogs)
+                    {
+                        AddTableRow(logsTable,
+                            log.Date.ToString("dd.MM.yyyy"),
+                            log.Difficulty.ToString(),
+                            log.Rating.ToString(),
+                            log.Comment ?? "",
+                            (log.TotalDistance / 1000).ToString("F2") + " km",
+                            log.TotalTime.ToString(@"hh\:mm\:ss"));
+                    }
+
+                    document.Add(logsTable);
+                }
+
                 _logger.LogInformation("Tour report generated successfully: {FilePath}", filePath);
                 return new Result(Result.ResultCode.Success);
             }
@@ -84,149 +157,16 @@ namespace TourPlanner.UI.Services
                 _logger.LogError(e, "Input / Output error writing report to {FilePath}", filePath);
                 return new Result(Result.ResultCode.FileAccessError);
             }
+            catch (PdfException e)
+            {
+                _logger.LogError(e, "PDF generation error for {FilePath}", filePath);
+                return new Result(Result.ResultCode.PdfGenerationError);
+            }
             catch (Exception e)
             {
                 _logger.LogError(e, "Error generating tour report for {FilePath}", filePath);
                 return new Result(Result.ResultCode.UnknownError);
             }
-        }
-
-        private void ComposeHeader(IContainer container)
-        {
-            container.Row(row =>
-            {
-                row.RelativeItem().Column(column =>
-                {
-                    column.Item().Text("TourPlanner").Bold().FontSize(16);
-                    column.Item().Text("Tour Report").FontSize(12).FontColor(Colors.Grey.Medium);
-                });
-            });
-        }
-
-        private void ComposeContent(IContainer container, Tour tour)
-        {
-            container.PaddingVertical(20).Column(column =>
-            {
-                // Title
-                column.Item().AlignCenter().Text($"Tour Report: {tour.Name}")
-                    .FontSize(20)
-                    .Bold();
-
-                column.Item().Height(20);
-
-                // Tour Details Table
-                column.Item().Table(table =>
-                {
-                    table.ColumnsDefinition(columns =>
-                    {
-                        columns.RelativeColumn(1);
-                        columns.RelativeColumn(2);
-                    });
-
-                    table.Cell().Background(Colors.Grey.Medium).Text("Name").Bold();
-                    table.Cell().Text(tour.Name);
-                    table.Cell().Background(Colors.Grey.Medium).Text("Description").Bold();
-                    table.Cell().Text(tour.Description);
-                    table.Cell().Background(Colors.Grey.Medium).Text("From").Bold();
-                    table.Cell().Text(tour.From);
-                    table.Cell().Background(Colors.Grey.Medium).Text("To").Bold();
-                    table.Cell().Text(tour.To);
-                    table.Cell().Background(Colors.Grey.Medium).Text("Transport Type").Bold();
-                    table.Cell().Text(tour.TransportType);
-                    table.Cell().Background(Colors.Grey.Medium).Text("Distance").Bold();
-                    table.Cell().Text($"{tour.Distance:F2} km");
-                    table.Cell().Background(Colors.Grey.Medium).Text("Estimated Time").Bold();
-                    table.Cell().Text(tour.EstimatedTime.ToString(@"hh\:mm\:ss"));
-                    table.Cell().Background(Colors.Grey.Medium).Text("Date").Bold();
-                    table.Cell().Text(tour.Date.ToString("dd.MM.yyyy"));
-                });
-
-                column.Item().Height(20);
-
-                // Map Section
-                column.Item().AlignCenter().Text("Route Map")
-                    .FontSize(16)
-                    .Bold();
-
-                column.Item().Height(10);
-
-                // Add map as embedded HTML/CSS
-                try
-                {
-                    var mapGeometry = GetMapGeometryAsync(tour).Result;
-                    if (mapGeometry != null)
-                    {
-                        column.Item().Background(Colors.Grey.Medium).Padding(10).Column(col =>
-                        {
-                            col.Item().Text("Route Information:").Bold();
-                            col.Item().Text($"From: {tour.From}");
-                            col.Item().Text($"To: {tour.To}");
-                            col.Item().Text($"Distance: {tour.Distance:F2} km");
-                            col.Item().Text($"Estimated Time: {tour.EstimatedTime:hh\\:mm\\:ss}");
-                            
-                            if (mapGeometry.WayPoints != null && mapGeometry.WayPoints.Count > 0)
-                            {
-                                col.Item().Height(10);
-                                col.Item().Text("Route Coordinates:").Bold();
-                                col.Item().Text($"Start: {mapGeometry.WayPoints.First().Latitude:F4}, {mapGeometry.WayPoints.First().Longitude:F4}");
-                                col.Item().Text($"End: {mapGeometry.WayPoints.Last().Latitude:F4}, {mapGeometry.WayPoints.Last().Longitude:F4}");
-                                col.Item().Text($"Waypoints: {mapGeometry.WayPoints.Count}");
-                            }
-                        });
-                    }
-                }
-                catch (Exception ex)
-                {
-                    column.Item().Background(Colors.Red.Medium).Padding(10).Text($"Error loading map data: {ex.Message}");
-                    _logger.LogWarning(ex, "Failed to add map data to report for tour {TourId}", tour.Id);
-                }
-
-                column.Item().Height(20);
-
-                // Tour Logs
-                if (tour.TourLogs != null && tour.TourLogs.Count > 0)
-                {
-                    column.Item().AlignCenter().Text("Tour Logs")
-                        .FontSize(16)
-                        .Bold();
-
-                    column.Item().Height(10);
-
-                    column.Item().Table(table =>
-                    {
-                        table.ColumnsDefinition(columns =>
-                        {
-                            columns.RelativeColumn(1); // Date
-                            columns.RelativeColumn(1); // Difficulty
-                            columns.RelativeColumn(1); // Rating
-                            columns.RelativeColumn(2); // Comment
-                            columns.RelativeColumn(1); // Total Distance
-                            columns.RelativeColumn(1); // Total Time
-                        });
-
-                        // Headers
-                        table.Header(header =>
-                        {
-                            header.Cell().Text("Date").Bold();
-                            header.Cell().Text("Difficulty").Bold();
-                            header.Cell().Text("Rating").Bold();
-                            header.Cell().Text("Comment").Bold();
-                            header.Cell().Text("Distance").Bold();
-                            header.Cell().Text("Time").Bold();
-                        });
-
-                        foreach (var log in tour.TourLogs)
-                        {
-                            table.Cell().Text(log.Date.ToString("dd.MM.yyyy"));
-                            table.Cell().Text(log.Difficulty.ToString());
-                            table.Cell().Text(log.Rating.ToString());
-                            table.Cell().Text(log.Comment ?? "");
-                            table.Cell().Text($"{log.TotalDistance:F2} km");
-                            table.Cell().Text(log.TotalTime.ToString(@"hh\:mm\:ss"));
-                        }
-                    });
-                }
-            });
         }
 
         public Result GenerateSummaryReport(List<Tour> tours, string filePath)
@@ -244,26 +184,54 @@ namespace TourPlanner.UI.Services
                     return new Result(Result.ResultCode.FileAccessError);
                 }
 
-                var document = Document.Create(container =>
+                using PdfWriter writer = new PdfWriter(filePath);
+                using PdfDocument pdf = new PdfDocument(writer);
+                using Document document = new Document(pdf);
+
+                // Add title
+                Paragraph? title = new Paragraph("Tour Summary Report")
+                    .SetTextAlignment(TextAlignment.CENTER)
+                    .SetFontSize(20)
+                    .SetFont(PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA_BOLD));
+
+                document.Add(title);
+                document.Add(new Paragraph("\n"));
+
+                // Create summary table
+                Table? summaryTable = new Table(7)
+                    .SetWidth(UnitValue.CreatePercentValue(100));
+
+                // headers
+                AddTableHeader(summaryTable, "Tour Name", "Total Logs", "Avg. Distance", "Avg. Time", "Avg. Rating", "Popularity", "Child-Friendliness");
+
+                foreach (Tour tour in tours)
                 {
-                    container.Page(page =>
+                    int tourLogsCount = 0;
+                    double avgDistance = tour.Distance / 1000;
+                    TimeSpan avgTime = TimeSpan.FromMinutes(tour.EstimatedTime.TotalMinutes);
+                    double avgRating = 0;
+                    int popularity = tour.TourAttributes.Popularity;
+                    bool childFriendliness = tour.TourAttributes.ChildFriendliness;
+
+                    if (tour.TourLogs != null && tour.TourLogs.Count != 0)
                     {
-                        page.Size(PageSizes.A4);
-                        page.Margin(2, Unit.Centimetre);
-                        page.DefaultTextStyle(x => x.FontSize(10));
+                        tourLogsCount = tour.TourLogs.Count;
+                        avgDistance = tour.TourLogs.Average(l => l.TotalDistance / 1000);
+                        avgTime = TimeSpan.FromMinutes(tour.TourLogs.Average(l => l.TotalTime.TotalMinutes));
+                        avgRating = tour.TourLogs.Average(l => l.Rating);
+                    }
 
-                        page.Header().Element(ComposeSummaryHeader);
-                        page.Content().Element(container => ComposeSummaryContent(container, tours));
-                        page.Footer().AlignCenter().Text(x =>
-                        {
-                            x.CurrentPageNumber();
-                            x.Span(" / ");
-                            x.TotalPages();
-                        });
-                    });
-                });
+                    AddTableRow(summaryTable,
+                                tour.Name,
+                                tourLogsCount.ToString(),
+                                avgDistance.ToString("F2") + " km",
+                                avgTime.ToString(@"hh\:mm") + " h",
+                                avgRating.ToString("F1"),
+                                popularity.ToString(),
+                                childFriendliness ? "Yes" : "No");
+                }
 
-                document.GeneratePdf(filePath);
+                document.Add(summaryTable);
                 _logger.LogInformation("Summary report generated successfully: {FilePath}", filePath);
                 return new Result(Result.ResultCode.Success);
             }
@@ -277,6 +245,11 @@ namespace TourPlanner.UI.Services
                 _logger.LogError(e, "Input / Output error writing report to {FilePath}", filePath);
                 return new Result(Result.ResultCode.FileAccessError);
             }
+            catch (PdfException e)
+            {
+                _logger.LogError(e, "PDF generation error for {FilePath}", filePath);
+                return new Result(Result.ResultCode.PdfGenerationError);
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error generating summary report for {FilePath}", filePath);
@@ -284,98 +257,92 @@ namespace TourPlanner.UI.Services
             }
         }
 
-        private void ComposeSummaryHeader(IContainer container)
+        private void AddTableHeader(Table table, params string[] headers)
         {
-            container.Row(row =>
+            foreach (var header in headers)
             {
-                row.RelativeItem().Column(column =>
-                {
-                    column.Item().Text("TourPlanner").Bold().FontSize(16);
-                    column.Item().Text("Summary Report").FontSize(12).FontColor(Colors.Grey.Medium);
-                });
-            });
+                table.AddHeaderCell(new Cell().Add(new Paragraph(header)).SetFont(PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA_BOLD)));
+            }
         }
 
-        private void ComposeSummaryContent(IContainer container, List<Tour> tours)
+        private void AddTableRow(Table table, params string[] values)
         {
-            container.PaddingVertical(20).Column(column =>
+            foreach (var value in values)
             {
-                column.Item().AlignCenter().Text("Tour Summary Report")
-                    .FontSize(20)
-                    .Bold();
-
-                column.Item().Height(20);
-
-                column.Item().Table(table =>
-                {
-                    table.ColumnsDefinition(columns =>
-                    {
-                        columns.RelativeColumn(2); // Tour Name
-                        columns.RelativeColumn(1); // Total Logs
-                        columns.RelativeColumn(1); // Avg. Distance
-                        columns.RelativeColumn(1); // Avg. Time
-                        columns.RelativeColumn(1); // Avg. Rating
-                        columns.RelativeColumn(1); // Popularity
-                        columns.RelativeColumn(1); // Child-Friendliness
-                    });
-
-                    // Headers
-                    table.Header(header =>
-                    {
-                        header.Cell().Text("Tour Name").Bold();
-                        header.Cell().Text("Total Logs").Bold();
-                        header.Cell().Text("Avg. Distance").Bold();
-                        header.Cell().Text("Avg. Time").Bold();
-                        header.Cell().Text("Avg. Rating").Bold();
-                        header.Cell().Text("Popularity").Bold();
-                        header.Cell().Text("Child-Friendly").Bold();
-                    });
-
-                    foreach (var tour in tours)
-                    {
-                        int tourLogsCount = 0;
-                        double avgDistance = tour.Distance;
-                        double avgTime = tour.EstimatedTime.TotalMinutes;
-                        double avgRating = 0;
-                        int popularity = tour.TourAttributes?.Popularity ?? 0;
-                        bool childFriendliness = tour.TourAttributes?.ChildFriendliness ?? false;
-
-                        if (tour.TourLogs != null && tour.TourLogs.Count > 0)
-                        {
-                            tourLogsCount = tour.TourLogs.Count;
-                            avgDistance = tour.TourLogs.Average(l => l.TotalDistance);
-                            avgTime = tour.TourLogs.Average(l => l.TotalTime.TotalMinutes);
-                            avgRating = tour.TourLogs.Average(l => l.Rating);
-                        }
-
-                        table.Cell().Text(tour.Name);
-                        table.Cell().Text(tourLogsCount.ToString());
-                        table.Cell().Text($"{avgDistance:F2} km");
-                        table.Cell().Text($"{avgTime:F2} min");
-                        table.Cell().Text($"{avgRating:F1}");
-                        table.Cell().Text(popularity.ToString());
-                        table.Cell().Text(childFriendliness ? "Yes" : "No");
-                    }
-                });
-            });
+                table.AddCell(new Cell().Add(new Paragraph(value)));
+            }
         }
 
-        private async Task<MapGeometry?> GetMapGeometryAsync(Tour tour)
+        private async Task<string> GenerateMapImage(Tour tour)
         {
             try
             {
-                var result = await _openRouteService.GetMapGeometry(tour);
-                if (result.Code == Result.ResultCode.Success && result.Data is MapGeometry mapGeometry)
+                // 1. fetch MapGeometry 
+                Result result = await _openRouteService.GetMapGeometry(tour);
+                if (result.Code != Result.ResultCode.Success ||
+                    result.Data is not MapGeometry mapGeometry ||
+                    mapGeometry == null ||
+                    mapGeometry.WayPoints == null || mapGeometry.WayPoints.Count == 0 ||
+                    mapGeometry.Bbox == null ||
+                    mapGeometry.Distance <= 0 || mapGeometry.Duration == TimeSpan.Zero)
                 {
-                    return mapGeometry;
+                    throw new InvalidOperationException("Failed to retrieve map geometry for the tour");
                 }
-                return null;
+
+                // 2. create directions.js  (like LeafletHelper)
+                string leafletDir = FindLeafletDirectory();
+                string directionsPath = Path.Combine(leafletDir, "directions.js");
+                string mapHtmlPath = Path.Combine(leafletDir, "map.html");
+                var directionsObject = new
+                {
+                    type = "Feature",
+                    geometry = new
+                    {
+                        type = "LineString",
+                        coordinates = mapGeometry.WayPoints.Select(wp => new[] { wp.Longitude, wp.Latitude }).ToArray()
+                    },
+                    bbox = new[] { mapGeometry.Bbox.MinLongitude, mapGeometry.Bbox.MinLatitude, mapGeometry.Bbox.MaxLongitude, mapGeometry.Bbox.MaxLatitude },
+                    fromAddress = tour.From,
+                    toAddress = tour.To
+                };
+                string directionsJson = $"var directions = {System.Text.Json.JsonSerializer.Serialize(directionsObject)};";
+                File.WriteAllText(directionsPath, directionsJson);
+
+                // 3. HTML
+                string tempPngPath = Path.GetTempFileName() + ".png";
+
+                // 4. Playwright Screenshot
+                using var playwright = await Microsoft.Playwright.Playwright.CreateAsync();
+                var browser = await playwright.Chromium.LaunchAsync(new Microsoft.Playwright.BrowserTypeLaunchOptions { Headless = true });
+                var page = await browser.NewPageAsync(new Microsoft.Playwright.BrowserNewPageOptions { ViewportSize = new Microsoft.Playwright.ViewportSize { Width = 800, Height = 600 } });
+                await page.GotoAsync($"file:///{mapHtmlPath.Replace("\\", "/")}");
+                await page.WaitForTimeoutAsync(2000); // Image loading: wait 2 seconds; 
+                await page.ScreenshotAsync(new Microsoft.Playwright.PageScreenshotOptions { Path = tempPngPath });
+                await browser.CloseAsync();
+
+                return tempPngPath;
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(ex, "Failed to retrieve map geometry for tour {TourId}", tour.Id);
-                return null;
+                throw;
             }
         }
+
+        private string FindLeafletDirectory()
+        {
+            var dir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
+            while (dir != null)
+            {
+                var leaflet = Path.Combine(dir.FullName, "TourPlanner.UI", "Leaflet");
+                if (Directory.Exists(leaflet) && File.Exists(Path.Combine(leaflet, "map.html")))
+                    return leaflet;
+                leaflet = Path.Combine(dir.FullName, "Leaflet");
+                if (Directory.Exists(leaflet) && File.Exists(Path.Combine(leaflet, "map.html")))
+                    return leaflet;
+                dir = dir.Parent;
+            }
+            throw new DirectoryNotFoundException("Leaflet directory with map.html not found.");
+        }
+
     }
-} 
+}
