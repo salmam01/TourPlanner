@@ -366,3 +366,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /TourPlanner.UI/appsettings.json
 /TourPlanner.UI/Leaflet/directions.js
+/TourPlanner.DAL/Migrations/

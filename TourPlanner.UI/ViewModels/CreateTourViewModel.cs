@@ -112,7 +112,7 @@ namespace TourPlanner.UI.ViewModels
             {
                 if (_from == value) return;
                 _from = value;
-                _ = ValidateFrom();
+                ValidateFrom();
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(CanCreate));
                 OnPropertyChanged(nameof(FromError));
@@ -141,7 +141,7 @@ namespace TourPlanner.UI.ViewModels
             {
                 if (_to == value) return;
                 _to = value;
-                _ = ValidateTo();
+                ValidateTo();
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(CanCreate));
                 OnPropertyChanged(nameof(ToError));
@@ -212,8 +212,8 @@ namespace TourPlanner.UI.ViewModels
             ValidateName();
             ValidateDescription();
             ValidateTransportType();
-            _ = ValidateFrom();
-            _ = ValidateTo();
+            ValidateFrom();
+            ValidateTo();
             ValidateDate();
 
             if (!ValidateInput())
@@ -283,7 +283,7 @@ namespace TourPlanner.UI.ViewModels
             if (!string.IsNullOrEmpty(From))
             {
                 Result result = await _openRouteService.GetLocationSuggestionsAsync(From);
-                FromLocationSuggestions = (List<string>)result.Data;
+                FromLocationSuggestions = (List<string>)result.Data ?? new List<string>();
                 OnPropertyChanged(nameof(FromLocationSuggestions));
             }
         }
@@ -293,7 +293,7 @@ namespace TourPlanner.UI.ViewModels
             if (!string.IsNullOrEmpty(To))
             {
                 Result result = await _openRouteService.GetLocationSuggestionsAsync(To);
-                ToLocationSuggestions = (List<string>)result.Data;
+                ToLocationSuggestions = (List<string>)result.Data ?? new List<string>();
                 OnPropertyChanged(nameof(ToLocationSuggestions));
             }
         }
@@ -322,17 +322,17 @@ namespace TourPlanner.UI.ViewModels
             else
                 ClearErrors(nameof(TransportType));
         }
-        private async Task ValidateFrom()
+        private async void ValidateFrom()
         {
             string error = TourValidator.ValidateFrom(From);
-            bool foundInSuggestions = FromLocationSuggestions
-                .Any(s => string.Equals(s, From, StringComparison.OrdinalIgnoreCase));
 
             if (!string.IsNullOrWhiteSpace(error))
             {
                 SetError(nameof(From), error);
                 return;
             }
+            bool foundInSuggestions = FromLocationSuggestions
+                .Any(s => string.Equals(s, From, StringComparison.OrdinalIgnoreCase));
             if (foundInSuggestions)
             {
                 ClearErrors(nameof(From));
@@ -340,24 +340,25 @@ namespace TourPlanner.UI.ViewModels
             }
             if (!foundInSuggestions)
             {
-                Result result = await _openRouteService.CheckIfAddressExists(From);
-                if (result.Code != Result.ResultCode.Success)
-                    SetError(nameof(From), "Please select a valid address.");
+                bool valid = await ValidateAddress(To);
+                if (!valid)
+                    SetError(nameof(To), "Please select a valid address.");
                 else
-                    ClearErrors(nameof(From));
+                    ClearErrors(nameof(To));
             }
         }
-        private async Task ValidateTo()
+        private async void ValidateTo()
         {
             string error = TourValidator.ValidateTo(To);
-            bool foundInSuggestions = ToLocationSuggestions
-                .Any(s => string.Equals(s, To, StringComparison.OrdinalIgnoreCase));
 
             if (!string.IsNullOrWhiteSpace(error))
             {
                 SetError(nameof(To), error);
                 return;
             }
+
+            bool foundInSuggestions = ToLocationSuggestions
+                .Any(s => string.Equals(s, To, StringComparison.OrdinalIgnoreCase));
             if (foundInSuggestions)
             {
                 ClearErrors(nameof(To));
@@ -365,13 +366,19 @@ namespace TourPlanner.UI.ViewModels
             }
             if (!foundInSuggestions)
             {
-                Result result = await _openRouteService.CheckIfAddressExists(To);
-                if (result.Code != Result.ResultCode.Success)
+                bool valid = await ValidateAddress(To);
+                if (!valid)
                     SetError(nameof(To), "Please select a valid address.");
                 else
                     ClearErrors(nameof(To));
             }
         }
+        private async Task<bool> ValidateAddress(string address)
+        {
+            Result result = await _openRouteService.CheckIfAddressExists(address);
+            return (result.Code == Result.ResultCode.Success);
+        }
+
         private void ValidateDate()
         {
             string error = TourValidator.ValidateDate(Date);
