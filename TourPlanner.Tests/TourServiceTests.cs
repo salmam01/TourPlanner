@@ -1,3 +1,5 @@
+using TourPlanner.Models.Utils.Helpers;
+
 namespace TourPlanner.Tests
 {
     using Xunit;
@@ -126,7 +128,8 @@ namespace TourPlanner.Tests
 
             var result = service.GetAllTours();
 
-            Assert.Equal(2, ((List<Tour>)result).Count);
+            Assert.Equal(Result.ResultCode.Success, result.Code);
+            Assert.Equal(2, ((List<Tour>)result.Data).Count);
         }
 
         [Fact]
@@ -135,9 +138,10 @@ namespace TourPlanner.Tests
             repo.Setup(r => r.GetTours()).Returns(new List<Tour>());
             TourService service = CreateService(repo);
 
-            IEnumerable<Tour> result = service.GetAllTours();
+            Result result = service.GetAllTours();
 
-            Assert.Empty(result);
+            Assert.Equal(Result.ResultCode.Success, result.Code);
+            Assert.Empty((List<Tour>)result.Data);
         }
 
         // ----------- DeleteAllTours -----------
@@ -190,9 +194,10 @@ namespace TourPlanner.Tests
             repo.Setup(r => r.SearchTours("mountain")).Returns(new List<Tour> { tour1 });
             repo.Setup(r => r.GetTourById(tour2.Id)).Returns(tour2);
 
-            List<Tour> result = service.SearchToursAndLogs("mountain", new List<TourLog> { tourLog });
+            Result result = service.SearchToursAndLogs("mountain", new List<TourLog> { tourLog });
 
-            Assert.Equal(2, result.Count);
+            Assert.Equal(Result.ResultCode.Success, result.Code);
+            Assert.Equal(2, ((List<Tour>)result.Data).Count);
         }
     }
 }

@@ -1,7 +1,7 @@
 namespace TourPlanner.Tests
 {
     using Xunit;
-    using TourPlanner.UI.Utils.Validators;
+    using TourPlanner.UI.Validators;
     using System;
 
     public class TourValidatorTests
@@ -114,9 +114,9 @@ namespace TourPlanner.Tests
             string to = "Salzburg";
             DateTime date = DateTime.UtcNow.AddDays(1);
             
-            Dictionary<string, string> errors = TourValidator.ValidateAll(name, description, transportType, from, to, date);
+            var errors = TourValidator.ValidateAll(name, description, transportType, from, to, date);
             
-            Assert.All(errors.Values, v => Assert.True(false));
+            Assert.All(errors.Values, v => Assert.Null(v));
         }
 
         [Fact]
@@ -128,7 +128,7 @@ namespace TourPlanner.Tests
             string to = "";
             var date = DateTime.UtcNow.AddDays(-1);
             
-            Dictionary<string, string> errors = TourValidator.ValidateAll(name, description, transportType, from, to, date);
+            var errors = TourValidator.ValidateAll(name, description, transportType, from, to, date);
             
             Assert.Equal("Name is required", errors["name"]);
             Assert.Equal("Description is required", errors["description"]);
@@ -138,4 +138,4 @@ namespace TourPlanner.Tests
             Assert.Equal("Date must be in the future", errors["date"]);
         }
     }
-} 
+}

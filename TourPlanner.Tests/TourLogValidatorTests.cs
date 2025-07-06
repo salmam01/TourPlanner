@@ -1,7 +1,7 @@
 namespace TourPlanner.Tests
 {
     using Xunit;
-    using TourPlanner.UI.Utils.Validators;
+    using TourPlanner.UI.Validators;
     using System;
 
     public class TourLogValidatorTests
@@ -125,7 +125,7 @@ namespace TourPlanner.Tests
             
             var errors = TourLogValidator.ValidateAll(date, comment, difficulty, distance, time, rating);
             
-            Assert.All(errors.Values, v => Assert.True(v == null));
+            Assert.All(errors.Values, v => Assert.Null(v));
         }
 
         [Fact]
@@ -147,4 +147,4 @@ namespace TourPlanner.Tests
             Assert.Equal("Rating must be between 1 and 5", errors["rating"]);
         }
     }
-} 
+}
