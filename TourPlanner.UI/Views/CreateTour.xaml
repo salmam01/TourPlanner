@@ -47,7 +47,7 @@
                                Foreground="#f28484"/>
                     <TextBox x:Name="name"
                              Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                             Height="30"
+                             Height="46"
                              Width="290">
                         <TextBox.Style>
                             <Style TargetType="TextBox" BasedOn="{StaticResource FormFieldTextBox}">
@@ -151,7 +151,7 @@
                                                          ValidatesOnDataErrors=True, 
                                                          NotifyOnValidationError=True}"
                                   Style="{StaticResource FormComboBoxStyle}"
-                                  Height="36"
+                                  Height="40"
                                   Width="290"
                                   BorderBrush="#f28484"/>
                         <TextBlock Text="{Binding TransportTypeError}" Foreground="Red" FontSize="12" />
@@ -175,7 +175,7 @@
                                   SelectedItem="{Binding SelectedFromSuggestion}"
                                   PreviewTextInput="ComboBox_PreviewTextInput"
                                   Style="{StaticResource FormComboBoxStyle}"
-                                  Height="36"
+                                  Height="42"
                                   Width="290"
                                   BorderBrush="#f28484"/>
 
@@ -199,7 +199,7 @@
                                   SelectedItem="{Binding SelectedToSuggestion}"
                                   PreviewTextInput="ComboBox_PreviewTextInput"
                                   Style="{StaticResource FormComboBoxStyle}"
-                                  Height="36"
+                                  Height="40"
                                   Width="290"
                                   BorderBrush="#f28484"/>
                         
