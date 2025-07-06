@@ -54,8 +54,20 @@ namespace TourPlanner.UI.Utils.Helpers
                 return geoCoordinates;
             }
 
-            geoCoordinates.Longitude = jsonObject["features"][0]["geometry"]["coordinates"][0].ToObject<double>();
-            geoCoordinates.Latitude = jsonObject["features"][0]["geometry"]["coordinates"][1].ToObject<double>();
+            JArray? features = jsonObject["features"] as JArray;
+            if (features == null || features.Count == 0)
+            {
+                return geoCoordinates;
+            }
+
+            JArray? coordinates = features[0]["geometry"]?["coordinates"] as JArray;
+            if (coordinates == null || coordinates.Count == 0 || coordinates.Count > 2)
+            {
+                return geoCoordinates;
+            }
+
+            geoCoordinates.Longitude = coordinates[0].ToObject<double>();
+            geoCoordinates.Latitude = coordinates[1].ToObject<double>();
 
             return geoCoordinates;
         }

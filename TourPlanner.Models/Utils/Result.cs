@@ -14,6 +14,7 @@ namespace TourPlanner.Models.Utils.Helpers
             NullError,
             DatabaseError,
             ApiError,
+            InvalidAddress,
             FileAccessError,
             PdfGenerationError,
             ParseError,

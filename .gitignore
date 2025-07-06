@@ -365,3 +365,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /TourPlanner.UI/appsettings.json
+/TourPlanner.UI/Leaflet/directions.js

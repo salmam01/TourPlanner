@@ -208,12 +208,44 @@ namespace TourPlanner.UI.API
             }
         }
 
+        public async Task<Result> CheckIfAddressExists(string location)
+        {
+            try
+            {
+                GeoCoordinates geoCoordinates = await GetGeoCoordinatesAsync(location);
+                if (geoCoordinates == null || !IsValidCoordinates(geoCoordinates))
+                {
+                    _logger.LogWarning("Invalid address entered.");
+                    return new Result(Result.ResultCode.InvalidAddress);
+                }
+
+                _logger.LogWarning("Valid address entered.");
+                return new Result(Result.ResultCode.Success);
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError(ex, "HTTP request failed while retrieving map geometry.");
+                return new Result(Result.ResultCode.ApiError);
+            }
+            catch (JsonException ex)
+            {
+                _logger.LogError(ex, "Failed to parse JSON for Map Geometry.");
+                return new Result(Result.ResultCode.ParseError);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Exception during Map Geometry request.");
+                return new Result(Result.ResultCode.UnknownError);
+            }
+        }
+
         //  Helper-Method that sends an API request to OpenRoute to retrieve Geo Coordinates for a specific location
         public async Task<GeoCoordinates> GetGeoCoordinatesAsync(string location)
         {
             try
             {
                 GeoCoordinates geoCoordinates = new();
+
                 string url = ($"geocode/search?api_key={_openRouteKey}&text={location}");
 
                 HttpResponseMessage response = await _client.GetAsync(url);
