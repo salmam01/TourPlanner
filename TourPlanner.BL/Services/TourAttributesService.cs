@@ -30,19 +30,20 @@ namespace TourPlanner.BL.Services
         /// Computes child-friendliness based on average difficulty, time, and distance.
         /// Returns true if child-friendly, false otherwise.
         /// </summary>
-        public bool ComputeChildFriendliness(ICollection<TourLog> logs)
+        public bool ComputeChildFriendliness(Tour tour)
         {
-            if (logs == null || logs.Count == 0)
+            if (tour.TourLogs == null || tour.TourLogs.Count == 0)
             {
-                return false;
+                return (tour.Distance / 1000) <= 10.0 &&
+                       tour.EstimatedTime.TotalMinutes <= 150.0;
             }
 
             // Average difficulty: 1-5, threshold <= 2 (easy/moderate)
-            double avgDifficulty = logs.Average(l => l.Difficulty);
+            double avgDifficulty = tour.TourLogs.Average(l => l.Difficulty);
             // Average distance: threshold < 10km (adjust as needed)
-            double avgDistance = logs.Average(l => l.TotalDistance);
+            double avgDistance = tour.TourLogs.Average(l => l.TotalDistance / 1000);
             // Average time: threshold < 2.5h (in minutes)
-            double avgMinutes = logs.Average(l => l.TotalTime.TotalMinutes);
+            double avgMinutes = tour.TourLogs.Average(l => l.TotalTime.TotalMinutes);
 
             return
                 avgDifficulty <= 2.0 &&
@@ -54,7 +55,7 @@ namespace TourPlanner.BL.Services
         {
             double SearchAlgorithmRanking = Popularity / 100;
 
-            if(Childfriendliness)
+            if (Childfriendliness)
                 SearchAlgorithmRanking *= 1.5;
 
             return Math.Min(SearchAlgorithmRanking, 1.0);
@@ -67,7 +68,7 @@ namespace TourPlanner.BL.Services
         {
             //  Errors are handled by TourService
             tour.TourAttributes.Popularity = ComputePopularity(tour.TourLogs);
-            tour.TourAttributes.ChildFriendliness = ComputeChildFriendliness(tour.TourLogs);
+            tour.TourAttributes.ChildFriendliness = ComputeChildFriendliness(tour);
             tour.TourAttributes.SearchAlgorithmRanking = ComputeSearchAlgorithmRanking(tour.TourAttributes.Popularity, tour.TourAttributes.ChildFriendliness);
 
             _logger.LogInformation("Updating TourAttributes for Tour => {@TourId}.\nPopularity: {Popularity}, ChildFriendliness: {ChildFriendly}, Ranking: {Ranking}",

@@ -147,7 +147,7 @@ namespace TourPlanner.UI.ViewModels
         {
             if (_selectedTour == null)
             {
-                MessageBox.Show("Please select a tour to edit.");
+                MessageBox.Show("Please select a tour to edit.", "Edit Tour", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -217,7 +217,7 @@ namespace TourPlanner.UI.ViewModels
             }
             tour = (Tour)result.Data;
 
-            result = _tourService.UpdateTour(tour);
+            result = _tourService.EditTour(tour);
 
             if (result.Code == Result.ResultCode.Success)
             {

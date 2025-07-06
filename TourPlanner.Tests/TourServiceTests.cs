@@ -38,7 +38,7 @@ namespace TourPlanner.Tests
 
             Result result = method switch {
                 "Create" => service.CreateTour(null),
-                "Update" => service.UpdateTour(null),
+                "Update" => service.EditTour(null),
                 "Delete" => service.DeleteTour(null),
                 "Recalculate" => service.RecalculateTourAttributes(null),
                 _ => throw new ArgumentException("Invalid method name")
@@ -73,7 +73,7 @@ namespace TourPlanner.Tests
 
             Result result = method switch {
                 "Create" => service.CreateTour(tour),
-                "Update" => service.UpdateTour(tour),
+                "Update" => service.EditTour(tour),
                 "Delete" => service.DeleteTour(tour),
                 _ => throw new ArgumentException("Invalid method")
             };
@@ -107,7 +107,7 @@ namespace TourPlanner.Tests
 
             Result result = method switch {
                 "Create" => service.CreateTour(tour),
-                "Update" => service.UpdateTour(tour),
+                "Update" => service.EditTour(tour),
                 "Delete" => service.DeleteTour(tour),
                 _ => throw new ArgumentException("Invalid method")
             };

@@ -100,6 +100,12 @@ public class TourService {
             }
 
             _tourRepository.InsertTour(tour);
+
+            Result result = RecalculateTourAttributes(tour);
+            if (result.Code != Result.ResultCode.Success)
+            {
+                return result;
+            }
             _logger.LogInformation("Tour created => {@Tour}", tour);
             return new Result(Result.ResultCode.Success);
         }
@@ -120,7 +126,7 @@ public class TourService {
         }
     }
     
-    public Result UpdateTour(Tour tour) {
+    public Result EditTour(Tour tour) {
         try
         {
             if (tour == null)
@@ -128,8 +134,15 @@ public class TourService {
                 _logger.LogWarning("Trying to update Tour with NULL Tour.");
                 return new Result(Result.ResultCode.NullError);
             }
-        
+
             _tourRepository.UpdateTour(tour);
+
+            Result result = RecalculateTourAttributes(tour);
+            if (result.Code != Result.ResultCode.Success)
+            {
+                return result;
+            }
+
             _logger.LogInformation("Tour updated => {Tour}", tour);
             return new Result(Result.ResultCode.Success);
         }
