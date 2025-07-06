@@ -59,6 +59,33 @@
         <Setter Property="Foreground" Value="#d65a5a" />
         <Setter Property="Margin" Value="5,0,5,5" />
         <Setter Property="Background" Value="#e8a0a0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Slider">
+                    <Grid>
+                        <Track x:Name="PART_Track"
+                               VerticalAlignment="Center">
+                            <Track.DecreaseRepeatButton>
+                                <RepeatButton Command="Slider.DecreaseLarge" Style="{x:Null}" Background="Transparent"/>
+                            </Track.DecreaseRepeatButton>
+                            <Track.Thumb>
+                                <Thumb Width="18" Height="18">
+                                    <Thumb.Template>
+                                        <ControlTemplate TargetType="Thumb">
+                                            <Ellipse Fill="White" StrokeThickness="0"/>
+                                        </ControlTemplate>
+                                    </Thumb.Template>
+                                </Thumb>
+                            </Track.Thumb>
+                            <Track.IncreaseRepeatButton>
+                                <RepeatButton Command="Slider.IncreaseLarge" Style="{x:Null}" Background="Transparent"/>
+                            </Track.IncreaseRepeatButton>
+                        </Track>
+                        <Rectangle Height="4" VerticalAlignment="Center" Fill="#d65a5a" RadiusX="2" RadiusY="2"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
         <Style.Triggers>
             <Trigger Property="Validation.HasError" Value="True">
                 <Setter Property="Foreground" Value="#c44a4a" />
