@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using Microsoft.Playwright;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

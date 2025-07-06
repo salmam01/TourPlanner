@@ -15,6 +15,7 @@ using TourPlanner.UI.ViewModels;
 using TourPlanner.UI.Views;
 using TourPlanner.BL.API;
 using TourPlanner.BL.Utils.Helpers;
+using QuestPDF;
 
 namespace TourPlanner.UI;
 
@@ -28,6 +29,7 @@ public partial class App : Application
 
     public App()
     {
+        QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
         //  Load configuration from appsettings.json
         IConfiguration config = new ConfigurationBuilder()
             // Set the file to Content and Copy-Always
