@@ -162,6 +162,8 @@ namespace TourPlanner.UI.ViewModels
 
             Popularity = 0;
             ChildFriendly = "No";
+
+            _selectedTour = null;
         }
 
         private void ShowTourDetails(Tour tour)
@@ -189,17 +191,20 @@ namespace TourPlanner.UI.ViewModels
         {
             switch (tourEvent.Type)
             {
+                case TourEvent.EventType.Reload:
+                    SetDefaultValues();
+                    break;
                 case TourEvent.EventType.SelectTour:
                     ShowTourDetails(tourEvent.Tour);
                     break;
                 case TourEvent.EventType.TourEdited:
                     ShowTourDetails(tourEvent.Tour);
                     break;
+                case TourEvent.EventType.TourDeleted:
+                    SetDefaultValues();
+                    break;
                 case TourEvent.EventType.LogCreated:
                     ShowTourDetails(tourEvent.Tour);
-                    break;
-                case TourEvent.EventType.DeleteTour:
-                    SetDefaultValues();
                     break;
                 case TourEvent.EventType.AllToursDeleted:
                     SetDefaultValues();

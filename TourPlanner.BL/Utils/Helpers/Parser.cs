@@ -6,9 +6,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TourPlanner.BL.Utils.DTO;
+using TourPlanner.UI.Utils.DTO;
 
-namespace TourPlanner.BL.Utils.Helpers
+namespace TourPlanner.UI.Utils.Helpers
 {
     public class Parser
     {

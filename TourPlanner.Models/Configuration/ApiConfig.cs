@@ -12,5 +12,6 @@ namespace TourPlanner.Models.Configuration
         public string BaseUrl { get; set; } = string.Empty;
         public double FocusPointLat { get; set; } = 0.0;
         public double FocusPointLon { get; set;} = 0.0;
+        public int MaxResults { get; set; } = 0;
     }
 }

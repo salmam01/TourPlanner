@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TourPlanner.Models.Entities;
-using TourPlanner.BL.Services;
+using TourPlanner.UI.Services;
 using TourPlanner.UI.Commands;
 using TourPlanner.UI.Events;
 
@@ -68,12 +68,18 @@ namespace TourPlanner.UI.ViewModels
 
         public void ReloadTourLogs(IEnumerable<TourLog> tourLogs)
         {
-            _tourLogs.Clear();
+            Clear();
             foreach (TourLog tourLog in tourLogs) {
                 _tourLogs.Add(tourLog);
             }
             OnPropertyChanged(nameof(TourLogs));
             HasNoResults = _tourLogs.Count == 0;
+        }
+
+        public void Clear()
+        {
+            _selectedTourLog = null;
+            _tourLogs.Clear();
         }
     }
 }

@@ -5,6 +5,10 @@ using Microsoft.Extensions.Logging;
 using TourPlanner.Models.Entities;
 using System.IO;
 using System.Threading.Tasks;
+using TourPlanner.UI.API;
+using TourPlanner.UI.Utils.DTO;
+using Microsoft.Playwright;
+using iText.IO.Image;
 using TourPlanner.BL.API;
 using TourPlanner.BL.Utils.DTO;
 using QuestPDF.Fluent;
@@ -13,7 +17,7 @@ using QuestPDF.Infrastructure;
 using System.Text.Json;
 using TourPlanner.Models.Utils.Helpers;
 
-namespace TourPlanner.BL.Services
+namespace TourPlanner.UI.Services
 {
     public class ReportGenerationService
     {

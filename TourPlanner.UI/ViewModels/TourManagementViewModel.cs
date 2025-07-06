@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using TourPlanner.BL.API;
-using TourPlanner.BL.Services;
+using TourPlanner.UI.API;
+using TourPlanner.UI.Services;
 using TourPlanner.Models.Entities;
 using TourPlanner.Models.Utils.Helpers;
 using TourPlanner.UI.Commands;
@@ -134,6 +134,7 @@ namespace TourPlanner.UI.ViewModels
                 return;
             }
             TourListViewModel.ReloadTours(tours);
+            _eventAggregator.Publish(new TourEvent(TourEvent.EventType.Reload));
             _selectedTour = null;
         }
 
@@ -146,7 +147,7 @@ namespace TourPlanner.UI.ViewModels
         {
             if (_selectedTour == null)
             {
-                MessageBox.Show("Please select a tour to edit.");
+                MessageBox.Show("Please select a tour to edit.", "Edit Tour", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -216,7 +217,7 @@ namespace TourPlanner.UI.ViewModels
             }
             tour = (Tour)result.Data;
 
-            result = _tourService.UpdateTour(tour);
+            result = _tourService.EditTour(tour);
 
             if (result.Code == Result.ResultCode.Success)
             {

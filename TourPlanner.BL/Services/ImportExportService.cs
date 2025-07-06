@@ -12,7 +12,7 @@ using TourPlanner.Models.Utils.Helpers;
 ///     Service to handle import/export of tours and logs in JSON and XLSX (Excel)
 /// </summary>
 
-namespace TourPlanner.BL.Services
+namespace TourPlanner.UI.Services
 {
     public class ImportExportService
     {

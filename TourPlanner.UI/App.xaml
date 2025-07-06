@@ -6,12 +6,12 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Theme/WindowButtonTheme.xaml"/>
-                <ResourceDictionary Source="/Theme/ActionButtonTheme.xaml"/>
-                <ResourceDictionary Source="/Theme/FormFieldTheme.xaml"/>
-                <ResourceDictionary Source="/Theme/TabItemTheme.xaml"/>
-                <ResourceDictionary Source="/Theme/SearchbarTheme.xaml"/>
-                <ResourceDictionary Source="/Theme/TextBlockTheme.xaml"/>
+                <ResourceDictionary Source="/Resources/Themes/WindowButtonTheme.xaml"/>
+                <ResourceDictionary Source="/Resources/Themes/ActionButtonTheme.xaml"/>
+                <ResourceDictionary Source="/Resources/Themes/FormFieldTheme.xaml"/>
+                <ResourceDictionary Source="/Resources/Themes/TabItemTheme.xaml"/>
+                <ResourceDictionary Source="/Resources/Themes/SearchbarTheme.xaml"/>
+                <ResourceDictionary Source="/Resources/Themes/TextBlockTheme.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         </ResourceDictionary>

@@ -6,10 +6,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TourPlanner.BL.Utils.DTO;
+using TourPlanner.UI.Utils.DTO;
 using System.Text.Json;
 
-namespace TourPlanner.BL.Utils.Helpers
+namespace TourPlanner.UI.Utils.Helpers
 {
     public class LeafletHelper
     {

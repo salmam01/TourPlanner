@@ -6,7 +6,7 @@ using TourPlanner.DAL.Repositories.TourRepository;
 using TourPlanner.Models.Entities;
 using TourPlanner.Models.Utils.Helpers;
 
-namespace TourPlanner.BL.Services;
+namespace TourPlanner.UI.Services;
 
 public class TourService {
     private readonly ITourRepository _tourRepository;
@@ -32,14 +32,14 @@ public class TourService {
         {
             _logger.LogCritical(
                 dbEx,
-                "\nDatabase Exception occurred while retrieving a list of all Tours.\nMessage: {Message}",
+                "Database Exception occurred while retrieving a list of all Tours. Message: {Message}",
                 dbEx.Message
             );
             return new Result(Result.ResultCode.DatabaseError);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "\nException occurred while retrieving a list of all Tours.");
+            _logger.LogError(ex, "Exception occurred while retrieving a list of all Tours.");
             return new Result(Result.ResultCode.UnknownError);
         }
     }
@@ -78,14 +78,14 @@ public class TourService {
         {
             _logger.LogCritical(
                 dbEx,
-                "\nDatabase Exception occurred while searching Tours.\nMessage:{Message}",
+                "Database Exception occurred while searching Tours. Message:{Message}",
                 dbEx.Message
             );
             return new Result(Result.ResultCode.DatabaseError);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "\nException occurred while searching Tours.");
+            _logger.LogError(ex, "Exception occurred while searching Tours.");
             return new Result(Result.ResultCode.UnknownError);
         }
     }
@@ -100,6 +100,12 @@ public class TourService {
             }
 
             _tourRepository.InsertTour(tour);
+
+            Result result = RecalculateTourAttributes(tour);
+            if (result.Code != Result.ResultCode.Success)
+            {
+                return result;
+            }
             _logger.LogInformation("Tour created => {@Tour}", tour);
             return new Result(Result.ResultCode.Success);
         }
@@ -107,7 +113,7 @@ public class TourService {
         {
             _logger.LogCritical(
                 dbEx,
-                "\nDatabase Exception occurred while creating Tour => {TourName}.\nMessage: {Message}", 
+                "Database Exception occurred while creating Tour => {TourName}. Message: {Message}", 
                 tour.Name,
                 dbEx.Message
             );
@@ -115,12 +121,12 @@ public class TourService {
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "\nException occurred while creating Tour => {TourName}", tour.Name);
+            _logger.LogError(ex, "Exception occurred while creating Tour => {TourName}", tour.Name);
             return new Result(Result.ResultCode.UnknownError);
         }
     }
     
-    public Result UpdateTour(Tour tour) {
+    public Result EditTour(Tour tour) {
         try
         {
             if (tour == null)
@@ -128,8 +134,15 @@ public class TourService {
                 _logger.LogWarning("Trying to update Tour with NULL Tour.");
                 return new Result(Result.ResultCode.NullError);
             }
-        
+
             _tourRepository.UpdateTour(tour);
+
+            Result result = RecalculateTourAttributes(tour);
+            if (result.Code != Result.ResultCode.Success)
+            {
+                return result;
+            }
+
             _logger.LogInformation("Tour updated => {Tour}", tour);
             return new Result(Result.ResultCode.Success);
         }
