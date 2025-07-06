@@ -71,7 +71,7 @@ namespace TourPlanner.BL.Services
             tour.TourAttributes.ChildFriendliness = ComputeChildFriendliness(tour);
             tour.TourAttributes.SearchAlgorithmRanking = ComputeSearchAlgorithmRanking(tour.TourAttributes.Popularity, tour.TourAttributes.ChildFriendliness);
 
-            _logger.LogInformation("Updating TourAttributes for Tour => {@TourId}.\nPopularity: {Popularity}, ChildFriendliness: {ChildFriendly}, Ranking: {Ranking}",
+            _logger.LogInformation("Updating TourAttributes for Tour => {@TourId}. Popularity: {Popularity}, ChildFriendliness: {ChildFriendly}, Ranking: {Ranking}",
                 tour.Id,
                 tour.TourAttributes.Popularity,
                 tour.TourAttributes.ChildFriendliness,

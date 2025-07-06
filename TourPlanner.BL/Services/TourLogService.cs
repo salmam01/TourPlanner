@@ -29,14 +29,14 @@ public class TourLogService {
         {
             _logger.LogCritical(
                 dbEx,
-                "\nDatabase Exception occurred while retrieving a list of all Tour Logs.\nMessage: {Message}",
+                "Database Exception occurred while retrieving a list of all Tour Logs.Message: {Message}",
                 dbEx.Message
             );
             return new Result(Result.ResultCode.DatabaseError);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "\nException occurred while retrieving a list of all Tour Logs.");
+            _logger.LogError(ex, "Exception occurred while retrieving a list of all Tour Logs.");
             return new Result(Result.ResultCode.UnknownError);
         }
     }
@@ -69,7 +69,7 @@ public class TourLogService {
         {
             _logger.LogCritical(
                 dbEx,
-                "\nDatabase Exception occurred while creating TourLog => {TourLogID}.\nMessage: {Message}",
+                "Database Exception occurred while creating TourLog => {TourLogID}. Message: {Message}",
                 tourLog.Id,
                 dbEx.Message
             );
@@ -77,7 +77,7 @@ public class TourLogService {
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "\nException occurred while creating TourLog => {TourLogID}", tourLog.Id);
+            _logger.LogError(ex, "Exception occurred while creating TourLog => {TourLogID}", tourLog.Id);
             return new Result(Result.ResultCode.UnknownError);
         }
     }
@@ -99,7 +99,7 @@ public class TourLogService {
         {
             _logger.LogCritical(
                 dbEx,
-                "\nDatabase Exception occurred while updating TourLog => {TourLogID}.\nMessage: {Message}", 
+                "Database Exception occurred while updating TourLog => {TourLogID}. Message: {Message}", 
                 tourLog.Id,
                 dbEx.Message
             );
@@ -107,7 +107,7 @@ public class TourLogService {
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "\nException occurred while updating TourLog => {TourLogID}", tourLog.Id);
+            _logger.LogError(ex, "Exception occurred while updating TourLog => {TourLogID}", tourLog.Id);
             return new Result(Result.ResultCode.UnknownError);
         }
     }
@@ -129,7 +129,7 @@ public class TourLogService {
         {
             _logger.LogCritical(
                 dbEx,
-                "\nDatabase Exception occurred while deleting TourLog => {TourLogID}.\nMessage: {Message}", 
+                "Database Exception occurred while deleting TourLog => {TourLogID}. Message: {Message}", 
                 tourLog.Id,
                 dbEx.Message
             );
@@ -137,7 +137,7 @@ public class TourLogService {
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "\nException occurred while deleting TourLog => {TourLogID}", tourLog.Id);
+            _logger.LogError(ex, "Exception occurred while deleting TourLog => {TourLogID}", tourLog.Id);
             return new Result(Result.ResultCode.UnknownError);
         }
     }

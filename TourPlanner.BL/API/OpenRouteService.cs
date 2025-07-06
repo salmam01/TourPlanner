@@ -7,8 +7,6 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Nodes;
-using System.Threading.Tasks;
 using TourPlanner.BL.Utils.DTO;
 using TourPlanner.BL.Utils.Helpers;
 using TourPlanner.Models.Entities;
@@ -22,7 +20,7 @@ namespace TourPlanner.BL.API
         private readonly HttpClient _client;
         private readonly Parser _parser;
         private readonly GeoCoordinates _focusPoint;
-        private readonly static int _maxResults = 5;
+        private readonly int _maxResults;
         private readonly ILogger<OpenRouteService> _logger;
 
         public OpenRouteService(
@@ -31,6 +29,7 @@ namespace TourPlanner.BL.API
             string endPoint,
             double focusPointLat,
             double focusPointLon,
+            int maxResults,
             ILogger<OpenRouteService> logger
         ) {
             _openRouteKey = openRouteKey;
@@ -41,6 +40,7 @@ namespace TourPlanner.BL.API
             _focusPoint = new();
             _focusPoint.Latitude = focusPointLat;
             _focusPoint.Longitude = focusPointLon;
+            _maxResults = maxResults;
 
             _logger = logger;
         }

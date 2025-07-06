@@ -109,6 +109,7 @@ public partial class App : Application
                 apiConfig.BaseUrl,
                 apiConfig.FocusPointLat,
                 apiConfig.FocusPointLon,
+                apiConfig.MaxResults,
                 s.GetRequiredService<ILogger<OpenRouteService>>()
             )
         );

@@ -32,14 +32,14 @@ public class TourService {
         {
             _logger.LogCritical(
                 dbEx,
-                "\nDatabase Exception occurred while retrieving a list of all Tours.\nMessage: {Message}",
+                "Database Exception occurred while retrieving a list of all Tours. Message: {Message}",
                 dbEx.Message
             );
             return new Result(Result.ResultCode.DatabaseError);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "\nException occurred while retrieving a list of all Tours.");
+            _logger.LogError(ex, "Exception occurred while retrieving a list of all Tours.");
             return new Result(Result.ResultCode.UnknownError);
         }
     }
@@ -78,14 +78,14 @@ public class TourService {
         {
             _logger.LogCritical(
                 dbEx,
-                "\nDatabase Exception occurred while searching Tours.\nMessage:{Message}",
+                "Database Exception occurred while searching Tours. Message:{Message}",
                 dbEx.Message
             );
             return new Result(Result.ResultCode.DatabaseError);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "\nException occurred while searching Tours.");
+            _logger.LogError(ex, "Exception occurred while searching Tours.");
             return new Result(Result.ResultCode.UnknownError);
         }
     }
@@ -113,7 +113,7 @@ public class TourService {
         {
             _logger.LogCritical(
                 dbEx,
-                "\nDatabase Exception occurred while creating Tour => {TourName}.\nMessage: {Message}", 
+                "Database Exception occurred while creating Tour => {TourName}. Message: {Message}", 
                 tour.Name,
                 dbEx.Message
             );
@@ -121,7 +121,7 @@ public class TourService {
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "\nException occurred while creating Tour => {TourName}", tour.Name);
+            _logger.LogError(ex, "Exception occurred while creating Tour => {TourName}", tour.Name);
             return new Result(Result.ResultCode.UnknownError);
         }
     }
