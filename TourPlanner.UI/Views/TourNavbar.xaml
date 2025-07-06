@@ -20,13 +20,13 @@
                          Style="{StaticResource TabItemStyle}">
                     <views:Map DataContext="{Binding MapViewModel}"/>
                 </TabItem>
-                <TabItem Header="Logs"
-                         Style="{StaticResource TabItemStyle}">
-                    <views:TourLogsManagement DataContext="{Binding TourLogsManagementViewModel}"/>
-                </TabItem>
                 <TabItem Header="Details"
                          Style="{StaticResource TabItemStyle}">
                     <views:TourDetails DataContext="{Binding TourDetailsViewModel}"/>
+                </TabItem>
+                <TabItem Header="Logs"
+                         Style="{StaticResource TabItemStyle}">
+                    <views:TourLogsManagement DataContext="{Binding TourLogsManagementViewModel}"/>
                 </TabItem>
             </TabControl>
         </Grid>

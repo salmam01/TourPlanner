@@ -20,16 +20,22 @@ namespace TourPlanner.UI.Utils.Helpers
                 return locations;
             }
 
+            //  Dynamic JSON object
             JObject jsonObject = JObject.Parse(jsonString);
             if (jsonObject == null)
             {
                 return locations;
             }
 
-            int locationsSize = jsonObject["features"].Count();
-            for (int i = 0; i < locationsSize; i++)
+            JArray? features = jsonObject["features"] as JArray;
+            if (features == null || features.Count == 0)
             {
-                string location = jsonObject["features"][i]["properties"]["label"].ToString();
+                return locations;
+            }
+
+            for (int i = 0; i < features.Count; i++)
+            {
+                string? location = features[i]["properties"]?["label"]?.ToString();
                 if (!string.IsNullOrWhiteSpace(location)) {
                     locations.Add(location);
                 }
@@ -38,7 +44,6 @@ namespace TourPlanner.UI.Utils.Helpers
             return locations;
         }
 
-        //  TODO: refactor this shit plss
         public GeoCoordinates ParseGeoCoordinates(string jsonString)
         {
             GeoCoordinates geoCoordinates = new();
@@ -47,15 +52,26 @@ namespace TourPlanner.UI.Utils.Helpers
                 return geoCoordinates;
             }
 
-            //  Dynamic JSON object
             JObject jsonObject = JObject.Parse(jsonString);
             if (jsonObject == null)
             {
                 return geoCoordinates;
             }
 
-            geoCoordinates.Longitude = jsonObject["features"][0]["geometry"]["coordinates"][0].ToObject<double>();
-            geoCoordinates.Latitude = jsonObject["features"][0]["geometry"]["coordinates"][1].ToObject<double>();
+            JArray? features = jsonObject["features"] as JArray;
+            if (features == null || features.Count == 0)
+            {
+                return geoCoordinates;
+            }
+
+            JArray? coordinates = features[0]["geometry"]?["coordinates"] as JArray;
+            if (coordinates == null || coordinates.Count == 0 || coordinates.Count > 2)
+            {
+                return geoCoordinates;
+            }
+
+            geoCoordinates.Longitude = coordinates[0].ToObject<double>();
+            geoCoordinates.Latitude = coordinates[1].ToObject<double>();
 
             return geoCoordinates;
         }
@@ -68,36 +84,54 @@ namespace TourPlanner.UI.Utils.Helpers
                 return mapGeometry;
             }
 
-            //  Dynamic JSON object
             JObject jsonObject = JObject.Parse(jsonString);
             if (jsonObject == null)
             {
                 return mapGeometry;
             }
 
-            int wayPointsLength = jsonObject["features"][0]["geometry"]["coordinates"].Count();
+            JArray? features = jsonObject["features"] as JArray;
+            if (features == null || features.Count == 0)
+            {
+                return mapGeometry;
+            }
+
+            int? wayPointsLength = features[0]?["geometry"]?["coordinates"]?.Count();
             if (wayPointsLength > 0)
             {
                 for (int i = 0; i < wayPointsLength; i++)
                 {
+                    JArray? wayPointsArray = features[0]?["geometry"]?["coordinates"]?[i] as JArray;
+                    if (wayPointsArray == null || wayPointsArray.Count == 0)
+                    {
+                        return mapGeometry;
+                    }
+
                     GeoCoordinates wayPointCoordinates = new();
-                    wayPointCoordinates.Longitude = jsonObject["features"][0]["geometry"]["coordinates"][i][0].ToObject<double>();
-                    wayPointCoordinates.Latitude = jsonObject["features"][0]["geometry"]["coordinates"][i][1].ToObject<double>();
+                    wayPointCoordinates.Longitude = wayPointsArray[0]?.ToObject<double>() ?? 0;
+                    wayPointCoordinates.Latitude = wayPointsArray[1]?.ToObject<double>() ?? 0;
                     mapGeometry.WayPoints.Add(wayPointCoordinates);
                 }
             }
 
-            mapGeometry.Bbox = new BboxCoordinates
+            JArray? bboxArray = jsonObject["bbox"] as JArray;
+            if (bboxArray != null && bboxArray.Count >= 4)
             {
-                MinLongitude = jsonObject["bbox"][0].ToObject<double>(),
-                MinLatitude = jsonObject["bbox"][1].ToObject<double>(),
-                MaxLongitude = jsonObject["bbox"][2].ToObject<double>(),
-                MaxLatitude = jsonObject["bbox"][3].ToObject<double>()
-            };
+                mapGeometry.Bbox = new BboxCoordinates
+                {
+                    MinLongitude = bboxArray[0]?.ToObject<double>() ?? 0,
+                    MinLatitude = bboxArray[1]?.ToObject<double>() ?? 0,
+                    MaxLongitude = bboxArray[2]?.ToObject<double>() ?? 0,
+                    MaxLatitude = bboxArray[3]?.ToObject<double>() ?? 0
+                };
+            }
 
-            double duration = jsonObject["features"][0]["properties"]["summary"]["duration"].ToObject<double>();
-            mapGeometry.Distance = jsonObject["features"][0]["properties"]["summary"]["distance"].ToObject<double>();
-            mapGeometry.Duration = TimeSpan.FromSeconds(duration);
+            JObject? summary = features[0]?["properties"]?["summary"] as JObject;
+            if (summary != null)
+            {
+                mapGeometry.Distance = summary["distance"]?.ToObject<double>() ?? 0;
+                mapGeometry.Duration = TimeSpan.FromSeconds(summary["duration"]?.ToObject<double>() ?? 0);
+            }
 
             return mapGeometry;
         }

@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace TourPlanner.UI.Events
 {
-    //  Helper folder / system comp folder
     public class EventAggregator
     {
-        //  Note: you can add a lock for thread safety
 
         List<(Type eventType, Delegate methodToCall)> eventRegistrations =
             new List<(Type eventType, Delegate methodToCall)>();
