@@ -68,12 +68,18 @@ namespace TourPlanner.UI.ViewModels
 
         public void ReloadTourLogs(IEnumerable<TourLog> tourLogs)
         {
-            _tourLogs.Clear();
+            Clear();
             foreach (TourLog tourLog in tourLogs) {
                 _tourLogs.Add(tourLog);
             }
             OnPropertyChanged(nameof(TourLogs));
             HasNoResults = _tourLogs.Count == 0;
+        }
+
+        public void Clear()
+        {
+            _selectedTourLog = null;
+            _tourLogs.Clear();
         }
     }
 }

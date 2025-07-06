@@ -11,6 +11,7 @@ namespace TourPlanner.UI.Events
     {
         public enum EventType
         {
+            Reload,
             SelectTour,
             CreateTour,
             EditTour,

@@ -59,14 +59,39 @@ namespace TourPlanner.UI.ViewModels
 
             _eventAggregator.Subscribe<TourEvent>(e =>
             {
-                if (e.Type == TourEvent.EventType.SelectTour)
-                    OnTourSelected(e.Tour);
+                EventHandler(e);
             });
 
             TourLogListViewModel.TourLogSelected += OnTourLogSelected;
             _createTourLogViewModel.TourLogCreated += OnTourLogCreated;
             _createTourLogViewModel.TourLogEdited += OnTourLogEdited;
             _createTourLogViewModel.Cancelled += OnCancel;
+        }
+
+        private void EventHandler(TourEvent tourEvent)
+        {
+            switch (tourEvent.Type)
+            {
+                case TourEvent.EventType.SelectTour:
+                    OnTourSelected(tourEvent.Tour);
+                    break;
+                case TourEvent.EventType.Reload:
+                    OnReload();
+                    break;
+                case TourEvent.EventType.TourDeleted:
+                    OnReload();
+                    break;
+                case TourEvent.EventType.AllToursDeleted:
+                    OnReload();
+                    break;
+            }
+        }
+
+        private void OnReload()
+        {
+            TourLogListViewModel.Clear();
+            _selectedTour = null;
+            _selectedTourLog = null;
         }
 
         public void ReloadLogList(Tour tour)

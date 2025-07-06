@@ -134,6 +134,7 @@ namespace TourPlanner.UI.ViewModels
                 return;
             }
             TourListViewModel.ReloadTours(tours);
+            _eventAggregator.Publish(new TourEvent(TourEvent.EventType.Reload));
             _selectedTour = null;
         }
 
