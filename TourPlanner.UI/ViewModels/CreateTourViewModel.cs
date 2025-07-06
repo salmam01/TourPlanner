@@ -61,8 +61,7 @@ namespace TourPlanner.UI.ViewModels
         }
         public string NameError => GetFirstError(nameof(Name));
 
-        public DateTime Date
-        {
+        public DateTime Date {
             get => _date;
             set
             {
