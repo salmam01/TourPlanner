@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TourPlanner.BL.Utils.Helpers
+namespace TourPlanner.Models.Utils.Helpers
 {
     public class Result
     {

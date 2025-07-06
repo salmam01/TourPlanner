@@ -13,5 +13,4 @@ public interface ITourRepository
     void UpdateTour(Tour tour);
     void DeleteTour(Guid tourId);
     void DeleteAllTours();
-    void Save();
 }

@@ -8,6 +8,7 @@ using TourPlanner.BL.API;
 using TourPlanner.BL.Utils.DTO;
 using TourPlanner.BL.Utils.Helpers;
 using TourPlanner.Models.Entities;
+using TourPlanner.Models.Utils.Helpers;
 using TourPlanner.UI.Events;
 
 namespace TourPlanner.UI.ViewModels
