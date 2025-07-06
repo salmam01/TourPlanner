@@ -340,11 +340,11 @@ namespace TourPlanner.UI.ViewModels
             }
             if (!foundInSuggestions)
             {
-                bool valid = await ValidateAddress(To);
+                bool valid = await ValidateAddress(From);
                 if (!valid)
-                    SetError(nameof(To), "Please select a valid address.");
+                    SetError(nameof(From), "Please select a valid address.");
                 else
-                    ClearErrors(nameof(To));
+                    ClearErrors(nameof(From));
             }
         }
         private async void ValidateTo()
