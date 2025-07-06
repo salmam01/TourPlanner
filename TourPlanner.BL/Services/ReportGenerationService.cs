@@ -71,7 +71,7 @@ namespace TourPlanner.UI.Services
                 AddTableRow(tourDetails, "From", tour.From);
                 AddTableRow(tourDetails, "To", tour.To);
                 AddTableRow(tourDetails, "Transport Type", tour.TransportType);
-                AddTableRow(tourDetails, "Distance", tour.Distance.ToString("F2") + " km");
+                AddTableRow(tourDetails, "Distance", (tour.Distance / 1000).ToString("F2") + " km");
                 AddTableRow(tourDetails, "Estimated Time", tour.EstimatedTime.ToString(@"hh\:mm\:ss"));
                 AddTableRow(tourDetails, "Date", tour.Date.ToString("dd.MM.yyyy"));
 
@@ -137,7 +137,7 @@ namespace TourPlanner.UI.Services
                             log.Difficulty.ToString(),
                             log.Rating.ToString(),
                             log.Comment ?? "",
-                            log.TotalDistance.ToString("F2") + " km",
+                            (log.TotalDistance / 1000).ToString("F2") + " km",
                             log.TotalTime.ToString(@"hh\:mm\:ss"));
                     }
                     
@@ -207,8 +207,8 @@ namespace TourPlanner.UI.Services
                 foreach (Tour tour in tours)
                 {
                     int tourLogsCount = 0;
-                    double avgDistance = tour.Distance;
-                    double avgTime = tour.EstimatedTime.TotalMinutes;
+                    double avgDistance = tour.Distance / 1000;
+                    TimeSpan avgTime = TimeSpan.FromMinutes(tour.EstimatedTime.TotalMinutes);
                     double avgRating = 0;
                     int popularity = tour.TourAttributes.Popularity;
                     bool childFriendliness = tour.TourAttributes.ChildFriendliness;
@@ -216,8 +216,8 @@ namespace TourPlanner.UI.Services
                     if (tour.TourLogs != null && tour.TourLogs.Count != 0)
                     {
                         tourLogsCount = tour.TourLogs.Count;
-                        avgDistance = tour.TourLogs.Average(l => l.TotalDistance);
-                        avgTime = tour.TourLogs.Average(l => l.TotalTime.TotalMinutes);
+                        avgDistance = tour.TourLogs.Average(l => l.TotalDistance / 1000);
+                        avgTime = TimeSpan.FromMinutes(tour.TourLogs.Average(l => l.TotalTime.TotalMinutes));
                         avgRating = tour.TourLogs.Average(l => l.Rating);
                     }
 
@@ -225,7 +225,7 @@ namespace TourPlanner.UI.Services
                                 tour.Name,
                                 tourLogsCount.ToString(),
                                 avgDistance.ToString("F2") + " km",
-                                avgTime.ToString("F2") + " min",
+                                avgTime.ToString(@"hh\:mm") + " h",
                                 avgRating.ToString("F1"),
                                 popularity.ToString(),
                                 childFriendliness ? "Yes" : "No");

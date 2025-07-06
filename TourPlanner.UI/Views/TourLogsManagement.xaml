@@ -45,7 +45,7 @@
 
             <!--- Tour Logs Table -->
             <views:TourLogList Grid.Row="1"
-                           DataContext="{Binding TourLogListViewModel}"/>
+                               DataContext="{Binding TourLogListViewModel}"/>
         </Grid>
     </Border>
 </UserControl>
