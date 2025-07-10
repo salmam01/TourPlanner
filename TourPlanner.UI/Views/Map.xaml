@@ -8,16 +8,16 @@
              xmlns:converters="clr-namespace:TourPlanner.UI.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    
+
     <UserControl.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     </UserControl.Resources>
 
     <Border CornerRadius="24"
-            BorderBrush="#A4B465"
+            BorderBrush="#4E5A38"
             BorderThickness="1"
             Margin="16"
-            Background="Transparent">
+            Background="#4E5A38">
         <Grid>
             <wpf:WebView2 x:Name="webView"
                          DefaultBackgroundColor="#4E5A38"

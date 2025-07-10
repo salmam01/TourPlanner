@@ -19,22 +19,10 @@ namespace TourPlanner.UI.ViewModels
         private readonly OpenRouteService _openRouteService;
         private readonly LeafletHelper _leafletHelper;
         private Tour _selectedTour;
-        private bool _isMapVisible = true;
 
         public string BaseDirectory { get; }
 
-        public bool IsMapVisible
-        {
-            get => _isMapVisible;
-            set
-            {
-                if (_isMapVisible != value)
-                {
-                    _isMapVisible = value;
-                    OnPropertyChanged(nameof(IsMapVisible));
-                }
-            }
-        }
+        public bool IsMapVisible => _selectedTour == null ? false : true;
 
         public MapViewModel(
             EventAggregator eventAggregator, 
@@ -49,9 +37,30 @@ namespace TourPlanner.UI.ViewModels
 
             _eventAggregator.Subscribe<TourEvent>(e =>
             {
-                if (e.Type == TourEvent.EventType.SelectTour)
-                    OnTourSelected(e.Tour);
+                EventHandler(e);
             });
+        }
+
+        private void EventHandler(TourEvent tourEvent)
+        {
+            switch (tourEvent.Type)
+            {
+                case TourEvent.EventType.Reload:
+                    HideMap();
+                    break;
+                case TourEvent.EventType.SelectTour:
+                    OnTourSelected(tourEvent.Tour);
+                    break;
+                case TourEvent.EventType.TourEdited:
+                    OnTourSelected(tourEvent.Tour);
+                    break;
+                case TourEvent.EventType.TourDeleted:
+                    HideMap();
+                    break;
+                case TourEvent.EventType.AllToursDeleted:
+                    HideMap();
+                    break;
+            }
         }
 
         private async void OnTourSelected(Tour tour)
@@ -59,18 +68,25 @@ namespace TourPlanner.UI.ViewModels
             if (_selectedTour != tour && tour != null)
             {
                 _selectedTour = tour;
+                OnPropertyChanged(nameof(IsMapVisible));
 
                 //  Get the map geometry needed for the map image
-                Result result = await _openRouteService.GetMapGeometry(_selectedTour);
+                Result result = await _openRouteService.GetMapGeometry(tour);
                 MapGeometry mapGeometry = (MapGeometry)result.Data;
 
                 if (mapGeometry != null && mapGeometry.WayPoints.Count > 0 && mapGeometry.Bbox != null)
                 {
                     //  Draw the map using Leaflet
-                    _leafletHelper.SaveMapGeometryAsJson(mapGeometry, BaseDirectory, _selectedTour.From, _selectedTour.To);
+                    _leafletHelper.SaveMapGeometryAsJson(mapGeometry, BaseDirectory, tour.From, tour.To);
                     _eventAggregator.Publish(new TourEvent(TourEvent.EventType.MapUpdated));
                 }
             }
+        }
+
+        private void HideMap()
+        {
+            _selectedTour = null;
+            OnPropertyChanged(nameof(IsMapVisible));
         }
     }
 }

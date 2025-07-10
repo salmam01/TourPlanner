@@ -10,9 +10,10 @@ namespace TourPlanner.UI.Events
     {
         public enum Destination
         {
+            Home,
             CreateTour,
             CreateTourLog,
-            Home
+            LogViewer
         }
         public Destination Destin { get; }
 

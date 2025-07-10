@@ -64,7 +64,7 @@ namespace TourPlanner.UI.API
                               $"&size={_maxResults}" +
                               $"&focus.point.lat={_focusPoint.Latitude.ToString(CultureInfo.InvariantCulture)}" +
                               $"&focus.point.lon={_focusPoint.Longitude.ToString(CultureInfo.InvariantCulture)}" +
-                              $"&layers=address,street");
+                              $"&layers=address,street,venue,locality");
 
                 //  Will return a JSON response with coordinates and bbox
                 //  bbox are the coordinates of the bounding box for the map
@@ -75,10 +75,13 @@ namespace TourPlanner.UI.API
                     return new Result(Result.ResultCode.ApiError);
                 }
 
-                List<string> locations = _parser.ParseLocationSuggestions(await response.Content.ReadAsStringAsync());
+                string responseContent = await response.Content.ReadAsStringAsync();
+                _logger.LogDebug("Location suggestions API response: {Response}", responseContent);
+
+                List<string> locations = _parser.ParseLocationSuggestions(responseContent);
                 if (locations == null || locations.Count == 0)
                 {
-                    _logger.LogError("Failed to parse JSON from location suggestions request.");
+                    _logger.LogError("Failed to parse JSON from location suggestions request. Response: {Response}", responseContent);
                     return new Result(Result.ResultCode.ParseError);
                 }
 
@@ -213,29 +216,36 @@ namespace TourPlanner.UI.API
         {
             try
             {
-                GeoCoordinates geoCoordinates = await GetGeoCoordinatesAsync(location);
-                if (geoCoordinates == null || !IsValidCoordinates(geoCoordinates))
+                if (string.IsNullOrWhiteSpace(location))
                 {
-                    _logger.LogWarning("Invalid address entered.");
+                    _logger.LogWarning("Trying to check address existence with empty location.");
                     return new Result(Result.ResultCode.InvalidAddress);
                 }
 
-                _logger.LogWarning("Valid address entered.");
+                GeoCoordinates geoCoordinates = await GetGeoCoordinatesAsync(location);
+                if (geoCoordinates == null || !IsValidCoordinates(geoCoordinates))
+                {
+                    _logger.LogWarning("Invalid address entered: {Location}", location);
+                    return new Result(Result.ResultCode.InvalidAddress);
+                }
+
+                _logger.LogInformation("Valid address found: {Location} at coordinates ({Lat}, {Lon})",
+                    location, geoCoordinates.Latitude, geoCoordinates.Longitude);
                 return new Result(Result.ResultCode.Success);
             }
             catch (HttpRequestException ex)
             {
-                _logger.LogError(ex, "HTTP request failed while retrieving map geometry.");
+                _logger.LogError(ex, "HTTP request failed while checking address existence for: {Location}", location);
                 return new Result(Result.ResultCode.ApiError);
             }
             catch (JsonException ex)
             {
-                _logger.LogError(ex, "Failed to parse JSON for Map Geometry.");
+                _logger.LogError(ex, "Failed to parse JSON while checking address existence for: {Location}", location);
                 return new Result(Result.ResultCode.ParseError);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Exception during Map Geometry request.");
+                _logger.LogError(ex, "Exception during address existence check for: {Location}", location);
                 return new Result(Result.ResultCode.UnknownError);
             }
         }
@@ -246,12 +256,13 @@ namespace TourPlanner.UI.API
             try
             {
                 GeoCoordinates geoCoordinates = new();
-
                 string url = ($"geocode/search?api_key={_openRouteKey}&text={location}");
 
                 HttpResponseMessage response = await _client.GetAsync(url);
                 if (response.IsSuccessStatusCode)
+                {
                     geoCoordinates = _parser.ParseGeoCoordinates(await response.Content.ReadAsStringAsync());
+                }
                 else
                     _logger.LogError("Request to retrieve Coordinates failed with {Status}:", response.StatusCode);
 
@@ -275,6 +286,13 @@ namespace TourPlanner.UI.API
                     return string.Empty;
                 }
 
+                if (!IsValidCoordinates(start) || !IsValidCoordinates(end))
+                {
+                    _logger.LogWarning("Invalid coordinates provided: Start({StartLat}, {StartLon}), End({EndLat}, {EndLon})",
+                        start.Latitude, start.Longitude, end.Latitude, end.Longitude);
+                    return string.Empty;
+                }
+
                 string startX = start.Longitude.ToString(CultureInfo.InvariantCulture);
                 string startY = start.Latitude.ToString(CultureInfo.InvariantCulture);
                 string endX = end.Longitude.ToString(CultureInfo.InvariantCulture);
@@ -284,13 +302,28 @@ namespace TourPlanner.UI.API
                               $"?api_key={_openRouteKey}" +
                               $"&start={startX},{startY}" +
                               $"&end={endX},{endY}");
+                _logger.LogDebug("Requesting directions from ({StartLat}, {StartLon}) to ({EndLat}, {EndLon}) with profile {Profile}",
+                    start.Latitude, start.Longitude, end.Latitude, end.Longitude, profile);
 
                 HttpResponseMessage response = await _client.GetAsync(url);
                 if (response.IsSuccessStatusCode)
-                    return await response.Content.ReadAsStringAsync();
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    if (!string.IsNullOrWhiteSpace(content))
+                    {
+                        _logger.LogDebug("Successfully retrieved directions response");
+                        return content;
+                    }
+                    else
+                    {
+                        _logger.LogWarning("Empty response content from directions API.");
+                        return string.Empty;
+                    }
+                }
                 else
                 {
-                    _logger.LogError("Request failed with {Status}:", response.StatusCode);
+                    string errorContent = await response.Content.ReadAsStringAsync();
+                    _logger.LogError("Request failed with {Status}: {ErrorContent}", response.StatusCode, errorContent);
                     return string.Empty;
                 }
             }
@@ -305,7 +338,8 @@ namespace TourPlanner.UI.API
         {
             return geoCoordinates != null
                 && geoCoordinates.Latitude >= -90 && geoCoordinates.Latitude <= 90
-                && geoCoordinates.Longitude >= -180 && geoCoordinates.Longitude <= 180;
+                && geoCoordinates.Longitude >= -180 && geoCoordinates.Longitude <= 180
+                && !(geoCoordinates.Latitude == 0 && geoCoordinates.Longitude == 0); // Exclude null island
         }
 
         //  Helper method that returns the OpenRoute API profile equivalent

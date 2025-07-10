@@ -17,7 +17,8 @@ using TourPlanner.UI.Validators;
 
 namespace TourPlanner.UI.ViewModels
 {
-    public class CreateTourViewModel : BaseFormViewModel {
+    public class CreateTourViewModel : BaseFormViewModel
+    {
         private OpenRouteService _openRouteService;
 
         private string _name;
@@ -61,7 +62,8 @@ namespace TourPlanner.UI.ViewModels
         }
         public string NameError => GetFirstError(nameof(Name));
 
-        public DateTime Date {
+        public DateTime Date
+        {
             get => _date;
             set
             {
@@ -175,12 +177,14 @@ namespace TourPlanner.UI.ViewModels
             "Car"
         };
 
-        public CreateTourViewModel(OpenRouteService openRouteService) {
+        public CreateTourViewModel(OpenRouteService openRouteService)
+        {
             _openRouteService = openRouteService;
             ResetForm();
         }
 
-        private void ResetForm() {
+        private void ResetForm()
+        {
             _name = "";
             _date = DateTime.UtcNow;
             _description = "";
@@ -208,12 +212,14 @@ namespace TourPlanner.UI.ViewModels
             OnPropertyChanged(nameof(SubmitButtonText));
         }
 
-        private void CreateTour() {
+        private async void CreateTour()
+        {
             ValidateName();
             ValidateDescription();
             ValidateTransportType();
             ValidateFrom();
             ValidateTo();
+            OnPropertyChanged(nameof(ToError));
             ValidateDate();
 
             if (!ValidateInput())
@@ -222,9 +228,34 @@ namespace TourPlanner.UI.ViewModels
                 return;
             }
 
+            // Validate addresses if they are not in suggestions
+            bool fromInSuggestions = FromLocationSuggestions.Any(s => string.Equals(s, From, StringComparison.OrdinalIgnoreCase));
+            bool toInSuggestions = ToLocationSuggestions.Any(s => string.Equals(s, To, StringComparison.OrdinalIgnoreCase));
+
+            if (!fromInSuggestions)
+            {
+                bool fromValid = await ValidateAddress(From);
+                if (!fromValid)
+                {
+                    SetError(nameof(From), "Please select a valid address.");
+                    return;
+                }
+            }
+
+            if (!toInSuggestions)
+            {
+                bool toValid = await ValidateAddress(To);
+                if (!toValid)
+                {
+                    SetError(nameof(To), "Please select a valid address.");
+                    return;
+                }
+            }
+
             DateTime dateUtc = DateTime.SpecifyKind(_date.Date, DateTimeKind.Utc);
 
-            if (_isEditing && _editingTour != null) {
+            if (_isEditing && _editingTour != null)
+            {
                 _editingTour.Name = _name;
                 _editingTour.Date = dateUtc;
                 _editingTour.Description = _description;
@@ -234,7 +265,8 @@ namespace TourPlanner.UI.ViewModels
 
                 TourUpdated?.Invoke(this, _editingTour);
             }
-            else {
+            else
+            {
                 Tour tour = new Tour(
                     _name,
                     dateUtc,
@@ -249,7 +281,8 @@ namespace TourPlanner.UI.ViewModels
             ResetForm();
         }
 
-        public void LoadTour(Tour tour) {
+        public void LoadTour(Tour tour)
+        {
             _editingTour = tour;
             _name = tour.Name;
             _date = tour.Date;
@@ -298,6 +331,42 @@ namespace TourPlanner.UI.ViewModels
             }
         }
 
+        private async Task<bool> ValidateAddress(string address)
+        {
+            Result result = await _openRouteService.CheckIfAddressExists(address);
+
+            switch (result.Code)
+            {
+                case Result.ResultCode.Success:
+                    return true;
+                case Result.ResultCode.InvalidAddress:
+                    MessageBox.Show($"The address '{address}' could not be found. Please enter a valid address.",
+                        "Invalid Address", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return false;
+                case Result.ResultCode.ApiError:
+                    MessageBox.Show("Network error while validating address. Please check your internet connection.",
+                        "Network Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return false;
+                case Result.ResultCode.ParseError:
+                    MessageBox.Show("Error processing address validation. Please try again.",
+                        "Processing Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return false;
+                default:
+                    MessageBox.Show("Unknown error occurred while validating address. Please try again.",
+                        "Unknown Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return false;
+            }
+        }
+
+        private void ValidateDate()
+        {
+            string error = TourValidator.ValidateDate(Date);
+            if (!string.IsNullOrWhiteSpace(error))
+                SetError(nameof(Date), error);
+            else
+                ClearErrors(nameof(Date));
+        }
+
         private void ValidateName()
         {
             string error = TourValidator.ValidateName(Name);
@@ -322,7 +391,7 @@ namespace TourPlanner.UI.ViewModels
             else
                 ClearErrors(nameof(TransportType));
         }
-        private async void ValidateFrom()
+        private void ValidateFrom()
         {
             string error = TourValidator.ValidateFrom(From);
 
@@ -331,6 +400,7 @@ namespace TourPlanner.UI.ViewModels
                 SetError(nameof(From), error);
                 return;
             }
+
             bool foundInSuggestions = FromLocationSuggestions
                 .Any(s => string.Equals(s, From, StringComparison.OrdinalIgnoreCase));
             if (foundInSuggestions)
@@ -338,16 +408,13 @@ namespace TourPlanner.UI.ViewModels
                 ClearErrors(nameof(From));
                 return;
             }
-            if (!foundInSuggestions)
-            {
-                bool valid = await ValidateAddress(From);
-                if (!valid)
-                    SetError(nameof(From), "Please select a valid address.");
-                else
-                    ClearErrors(nameof(From));
-            }
+
+            // For now, just clear errors if basic validation passes
+            // Address validation can be done when user submits the form
+            ClearErrors(nameof(From));
         }
-        private async void ValidateTo()
+
+        private void ValidateTo()
         {
             string error = TourValidator.ValidateTo(To);
 
@@ -364,28 +431,10 @@ namespace TourPlanner.UI.ViewModels
                 ClearErrors(nameof(To));
                 return;
             }
-            if (!foundInSuggestions)
-            {
-                bool valid = await ValidateAddress(To);
-                if (!valid)
-                    SetError(nameof(To), "Please select a valid address.");
-                else
-                    ClearErrors(nameof(To));
-            }
-        }
-        private async Task<bool> ValidateAddress(string address)
-        {
-            Result result = await _openRouteService.CheckIfAddressExists(address);
-            return (result.Code == Result.ResultCode.Success);
-        }
 
-        private void ValidateDate()
-        {
-            string error = TourValidator.ValidateDate(Date);
-            if (!string.IsNullOrWhiteSpace(error))
-                SetError(nameof(Date), error);
-            else
-                ClearErrors(nameof(Date));
+            // For now, just clear errors if basic validation passes
+            // Address validation can be done when user submits the form
+            ClearErrors(nameof(To));
         }
 
         private string GetFirstError(string propertyName)
@@ -394,5 +443,5 @@ namespace TourPlanner.UI.ViewModels
             return errors != null && errors.Any() ? errors.First() : null;
         }
 
-    } 
- }
+    }
+}

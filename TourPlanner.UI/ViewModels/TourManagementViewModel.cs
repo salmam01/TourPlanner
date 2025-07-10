@@ -15,6 +15,7 @@ using TourPlanner.Models.Entities;
 using TourPlanner.Models.Utils.Helpers;
 using TourPlanner.UI.Commands;
 using TourPlanner.UI.Events;
+using System.Diagnostics;
 
 namespace TourPlanner.UI.ViewModels
 {
@@ -140,6 +141,7 @@ namespace TourPlanner.UI.ViewModels
 
         public void CreateTour()
         {
+            //_createTourViewModel.ResetForm();
             _eventAggregator.Publish(new NavigationEvent(NavigationEvent.Destination.CreateTour));
         }
 

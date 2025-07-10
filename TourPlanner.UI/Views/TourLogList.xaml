@@ -8,119 +8,121 @@
 
     <Grid>
         <!-- Tour Logs Table -->
-        <ListView ItemsSource="{Binding TourLogs}"
-                  SelectedItem="{Binding SelectedTourLog, Mode=TwoWay}"
-                  Background="#F5ECD5"
-                  BorderThickness="0"
-                  Margin="0"
-                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                  AlternationCount="2">
-            <ListView.Resources>
-                <Style TargetType="GridViewColumnHeader">
-                    <Setter Property="Background" Value="#f28484" />
-                    <Setter Property="Foreground" Value="White" />
-                    <Setter Property="FontFamily" Value="/Resources/Fonts/#Montserrat" />
-                    <Setter Property="FontSize" Value="14" />
-                    <Setter Property="Padding" Value="7" />
-                    <Setter Property="BorderThickness" Value="0,0,1,0" />
-                    <Setter Property="BorderBrush" Value="#F5ECD5" />
-                </Style>
-            </ListView.Resources>
+        <Border CornerRadius="0,0,38,38" Background="#F5ECD5" Padding="0" Margin="0,0,16,10">
+            <ListView ItemsSource="{Binding TourLogs}"
+                      SelectedItem="{Binding SelectedTourLog, Mode=TwoWay}"
+                      Background="Transparent"
+                      BorderThickness="0"
+                      Margin="0"
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      AlternationCount="2">
+                <ListView.Resources>
+                    <Style TargetType="GridViewColumnHeader">
+                        <Setter Property="Background" Value="#f28484" />
+                        <Setter Property="Foreground" Value="White" />
+                        <Setter Property="FontFamily" Value="/Resources/Fonts/#Montserrat" />
+                        <Setter Property="FontSize" Value="14" />
+                        <Setter Property="Padding" Value="7" />
+                        <Setter Property="BorderThickness" Value="0,0,1,0" />
+                        <Setter Property="BorderBrush" Value="#F5ECD5" />
+                    </Style>
+                </ListView.Resources>
 
-            <ListView.View>
-                <GridView>
-                    <!-- Date Column -->
-                    <GridViewColumn Header="Date" Width="140">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Date, StringFormat=dd.MM.yyyy}"
-                                           Margin="10,5"
-                                           VerticalAlignment="Center"
-                                           Foreground="Black"
-                                           FontSize="12" />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
+                <ListView.View>
+                    <GridView>
+                        <!-- Date Column -->
+                        <GridViewColumn Header="Date" Width="135">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Date, StringFormat=dd.MM.yyyy}"
+                                               Margin="10,5"
+                                               VerticalAlignment="Center"
+                                               Foreground="Black"
+                                               FontSize="12" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
 
-                    <!-- Duration Column -->
-                    <GridViewColumn Header="Duration" Width="140">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Margin="10,5" VerticalAlignment="Center" Foreground="Black" FontSize="12">
-                                    <Run Text="{Binding TotalTime, StringFormat=hh}" />
-                                    <Run Text=" : " />
-                                    <Run Text="{Binding TotalTime, StringFormat=mm}" />
-                                </TextBlock>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
+                        <!-- Duration Column -->
+                        <GridViewColumn Header="Duration" Width="135">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Margin="10,5" VerticalAlignment="Center" Foreground="Black" FontSize="12">
+                                        <Run Text="{Binding TotalTime, StringFormat=hh}" />
+                                        <Run Text=" : " />
+                                        <Run Text="{Binding TotalTime, StringFormat=mm}" />
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
 
-                    <!-- Distance Column -->
-                    <GridViewColumn Header="Distance" Width="140">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Margin="10,5" VerticalAlignment="Center" Foreground="Black" FontSize="12">
-                                    <Run Text="{Binding TotalDistance, StringFormat=F1}" />
-                                    <Run Text=" km" />
-                                </TextBlock>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
+                        <!-- Distance Column -->
+                        <GridViewColumn Header="Distance" Width="135">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Margin="10,5" VerticalAlignment="Center" Foreground="Black" FontSize="12">
+                                        <Run Text="{Binding TotalDistance, StringFormat=F1}" />
+                                        <Run Text=" km" />
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
 
-                    <!-- Difficulty Column -->
-                    <GridViewColumn Header="Difficulty" Width="140">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Difficulty}"
-                                           Margin="10,5"
-                                           VerticalAlignment="Center"
-                                           Foreground="Black"
-                                           FontSize="12" />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
+                        <!-- Difficulty Column -->
+                        <GridViewColumn Header="Difficulty" Width="130">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Difficulty}"
+                                               Margin="10,5"
+                                               VerticalAlignment="Center"
+                                               Foreground="Black"
+                                               FontSize="12" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
 
-                    <!-- Rating Column -->
-                    <GridViewColumn Header="Rating" Width="130">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Rating}"
-                                           Margin="10,5"
-                                           VerticalAlignment="Center"
-                                           Foreground="Black"
-                                           FontSize="12" />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
+                        <!-- Rating Column -->
+                        <GridViewColumn Header="Rating" Width="130">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Rating}"
+                                               Margin="10,5"
+                                               VerticalAlignment="Center"
+                                               Foreground="Black"
+                                               FontSize="12" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
 
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="Height" Value="35" />
-                    <Setter Property="Background" Value="White" />
-                    <Setter Property="BorderThickness" Value="0" />
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
-                    <Setter Property="FontFamily" Value="/Resources/Fonts/#Montserrat"/>
-                    <Style.Triggers>
-                        <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                            <Setter Property="Background" Value="#f7b2b2" />
-                        </Trigger>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="#f28484" />
-                        </Trigger>
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsMouseOver" Value="True" />
-                                <Condition Property="IsSelected" Value="False" />
-                            </MultiTrigger.Conditions>
-                            <Setter Property="Background" Value="#F0F0F0" />
-                        </MultiTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ListView.ItemContainerStyle>
-        </ListView>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="Height" Value="35" />
+                        <Setter Property="Background" Value="White" />
+                        <Setter Property="BorderThickness" Value="0" />
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                        <Setter Property="FontFamily" Value="/Resources/Fonts/#Montserrat"/>
+                        <Style.Triggers>
+                            <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                                <Setter Property="Background" Value="#f7b2b2" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#f28484" />
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" Value="True" />
+                                    <Condition Property="IsSelected" Value="False" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background" Value="#F0F0F0" />
+                            </MultiTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
+        </Border>
 
         <TextBlock Text="Click + Button to create a Tour Log!"
                    Foreground="#C74767"

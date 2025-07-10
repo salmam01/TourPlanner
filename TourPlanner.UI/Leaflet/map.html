@@ -1,146 +1,175 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Leaflet Map</title>
-        
-        <!-- Leaflet -->
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
-                integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" 
-                crossorigin="" />
-        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
-                integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" 
-                crossorigin=""></script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaflet Map</title>
 
-        <!-- Route Data -->
-        <script src="directions.js"></script>
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
 
-        <style>
-            html, body {
-                height: 100%;
-                margin: 0;
-                padding: 0;
-                overflow: hidden;
-                background: #626F47 !important;
+    <!-- Route Data -->
+    <script src="directions.js"></script>
+
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #4E5A38 !important;
+        }
+
+        #map-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-radius: 24px;
+        }
+
+        .leaflet-control {
+            border-radius: 8px !important;
+        }
+
+        @keyframes fadeInOverlay {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
             }
-            #map-container {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                height: 100vh;
-                width: 100vw;
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
-            #map {
-                height: 100%;
-                width: 100%;
-                overflow: hidden;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-                border-radius: 24px;
+        }
+
+        .leaflet-popup-content-wrapper {
+            animation: popupFadeIn 0.4s ease-out;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+
+        .leaflet-popup-content {
+            font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+            font-size: 1.1em;
+            color: #333;
+            padding: 8px 0;
+        }
+
+        @keyframes popupFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8) translateY(-10px);
             }
-            .leaflet-control {
-                border-radius: 8px !important;
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
             }
-            @keyframes fadeInOverlay {
-              from { opacity: 0; transform: translateY(-20px); }
-              to { opacity: 1; transform: translateY(0); }
-            }
-            .leaflet-popup-content-wrapper {
-              animation: popupFadeIn 0.4s ease-out;
-              border-radius: 12px;
-              box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-            }
-            .leaflet-popup-content {
-              font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
-              font-size: 1.1em;
-              color: #333;
-              padding: 8px 0;
-            }
-            @keyframes popupFadeIn {
-              from { opacity: 0; transform: scale(0.8) translateY(-10px); }
-              to { opacity: 1; transform: scale(1) translateY(0); }
-            }
-            /* Zoom Controls */
-            .leaflet-control-zoom {
-              border-radius: 16px !important;
-              box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
-              background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(240,245,255,0.9) 100%) !important;
-              backdrop-filter: blur(10px);
-              border: 1px solid rgba(255,255,255,0.3) !important;
-              overflow: hidden;
-              display: flex !important;
-              flex-direction: column !important;
-            }
+        }
+        /* Zoom Controls */
+        .leaflet-control-zoom {
+            border-radius: 16px !important;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(240,245,255,0.9) 100%) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3) !important;
+            overflow: hidden;
+            display: flex !important;
+            flex-direction: column !important;
+        }
+
             .leaflet-control-zoom a {
-              width: 36px !important;
-              height: 36px !important;
-              line-height: 36px !important;
-              font-size: 16px !important;
-              font-weight: 600 !important;
-              color: #333 !important;
-              background: transparent !important;
-              border: none !important;
-              border-radius: 0 !important;
-              transition: all 0.3s ease !important;
-              text-decoration: none !important;
-              position: relative;
+                width: 36px !important;
+                height: 36px !important;
+                line-height: 36px !important;
+                font-size: 16px !important;
+                font-weight: 600 !important;
+                color: #333 !important;
+                background: transparent !important;
+                border: none !important;
+                border-radius: 0 !important;
+                transition: all 0.3s ease !important;
+                text-decoration: none !important;
+                position: relative;
             }
-            .leaflet-control-zoom a:hover {
-              background: linear-gradient(135deg, rgba(236,72,153,0.1) 0%, rgba(236,72,153,0.2) 100%) !important;
-              color: #EC4899 !important;
-              transform: scale(1.05);
-            }
-            .leaflet-control-zoom a:active {
-              transform: scale(0.95);
-            }
-            .leaflet-control-zoom a:first-child {
-              border-bottom: 1px solid rgba(0,0,0,0.1) !important;
-            }
-            .leaflet-control-zoom a:before {
-              content: '';
-              position: absolute;
-              top: 0;
-              left: 0;
-              right: 0;
-              bottom: 0;
-              background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 100%);
-              pointer-events: none;
-            }
-            .map-controls-container {
-              position: absolute;
-              bottom: 20px;
-              right: 20px;
-              display: flex;
-              flex-direction: column;
-              align-items: flex-end;
-              z-index: 1000;
-            }
-            .reset-view-btn {
-              width: 36px;
-              height: 36px;
-              border-radius: 16px;
-              background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(240,245,255,0.9) 100%);
-              backdrop-filter: blur(10px);
-              border: 1px solid rgba(255,255,255,0.3);
-              box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              cursor: pointer;
-              transition: all 0.3s ease;
-              font-size: 16px;
-              color: #333;
-              text-decoration: none;
-              margin-bottom: 8px;
-            }
-            .leaflet-control-attribution {
-                display: none !important;
-            }
-        </style>
 
-    </head>
-    <body>
-        <div id="address-overlay" style="
+                .leaflet-control-zoom a:hover {
+                    background: linear-gradient(135deg, rgba(236,72,153,0.1) 0%, rgba(236,72,153,0.2) 100%) !important;
+                    color: #EC4899 !important;
+                    transform: scale(1.05);
+                }
+
+                .leaflet-control-zoom a:active {
+                    transform: scale(0.95);
+                }
+
+                .leaflet-control-zoom a:first-child {
+                    border-bottom: 1px solid rgba(0,0,0,0.1) !important;
+                }
+
+                .leaflet-control-zoom a:before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+                    pointer-events: none;
+                }
+
+        .map-controls-container {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            z-index: 1000;
+        }
+
+        .reset-view-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(240,245,255,0.9) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            color: #333;
+            text-decoration: none;
+            margin-bottom: 8px;
+        }
+
+        .leaflet-control-attribution {
+            display: none !important;
+        }
+    </style>
+
+</head>
+<body>
+    <div id="address-overlay" style="
           position: absolute;
           top: 15px;
           right: 20px;
@@ -160,21 +189,21 @@
           max-width: 250px;
           backdrop-filter: blur(8px);
         ">
-          <div style="display: flex; align-items: center; margin-bottom: 3px; line-height: 1.2;">
+        <div style="display: flex; align-items: center; margin-bottom: 3px; line-height: 1.2;">
             <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="Start" style="width:14px;height:14px;margin-right:5px;flex-shrink:0;">
             <div style="flex:1;overflow:hidden;"><b>Start:</b> <span id="fromAddress" style="word-wrap:break-word;"></span></div>
-          </div>
-          <div style="display: flex; align-items: center; line-height: 1.2;">
+        </div>
+        <div style="display: flex; align-items: center; line-height: 1.2;">
             <img src="https://cdn-icons-png.flaticon.com/512/149/149059.png" alt="Destination" style="width:14px;height:14px;margin-right:5px;flex-shrink:0;">
             <div style="flex:1;overflow:hidden;"><b>Destination:</b> <span id="toAddress" style="word-wrap:break-word;"></span></div>
-          </div>
         </div>
-        <div id="map"></div>
-        <div class="map-controls-container">
-          <div class="reset-view-btn" id="resetViewBtn" title="Back to Main View">🏠</div>
-        </div>
-        
-        <script>
+    </div>
+    <div id="map"></div>
+    <div class="map-controls-container">
+        <div class="reset-view-btn" id="resetViewBtn" title="Back to Main View">🏠</div>
+    </div>
+
+    <script>
             var map = L.map('map');
 
             var bbox = directions.bbox;
@@ -201,10 +230,10 @@
                 }).addTo(map);
             });
             watercolor.addTo(map);
-            
+
             L.geoJSON(directions, {
                 style: {
-                    color: '#0074D9', 
+                    color: '#0074D9',
                     weight: 5,
                     opacity: 0.95
                 }
@@ -216,7 +245,7 @@
 
             // Marker-Icons
             var startIcon = L.icon({
-                iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png', 
+                iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
                 iconSize: [28, 28],
                 iconAnchor: [14, 28],
                 popupAnchor: [0, -28]
@@ -268,7 +297,7 @@
                     [bbox[3], bbox[2]]
                 ], {padding: [60, 60]});
             };
-        </script>
+    </script>
 
-    </body>
+</body>
 </html>

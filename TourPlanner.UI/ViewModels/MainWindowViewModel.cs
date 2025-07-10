@@ -8,47 +8,34 @@ namespace TourPlanner.UI.ViewModels;
 public class MainWindowViewModel : BaseViewModel {
 
     private readonly EventAggregator _eventAggregator;
-    private readonly TourLogListViewModel _tourLogListViewModel;
     private UserControl _currentView;
     private UserControl _homeView;
-    
+
+    public HomeViewModel HomeViewModel { get; }
+    public CreateTourLogViewModel CreateTourLogViewModel { get; }
+    public CreateTourViewModel CreateTourViewModel { get; }
+    public LogViewerViewModel LogViewerViewModel { get; }
+
     public MainWindowViewModel(
         HomeViewModel homeViewModel,
-        TourManagementViewModel tourManagementViewModel,
         CreateTourLogViewModel createTourLogViewModel,
         CreateTourViewModel createTourViewModel,
-        TourListViewModel tourListViewModel,
-        TourLogListViewModel tourLogListViewModel,
-        SearchBarViewModel searchBarViewModel,
+        LogViewerViewModel logViewerViewModel,
         EventAggregator eventAggregator
     ) {
-        TourManagementViewModel = tourManagementViewModel;
         HomeViewModel = homeViewModel;
         CreateTourLogViewModel = createTourLogViewModel;
         CreateTourViewModel = createTourViewModel;
-        TourListViewModel = tourListViewModel;
-        _tourLogListViewModel = tourLogListViewModel;
-        SearchBarViewModel = searchBarViewModel;
+        LogViewerViewModel = logViewerViewModel;
         _eventAggregator = eventAggregator;
 
         _homeView = new Home {
             DataContext = HomeViewModel
         };
 
-        CurrentView = new TourManagement {
-            DataContext = TourManagementViewModel
-        };
-
         _eventAggregator.Subscribe<NavigationEvent>(NavigationHandler);
         ShowHomeView();
     }
-
-    public HomeViewModel HomeViewModel { get; }
-    public TourManagementViewModel TourManagementViewModel { get; }
-    public CreateTourLogViewModel CreateTourLogViewModel { get; }
-    public CreateTourViewModel CreateTourViewModel { get; }
-    public TourListViewModel TourListViewModel { get; }
-    public SearchBarViewModel SearchBarViewModel { get; }
 
     public UserControl CurrentView
     {
@@ -79,6 +66,9 @@ public class MainWindowViewModel : BaseViewModel {
             case NavigationEvent.Destination.CreateTourLog:
                 ShowCreateTourLog();
                 break;
+            case NavigationEvent.Destination.LogViewer:
+                ShowLogViewer();
+                break;
         }
     }
 
@@ -95,6 +85,14 @@ public class MainWindowViewModel : BaseViewModel {
     private void ShowCreateTourLog() {
         CurrentView = new CreateTourLog {
             DataContext = CreateTourLogViewModel
+        };
+    }
+
+    private void ShowLogViewer()
+    {
+        CurrentView = new LogViewer
+        {
+            DataContext = LogViewerViewModel
         };
     }
 }
